@@ -10,20 +10,22 @@ import Staking from './components/pages/Staking';
 import Guides from './components/pages/Guides';
 import About from './components/pages/About';
 import Footer from './components/Footer/Footer';
+import config from './config/config';
 
 const App = () => {
   return (
     <div className="app-component">
-      <Navbar />
       <Router>
+        <Navbar />
           <Switch>
-            <Route path={["/", "/platform"]} component={Platform} />
-            <Route path="/staking" component={Staking} />
-            <Route path="/guides" component={Guides} />
-            <Route path="/about" component={About} />
+            <Route path={config.routes.staking.path} component={Staking} />
+            <Route path={config.routes.guides.path} component={Guides} />
+            <Route path={config.routes.about.path} component={About} />
+            
+            <Route path={["/", config.routes.platform.path]} component={Platform} />
           </Switch>
+        <Footer />
       </Router>
-      <Footer />
     </div>
   );
 }
