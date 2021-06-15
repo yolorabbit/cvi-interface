@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
 import Platform from './components/pages/Platform';
 import './App.scss';
@@ -21,8 +22,10 @@ const App = () => {
             <Route path={config.routes.staking.path} component={Staking} />
             <Route path={config.routes.guides.path} component={Guides} />
             <Route path={config.routes.about.path} component={About} />
-            
-            <Route path={["/", config.routes.platform.path]} component={Platform} />
+
+            <Route path={ config.routes.platform.path} component={Platform} />
+
+            <Redirect to="/platform" />
           </Switch>
         <Footer />
       </Router>

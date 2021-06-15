@@ -1,18 +1,23 @@
-import React, { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom';
 import config from '../../config/config';
 import './Navbar.scss';
 
 const Navbar = () => {
-    const [activePath, setActivePath] = useState(config.routes.platform.path);
+    const location = useLocation();
+    const [activePath, setActivePath] = useState();
     const links = Object.values(config.routes);
+
+    useEffect(() => {
+        setActivePath(location?.pathname);
+    }, [location?.pathname]);
 
     return (
         <div className="navbar-component">
             <Logo />
 
             {links.map(({label, path}) => <div key={path} className="navbar-component__list">
-                <Link className={path === activePath ? 'active' : ''} to={path} onClick={() => setActivePath(path)}>{label}</Link>
+                <Link className={path === activePath ? 'active' : ''} to={path}>{label}</Link>
             </div>)}    
         </div>
     )
