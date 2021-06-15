@@ -6,6 +6,10 @@
         height: 5.275vw;
     }
 
+    @media (max-width: 980px) {
+        height: 9.387vw;
+    }
+
     @media (max-width: 767px) {
         border-radius: 2.222vw;
         background-color: #007acb;
