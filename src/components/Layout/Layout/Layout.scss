@@ -1,0 +1,12 @@
+.layout-component {
+    width: 100%;
+    padding: 32px 24px;
+
+    & .row-component {
+        padding-top: 24px;
+
+        &:first-child {
+            padding-top: 0;
+        }
+    }
+}

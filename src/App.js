@@ -16,7 +16,7 @@ const App = () => {
       <Navbar />
       <Router>
           <Switch>
-            <Route path="/platform" component={Platform} />
+            <Route path={["/", "/platform"]} component={Platform} />
             <Route path="/staking" component={Staking} />
             <Route path="/guides" component={Guides} />
             <Route path="/about" component={About} />
