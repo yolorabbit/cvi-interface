@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Column from '../../Layout/Column/Column';
 import Container from '../../Layout/Container';
 import Layout from '../../Layout/Layout';
 import Row from '../../Layout/Row';
 import SubNavbar from '../../SubNavbar';
-import TabsForm from '../../TabsForm';
+import Graphs from './Graphs';
+import Tables from './Tables';
 import './Platform.scss';
 
 const Platform = () => {
-    const [activeTab, setActiveTab] = useState("positions");
-    const [activeTabZ, setActiveTabZ] = useState("cvi index");
 
     return (
         <div className="platform-component">
@@ -19,9 +18,7 @@ const Platform = () => {
                 <Row>
                     <Column>
                         <Row>
-                            <Container>
-                    
-                            </Container>
+                            <Container />
                         </Row>
 
                         <Row>
@@ -35,27 +32,13 @@ const Platform = () => {
                         </Row>
 
                         <Row>
-                            <Container>
-                                <TabsForm 
-                                    tabs={["cvi index", "funding fee"]} 
-                                    activeTab={activeTabZ} 
-                                    setActiveTab={(tab) => setActiveTabZ(tab)}>
-                                
-                                </TabsForm>
-                            </Container>
+                            <Graphs />
                         </Row>
                     </Column>
                 </Row>
 
                 <Row>
-                    <Container>
-                        <TabsForm 
-                            tabs={["positions", "history"]} 
-                            activeTab={activeTab} 
-                            setActiveTab={(tab) => setActiveTab(tab)}>
-                        
-                        </TabsForm>
-                    </Container>
+                    <Tables />
                 </Row>
             </Layout>
         </div>

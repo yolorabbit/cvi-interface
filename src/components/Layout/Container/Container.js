@@ -1,9 +1,9 @@
 import React from 'react'
 import './Container.scss';
 
-const Container = ({children}) => {
+const Container = ({className, children}) => {
     return (
-        <div className="container-component">
+        <div className={`${className ?? ''} container-component`}>
             {children}
         </div>
     )
