@@ -9,6 +9,7 @@ import './App.scss';
 import Staking from './components/pages/Staking';
 import Guides from './components/pages/Guides';
 import About from './components/pages/About';
+import Footer from './components/Footer/Footer';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
             <Route path="/about" component={About} />
           </Switch>
       </Router>
+      <Footer />
     </div>
   );
 }
