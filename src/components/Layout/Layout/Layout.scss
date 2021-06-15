@@ -2,8 +2,36 @@
     width: 100%;
     padding: 32px 24px;
 
+    @media (max-width: 767px) {
+        padding: 24px;
+    }
+
     & .row-component {
-        padding-top: 24px;
+        padding-top: 1.25vw;
+
+        @media (max-width: 1365px) { 
+            padding-top: 16px;
+        }
+
+        @media (max-width: 980px) {
+            flex-wrap: wrap;
+
+            & .column-component {
+                padding: 0;
+                padding-top: 16px;
+
+                &:first-child {
+                    padding-top: 0;
+                }
+            }
+        }
+
+        @media (max-width: 767px) {
+            padding-top: 24px;
+            & .column-component { 
+                padding-top: 24px;
+            }
+        }
 
         &:first-child {
             padding-top: 0;

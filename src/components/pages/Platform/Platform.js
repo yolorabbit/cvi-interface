@@ -15,7 +15,9 @@ const Platform = () => {
                 <Row>
                     <Column>
                         <Row>
-                            <Container />
+                            <Container>
+                    
+                            </Container>
                         </Row>
 
                         <Row>

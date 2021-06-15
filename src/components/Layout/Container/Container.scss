@@ -3,4 +3,12 @@
     background-color: #1b1d38;
     min-height: 5.208vw;
     width: 100%;
+
+    @media (max-width: 1365px) {
+        min-height: 7.326vw;
+    }
+
+    @media (max-width: 767px) {
+        height: 82.222vw;
+    }
 }

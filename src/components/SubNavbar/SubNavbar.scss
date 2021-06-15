@@ -1,4 +1,15 @@
 .sub-navbar-component {
     height: 3.75vw;
     background-color: #2b387c;
+
+    @media (max-width: 1365px) { 
+        height: 5.275vw;
+    }
+
+    @media (max-width: 767px) {
+        border-radius: 2.222vw;
+        background-color: #007acb;
+        height: 15.556vw;
+        margin: 0 24px;
+    }
 }
