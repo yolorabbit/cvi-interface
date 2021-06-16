@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.scss';
+import { ViewportProvider } from 'components/Context';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ViewportProvider>
+      <App />
+    </ViewportProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
