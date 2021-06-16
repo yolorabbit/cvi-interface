@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Column from '../../Layout/Column/Column';
 import Container from '../../Layout/Container';
 import Layout from '../../Layout/Layout';
@@ -9,10 +9,11 @@ import Tables from './Tables';
 import './Platform.scss';
 
 const Platform = () => {
+    const [activeView, setActiveView] = useState();
 
     return (
         <div className="platform-component">
-            <SubNavbar />
+            <SubNavbar tabs={["trade", "provide liquidity"]} activeView={activeView} setActiveView={setActiveView} />
 
             <Layout>
                 <Row>

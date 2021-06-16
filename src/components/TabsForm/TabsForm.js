@@ -4,15 +4,15 @@ import Tabs from 'components/Tabs';
 import { useInDOM } from 'components/hooks';
 import './TabsForm.scss';
 
-const TabsForm = ({tabs = [], dontChangeQuery, activeTab, setActiveTab, className, children}) => {
+const TabsForm = ({id = "view", tabs = [], dontChangeQuery, activeTab, setActiveTab, className, children}) => {
     const history = useHistory();
     const isActiveInDOM = useInDOM();
     
     useEffect(() => {
         if(activeTab && !dontChangeQuery) {
             const urlParams = new URLSearchParams(history.location?.search);
-            urlParams.delete("view");
-            urlParams.append("view", activeTab);
+            urlParams.delete(id);
+            urlParams.append(id, activeTab);
             history.push({search: urlParams.toString()});
         }
         //eslint-disable-next-line
@@ -20,7 +20,7 @@ const TabsForm = ({tabs = [], dontChangeQuery, activeTab, setActiveTab, classNam
 
     useEffect(() => {
         if(isActiveInDOM()) {
-            const viewParam = new URLSearchParams(history.location?.search).get('view');
+            const viewParam = new URLSearchParams(history.location?.search).get(id);
             if(viewParam && tabs.some(tab => tab === viewParam)) {
                 setActiveTab(viewParam);
             } else {

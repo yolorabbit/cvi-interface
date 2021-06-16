@@ -9,6 +9,7 @@ const Graphs = () => {
     return (
         <Container className="graphs-component">
             <TabsForm 
+                id="graph"
                 tabs={["cvi index", "funding fee"]} 
                 activeTab={activeTab} 
                 setActiveTab={(tab) => setActiveTab(tab)}>

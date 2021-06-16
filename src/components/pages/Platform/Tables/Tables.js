@@ -9,6 +9,7 @@ const Tables = () => {
     return (
         <Container className="tables-component">
             <TabsForm 
+                id="table"
                 tabs={["positions", "history"]} 
                 activeTab={activeTab} 
                 setActiveTab={(tab) => setActiveTab(tab)}>
