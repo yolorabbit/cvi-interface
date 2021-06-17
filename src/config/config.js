@@ -34,7 +34,15 @@ const config = {
             "liquidity": "Liquidity",
             "history": "History"
         }
-    }
+    },
+    socialLinks: [
+        { iconName: 'github', to: 'https://github.com/coti-io/cvi-contracts' },
+        { iconName: 'telegram', to: 'https://t.me/cviofficial' },
+        { iconName: 'twitter', to: 'https://twitter.com/official_cvi' },
+        { iconName: 'medium', to: 'https://cviofficial.medium.com' },
+        { iconName: 'defipulse', to: 'https://defipulse.com' },
+        { iconName: 'discord', to: 'https://discord.gg/jXba8HmTs5' },
+     ],
 }
 
 export default config;
