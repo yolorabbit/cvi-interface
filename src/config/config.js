@@ -16,6 +16,24 @@ const config = {
             label: "About",
             path: '/about'
         }
+    },
+    tabs: {
+        "sub-navbar": {
+            "trade": "Trade",
+            "liquidity": "Provide Liquidity"
+        },
+        graphs: {
+            "cvi index": "CVI Index",
+            "funding fee": "Funding fee"
+        },
+        trade: {
+            "positions": "Positions",
+            "history": "History"
+        },
+        liquidity: {
+            "liquidity": "Liquidity",
+            "history": "History"
+        }
     }
 }
 

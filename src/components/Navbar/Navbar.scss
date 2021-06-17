@@ -97,6 +97,18 @@
         font-weight: normal;
         color: white;
         text-decoration: none;
+
+        @media (max-width: 1365px) {  
+            font-size: 0.733vw;
+        }
+    
+        @media (max-width: 980px) { 
+            font-size: 1.304vw;
+        }
+    
+        @media (max-width: 767px) { 
+            font-size: 2.778vw;
+        }
     }
 }
 

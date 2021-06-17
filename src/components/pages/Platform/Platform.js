@@ -6,42 +6,46 @@ import Row from '../../Layout/Row';
 import SubNavbar from '../../SubNavbar';
 import Graphs from './Graphs';
 import Tables from './Tables';
+import config from '../../../config/config';
 import './Platform.scss';
+import { platformViewContext } from 'components/Context';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
 
     return (
         <div className="platform-component">
-            <SubNavbar tabs={["trade", "provide liquidity"]} activeView={activeView} setActiveView={setActiveView} />
+            <SubNavbar tabs={Object.keys(config.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
 
-            <Layout>
-                <Row>
-                    <Column>
-                        <Row>
-                            <Container />
-                        </Row>
+            <platformViewContext.Provider value={{activeView}}>
+                <Layout>
+                    <Row>
+                        <Column>
+                            <Row>
+                                <Container />
+                            </Row>
 
-                        <Row>
-                            <Container />
-                        </Row>
-                    </Column>
+                            <Row>
+                                <Container />
+                            </Row>
+                        </Column>
 
-                    <Column>
-                        <Row>
-                            <Container />
-                        </Row>
+                        <Column>
+                            <Row>
+                                <Container />
+                            </Row>
 
-                        <Row>
-                            <Graphs />
-                        </Row>
-                    </Column>
-                </Row>
+                            <Row>
+                                <Graphs />
+                            </Row>
+                        </Column>
+                    </Row>
 
-                <Row>
-                    <Tables />
-                </Row>
-            </Layout>
+                    <Row>
+                        <Tables />
+                    </Row>
+                </Layout>
+            </platformViewContext.Provider>
         </div>
     )
 }
