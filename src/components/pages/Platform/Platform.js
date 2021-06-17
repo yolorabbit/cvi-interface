@@ -9,6 +9,7 @@ import Tables from './Tables';
 import config from '../../../config/config';
 import './Platform.scss';
 import { platformViewContext } from 'components/Context';
+import Statistics from 'components/Statistics/Statistics';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
@@ -22,7 +23,9 @@ const Platform = () => {
                     <Row>
                         <Column>
                             <Row>
-                                <Container />
+                                <Container>
+                                    <Statistics />
+                                </Container>
                             </Row>
 
                             <Row>

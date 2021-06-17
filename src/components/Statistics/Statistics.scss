@@ -1,0 +1,58 @@
+.statistics-component {
+    padding: 1.667vw 0.729vw 1.25vw 0.729vw;
+
+    @media (max-width: 1365px){
+        padding: 1.667vw 0.729vw 1.25vw 0.729vw;
+    }
+
+    @media (max-width: 980px){
+        padding: 1.667vw 0.729vw 1.25vw 0.729vw;
+    }
+
+    @media (max-width: 767px){
+        padding: 1.667vw 0.729vw 1.25vw 0.729vw;
+    }
+
+    & .stat-component {
+        min-width: 5.208vw;
+
+        @media (max-width: 1365px){
+            width: 12.208vw;
+        }
+
+        & h2 {
+            max-width: 7.292vw;
+            height: 1.979vw;
+
+            @media (max-width: 1365px){
+                max-width: 100%;
+                height: 2.784vw;	
+            }
+
+            @media (max-width: 980px){
+                max-width: 18.253vw;
+                height: 4.954vw;
+            }
+
+            @media (max-width: 767px){
+                max-width: 140px;
+                height: 38px;
+            }
+        }
+    }
+
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        @media (max-width: 1365px) {
+            flex-wrap: wrap;
+        }
+
+        &--breaker {
+            @media (max-width: 1365px) {
+                width: 100%;
+                margin: 0.44vw 0;
+            }
+        }
+    }
+}
