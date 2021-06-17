@@ -13,7 +13,7 @@ const Tables = () => {
         <Container className="tables-component">
             <TabsForm 
                 id="table"
-                tabs={Object.values(config.tabs[activeView ?? 'trade'])} 
+                tabs={Object.values(config.tabs[activeView ?? 'trade'] ?? [])} 
                 activeTab={activeTab} 
                 setActiveTab={(tab) => setActiveTab(tab)}>
             

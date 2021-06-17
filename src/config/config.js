@@ -20,17 +20,17 @@ const config = {
     tabs: {
         "sub-navbar": {
             "trade": "Trade",
-            "liquidity": "Provide Liquidity"
+            "view-liquidity": "Provide Liquidity"
         },
         graphs: {
             "cvi index": "CVI Index",
             "funding fee": "Funding fee"
         },
         trade: {
-            "positions": "Positions",
+            "positions": "Open trades",
             "history": "History"
         },
-        liquidity: {
+        "view-liquidity": {
             "liquidity": "Liquidity",
             "history": "History"
         }
