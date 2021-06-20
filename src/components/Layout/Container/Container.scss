@@ -9,10 +9,10 @@
     }
 
     @media (max-width: 980px) {
-        height: 20.86vw;
+        min-height: 20.86vw;
     }
 
     @media (max-width: 767px) {
-        height: 82.222vw;
+        min-height: 82.222vw;
     }
 }

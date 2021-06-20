@@ -22,11 +22,11 @@
             }
 
             @media (max-width: 980px){
-            	font-size: 11px;
+            	font-size: 1.434vw;
             }
 
             @media (max-width: 767px){
-            	font-size: 11px;
+            	font-size: 3.056vw;
             }
         }
     }
@@ -40,7 +40,7 @@
         align-items: flex-start;
         
         @media (max-width: 1365px){
-            font-size: 0.732vw;	
+            font-size: 0.879vw;	
             line-height: 1.172vw;
         }
 
@@ -50,7 +50,9 @@
         }
 
         @media (max-width: 767px){
-            font-size: 12px;
+            font-size: 3.333vw;
+            margin-bottom: 2.222vw;
+            margin-top: 4.444vw;
         }
     }
 
@@ -71,8 +73,8 @@
         }
 
         @media (max-width: 767px){
-            font-size: 18px;
-            line-height: 16px;
+            font-size: 5vw;
+            line-height: 4.444vw;
         }
     }
 }
