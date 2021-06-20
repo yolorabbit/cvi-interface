@@ -2,6 +2,7 @@ import { useViewport } from 'components/hooks';
 import Stat from 'components/Stat/Stat'
 import React from 'react'
 import './Statistics.scss';
+
 const Statistics = () => {
     const { width } = useViewport();
 

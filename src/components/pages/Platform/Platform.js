@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import Column from '../../Layout/Column/Column';
-import Container from '../../Layout/Container';
-import Layout from '../../Layout/Layout';
-import Row from '../../Layout/Row';
-import SubNavbar from '../../SubNavbar';
+import { platformViewContext } from 'components/Context';
+import SubNavbar from 'components/SubNavbar';
+import config from 'config/config';
 import Graphs from './Graphs';
 import Tables from './Tables';
-import config from '../../../config/config';
+import Statistics from './Statistics';
+import CviStats from './CviStats';
+import Column from 'components/Layout/Column';
+import Layout from 'components/Layout/Layout';
+import Row from 'components/Layout/Row';
+import Container from 'components/Layout/Container';
 import './Platform.scss';
-import { platformViewContext } from 'components/Context';
-import Statistics from 'components/Statistics/Statistics';
-import CviStats from '../../CviStats';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
@@ -18,7 +18,7 @@ const Platform = () => {
     return (
         <div className="platform-component">
             <SubNavbar tabs={Object.keys(config.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
-
+            
             <platformViewContext.Provider value={{activeView}}>
                 <Layout>
                     <Row>
@@ -30,7 +30,8 @@ const Platform = () => {
                             </Row>
 
                             <Row>
-                                <Container />
+                                <Container>
+                                </Container>
                             </Row>
                         </Column>
 

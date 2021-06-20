@@ -1,7 +1,7 @@
 import React from 'react'
-import './CviStats.scss';
-import Stat from '../Stat';
 import CviInfo from './CviInfo';
+import Stat from 'components/Stat';
+import './CviStats.scss';
 
 const CviStats = () => {
     return (
