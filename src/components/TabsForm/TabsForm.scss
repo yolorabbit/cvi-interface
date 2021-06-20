@@ -14,7 +14,7 @@
             flex-direction: column;
             & .tabs-component {
                 display: flex;
-                border-bottom: solid 1px rgba(43, 190, 222, 0.2);
+                border-bottom: solid 0.278vw rgba(43, 190, 222, 0.2);
                 width: 100%;
                 justify-content: center;
             }
@@ -22,16 +22,22 @@
     }
 
     &__container {
-        border-top: solid 1px #2b387c;
+        border-top: solid 0.052vw #2b387c;
         border-bottom-left-radius: 0.833vw;
         border-bottom-right-radius: 0.833vw;
 
+        @media (max-width: 1365px){
+        	border-top: solid 0.073vw #2b387c;
+        }
+
+        @media (max-width: 980px){
+        	border-top: solid 0.13vw #2b387c;
+        }
+
         @media (max-width: 767px) {
+            border-top: solid 0.278vw #2b387c;
             display: flex;
             justify-content: center;
-        }
-        
-        @media (max-width: 767px) {
             border: 0;
         }
     }

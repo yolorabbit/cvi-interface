@@ -4,7 +4,7 @@ import Tabs from 'components/Tabs';
 import { useInDOM } from 'components/hooks';
 import './TabsForm.scss';
 
-const TabsForm = ({id = "view", tabs = [], dontChangeQuery, activeTab, setActiveTab, className, children}) => {
+const TabsForm = ({id = "view", tabs = [], isDropdown, dontChangeQuery, activeTab, setActiveTab, className, children}) => {
     const history = useHistory();
     const isActiveInDOM = useInDOM();
     
@@ -34,7 +34,7 @@ const TabsForm = ({id = "view", tabs = [], dontChangeQuery, activeTab, setActive
         <>
             <div className={`tabs-form-component ${className ?? ''}`}>
                 <div className="tabs-form-component__header">
-                    <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab}/>
+                    <Tabs isDropdown={isDropdown} tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab}/>
                 </div>
 
                 <div className="tabs-form-component__container">

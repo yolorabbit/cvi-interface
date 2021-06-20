@@ -1,6 +1,23 @@
 .sub-navbar-component {
     height: 3.75vw;
     background-color: #2b387c;
+    
+    @media (max-width: 1365px) { 
+        height: 5.275vw;
+    }
+
+    @media (max-width: 980px) {
+        height: 9.387vw;
+    }
+
+    @media (max-width: 767px) {
+        border-radius: 2.222vw;
+        background-color: #182f5d;
+        margin: 0 24px;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
     & .sub-navbar {
         height: 100%;
@@ -23,7 +40,13 @@
             @media (max-width: 980px) { 
                 padding: 0 3.129vw;
             }
-    
+            
+            @media (max-width: 767px){
+                padding: 0 4.444vw;
+                border-bottom: 0;
+                background-color: #0f112d;
+            }
+
             & .tabs-component__tab {
                 text-transform: capitalize;
                 padding: 0.417vw 1.458vw;
@@ -53,27 +76,25 @@
                     height: 5.214vw;
                     margin-right: 2.086vw;
                 }
-    
+                
+                @media (max-width: 767px){
+                    padding: 0;
+                	border: 0;
+                    font-size: 3.889vw;
+                    line-height: 0;
+                    height: auto;
+                    display: flex;
+                    align-items: center;
+                }
+
                 &.active {
                     background-color: #007acb;
+
+                    @media (max-width: 767px){
+                    	background-color: transparent;
+                    }
                 }
             }
         }
-    }
-
-
-    @media (max-width: 1365px) { 
-        height: 5.275vw;
-    }
-
-    @media (max-width: 980px) {
-        height: 9.387vw;
-    }
-
-    @media (max-width: 767px) {
-        border-radius: 2.222vw;
-        background-color: #007acb;
-        height: 15.556vw;
-        margin: 0 24px;
     }
 }
