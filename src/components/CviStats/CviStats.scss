@@ -1,12 +1,16 @@
 .cvi-stats-component {
-    padding: 1.667vw 1.667vw;
+    padding: 1.667vw;
+    height: 6.558vw;
 
     @media (max-width: 1365px){
+        min-height: 10vw;
     	padding: 1.099vw 1.667vw;
     }
 
     @media (max-width: 980px){
         padding: 3.129vw;
+        min-height: 100%;
+        height: 100%;
     }
 
     @media (max-width: 767px){

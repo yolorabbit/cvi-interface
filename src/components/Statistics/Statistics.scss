@@ -1,12 +1,16 @@
 .statistics-component {
     padding: 1.667vw 0.729vw 1.25vw 0.729vw;
-
+    min-height: 6.558vw;
+    
     @media (max-width: 1365px){
+        min-height: 10vw;
         padding: 1.667vw 0.729vw 1.25vw 0.729vw;
     }
 
     @media (max-width: 980px){
         padding: 3.129vw;
+        min-height: 100%;
+        height: 100%;
     }
 
     @media (max-width: 767px){
