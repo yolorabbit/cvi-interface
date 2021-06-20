@@ -10,6 +10,7 @@ import config from '../../../config/config';
 import './Platform.scss';
 import { platformViewContext } from 'components/Context';
 import Statistics from 'components/Statistics/Statistics';
+import CviStats from '../../CviStats';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
@@ -35,7 +36,9 @@ const Platform = () => {
 
                         <Column>
                             <Row>
-                                <Container />
+                                <Container>
+                                    <CviStats />
+                                </Container>
                             </Row>
 
                             <Row>

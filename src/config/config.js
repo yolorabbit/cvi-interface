@@ -47,6 +47,7 @@ const config = {
         totalValueLocked: {
           title: "Total value locked",
           className: "bold green",
+          prefix: "$",
           tooltip: {
             content: "The total value locked(TVL) in the platform in USD",
             left: -30,
@@ -54,6 +55,7 @@ const config = {
         },
         liquidityPoolBalance: {
           title: "Liquidity pools",
+          prefix: "$",
           tooltip: {
             content: "The total value locked in all liquidity pools in USD. It is the total value deposited into the platform by liquidity providers who expect the CVI index to drop or stay the same.",
             left: "-100%",
@@ -62,6 +64,7 @@ const config = {
         },
         openTrades: {
           title: "Open trades",
+          prefix: "$",
           tooltip: {
             content: "The total value of open positions in USD. Positions are bought by traders who expect the CVI index to increase.",
             left: "-100%",
@@ -70,10 +73,12 @@ const config = {
         },
         goviPrice: {
           title: "GOVI price",
+          prefix: "$",
         },
         feesCollected: {
           title: "Fees collected for GOVI holders",
           className: "bold green",
+          prefix: "$",
         },
         totalGoviRewards: {
           title: "Today's rewards for new positions",

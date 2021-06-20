@@ -1,0 +1,55 @@
+.cvi-stats-component {
+    padding: 1.667vw 1.667vw;
+
+    @media (max-width: 1365px){
+    	padding: 1.099vw 1.667vw;
+    }
+
+    @media (max-width: 980px){
+        padding: 3.129vw;
+    }
+
+    @media (max-width: 767px){
+        padding: 6.667vw 4.444vw;
+    }
+
+    &__container {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        & .stat-component {
+            max-width: 4.896vw;
+            width: 100%;
+
+            @media (max-width: 1365px){
+            	max-width: 100%;
+                width: 7.326vw;
+            }
+
+            @media (max-width: 980px){
+            	width: auto;
+            }
+
+            @media (max-width: 767px){
+            	width: 100%;
+            }
+
+            & h2 {
+                margin-bottom: 0.417vw;
+
+                @media (max-width: 980px){
+                	margin-bottom: 1.043vw;
+                }
+
+                @media (max-width: 767px){
+                    font-size: 3.333vw;
+                    line-height: 6.667vw;
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
