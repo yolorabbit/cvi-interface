@@ -68,13 +68,15 @@
         }
 
         &--breaker {
-            @media (max-width: 1365px) {
-                width: 100%;
-                margin: 0.44vw 0;
-            }
-
+            width: 100%;
+            margin: 0.44vw 0;
+   
             @media (max-width: 1024px) {
                 margin: 1.043vw 0;
+            }
+
+            @media (max-width: 767px){
+            	margin: 0;
             }
         }
     }
