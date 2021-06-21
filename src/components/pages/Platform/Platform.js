@@ -11,6 +11,7 @@ import Layout from 'components/Layout/Layout';
 import Row from 'components/Layout/Row';
 import Container from 'components/Layout/Container';
 import './Platform.scss';
+import Form from './Form';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
@@ -31,6 +32,7 @@ const Platform = () => {
 
                             <Row>
                                 <Container>
+                                    <Form />
                                 </Container>
                             </Row>
                         </Column>

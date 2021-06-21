@@ -14,7 +14,7 @@ export const useIsDesktop = () => {
 
 export const useIsTablet = () => {
   const { width } = useContext(viewportContext);
-  return width <= 980
+  return width <= 1024
 }
 
 export const useInDOM = () => {
