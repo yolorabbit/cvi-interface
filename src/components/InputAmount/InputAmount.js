@@ -9,17 +9,17 @@ import InputGroup from 'components/InputGroup';
 const InputAmount = ({label = "Amount", breakLine, amount, setAmount, symbol, decimals = 6, balance, availableBalanceDecimals, availableText = "Your available balance:", error}) => {
     
     const _onChangeNumber = (value) => {
-            if(value?.split && value?.split('.')?.length > 0 && value?.split('.')?.[1]?.length > decimals) return;
-            
-            if(Number(value) > 999999999999) return;
+        if(value?.split && value?.split('.')?.length > 0 && value?.split('.')?.[1]?.length > decimals) return;
+        
+        if(Number(value) > 999999999999) return;
 
-            if (value?.match && value.match(/[+-]?([0-9]*[.])?[0-9]+/) && !isNaN(value)) {
-                setAmount(value);
-            }
+        if (value?.match && value.match(/[+-]?([0-9]*[.])?[0-9]+/) && !isNaN(value)) {
+            setAmount(value);
+        }
 
-            if(!value.length) {
-                setAmount('');
-            }
+        if(!value.length) {
+            setAmount('');
+        }
     }
 
     const mapSymbol = () => {

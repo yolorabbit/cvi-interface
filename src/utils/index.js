@@ -1,3 +1,6 @@
+import BigNumber from "bignumber.js";
+import { BN } from "bn.js";
+
 const removeZerosFromEndOfNumber = (number) => {
     if(number.includes('.')){
         while (number.charAt(number.length -1) === "0")
@@ -37,3 +40,56 @@ export const customFixed = (num, fixed) => {
     }
     return Number(fixed_num)
 }
+
+const DECIMALS = 6;
+
+
+export const toFixed = (x) => {
+    var data= String(x).split(/[eE]/);
+    if(data.length === 1) return data[0]; 
+    var  z= '', sign= x<0? '-':'',
+    str= data[0].replace('.', ''),
+    mag= Number(data[1])+ 1;
+    if(mag<0){
+        z= sign + '0.';
+        while(mag++) z += '0';// eslint-disable-next-line
+        return z + str.replace(/^\-/,'');
+    }
+    mag -= str.length;  
+    while(mag--) z += '0';
+    return str + z;
+}
+
+export function fromTokenAmountToUnits(tokenAmount, index) {
+    return tokenAmount.mul(toBN(20000)).div(toBN(index));
+}
+
+export const toDisplayAmount = (amount, magnitude = 0) => {
+    const mag = BigNumber(10).pow(BigNumber(magnitude));
+    return BigNumber(amount).div(mag).toString();
+}
+
+export const toBNAmount = (amount, magnitude = 0) => {
+    const mag = new BigNumber(10).pow(new BigNumber(magnitude));
+    return toFixed(new BigNumber(isNaN(amount) ? "0" : amount).multipliedBy(mag).toString());
+};
+
+export const toBN = (amount, magnitude = 0) => {
+    const mag = new BN(10).pow(new BN(magnitude));
+    if(amount === null) return new BN("0");
+    return new BN(isNaN(amount) || !amount ? "0" : amount).mul(mag);
+};
+
+export const toTokenAmount = amount => {
+    return toBN(amount, DECIMALS);
+};
+
+export const fromBN = (amount, magnitude = 0) => {
+    const wei = toBN(amount.toString());
+    const base = toBN(10).pow(toBN(magnitude));
+    let fraction = wei.abs().mod(base).toString(10);
+    while (fraction.length !== Number(magnitude)) fraction = `0${fraction}`;
+    const whole = wei.abs().div(base).toString(10);
+    const unsigned = `${whole}.${fraction}`;
+    return wei.isNeg() ? -unsigned : +unsigned;
+};

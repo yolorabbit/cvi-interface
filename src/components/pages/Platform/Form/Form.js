@@ -5,24 +5,29 @@ import Button from 'components/Elements/Button';
 import InputAmount from 'components/InputAmount';
 import Stat from 'components/Stat';
 import SelectLeverage from 'components/SelectLeverage';
+import { commaFormatted } from 'utils';
 import './Form.scss';
 
 const Form = () => {
     const { activeView } = useContext(platformViewContext);
     const [selectedCurrency, setSelectedCurrency] = useState("usdt");
-    
+    const [amount, setAmount] = useState();
+
     return useMemo(() => {
         return (
             <div className="platform-form-component">
                <div className="platform-form-component__left">
                     <CurrencySelect selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />
                     {activeView === 'trade' && <SelectLeverage /> }
-                    <InputAmount label="Amount" symbol={selectedCurrency} balance={"1000000.555555555"} />
-                    <Button className="button platform-form-component__left-button" buttonText={activeView === "trade" ? "BUY" : "DEPOSIT"} />
+                    <InputAmount label="Amount" symbol={selectedCurrency} balance="100000" amount={amount} setAmount={setAmount} />
+                    <Button 
+                        className="button platform-form-component__left-button" 
+                        buttonText={activeView === "trade" ? "BUY" : "DEPOSIT"} 
+                    />
                </div>
     
                <div className="platform-form-component__right">
-                    <Details selectedCurrency={selectedCurrency?.toUpperCase()} />
+                    <Details selectedCurrency={selectedCurrency?.toUpperCase()} amount={amount} />
                </div>
     
                 <div className="platform-form-component__bottom">
@@ -33,10 +38,10 @@ const Form = () => {
             </div>
         )
         //eslint-disable-next-line
-    }, [activeView, selectedCurrency]) 
+    }, [activeView, selectedCurrency, amount]) 
 }
 
-const Details = ({selectedCurrency}) => {
+const Details = ({selectedCurrency, amount}) => {
     const { activeView } = useContext(platformViewContext);
  
     return useMemo(() => {
@@ -49,7 +54,7 @@ const Details = ({selectedCurrency}) => {
 
                     <div className="platform-form-details-component__container--amount">
                         <span>{activeView === 'trade' ? "Buy" : "Deposit"} amount</span>
-                        <b>100,000.00021455 {selectedCurrency}</b>
+                        <b>{commaFormatted(amount ?? 0)} {selectedCurrency}</b>
                     </div>
 
                     {activeView === "trade" ? <> 
@@ -60,13 +65,13 @@ const Details = ({selectedCurrency}) => {
                         <Stat title="Open position reward" value="100 GOVI" />
 
                         <Stat title="Current funding fee" value={`0.01 ${selectedCurrency}`} />
-                    </> : <Stat className="bold" title="You will receive" value="0.4 CVI-ETH-LP" /> }
+                    </> : <Stat className="bold" title="You will receive" value={`0.4 CVI-${selectedCurrency}-LP`} /> }
 
                     <Stat title="CVI Index" value="39.8" />
                 </div>
             </div>
         )
-    }, [selectedCurrency, activeView]); 
+    }, [selectedCurrency, activeView, amount]); 
 }
 
 export default Form;
