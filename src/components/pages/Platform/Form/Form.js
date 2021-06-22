@@ -3,15 +3,14 @@ import React, { useContext, useMemo, useState } from 'react'
 import CurrencySelect from 'components/CurrencySelect';
 import Button from 'components/Elements/Button';
 import InputAmount from 'components/InputAmount';
-import Stat from 'components/Stat';
 import SelectLeverage from 'components/SelectLeverage';
-import { commaFormatted } from 'utils';
+import Details from './Details/Details';
 import './Form.scss';
 
 const Form = () => {
     const { activeView } = useContext(platformViewContext);
     const [selectedCurrency, setSelectedCurrency] = useState("usdt");
-    const [amount, setAmount] = useState();
+    const [amount, setAmount] = useState("");
 
     return useMemo(() => {
         return (
@@ -29,49 +28,25 @@ const Form = () => {
                <div className="platform-form-component__right">
                     <Details selectedCurrency={selectedCurrency?.toUpperCase()} amount={amount} />
                </div>
-    
-                <div className="platform-form-component__bottom">
-                    <p>
-                        * You will not be able to withdraw your funds for 72 hours <b>See more</b>
-                    </p>
-                </div>
+            
+                <SeeMore />    
             </div>
         )
         //eslint-disable-next-line
     }, [activeView, selectedCurrency, amount]) 
 }
 
-const Details = ({selectedCurrency, amount}) => {
+const SeeMore = () => {
     const { activeView } = useContext(platformViewContext);
- 
     return useMemo(() => {
-        return (
-            <div className="platform-form-details-component">
-                <div className="platform-form-details-component__container">
-                    <Stat className="bold" title="Collateral ratio" value="65%" />
-
-                    {activeView === 'trade' && <Stat className="bold" title="Leverage" value="X2" /> }
-
-                    <div className="platform-form-details-component__container--amount">
-                        <span>{activeView === 'trade' ? "Buy" : "Deposit"} amount</span>
-                        <b>{commaFormatted(amount ?? 0)} {selectedCurrency}</b>
-                    </div>
-
-                    {activeView === "trade" ? <> 
-                        <Stat title="Purchase fee" value={`0.10007213 ${selectedCurrency}`} />
-
-                        <Stat className="bold green" title="Your position" value={`3.93287142 ${selectedCurrency}`} />
-
-                        <Stat title="Open position reward" value="100 GOVI" />
-
-                        <Stat title="Current funding fee" value={`0.01 ${selectedCurrency}`} />
-                    </> : <Stat className="bold" title="You will receive" value={`0.4 CVI-${selectedCurrency}-LP`} /> }
-
-                    <Stat title="CVI Index" value="39.8" />
-                </div>
-            </div>
-        )
-    }, [selectedCurrency, activeView, amount]); 
+        return <div className="platform-form-component__bottom">
+            {activeView === "trade" ? <p>
+                <b>Pay Attention: </b> 
+                GOVI tokens will become claimable starting the day after your last position action (UTC time) and for a period of not ece... 
+                <b> See more</b>
+            </p> : <p>* You will not be able to withdraw your funds for 72 hours <b>See more</b></p>}
+        </div>
+    }, [activeView]);
 }
 
 export default Form;

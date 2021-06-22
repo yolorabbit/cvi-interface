@@ -13,6 +13,12 @@
         }
     }
 
+    &.red {
+        & p {
+            color: #f96a9a;
+        }
+    }
+
     &.multiline {
         & p {
             font-size: 0.573vw;

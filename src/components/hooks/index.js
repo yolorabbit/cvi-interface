@@ -17,6 +17,11 @@ export const useIsTablet = () => {
   return width <= 1024
 }
 
+export const useIsLaptop = () => {
+  const { width } = useContext(viewportContext);
+  return width <= 1365
+}
+
 export const useInDOM = () => {
     const isMounted = useRef(false);
     useEffect(() => {

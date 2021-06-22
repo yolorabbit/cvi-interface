@@ -1,7 +1,7 @@
 import React from 'react'
-import './CviInfo.scss';
+import './CviValue.scss';
 
-const CviInfo = () => {
+const CviValue = () => {
     const isPositive = true;
 
     return (
@@ -23,4 +23,4 @@ const CviInfo = () => {
     )
 }
 
-export default CviInfo;
+export default CviValue;
