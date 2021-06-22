@@ -83,34 +83,37 @@
 
         @media (max-width: 1365px) {
             font-size: 1.319vw;
+            border-bottom: 0.293vw solid transparent;
             height: 5.861vw;
         }
 
         @media (max-width: 1024px) {
             font-size: 2.347vw;
             height: 10.43vw;
+            border-bottom: 0.522vw solid transparent;
         }
 
         @media (max-width: 767px) {
             font-size: 3.889vw;
             margin-right: 0;
             flex: 1;
+            border-bottom: 1.111vw solid transparent;
         }
 
         &.active {
             font-weight: bold;
-            border-bottom: 0.104vw solid #fea716;
+            border-bottom: 0.208vw solid #fea716;
 
             @media (max-width: 1365px) {
-                border-bottom: 0.146vw solid #fea716;
+                border-bottom: 0.293vw solid #fea716;
             }
     
             @media (max-width: 1024px) {
-                border-bottom: 0.261vw solid #fea716;
+                border-bottom: 0.522vw solid #fea716;
             }
     
             @media (max-width: 767px) {
-                border-bottom: 0.548vw solid #fea716;
+                border-bottom: 1.111vw solid #fea716;
             }
         }
 
