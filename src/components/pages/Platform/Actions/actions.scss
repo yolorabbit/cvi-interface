@@ -23,7 +23,10 @@
     }
 }
 
-.sell-component {
+.sell-component, .withdraw-component {
+    height: inherit;
+    vertical-align: middle;
+    
     &__container {
         display: flex;
 

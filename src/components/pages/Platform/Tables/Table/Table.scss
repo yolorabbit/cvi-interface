@@ -28,6 +28,7 @@
             border-right: 16px solid transparent;
 
             & td {
+                height: inherit;
                 border-collapse: separate;
             }
 
@@ -57,6 +58,8 @@
 
         &:last-child {
             text-align: right;
+            display: table;
+            margin-left: auto;
         }
     }
 }

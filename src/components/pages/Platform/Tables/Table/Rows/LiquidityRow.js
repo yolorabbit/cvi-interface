@@ -1,4 +1,5 @@
 import Button from "components/Elements/Button"
+import { Withdraw } from "components/pages/Platform/Actions"
 import { Pnl } from "../Values/Pnl"
 import { Value } from "../Values/Value"
 
@@ -18,8 +19,6 @@ export const LiquidityRow = ({token}) => {
             <Value text="768.20820509" subText={token?.toUpperCase()} />
         </td>
 
-        <td>
-            <Button buttonText="Withdraw" onClick={() => {}} />
-        </td>
+        <td><Withdraw /></td>
     </tr>
 }
