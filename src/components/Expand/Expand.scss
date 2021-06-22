@@ -1,0 +1,30 @@
+.expand-component {
+    width: 100%;
+
+    &.expanded {
+        .expand-component__header {
+            background-color: #182f5d;
+            & img {
+                transform: rotateZ(180deg);
+            }
+        }
+    }
+
+    &__expanded {
+        height: 184px;
+        padding: 16px 15px 24px 24px;
+        background-color: #182f5d;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 24px;
+        background-color: #1a2243;
+
+        & img {
+            transition: 0.2s all;
+        }
+    }
+}

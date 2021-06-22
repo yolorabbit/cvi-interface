@@ -1,0 +1,95 @@
+.table-component {
+    padding: 40px;
+
+    table {
+        width: 100%;
+    }
+
+    & thead {
+        & tr {
+            border-color: transparent;
+        }
+        
+        & th {
+            padding-bottom: 16px;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 24px;
+            letter-spacing: normal;
+            text-align: left;
+            color: rgba(white, 0.5);
+        }
+    }
+
+    & tbody {
+        & tr {
+            height: 64px;
+            border-left: 16px solid transparent;
+            border-right: 16px solid transparent;
+
+            & td {
+                border-collapse: separate;
+            }
+
+            &:hover {
+                border-left: 16px solid #1a2243;
+                border-right: 16px solid #1a2243;
+                background-color: #1a2243;
+            }
+        }
+    }
+
+    & td, & th {
+        text-align: left;
+        vertical-align: middle;
+
+        &:first-child {
+            & img {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        & > div {
+            width: 100%;
+            display: table-cell;
+        }
+
+        &:last-child {
+            text-align: right;
+        }
+    }
+}
+
+.value-component {
+    & b, & span {
+        font-size: 14px;
+    }
+}
+
+.pnl-component {
+    &.high {
+        & .pnl-component__precents { 
+            color: #2bdec1;
+        }
+    }
+
+    &.low { 
+        & .pnl-component__precents {
+            color: #f44336;
+        }
+    }
+
+    & b, & span {
+        font-size: 14px;
+    }
+
+    &__precents {
+        width: 100%;
+
+        & img {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}
