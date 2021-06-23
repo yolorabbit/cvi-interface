@@ -5,7 +5,7 @@ import Container from '../../../Layout/Container';
 import TabsForm from '../../../TabsForm';
 import config from '../../../../config/config';
 import Table from './Table';
-import List from 'components/List';
+import ExpandList from './ExpandList';
 import './Tables.scss';
 
 const Tables = () => {
@@ -16,11 +16,11 @@ const Tables = () => {
     const renderView = () => {
         switch(activeTab) {
             case config.tabs.trade.positions: {
-                return isTablet ? <List /> : <Table activeTab={activeTab} />
+                return isTablet ? <ExpandList activeTab={activeTab} /> : <Table activeTab={activeTab} />
             }
 
             case config.tabs['view-liquidity'].liquidity: {
-                return isTablet ? <List /> : <Table activeTab={activeTab} />
+                return isTablet ? <ExpandList activeTab={activeTab} /> : <Table activeTab={activeTab} />
             }
 
             case "History": 

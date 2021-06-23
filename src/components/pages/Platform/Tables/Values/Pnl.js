@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Pnl = ({value, token, precents}) => {
+const Pnl = ({value, token, precents}) => {
     const isPositive = precents >= 0;
 
     return (
@@ -11,3 +11,5 @@ export const Pnl = ({value, token, precents}) => {
         </div>
     )
 }
+
+export default Pnl;

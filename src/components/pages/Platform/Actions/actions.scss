@@ -17,11 +17,14 @@
     }
 
     @media (max-width: 1024px) {
-        height: 48px;
-        padding: 2px 16px;
-        border-radius: 4px;
-        border: solid 1px #2bdec1;
-        border-radius: 8px;       
+        height: 6.258vw;
+        padding: 0.261vw 2.086vw;
+        border-radius: 0.522vw;
+        border: solid 0.13vw #2bdec1;
+        border-radius: 1.043vw;   
+        margin-top: 1.043vw;    
+        display: flex;
+        align-items: center;
     }
     
     @media (max-width: 767px) {
@@ -41,7 +44,7 @@
         }
     
         @media (max-width: 1024px) {
-                    
+            font-size: 1.825vw;
         }
         
         @media (max-width: 767px) {
@@ -57,7 +60,7 @@
         }
 
         @media (max-width: 1024px) {
-            margin-right: 10px;    
+            margin-right: 1.304vw;    
         }
         
         @media (max-width: 767px) {
@@ -80,7 +83,8 @@
         }
     
         @media (max-width: 1024px) {
-            font-size: 16px;
+            font-size: 2.086vw;
+            margin-left: auto;
         }
         
         @media (max-width: 767px) {
@@ -121,11 +125,11 @@
             }
         
             @media (max-width: 1024px) {
-                width: 168px;
-                height: 40px;
-                border-radius: 4px;
-                margin-left: 16px;
-                font-size: 16px;   
+                width: 21.904vw;
+                height: 5.215vw;
+                border-radius: 0.522vw;
+                margin-left: 2.086vw;
+                font-size: 2.086vw;   
             }
             
             @media (max-width: 767px) {

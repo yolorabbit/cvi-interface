@@ -40,7 +40,7 @@
     
             @media (max-width: 1024px) {
                 padding-bottom: 16px;
-                font-size: 14px;
+                font-size: 1.026vw;
                 line-height: 24px;        
             }
             
@@ -109,28 +109,7 @@
         padding-right: 12px;
 
         &:first-child {
-            padding: 0;
-
-            & img {
-                width: 1.667vw;
-                height: 1.667vw;
-                
-                @media (max-width: 1365px) {
-                    width: 2.344vw;
-                    height: 2.344vw;
-                    margin-right: 1.758vw;
-                }
-
-                @media (max-width: 1024px) {
-                    width: 32px;
-                    height: 32px;
-                }
-
-                @media (max-width: 767px) {
-                    width: 32px;
-                    height: 32px;
-                }
-            }
+            padding: 0; 
         }
 
         & > div {
@@ -143,79 +122,6 @@
             display: table;
             margin-left: auto;
             padding: 0;
-        }
-    }
-}
-
-.value-component {
-    & b, & span {
-        font-size: 0.729vw;
-
-        @media (max-width: 1365px) {
-            font-size: 1.026vw;       
-        }
-
-        @media (max-width: 1024px) {
-            font-size: 14px;      
-        }
-
-        @media (max-width: 767px) {
-            font-size: 14px;    
-        }
-    }
-}
-
-.pnl-component {
-    &.high {
-        & .pnl-component__precents { 
-            color: #2bdec1;
-        }
-    }
-
-    &.low { 
-        & .pnl-component__precents {
-            color: #f44336;
-        }
-    }
-
-    & b, & span {
-        font-size: 0.729vw;
-
-        @media (max-width: 1365px) {
-            font-size: 1.026vw;     
-        }
-
-        @media (max-width: 1024px) {
-            font-size: 14px;
-        }
-        
-        @media (max-width: 767px) {
-            font-size: 14px;   
-        }
-    }
-
-    &__precents {
-        width: 100%;
-        white-space: nowrap;
-
-        & img {
-            width: 0.833vw;
-            height: 0.833vw;
-
-            @media (max-width: 1365px) {
-                width: 1.172vw;
-                height: 1.172vw;   
-            }
-    
-            @media (max-width: 1024px) {
-                width: 16px;
-                height: 16px;      
-            }
-            
-            @media (max-width: 767px) {
-                width: 16px;
-                height: 16px;      
-            }
         }
     }
 }

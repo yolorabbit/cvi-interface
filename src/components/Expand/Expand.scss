@@ -1,30 +1,90 @@
 .expand-component {
-    width: 100%;
+   width: 100%;
 
-    &.expanded {
-        .expand-component__header {
-            background-color: #182f5d;
-            & img {
-                transform: rotateZ(180deg);
+   &.expanded {
+      .expand-component__header {
+         background-color: #182f5d;
+         & .row-item-component {
+            &.action {
+               display: block;
             }
-        }
-    }
+         }
 
-    &__expanded {
-        height: 184px;
-        padding: 16px 15px 24px 24px;
-        background-color: #182f5d;
-    }
+         & > img {
+            transform: rotateZ(180deg);
+         }
+      }
+   }
 
-    &__header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px 24px;
-        background-color: #1a2243;
+   &__expanded {
+      padding: 2.086vw 1.956vw 3.129vw 3.129vw;
+      background-color: #182f5d;
 
-        & img {
-            transition: 0.2s all;
-        }
-    }
+      .row-item-component {
+         margin-top: 0.833vw;
+         @media (max-width: 1365px) {
+            margin-top: 1.172vw;
+         }
+
+         @media (max-width: 1024px) {
+            margin-top: 2.086vw;
+         }
+
+         @media (max-width: 767px) {
+            margin-top: 4.444vw;
+         }
+
+         &:first-child {
+            margin-top: 0;
+         }
+
+         &--title {
+            font-weight: normal;
+            color: rgba(white, 0.5);
+            margin-bottom: 0.417vw;
+            font-size: 0.729vw;
+            @media (max-width: 1365px) {
+               margin-bottom: 0.586vw;
+               font-size: 1.026vw;
+            }
+
+            @media (max-width: 1024px) {
+               margin-bottom: 1.043vw;
+               font-size: 1.825vw;
+            }
+
+            @media (max-width: 767px) {
+               margin-bottom: 8px;
+               font-size: 14px;
+            }
+         }
+      }
+   }
+
+   &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      background-color: #1a2243;
+
+      & .row-item-component {
+         &.action {
+            display: none;
+         }
+
+         &:nth-last-child(2) {
+            margin-left: auto;
+            margin-right: 2.608vw;
+         }
+
+         &:nth-child(2) {
+            margin-right: auto;
+         }
+      }
+
+      & img {
+         transition: 0.2s all;
+      }
+   }
 }

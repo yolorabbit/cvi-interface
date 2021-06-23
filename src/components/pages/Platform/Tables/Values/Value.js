@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Value = ({text, subText}) => {
+const Value = ({text, subText}) => {
     return (
         <div className="value-component">
             <b>{text} </b>
@@ -8,3 +8,5 @@ export const Value = ({text, subText}) => {
         </div>
     )
 }
+
+export default Value;

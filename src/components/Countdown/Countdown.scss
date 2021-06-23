@@ -1,5 +1,6 @@
 .count-down-component {
     align-self: center;
+    white-space: nowrap;
     
     & img {
         margin-right: 0.104vw;
@@ -13,9 +14,9 @@
         }
 
         @media (max-width: 1024px) {
-            margin-right: 2px;    
-            width: 16px;
-            height: 16px;    
+            margin-right: 0.261vw;    
+            width: 2.086vw;
+            height: 2.086vw;     
         }
         
         @media (max-width: 767px) {
@@ -35,13 +36,13 @@
         }
 
         @media (max-width: 1024px) {
-            margin-right: 2px;
-            font-size: 14px;       
+            margin-right: 0.261vw;
+            font-size: 1.825vw;       
         }
         
         @media (max-width: 767px) {
             margin-right: 2px;
-            font-size: 14px;        
+            font-size: 7.869px;        
         }
     }
 
@@ -53,7 +54,7 @@
         }
 
         @media (max-width: 1024px) {
-            font-size: 10px;      
+            font-size: 1.304vw;      
         }
         
         @media (max-width: 767px) {

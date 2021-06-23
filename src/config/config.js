@@ -1,3 +1,22 @@
+const tabs = {
+  "sub-navbar": {
+      "trade": "Trade",
+      "view-liquidity": "Provide Liquidity"
+  },
+  graphs: {
+      "cvi index": "CVI Index",
+      "funding fee": "Funding fee"
+  },
+  trade: {
+      "positions": "Open trades",
+      "history": "History"
+  },
+  "view-liquidity": {
+      "liquidity": "Liquidity",
+      "history": "History"
+  }
+};
+
 const config = {
     routes: {
         platform: {
@@ -17,24 +36,7 @@ const config = {
             path: '/about'
         }
     },
-    tabs: {
-        "sub-navbar": {
-            "trade": "Trade",
-            "view-liquidity": "Provide Liquidity"
-        },
-        graphs: {
-            "cvi index": "CVI Index",
-            "funding fee": "Funding fee"
-        },
-        trade: {
-            "positions": "Open trades",
-            "history": "History"
-        },
-        "view-liquidity": {
-            "liquidity": "Liquidity",
-            "history": "History"
-        }
-    },
+    tabs,
     socialLinks: [
         { iconName: 'github', to: 'https://github.com/coti-io/cvi-contracts' },
         { iconName: 'telegram', to: 'https://t.me/cviofficial' },
@@ -85,7 +87,40 @@ const config = {
           className: "bold green",
           suffix: "GOVI"
         }
-     },
+    },
+    tokens: ["usdt", "eth"],
+    headers: {
+      [tabs.trade.positions]:  {
+        "Value": {
+          label: "Value"
+        },
+        "P&L": {
+          label: "P&L"
+        },
+        "Rewards (claimable today)": {
+          label: "Rewards (claimable today)"
+        },
+        "Leverage": {
+          label: "Leverage"
+        },
+        "Estimated Liquidation": {
+          label: "Estimated Liquidation"
+        },
+      },
+      [tabs['view-liquidity'].liquidity]:  {
+        "My liquidity (pool share)": {
+          label: "My liquidity (pool share)"
+        },
+        "P&L": {
+          label: "P&L"
+        },
+        "Pool size": {
+          label: "Pool size"
+        },
+      }
+    }
 }
+
+console.log(config);
 
 export default config;
