@@ -6,6 +6,7 @@ import './Navbar.scss';
 import Button from '../Elements/Button';
 
 const Navbar = () => {
+    const [pageYOffset, setPageYOffset] = useState(0);
     const location = useLocation();
     const isTablet = useIsTablet();
     const [activePath, setActivePath] = useState();
@@ -15,15 +16,37 @@ const Navbar = () => {
         setActivePath(location?.pathname);
     }, [location?.pathname]);
 
+    useEffect(() => {
+        const onScroll = () => {
+          setPageYOffset(window?.pageYOffset);
+        }
+        window.addEventListener('scroll', onScroll);
+        return () => {
+          window.removeEventListener('scroll', onScroll);
+        } 
+    }, []);
+      
+
+    const RenderView = useMemo(() => {
+        return (
+            <> 
+                <Logo />
+
+                {!isTablet && links.map(({label, path}) => <div key={path} className="navbar-component__list">
+                    <Link className={path === activePath ? 'active' : ''} to={path}>{label}</Link>
+                </div>)}    
+
+                {isTablet && <Hamburger />}
+            </>
+        )
+        //eslint-disable-next-line
+    }, [activePath, isTablet]);
+
     return (
-        <div className="navbar-component">
-            <Logo />
-
-            {!isTablet && links.map(({label, path}) => <div key={path} className="navbar-component__list">
-                <Link className={path === activePath ? 'active' : ''} to={path}>{label}</Link>
-            </div>)}    
-
-            {isTablet && <Hamburger />}
+        <div className={`navbar-component ${pageYOffset > 25 ? 'is-scroll' : ''}`}>
+          <div className="navbar-component__container">
+            {RenderView}
+          </div>
         </div>
     )
 }
