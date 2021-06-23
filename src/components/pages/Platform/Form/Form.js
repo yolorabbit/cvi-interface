@@ -21,7 +21,6 @@ const Form = () => {
                     {activeView === 'trade' && <SelectLeverage leverage={leverage} setLeverage={setLeverage} /> }
                   
                     <ActionController 
-                        isModal
                         amount={amount}
                         setAmount={setAmount}
                         token={selectedCurrency}

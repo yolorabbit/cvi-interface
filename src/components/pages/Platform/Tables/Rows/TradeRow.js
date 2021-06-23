@@ -1,13 +1,25 @@
 import { useIsMobile, useIsTablet } from "components/hooks";
 import config from "config/config";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Claim, Sell } from "../../Actions";
+import ActionController from "../../Actions/ActionController";
 import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
 
 const TradeRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
+    const [amount, setAmount] = useState("");
+
+    const sellController = useMemo(() => {
+        return <ActionController 
+            isModal 
+            token={token}
+            amount={amount}
+            setAmount={setAmount}
+            actionComponent={<Sell />}
+        />
+    }, [token, amount]);
 
     const RowData = useMemo(() => (
         <> 
@@ -31,15 +43,16 @@ const TradeRow = ({token, isHeader}) => {
                 header={config.headers[config.tabs.trade.positions]["Estimated Liquidation"].label} 
                 content={<Value text="22.06.2021" />} 
             />
-            {(!isTablet || isMobile) && <RowItem content={<Sell />} /> }
+            {(!isTablet || isMobile) && <RowItem content={sellController} /> }
         </>
-    ), [token, isTablet, isMobile]);
+        //eslint-disable-next-line
+    ), [token, isTablet, isMobile, amount]);
 
     if(isHeader) {
         return <>
              <RowItem content={<Coin token={token} />} />
              <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()} (0.03%)`} /> } />
-             {!isMobile && <RowItem type="action" content={<Sell />} /> }
+             {!isMobile && <RowItem type="action" content={sellController} /> }
         </>
     }
 

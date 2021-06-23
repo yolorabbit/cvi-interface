@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 
@@ -25,11 +25,36 @@ const ActionController = ({token, leverage, amount, setAmount, actionComponent, 
     </ActionControllerContext>
   }
 
+  useEffect(() => {
+    if(!isOpen) {
+      setAmount("");
+    }
+    //eslint-disable-next-line
+  }, [isOpen]);
+
   return <div className="action-controller-component">
-      {isModal && isOpen && <Modal closeIcon handleCloseModal={() => setIsOpen(false)}>
+      {(isModal && isOpen) && <Modal closeIcon handleCloseModal={() => setIsOpen(false)}>
+        <h1>{token}</h1>
+        <h1>{amount}</h1>
+
+        <InputAmount 
+          label="Amount" 
+          symbol={token} 
+          balance="100000" 
+          amount={amount} 
+          setAmount={setAmount} 
+        />
+
         {renderActionComponent()}
       </Modal>}
-      <InputAmount label="Amount" symbol={token} balance="100000" amount={amount} setAmount={setAmount} />
+
+      {!isModal && <InputAmount 
+        label="Amount" 
+        symbol={token} 
+        balance="100000" 
+        amount={amount} 
+        setAmount={setAmount} /> 
+      }
       
       {renderActionComponent(isModal)}
   </div>

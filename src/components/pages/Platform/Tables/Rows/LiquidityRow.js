@@ -1,15 +1,27 @@
 import { Withdraw } from "components/pages/Platform/Actions"
 import { useIsMobile, useIsTablet } from "components/hooks";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import RowItem from './RowItem';
 import Coin from '../Values/Coin';
 import Value from '../Values/Value';
 import Pnl from '../Values/Pnl';
 import config from "config/config";
+import ActionController from "../../Actions/ActionController";
 
 const LiquidityRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
+    const [amount, setAmount] = useState("");
+
+    const withdrawController = useMemo(() => {
+        return <ActionController 
+            isModal 
+            token={token}
+            amount={amount}
+            setAmount={setAmount}
+            actionComponent={<Withdraw />}
+        />
+    }, [token, amount]);
 
     const RowData = useMemo(() => (
         <> 
@@ -28,15 +40,16 @@ const LiquidityRow = ({token, isHeader}) => {
                 content={<Value text="768.20820509" subText={token?.toUpperCase()} /> } 
             />
 
-            {(!isTablet || isMobile) && <RowItem content={<Withdraw />} />}
+            {(!isTablet || isMobile) && <RowItem content={withdrawController} />}
         </>
-    ), [token, isTablet, isMobile]);
+        //eslint-disable-next-line
+    ), [token, isTablet, isMobile, amount]);
 
     if(isHeader) {
         return <>
             <RowItem content={<Coin token={token} />} />
             <RowItem content={<Value text="450,508.45637366" subText={`${token?.toUpperCase()} (0.03%)`} /> } />
-            {!isMobile && <RowItem type="action" content={<Withdraw />} /> }
+            {!isMobile && <RowItem type="action" content={withdrawController} /> }
         </>
     }
 
