@@ -2,10 +2,62 @@
     align-self: center;
     
     & img {
-        margin-right: 2px;
+        margin-right: 0.104vw;
+        width: 0.833vw;
+        height: 0.833vw;
+
+        @media (max-width: 1365px) {
+            margin-right: 0.147vw;  
+            width: 1.172vw;
+            height: 1.172vw;   
+        }
+
+        @media (max-width: 1024px) {
+            margin-right: 2px;    
+            width: 16px;
+            height: 16px;    
+        }
+        
+        @media (max-width: 767px) {
+            margin-right: 2px;    
+            width: 16px;
+            height: 16px;    
+        }
     }
 
     & b {
-        margin-right: 2px;
+        margin-right: 0.104vw;
+        font-size: 0.729vw;
+
+        @media (max-width: 1365px) {
+            margin-right: 0.147vw;
+            font-size: 1.026vw;      
+        }
+
+        @media (max-width: 1024px) {
+            margin-right: 2px;
+            font-size: 14px;       
+        }
+        
+        @media (max-width: 767px) {
+            margin-right: 2px;
+            font-size: 14px;        
+        }
+    }
+
+    & small {
+        font-size: 0.521vw;
+
+        @media (max-width: 1365px) {
+            font-size: 0.733vw;        
+        }
+
+        @media (max-width: 1024px) {
+            font-size: 10px;      
+        }
+        
+        @media (max-width: 767px) {
+            font-size: 10px;     
+        }
     }
 }

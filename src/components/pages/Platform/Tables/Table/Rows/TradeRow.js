@@ -10,10 +10,10 @@ export const TradeRow = ({token}) => {
             </div>
         </td>
 
-        <td> <Value text="8.45637366" subText={`${token?.toUpperCase()} (0.03%)`} /> </td>
+        <td> <Value text="880,503.45637366" subText={`${token?.toUpperCase()} (0.03%)`} /> </td>
 
         <td>
-            <Pnl value="1.30024285" token={`${token?.toUpperCase()}`} precents={5.6} /> 
+            <Pnl value="112,000.30024285" token={`${token?.toUpperCase()}`} precents={5.6} /> 
         </td>
 
         <td>

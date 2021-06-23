@@ -1,5 +1,17 @@
 .table-component {
-    padding: 40px;
+    padding: 2.083vw;
+
+    @media (max-width: 1365px) {
+        padding: 2.93vw;         
+    }
+
+    @media (max-width: 1024px) {
+        padding: 40px;       
+    }
+    
+    @media (max-width: 767px) {
+        padding: 40px;       
+    }
 
     table {
         width: 100%;
@@ -11,21 +23,58 @@
         }
         
         & th {
-            padding-bottom: 16px;
-            font-size: 14px;
             font-weight: normal;
-            line-height: 24px;
             letter-spacing: normal;
             text-align: left;
             color: rgba(white, 0.5);
+            padding-bottom: 0.833vw;
+            font-size: 0.729vw;
+            line-height: 1.25vw;
+            white-space: nowrap;
+
+            @media (max-width: 1365px) {
+                padding-bottom: 1.172vw;
+                font-size: 1.026vw;
+                line-height: 1.758vw;   
+            }
+    
+            @media (max-width: 1024px) {
+                padding-bottom: 16px;
+                font-size: 14px;
+                line-height: 24px;        
+            }
+            
+            @media (max-width: 767px) {
+                padding-bottom: 16px;
+                font-size: 14px;
+                line-height: 24px;        
+            }
         }
     }
 
     & tbody {
         & tr {
-            height: 64px;
-            border-left: 16px solid transparent;
-            border-right: 16px solid transparent;
+            height: 3.333vw;
+            border-left: 0.833vw solid transparent;
+            border-right: 0.833vw solid transparent;
+
+            @media (max-width: 1365px) {
+                height: 4.689vw;
+                border-left: 1.172vw solid transparent;
+                border-right: 1.172vw solid transparent;  
+            }
+    
+            @media (max-width: 1024px) {
+                height: 64px;
+                border-left: 16px solid transparent;
+                border-right: 16px solid transparent;        
+            }
+            
+            @media (max-width: 767px) {
+                height: 64px;
+                border-left: 16px solid transparent;
+                border-right: 16px solid transparent;     
+            }
 
             & td {
                 height: inherit;
@@ -33,9 +82,23 @@
             }
 
             &:hover {
-                border-left: 16px solid #1a2243;
-                border-right: 16px solid #1a2243;
                 background-color: #1a2243;
+                border-left: 0.833vw solid #1a2243;
+                border-right: 0.833vw solid #1a2243;
+                @media (max-width: 1365px) {
+                    border-left: 1.172vw solid #1a2243;
+                    border-right: 1.172vw solid #1a2243;
+                }
+        
+                @media (max-width: 1024px) {
+                    border-left: 16px solid #1a2243;
+                    border-right: 16px solid #1a2243;       
+                }
+                
+                @media (max-width: 767px) {
+                    border-left: 16px solid #1a2243;
+                    border-right: 16px solid #1a2243;      
+                }
             }
         }
     }
@@ -43,11 +106,30 @@
     & td, & th {
         text-align: left;
         vertical-align: middle;
+        padding-right: 12px;
 
         &:first-child {
+            padding: 0;
+
             & img {
-                width: 32px;
-                height: 32px;
+                width: 1.667vw;
+                height: 1.667vw;
+                
+                @media (max-width: 1365px) {
+                    width: 2.344vw;
+                    height: 2.344vw;
+                    margin-right: 1.758vw;
+                }
+
+                @media (max-width: 1024px) {
+                    width: 32px;
+                    height: 32px;
+                }
+
+                @media (max-width: 767px) {
+                    width: 32px;
+                    height: 32px;
+                }
             }
         }
 
@@ -60,13 +142,26 @@
             text-align: right;
             display: table;
             margin-left: auto;
+            padding: 0;
         }
     }
 }
 
 .value-component {
     & b, & span {
-        font-size: 14px;
+        font-size: 0.729vw;
+
+        @media (max-width: 1365px) {
+            font-size: 1.026vw;       
+        }
+
+        @media (max-width: 1024px) {
+            font-size: 14px;      
+        }
+
+        @media (max-width: 767px) {
+            font-size: 14px;    
+        }
     }
 }
 
@@ -84,15 +179,43 @@
     }
 
     & b, & span {
-        font-size: 14px;
+        font-size: 0.729vw;
+
+        @media (max-width: 1365px) {
+            font-size: 1.026vw;     
+        }
+
+        @media (max-width: 1024px) {
+            font-size: 14px;
+        }
+        
+        @media (max-width: 767px) {
+            font-size: 14px;   
+        }
     }
 
     &__precents {
         width: 100%;
+        white-space: nowrap;
 
         & img {
-            width: 16px;
-            height: 16px;
+            width: 0.833vw;
+            height: 0.833vw;
+
+            @media (max-width: 1365px) {
+                width: 1.172vw;
+                height: 1.172vw;   
+            }
+    
+            @media (max-width: 1024px) {
+                width: 16px;
+                height: 16px;      
+            }
+            
+            @media (max-width: 767px) {
+                width: 16px;
+                height: 16px;      
+            }
         }
     }
 }

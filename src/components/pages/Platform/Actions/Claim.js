@@ -4,8 +4,8 @@ import React from 'react'
 const Claim = () => {
     return (
         <div className="claim-component">
-            <b>1.01164174 </b>
-            <span>GOVI (2,700 GOVI) </span>
+            <b>100,587.01164174</b>
+            <span>&nbsp;GOVI (2,700 GOVI) </span>
             <Button className="claim-button" buttonText="Claim" onClick={() => {}} /> 
         </div>
     )
