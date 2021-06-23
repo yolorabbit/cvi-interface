@@ -2,6 +2,16 @@
     align-self: center;
     white-space: nowrap;
     
+    @media (max-width: 1024px) {
+        display: flex;
+        align-items: center;
+    }
+
+    @media (max-width: 767px) { 
+        align-self: unset;
+        margin-bottom: 2.222vw;
+    }
+
     & img {
         margin-right: 0.104vw;
         width: 0.833vw;
@@ -14,15 +24,15 @@
         }
 
         @media (max-width: 1024px) {
-            margin-right: 0.261vw;    
+            margin-right: 0.522vw;    
             width: 2.086vw;
             height: 2.086vw;     
         }
         
         @media (max-width: 767px) {
-            margin-right: 2px;    
-            width: 16px;
-            height: 16px;    
+            margin-right: 0.556vw;    
+            width: 4.444vw;
+            height: 4.444vw;
         }
     }
 
@@ -41,8 +51,8 @@
         }
         
         @media (max-width: 767px) {
-            margin-right: 2px;
-            font-size: 7.869px;        
+            margin-right: 0.556vw;
+            font-size: 3.889vw;       
         }
     }
 
@@ -58,7 +68,7 @@
         }
         
         @media (max-width: 767px) {
-            font-size: 10px;     
+            font-size: 2.778vw;     
         }
     }
 }

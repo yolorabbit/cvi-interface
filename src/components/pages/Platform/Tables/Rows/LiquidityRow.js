@@ -1,5 +1,5 @@
 import { Withdraw } from "components/pages/Platform/Actions"
-import { useIsTablet } from "components/hooks";
+import { useIsMobile, useIsTablet } from "components/hooks";
 import { useMemo } from "react";
 import RowItem from './RowItem';
 import Coin from '../Values/Coin';
@@ -9,6 +9,7 @@ import config from "config/config";
 
 const LiquidityRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
+    const isMobile = useIsMobile();
 
     const RowData = useMemo(() => (
         <> 
@@ -27,15 +28,15 @@ const LiquidityRow = ({token, isHeader}) => {
                 content={<Value text="768.20820509" subText={token?.toUpperCase()} /> } 
             />
 
-            {!isTablet && <RowItem content={<Withdraw />} />}
+            {(!isTablet || isMobile) && <RowItem content={<Withdraw />} />}
         </>
-    ), [token, isTablet]);
+    ), [token, isTablet, isMobile]);
 
     if(isHeader) {
         return <>
             <RowItem content={<Coin token={token} />} />
             <RowItem content={<Value text="450,508.45637366" subText={`${token?.toUpperCase()} (0.03%)`} /> } />
-            <RowItem type="action" content={<Withdraw />} />
+            {!isMobile && <RowItem type="action" content={<Withdraw />} /> }
         </>
     }
 

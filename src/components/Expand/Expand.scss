@@ -10,16 +10,19 @@
             }
          }
 
-         & > img {
+         &--button > img {
             transform: rotateZ(180deg);
          }
       }
    }
 
    &__expanded {
-      padding: 2.086vw 1.956vw 3.129vw 3.129vw;
       background-color: #182f5d;
-
+      padding: 2.086vw;
+      @media (max-width: 767px) {
+          padding: 0 4.444vw 4.444vw 4.444vw;
+      }
+    
       .row-item-component {
          margin-top: 0.833vw;
          @media (max-width: 1365px) {
@@ -54,8 +57,9 @@
             }
 
             @media (max-width: 767px) {
-               margin-bottom: 8px;
-               font-size: 14px;
+               margin-bottom: 2.222vw;
+               font-size: 3.889vw;
+               display: block;
             }
          }
       }
@@ -65,8 +69,19 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 16px 24px;
       background-color: #1a2243;
+      padding: 0.833vw 1.25vw;
+      @media (max-width: 1365px) {
+         padding: 1.172vw 1.758vw;
+      }
+
+      @media (max-width: 1024px) {
+         padding: 2.086vw 3.129vw;
+      }
+
+      @media (max-width: 767px) {
+         padding: 4.444vw;
+      }
 
       & .row-item-component {
          &.action {
@@ -80,11 +95,40 @@
 
          &:nth-child(2) {
             margin-right: auto;
+            flex: 1;
          }
       }
 
-      & img {
-         transition: 0.2s all;
+      &--button {
+          background-color: transparent;
+          border: 0;
+          outline: 0;
+          transition: 0.2s transform;
+          &:active {
+              transform: scale(1.12);
+          }
+
+          & img {
+             transition: 0.2s all;
+             width: 1.25vw;
+             height: 1.25vw;
+    
+             @media (max-width: 1365px) {
+                width: 1.758vw;
+                height: 1.758vw;
+             }
+    
+             @media (max-width: 1024px) {
+                width: 3.129vw;
+                height: 3.129vw;
+             }
+    
+             @media (max-width: 767px) {
+                width: 6.667vw;
+                height: 6.667vw;
+             }
+          }
       }
+      
    }
 }

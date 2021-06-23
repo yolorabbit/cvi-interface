@@ -1,4 +1,4 @@
-import { useIsTablet } from "components/hooks";
+import { useIsMobile, useIsTablet } from "components/hooks";
 import config from "config/config";
 import { useMemo } from "react";
 import { Claim, Sell } from "../../Actions";
@@ -7,6 +7,7 @@ import RowItem from './RowItem';
 
 const TradeRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
+    const isMobile = useIsMobile();
 
     const RowData = useMemo(() => (
         <> 
@@ -30,15 +31,15 @@ const TradeRow = ({token, isHeader}) => {
                 header={config.headers[config.tabs.trade.positions]["Estimated Liquidation"].label} 
                 content={<Value text="22.06.2021" />} 
             />
-            {!isTablet && <RowItem content={<Sell />} /> }
+            {(!isTablet || isMobile) && <RowItem content={<Sell />} /> }
         </>
-    ), [token, isTablet]);
+    ), [token, isTablet, isMobile]);
 
     if(isHeader) {
         return <>
              <RowItem content={<Coin token={token} />} />
              <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()} (0.03%)`} /> } />
-             <RowItem type="action" content={<Sell />} />
+             {!isMobile && <RowItem type="action" content={<Sell />} /> }
         </>
     }
 

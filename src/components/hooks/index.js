@@ -7,6 +7,11 @@ export const useViewport = () => {
   return { width, height };
 }
 
+export const useIsMobile = () => {
+  const { width } = useContext(viewportContext);
+  return width <= 767
+}
+
 export const useIsDesktop = () => {
   const { width } = useContext(viewportContext);
   return width > 767
