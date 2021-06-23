@@ -3,30 +3,30 @@ import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 
 export const actionControllerContext = createContext({});
-export const ActionControllerContext = ({children, token, leverage, amount, isModal, setIsOpen}) => {
+export const ActionControllerContext = ({children, token, leverage, amount, setAmount, isModal, setIsOpen}) => {
   return (
-    <actionControllerContext.Provider value={{ token, leverage, amount, isModal, setIsOpen }}>
+    <actionControllerContext.Provider value={{ token, leverage, amount, setAmount, isModal, setIsOpen }}>
       {children}
     </actionControllerContext.Provider>
   )
 }
 
 export const useActionController = () => {
-  const { token, leverage, amount, isModal, setIsOpen } = useContext(actionControllerContext);
-  return { token, leverage, amount, isModal, setIsOpen };
+  const { token, leverage, amount, isModal, setIsOpen, setAmount } = useContext(actionControllerContext);
+  return { token, leverage, amount, setAmount, isModal, setIsOpen };
 }
 
 const ActionController = ({token, leverage, amount, setAmount, actionComponent, isModal}) => {
   const [isOpen, setIsOpen] = useState();
 
   const renderActionComponent = (isModal = false) => {
-    return <ActionControllerContext token={token} leverage={leverage} amount={amount} isModal={isModal} setIsOpen={setIsOpen}>
+    return <ActionControllerContext token={token} leverage={leverage} amount={amount} setAmount={setAmount} isModal={isModal} setIsOpen={setIsOpen}>
       {actionComponent}
     </ActionControllerContext>
   }
 
   useEffect(() => {
-    if(!isOpen) {
+    if(!isOpen && amount !== "") {
       setAmount("");
     }
     //eslint-disable-next-line
@@ -55,7 +55,7 @@ const ActionController = ({token, leverage, amount, setAmount, actionComponent, 
         amount={amount} 
         setAmount={setAmount} /> 
       }
-      
+
       {renderActionComponent(isModal)}
   </div>
 };

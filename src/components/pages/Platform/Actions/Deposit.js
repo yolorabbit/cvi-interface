@@ -3,7 +3,7 @@ import React from 'react'
 import { useActionController } from './ActionController';
 
 const Deposit = () => {
-    const { token, isModal, setIsOpen, amount } = useActionController();
+    const { token, isModal, setIsOpen, amount, setAmount } = useActionController();
 
     const onClick = () => {
         console.log(token, amount);
@@ -12,6 +12,8 @@ const Deposit = () => {
         } else {
             setIsOpen(false);
         }
+
+        setAmount("");
     }
 
     return (
