@@ -159,23 +159,34 @@
 
 .buy-component, .deposit-component {
     & .button {
-        height: 2.5vw;
+        margin-top: 1.146vw;
+        height: 2.917vw;
+        border-radius: 0.417vw;
+        box-shadow: 0 0.104vw 0.521vw 0 rgba(0, 0, 0, 0.25);
+        background-color: #fea716;
+        line-height: 1px;
         font-size: 0.833vw;
-        border-radius: 8px;
+        font-weight: bold;
 
         @media (max-width: 1365px){
-            height: 3.516vw;
+            margin-top: 1.172vw;
+            height: 4.103vw;
             font-size: 1.172vw;
+            border-radius: 0.586vw;
         }
 
         @media (max-width: 1024px){
+            margin-top: 2.086vw;
             height: 7.301vw;
             font-size: 2.086vw;
+            border-radius: 1.043vw;
         }
 
         @media (max-width: 767px){
+            margin-top: 4.444vw;
             height: 15.556vw;
             font-size: 4.444vw;
+            border-radius: 2.222vw;
         }
     }
 }
