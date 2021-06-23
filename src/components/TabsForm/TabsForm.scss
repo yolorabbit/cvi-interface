@@ -11,6 +11,9 @@
         border-bottom-right-radius: 0;
 
         @media (max-width: 767px) {
+            border-radius: 4.444vw;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
             flex-direction: column;
             & .tabs-component {
                 display: flex;
