@@ -1,4 +1,5 @@
 .value-component {
+    line-height: 1;
   & b, & span {
       font-size: 0.729vw;
 
@@ -64,8 +65,8 @@
           }
           
           @media (max-width: 767px) {
-              width: 16px;
-              height: 16px;      
+              width: 4.444vw;
+              height: 4.444vw;      
           }
       }
   }
@@ -85,10 +86,12 @@
   @media (max-width: 1024px) {
       width: 4.172vw;
       height: 4.172vw;
+      margin-right: 1.043vw;
   }
 
   @media (max-width: 767px) {
       width: 8.889vw;
       height: 8.889vw;
+      margin-right: 2.222vw;
   }
 }

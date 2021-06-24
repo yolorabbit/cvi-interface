@@ -19,6 +19,11 @@
    &__expanded {
       background-color: #182f5d;
       padding: 2.086vw;
+ 
+      @media (max-width: 1024px){ 
+         padding: 0 3.129vw 3.129vw 3.129vw;
+      }
+
       @media (max-width: 767px) {
           padding: 0 4.444vw 4.444vw 4.444vw;
       }
@@ -54,12 +59,12 @@
             @media (max-width: 1024px) {
                margin-bottom: 1.043vw;
                font-size: 1.825vw;
+               display: block;
             }
 
             @media (max-width: 767px) {
                margin-bottom: 2.222vw;
                font-size: 3.889vw;
-               display: block;
             }
          }
       }

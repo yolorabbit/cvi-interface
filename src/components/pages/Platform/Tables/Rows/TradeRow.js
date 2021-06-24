@@ -26,7 +26,7 @@ const TradeRow = ({token, isHeader}) => {
         <> 
             {!isTablet && <> 
                 <RowItem content={<Coin token={token} />} />
-                <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()} (0.03%)`} /> } />
+                <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()}`} /> } />
             </>}
             <RowItem 
                 header={config.headers[config.tabs.trade.positions]["P&L"].label} 
@@ -52,7 +52,7 @@ const TradeRow = ({token, isHeader}) => {
     if(isHeader) {
         return <>
              <RowItem content={<Coin token={token} />} />
-             <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()} (0.03%)`} /> } />
+             <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()}`} /> } />
              {!isMobile && <RowItem type="action" content={sellController} /> }
         </>
     }

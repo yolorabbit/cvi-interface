@@ -30,7 +30,7 @@
         }
         
         @media (max-width: 767px) {
-            margin-right: 0.556vw;    
+            margin-right: 0.833vw;
             width: 4.444vw;
             height: 4.444vw;
         }
@@ -51,8 +51,9 @@
         }
         
         @media (max-width: 767px) {
-            margin-right: 0.556vw;
-            font-size: 3.889vw;       
+            margin-right: 0.733vw;
+            font-size: 2.778vw; 
+            margin-top: auto;      
         }
     }
 
@@ -68,7 +69,8 @@
         }
         
         @media (max-width: 767px) {
-            font-size: 2.778vw;     
+            font-size: 1.944vw;     
+            margin-top: auto;
         }
     }
 }
