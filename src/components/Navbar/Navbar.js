@@ -36,7 +36,7 @@ const Navbar = () => {
                     <Link className={path === activePath ? 'active' : ''} to={path}>{label}</Link>
                 </div>)}    
 
-                {isTablet && <Hamburger />}
+                {isTablet && <Hamburger activePath={activePath} links={links} />}
             </>
         )
         //eslint-disable-next-line
@@ -51,14 +51,26 @@ const Navbar = () => {
     )
 }
 
-const Hamburger = () => {
+const Hamburger = ({links, activePath}) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
         <> 
+            {isOpen && <div className="mobile-menu">
+                {links.map(({label, path}) => <div key={path} className="navbar-component__list">
+                        <Link 
+                            className={path === activePath ? 'active' : ''} 
+                            to={path}
+                            onClick={() => setIsOpen(false)}
+                        >{label}</Link>
+                </div>)}
+            </div>}
+            
             <Button className={`hamburger-component ${isOpen ? 'opened' : 'closed'}`} onClick={() => setIsOpen(!isOpen)} >
                 <div className="hamburger-component__container">
-                    <img src={require(`../../images/icons/${!isOpen ? 'menu-icon.svg' : 'close.svg'}`).default} alt="menu" />
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
             </Button>
         </>
