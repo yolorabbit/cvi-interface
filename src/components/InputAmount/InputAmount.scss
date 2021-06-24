@@ -64,6 +64,7 @@
 
         @media (max-width: 767px){
             height: 13.333vw;
+            font-size: 3.889vw;
         }
 
         /* Chrome, Safari, Edge, Opera */
@@ -96,8 +97,8 @@
             }
 
             @media (max-width: 767px){ 
-                font-size: 5vw;
-                transform: translateY(1.111vw);
+                font-size: 3.889vw;
+                transform: translateY(0.3vw);
             }
         }
     }

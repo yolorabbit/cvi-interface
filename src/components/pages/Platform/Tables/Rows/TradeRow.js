@@ -13,6 +13,7 @@ const TradeRow = ({token, isHeader}) => {
 
     const sellController = useMemo(() => {
         return <ActionController 
+            amountLabel="Select amount to sell"
             isModal 
             token={token}
             amount={amount}

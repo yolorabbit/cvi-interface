@@ -16,7 +16,7 @@ export const useActionController = () => {
   return { token, leverage, amount, setAmount, isModal, setIsOpen };
 }
 
-const ActionController = ({token, leverage, amount, setAmount, actionComponent, isModal}) => {
+const ActionController = ({amountLabel = "Amount", token, leverage, amount, setAmount, actionComponent, isModal}) => {
   const [isOpen, setIsOpen] = useState();
 
   const renderActionComponent = (isModal = false) => {
@@ -34,11 +34,8 @@ const ActionController = ({token, leverage, amount, setAmount, actionComponent, 
 
   return <div className="action-controller-component">
       {(isModal && isOpen) && <Modal closeIcon handleCloseModal={() => setIsOpen(false)}>
-        <h1>{token}</h1>
-        <h1>{amount}</h1>
-
         <InputAmount 
-          label="Amount" 
+          label={amountLabel}
           symbol={token} 
           balance="100000" 
           amount={amount} 
@@ -49,7 +46,7 @@ const ActionController = ({token, leverage, amount, setAmount, actionComponent, 
       </Modal>}
 
       {!isModal && <InputAmount 
-        label="Amount" 
+        label={amountLabel}
         symbol={token} 
         balance="100000" 
         amount={amount} 

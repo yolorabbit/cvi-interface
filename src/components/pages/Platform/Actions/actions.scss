@@ -99,6 +99,39 @@
     }
 }
 
+.modal {
+    &__container {
+        & .sell-component, & .withdraw-component {
+            &__container {
+                display: flex;
+                flex-direction: column;
+
+                .count-down-component {
+                    align-self: flex-start;
+                    margin-top: 16px;
+                    @media (max-width: 767px){
+                        margin-top: 4.444vw;
+                    }
+                }
+
+                &--button {
+                    margin-left: 0;
+                    margin-top: 16px;
+                    height: 56px;
+                    width: 100%;
+                    font-weight: bold;
+                    text-transform: uppercase;
+
+                    @media (max-width: 767px){
+                        height: 15.556vw;
+                        margin-top: 4.444vw;
+                    }
+                }
+            }
+        }
+    }
+}
+
 .sell-component, .withdraw-component {
     height: inherit;
     vertical-align: middle;
