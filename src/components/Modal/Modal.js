@@ -11,10 +11,10 @@ const Modal = ({ type = "basic", clickOutsideDisabled, className="", id, childre
 
   return ReactDOM.createPortal(
     <div {...id ? {id: id} : {}} className={`modal ${type} ${className}`}>
+      {closeIcon && <button className="close-button" onClick={handleCloseModal}>
+        <img src={require("images/icons/close-no-bg.svg").default} alt="close icon" />
+      </button> }
       <div ref={containerRef} className="modal__container">
-        {closeIcon && <button className="close-button" onClick={handleCloseModal}>
-          <img src={require("images/icons/close-no-bg.svg").default} alt="close icon" />
-        </button> }
         {children}
       </div>
     </div>,
