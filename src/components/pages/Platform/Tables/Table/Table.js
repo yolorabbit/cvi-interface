@@ -1,30 +1,58 @@
+import Paginator from 'components/Paginator';
 import config from 'config/config';
-import React from 'react';
+import { uniqueId } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import HistoryRow from '../Rows/HistoryRow';
 import LiquidityRow from '../Rows/LiquidityRow';
 import TradeRow from '../Rows/TradeRow';
 import './Table.scss';
 
-const Table = ({activeTab}) => {
-    const tableHeaders = ["", ...Object.values(config.headers?.[activeTab]), ""];
+const Table = ({activeTab, data = [], pageSize = 5}) => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const currentData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const showPaginator = data.length > pageSize;
+
+    const tableHeaders = activeTab === "History" ? 
+        Object.values(config.headers?.[activeTab]) : 
+        ["", ...Object.values(config.headers?.[activeTab]), ""];
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [activeTab]);
+
 
     return (
-        <div className="table-component">
+        <div className={`table-component ${activeTab?.toLowerCase()}`}>
             <table>
                 <thead>
                     <tr>
-                        {tableHeaders?.map((item, index) => <th key={index}>{item?.label}</th>)}
+                        {tableHeaders?.map((item, index) => <th key={index}>{item?.label ?? item}</th>)}
                     </tr>
                 </thead>
 
                 <tbody>
-                    {config.tokens.map(token => <TableRow activeTab={activeTab} key={token} token={token} />)}
+                    {currentData.map(token => <TableRow key={uniqueId(token)} activeTab={activeTab} token={token} />)}
                 </tbody>
             </table>
+
+            {showPaginator && <Paginator 
+                currentPage={currentPage} 
+                totalRecords={data.length} 
+                onFirstClick={() => setCurrentPage(1)}
+                onLastClick={(last) => setCurrentPage(last)}
+                onBackClick={() => setCurrentPage(currentPage - 1)}
+                onFwdClick={() => setCurrentPage(currentPage + 1)}
+                pgSize={pageSize}
+                numOfpageBtndsToDispay={0}
+            />}
         </div>
     )
 }
 
 const TableRow = ({token, activeTab}) => {
+    if(activeTab === "History") {
+        return <HistoryRow token={token} />
+    }
     return activeTab === config.tabs.trade.positions ? <TradeRow token={token} /> : <LiquidityRow token={token} />
 }
 

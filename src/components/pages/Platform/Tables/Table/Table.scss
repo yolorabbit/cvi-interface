@@ -13,6 +13,47 @@
         padding: 40px;       
     }
 
+    &.history {
+        & thead {
+            & tr {
+                & th {
+                    &:first-child {
+                        padding-bottom: 0.833vw;
+                    }
+                }
+            }
+        }
+        
+        & tbody {
+            & tr {
+                &:hover {
+                    background-color: transparent;
+                    border-color: transparent;
+                }
+
+                &:nth-child(odd) {
+                    background-color: #1a2243;
+                    border-left: 0.833vw solid #1a2243;
+                    border-right: 0.833vw solid #1a2243;
+                    @media (max-width: 1365px) {
+                        border-left: 1.172vw solid #1a2243;
+                        border-right: 1.172vw solid #1a2243;
+                    }
+            
+                    @media (max-width: 1024px) {
+                        border-left: 2.086vw solid #1a2243;
+                        border-right: 2.086vw solid #1a2243;       
+                    }
+                    
+                    @media (max-width: 767px) {
+                        border-left: 4.444vw solid #1a2243;
+                        border-right: 4.444vw solid #1a2243;      
+                    }
+                }
+            }
+        }
+    }
+
     table {
         width: 100%;
     }
@@ -64,9 +105,9 @@
             }
     
             @media (max-width: 1024px) {
-                height: 64px;
-                border-left: 16px solid transparent;
-                border-right: 16px solid transparent;        
+                height: 8.344vw;
+                border-left: 2.086vw solid transparent;
+                border-right: 2.086vw solid transparent;        
             }
             
             @media (max-width: 767px) {
@@ -90,13 +131,13 @@
                 }
         
                 @media (max-width: 1024px) {
-                    border-left: 16px solid #1a2243;
-                    border-right: 16px solid #1a2243;       
+                    border-left: 2.086vw solid #1a2243;
+                    border-right: 2.086vw solid #1a2243;       
                 }
                 
                 @media (max-width: 767px) {
-                    border-left: 16px solid #1a2243;
-                    border-right: 16px solid #1a2243;      
+                    border-left: 4.444vw solid #1a2243;
+                    border-right: 4.444vw solid #1a2243;      
                 }
             }
         }

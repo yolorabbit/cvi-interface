@@ -117,7 +117,8 @@ const config = {
         "Pool size": {
           label: "Pool size"
         },
-      }
+      },
+      "History": ["Action date", "Action type", "CVI index value", "Amount", "Fees", "Net amount"],
     }
 }
 
