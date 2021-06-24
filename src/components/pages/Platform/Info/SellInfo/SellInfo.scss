@@ -1,0 +1,41 @@
+.sell-info-component {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    &__row {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 0.938vw;
+
+        @media (max-width: 1365px){   
+            margin-top: 1.319vw;
+        }
+
+        @media (max-width: 1024px) {
+            margin-top: 2.347vw;
+        }
+
+        @media (max-width: 767px){
+            margin-top: 3.333vw;    	
+        }
+
+        & span, & b {
+            font-size: 0.729vw;
+            
+            @media (max-width: 1365px){   
+                font-size: 1.026vw;
+            }
+
+            @media (max-width: 1024px){ 
+                font-size: 1.825vw;
+            }
+
+            @media (max-width: 767px){
+                font-size: 3.889vw;
+            }
+        }
+    }
+}

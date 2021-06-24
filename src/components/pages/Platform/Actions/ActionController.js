@@ -3,24 +3,24 @@ import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 
 export const actionControllerContext = createContext({});
-export const ActionControllerContext = ({children, token, leverage, amount, setAmount, isModal, setIsOpen}) => {
+export const ActionControllerContext = ({children, token, leverage, amount, setAmount, isModal, isOpen, setIsOpen}) => {
   return (
-    <actionControllerContext.Provider value={{ token, leverage, amount, setAmount, isModal, setIsOpen }}>
+    <actionControllerContext.Provider value={{ token, leverage, amount, setAmount, isModal, isOpen, setIsOpen }}>
       {children}
     </actionControllerContext.Provider>
   )
 }
 
 export const useActionController = () => {
-  const { token, leverage, amount, isModal, setIsOpen, setAmount } = useContext(actionControllerContext);
-  return { token, leverage, amount, setAmount, isModal, setIsOpen };
+  const { token, leverage, amount, isModal, isOpen, setIsOpen, setAmount } = useContext(actionControllerContext);
+  return { token, leverage, amount, setAmount, isModal, isOpen, setIsOpen };
 }
 
 const ActionController = ({amountLabel = "Amount", token, leverage, amount, setAmount, actionComponent, isModal}) => {
   const [isOpen, setIsOpen] = useState();
 
   const renderActionComponent = (isModal = false) => {
-    return <ActionControllerContext token={token} leverage={leverage} amount={amount} setAmount={setAmount} isModal={isModal} setIsOpen={setIsOpen}>
+    return <ActionControllerContext token={token} leverage={leverage} amount={amount} setAmount={setAmount} isOpen={isOpen} isModal={isModal} setIsOpen={setIsOpen}>
       {actionComponent}
     </ActionControllerContext>
   }
