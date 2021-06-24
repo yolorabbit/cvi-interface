@@ -17,9 +17,9 @@ const HistoryRow = ({token, isHeader, history = {
 
     const RowData = useMemo(() => (
         <> 
-            {Object.values(history)?.filter((_history, i) => (!isTablet || (i !== 0 && i !== 1)))?.map((value, index) => <RowItem 
+            {Object.values(history)?.map((value, index) => <RowItem 
                 key={index}
-                header={config.headers.History?.filter((_history, i) => (!isTablet || (i !== 0 && i !== 1)))?.[index]} 
+                header={config.headers.History?.[index]} 
                 content={<Value subText={value} />} 
             />)}
         </>
