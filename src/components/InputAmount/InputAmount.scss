@@ -151,12 +151,7 @@
             }
 
             &:active {
-                font-size: 0.677vw;
                 transform: scale(1.05);
-
-                @media (max-width: 1365px){   
-                    font-size: 0.952vw;
-                }
             }
         }
 

@@ -15,6 +15,7 @@ const LiquidityRow = ({token, isHeader}) => {
 
     const withdrawController = useMemo(() => {
         return <ActionController 
+            amountLabel="Select amount to withdraw"
             isModal 
             token={token}
             amount={amount}
