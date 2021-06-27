@@ -10,6 +10,7 @@
         height: 9.387vw;
     }
 
+
     @media (max-width: 767px) {
         margin: 0 6.667vw;
         border-radius: 2.222vw;
@@ -96,5 +97,28 @@
                 }
             }
         }
+    }
+}
+
+.ethereum-main-address-component {
+    font-weight: normal;
+    color: white;
+    font-size: 0.625vw;
+
+    @media (max-width: 1365px){   
+        font-size: 0.879vw;     
+    }
+
+    @media (max-width: 1024px){ 
+        font-size: 1.565vw;
+    }
+
+    @media (max-width: 767px){
+        font-size: 3.333vw;  
+    }
+
+    & a {
+        color: #2bbede;
+        text-decoration: none;
     }
 }

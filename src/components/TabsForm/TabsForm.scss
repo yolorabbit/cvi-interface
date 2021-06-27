@@ -10,6 +10,14 @@
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
 
+        &--right {
+            padding-right: 1.563vw;
+            
+            @media (max-width: 1365px){   
+                padding-right: 2.198vw;
+            }
+        }
+
         @media (max-width: 767px) {
             border-radius: 4.444vw;
             border-bottom-left-radius: 0;

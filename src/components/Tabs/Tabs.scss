@@ -80,7 +80,8 @@
         border-bottom: 0.208vw solid transparent;
         color: white;
         margin-right: 1.458vw;
-
+        white-space: nowrap;
+        
         @media (max-width: 1365px) {
             font-size: 1.319vw;
             border-bottom: 0.293vw solid transparent;
