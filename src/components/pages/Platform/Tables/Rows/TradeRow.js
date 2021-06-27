@@ -1,7 +1,7 @@
 import { useIsMobile, useIsTablet } from "components/hooks";
 import config from "config/config";
 import { useMemo, useState } from "react";
-import { Claim, Sell } from "../../Actions";
+import { Claim } from "../../Actions";
 import ActionController from "../../Actions/ActionController";
 import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
@@ -18,7 +18,7 @@ const TradeRow = ({token, isHeader}) => {
             token={token}
             amount={amount}
             setAmount={setAmount}
-            actionComponent={<Sell />}
+            type={config.actionsConfig.sell.key}
         />
     }, [token, amount]);
 

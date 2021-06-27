@@ -1,4 +1,3 @@
-import { Withdraw } from "components/pages/Platform/Actions"
 import { useIsMobile, useIsTablet } from "components/hooks";
 import { useMemo, useState } from "react";
 import RowItem from './RowItem';
@@ -20,7 +19,7 @@ const LiquidityRow = ({token, isHeader}) => {
             token={token}
             amount={amount}
             setAmount={setAmount}
-            actionComponent={<Withdraw />}
+            type={config.actionsConfig.withdraw.key}
         />
     }, [token, amount]);
 

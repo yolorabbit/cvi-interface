@@ -4,15 +4,15 @@ import CurrencySelect from 'components/CurrencySelect';
 import SelectLeverage from 'components/SelectLeverage';
 import Details from './Details/Details';
 import './Form.scss';
-import { Buy, Deposit } from '../Actions';
 import ActionController from '../Actions/ActionController';
+import config from '../../../../config/config';
 
 const Form = () => {
     const { activeView } = useContext(platformViewContext);
     const [selectedCurrency, setSelectedCurrency] = useState("usdt");
     const [leverage, setLeverage] = useState("X1");
     const [amount, setAmount] = useState("");
-
+  
     return useMemo(() => {
         return (
             <div className="platform-form-component">
@@ -25,7 +25,7 @@ const Form = () => {
                         setAmount={setAmount}
                         token={selectedCurrency}
                         leverage={leverage}
-                        actionComponent={activeView === "trade" ? <Buy /> : <Deposit />} 
+                        type={activeView === "trade" ? config.actionsConfig.buy.key : config.actionsConfig.deposit.key}
                     />
                </div>
     

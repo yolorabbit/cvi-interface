@@ -145,9 +145,24 @@ const config = {
         trade: ["Action date", "Action type", "CVI index value", "Leverage", "Amount", "Fees", "Net amount"],
         'view-liquidity': ["Action date", "Action type", "Amount"],
       },
-    }
+    },
+    actionsConfig: {
+      "buy": {
+          key: "buy",
+      },
+      "sell": {
+          key: "sell",
+      },
+      "deposit": {
+          key: "deposit",
+      },
+      "withdraw": {
+          key: "withdraw",
+      },
+      "claim": {
+          key: "claim",
+      }
+  }
 }
-
-console.log(config);
 
 export default config;

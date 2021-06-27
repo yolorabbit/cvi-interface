@@ -2,12 +2,13 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 import { platformViewContext } from 'components/Context';
+import Action from './Action';
 
 export const actionControllerContext = createContext({});
-export const ActionControllerContext = ({children, token, leverage, amount, setAmount, isModal, isOpen, setIsOpen}) => {
+export const ActionControllerContext = ({children, token, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen}) => {
   return (
-    <actionControllerContext.Provider value={{ token, leverage, amount, setAmount, isModal, isOpen, setIsOpen }}>
-      {children}
+    <actionControllerContext.Provider value={{ type, token, leverage, amount, setAmount, isModal, isOpen, setIsOpen }}>
+      <Action />
     </actionControllerContext.Provider>
   )
 }
@@ -17,14 +18,14 @@ export const useActionController = () => {
   return context;
 }
 
-const ActionController = ({amountLabel = "Amount", token, leverage, amount, setAmount, actionComponent, isModal}) => {
+const ActionController = ({type, amountLabel = "Amount", token, leverage, amount, setAmount, isModal}) => {
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
 
+  console.log(isOpen);
+  
   const renderActionComponent = (isModal = false) => {
-    return <ActionControllerContext token={token} leverage={leverage} amount={amount} setAmount={setAmount} isOpen={isOpen} isModal={isModal} setIsOpen={setIsOpen}>
-      {actionComponent}
-    </ActionControllerContext>
+    return <ActionControllerContext type={type} token={token} leverage={leverage} amount={amount} setAmount={setAmount} isOpen={isOpen} isModal={isModal} setIsOpen={setIsOpen} />
   }
 
   useEffect(() => {
@@ -59,7 +60,7 @@ const ActionController = ({amountLabel = "Amount", token, leverage, amount, setA
         {renderActionComponent(isModal)}
     </div>
     //eslint-disable-next-line
-  }, [amount, isOpen, isModal, token, amountLabel])
+  }, [type, activeView, amount, isOpen, isModal, token, amountLabel])
 };
 
 export default ActionController;
