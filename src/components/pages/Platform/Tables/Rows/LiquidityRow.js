@@ -33,6 +33,7 @@ const LiquidityRow = ({token, isHeader}) => {
 
             <RowItem 
                 header={config.headers[config.tabs["view-liquidity"].liquidity]["P&L"].label} 
+                tooltip={config.headers[config.tabs["view-liquidity"].liquidity]["P&L"].tooltip} 
                 content={<Pnl value="88,158.30024285" token={`${token?.toUpperCase()}`} precents={5.6} /> } 
             />
             

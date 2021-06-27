@@ -1,5 +1,6 @@
 import { platformViewContext } from 'components/Context';
 import Paginator from 'components/Paginator';
+import Tooltip from 'components/Tooltip';
 import config from 'config/config';
 import { uniqueId } from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
@@ -22,13 +23,26 @@ const Table = ({activeTab, data = [], pageSize = 5}) => {
         setCurrentPage(1);
     }, [activeTab]);
 
-
     return (
         <div className={`table-component ${activeTab?.toLowerCase()}`}>
             <table>
                 <thead>
                     <tr>
-                        {tableHeaders?.map((item, index) => <th key={index}>{item?.label ?? item}</th>)}
+                        {tableHeaders?.map((item, index) => 
+                            <th 
+                                key={index}
+                            >
+                                {item?.label ?? item} 
+                                {item?.tooltip && <Tooltip 
+                                                    type="question" 
+                                                    left={item?.tooltip?.left ?? -30} 
+                                                    mobileLeft={item?.tooltip?.mobileLeft} 
+                                                    maxWidth={400} 
+                                                    minWidth={250} 
+                                                    content={item?.tooltip?.content} 
+                                                />}
+                            </th>
+                        )}
                     </tr>
                 </thead>
 

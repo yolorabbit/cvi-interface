@@ -18,8 +18,8 @@ const HistoryRow = ({token, isHeader}) => {
         date: "07/11/2020",
         type: "Liquidation",
         index: "77",
-        leverage: "X1",
         amount: `1 ETH`,
+        leverage: "X1",
         fees: `0.9 ETH`,
         netAmount: `0.1 ETH`
     }

@@ -27,7 +27,7 @@ const Details = ({selectedCurrency, amount}) => {
 const TradeView = ({amount, selectedCurrency}) => {
     return (
         <> 
-            <Stat className="bold" title="Collateral ratio" value="65%" />
+            <Stat name="collateralRatio" value="65%" />
 
             <Stat className="bold" title="Leverage" value="X2" />
 
@@ -49,7 +49,7 @@ const TradeView = ({amount, selectedCurrency}) => {
 const LiquidityView = ({amount, selectedCurrency}) => {
     return useMemo(() => {
         return  <> 
-            <Stat className="bold" title="Collateral ratio" value="65%" />
+            <Stat name="collateralRatio" value="65%" />
 
             <Amount title="Deposit" amount={amount} selectedCurrency={selectedCurrency} />
 

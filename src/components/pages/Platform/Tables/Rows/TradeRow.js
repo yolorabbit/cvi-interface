@@ -28,12 +28,15 @@ const TradeRow = ({token, isHeader}) => {
                 <RowItem content={<Coin token={token} />} />
                 <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()}`} /> } />
             </>}
+            
             <RowItem 
-                header={config.headers[config.tabs.trade.positions]["P&L"].label} 
+                header={config.headers[config.tabs.trade.positions]["P&L"].label}
+                tooltip={config.headers[config.tabs.trade.positions]["P&L"].tooltip}
                 content={<Pnl value="112,000.30024285" token={`${token?.toUpperCase()}`} precents={5.6} /> } 
             />
             <RowItem 
                 header={config.headers[config.tabs.trade.positions]["Rewards (claimable today)"].label} 
+                tooltip={config.headers[config.tabs.trade.positions]["Rewards (claimable today)"].tooltip}
                 content={<Claim />} 
             />
             <RowItem 
@@ -42,6 +45,7 @@ const TradeRow = ({token, isHeader}) => {
             />
             <RowItem 
                 header={config.headers[config.tabs.trade.positions]["Estimated Liquidation"].label} 
+                tooltip={config.headers[config.tabs.trade.positions]["Estimated Liquidation"].tooltip}
                 content={<Value text="22.06.2021" />} 
             />
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }

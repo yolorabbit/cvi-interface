@@ -75,8 +75,9 @@ const Tables = () => {
                 id="table"
                 tabs={Object.values(config.tabs[activeView ?? 'trade'] ?? [])} 
                 activeTab={activeTab} 
-                setActiveTab={(tab) => setActiveTab(tab)}>
-                    {renderView()}
+                setActiveTab={(tab) => setActiveTab(tab)}
+            >
+                {renderView()}
             </TabsForm>
         </Container>
     )

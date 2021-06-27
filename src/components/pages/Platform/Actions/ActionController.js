@@ -12,8 +12,8 @@ export const ActionControllerContext = ({children, token, leverage, amount, setA
 }
 
 export const useActionController = () => {
-  const { token, leverage, amount, isModal, isOpen, setIsOpen, setAmount } = useContext(actionControllerContext);
-  return { token, leverage, amount, setAmount, isModal, isOpen, setIsOpen };
+  const context = useContext(actionControllerContext);
+  return context;
 }
 
 const ActionController = ({amountLabel = "Amount", token, leverage, amount, setAmount, actionComponent, isModal}) => {

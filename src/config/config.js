@@ -60,7 +60,6 @@ const config = {
           prefix: "$",
           tooltip: {
             content: "The total value locked in all liquidity pools in USD. It is the total value deposited into the platform by liquidity providers who expect the CVI index to drop or stay the same.",
-            left: "-100%",
             mobileLeft: -30,
           }
         },
@@ -69,7 +68,6 @@ const config = {
           prefix: "$",
           tooltip: {
             content: "The total value of open positions in USD. Positions are bought by traders who expect the CVI index to increase.",
-            left: "-100%",
             mobileLeft: -30,
           }
         },
@@ -86,7 +84,16 @@ const config = {
           title: "Today's rewards for new positions",
           className: "bold green",
           suffix: "GOVI"
-        }
+        },
+        collateralRatio: {
+          title: "Collateral ratio",
+          className: "bold",
+          tooltip: {
+            content: "The collateral ratio is the ratio between the potential maximum value of open positions(open positions value when CVI index is 200) and the total value locked in the platform.",
+            left: "0",
+            mobileLeft: -40,
+          }
+        },
     },
     tokens: ["usdt", "eth"],
     headers: {
@@ -95,16 +102,28 @@ const config = {
           label: "Value"
         },
         "P&L": {
-          label: "P&L"
+          label: "P&L",
+          tooltip: {
+            content: "Profit and loss of your position is calculated continuously and is based on the CVI index change, purchase and funding fees.",
+            left: -30,
+          }
         },
         "Rewards (claimable today)": {
-          label: "Rewards (claimable today)"
+          label: "Rewards (claimable today)",
+          tooltip: {
+            content: "Please note that GOVI tokens will become claimable starting the day after your last open position action (UTC time). If the available claimable amount is lower than your reward amount at the time of your claim, you can try again a day later and for a period of 30 days from the time of the last position purchase.",
+            left: -30,
+          }
         },
         "Leverage": {
           label: "Leverage"
         },
         "Estimated Liquidation": {
-          label: "Estimated Liquidation"
+          label: "Estimated Liquidation",
+          tooltip: {
+            content: "Estimated number of days until your position is liquidated. The calculation is based on the current funding fee amount and will change if the funding fee changes.",
+            left: -30,
+          }
         },
       },
       [tabs['view-liquidity'].liquidity]:  {
@@ -112,7 +131,11 @@ const config = {
           label: "My liquidity (pool share)"
         },
         "P&L": {
-          label: "P&L"
+          label: "P&L",
+          tooltip: {
+            content: "Profit and loss is calculated continuously and is based on the CVI index change, incoming funding fees that traders pay, and your share of the pool.",
+            left: -30,
+          }
         },
         "Pool size": {
           label: "Pool size"

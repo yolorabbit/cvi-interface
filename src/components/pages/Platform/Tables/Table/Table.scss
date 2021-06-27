@@ -164,15 +164,18 @@
         text-align: left;
         vertical-align: middle;
         padding-right: 12px;
+        position: relative;
 
         &:first-child {
-            padding: 0; 
+            padding: 0;
         }
 
         & > div {
-            width: 100%;
-            vertical-align: middle;
-            display: table-cell;
+            &:not(.tooltip) {
+                width: 100%;
+                vertical-align: middle;
+                display: table-cell;
+            }
         }
 
         &:last-child {
