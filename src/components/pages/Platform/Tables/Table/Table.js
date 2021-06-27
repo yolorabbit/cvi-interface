@@ -1,19 +1,21 @@
+import { platformViewContext } from 'components/Context';
 import Paginator from 'components/Paginator';
 import config from 'config/config';
 import { uniqueId } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import HistoryRow from '../Rows/HistoryRow';
 import LiquidityRow from '../Rows/LiquidityRow';
 import TradeRow from '../Rows/TradeRow';
 import './Table.scss';
 
 const Table = ({activeTab, data = [], pageSize = 5}) => {
+    const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
     const currentData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     const showPaginator = data.length > pageSize;
 
     const tableHeaders = activeTab === "History" ? 
-        Object.values(config.headers?.[activeTab]) : 
+        Object.values(config.headers?.[activeTab]?.[activeView]) : 
         ["", ...Object.values(config.headers?.[activeTab]), ""];
 
     useEffect(() => {

@@ -118,7 +118,10 @@ const config = {
           label: "Pool size"
         },
       },
-      "History": ["Action date", "Action type", "CVI index value", "Amount", "Fees", "Net amount"],
+      "History": {
+        trade: ["Action date", "Action type", "CVI index value", "Amount", "Fees", "Net amount"],
+        'view-liquidity': ["Action date", "Action type", "Amount"],
+      },
     }
 }
 
