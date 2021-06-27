@@ -119,7 +119,7 @@ const config = {
         },
       },
       "History": {
-        trade: ["Action date", "Action type", "CVI index value", "Amount", "Fees", "Net amount"],
+        trade: ["Action date", "Action type", "CVI index value", "Leverage", "Amount", "Fees", "Net amount"],
         'view-liquidity': ["Action date", "Action type", "Amount"],
       },
     }
