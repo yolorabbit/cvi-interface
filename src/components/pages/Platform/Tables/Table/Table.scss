@@ -17,8 +17,25 @@
         & thead {
             & tr {
                 & th {
-                    &:first-child {
+                    &:first-child, &:last-child {
                         padding-bottom: 0.833vw;
+                        border-left: 0.833vw solid transparent;
+                        border-right: 0.313vw solid transparent;
+                        
+                        @media (max-width: 1365px) {
+                            border-left: 1.172vw solid transparent;
+                            border-right: 0.44vw solid transparent;
+                        }
+                
+                        @media (max-width: 1024px) {
+                            border-left: 2.086vw solid transparent;
+                            border-right: 0.782vw solid transparent;     
+                        }
+                        
+                        @media (max-width: 767px) {
+                            border-left: 4.444vw solid transparent;
+                            border-right: 1.667vw solid transparent;    
+                        }
                     }
                 }
             }
