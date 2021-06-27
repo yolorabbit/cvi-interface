@@ -28,7 +28,7 @@ const Tabs = ({type, isDropdown, tabs, activeTab, setActiveTab}) => {
                 </div>
 
                 {isOpen && <div className="tabs-component__dropdown--options">
-                    {tabs.map((tab, index) => <Button 
+                    {tabs?.filter(tab => tab !== activeTab)?.map((tab, index) => <Button 
                         key={tab} 
                         className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
                         buttonText={formattedTabs[tab] ?? tab} 
