@@ -1,8 +1,8 @@
 import { useIsMobile, useIsTablet } from "components/hooks";
 import config from "config/config";
 import { useMemo, useState } from "react";
-import { Claim } from "../../Actions";
 import ActionController from "../../Actions/ActionController";
+import Claim from "../../Actions/Claim";
 import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
 
@@ -34,15 +34,18 @@ const TradeRow = ({token, isHeader}) => {
                 tooltip={config.headers[config.tabs.trade.positions]["P&L"].tooltip}
                 content={<Pnl value="112,000.30024285" token={`${token?.toUpperCase()}`} precents={5.6} /> } 
             />
+
             <RowItem 
                 header={config.headers[config.tabs.trade.positions]["Rewards (claimable today)"].label} 
                 tooltip={config.headers[config.tabs.trade.positions]["Rewards (claimable today)"].tooltip}
                 content={<Claim />} 
             />
+
             <RowItem 
                 header={config.headers[config.tabs.trade.positions].Leverage.label} 
                 content={<Value text="X1" />} 
             />
+
             <RowItem 
                 header={config.headers[config.tabs.trade.positions]["Estimated Liquidation"].label} 
                 tooltip={config.headers[config.tabs.trade.positions]["Estimated Liquidation"].tooltip}
