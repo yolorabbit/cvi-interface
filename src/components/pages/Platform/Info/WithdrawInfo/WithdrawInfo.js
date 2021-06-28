@@ -7,7 +7,7 @@ const WithdrawInfo = () => {
 
     return (
         <div className="withdraw-info-component">
-            <span>You will send 567,654,565,555.111654654221 LP and receive {amount || 0} {token?.toUpperCase()}</span>
+            <span>You will send 567,654.111 LP and receive {amount || 0} {token?.toUpperCase()}</span>
         </div>
     )
 }
