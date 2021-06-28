@@ -1,13 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import Button from '../Elements/Button';
 import './Tabs.scss';
-import config from '../../config/config';
+import platformConfig from 'config/platformConfig';
 
 const Tabs = ({type, isDropdown, tabs, activeTab, setActiveTab}) => {
     const [isOpen, setIsOpen] = useState();
 
     const formattedTabs = useMemo(
-        () => Object.values(config.tabs).reduce((a, b) => ({...a, ...b})), 
+        () => Object.values(platformConfig.tabs).reduce((a, b) => ({...a, ...b})), 
     []);
 
     const onTabChange = (tab) => {

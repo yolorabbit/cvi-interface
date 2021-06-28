@@ -1,7 +1,7 @@
 import { platformViewContext } from 'components/Context';
 import Paginator from 'components/Paginator';
 import Tooltip from 'components/Tooltip';
-import config from 'config/config';
+import platformConfig from 'config/platformConfig';
 import { uniqueId } from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import HistoryRow from '../Rows/HistoryRow';
@@ -17,9 +17,9 @@ const Table = ({activeTab, data = [], pageSize = 5}) => {
         setCurrentPage(1);
     }, [activeTab]);
     
-    if(!activeTab || !config.headers?.[activeView]?.[activeTab]) return null;
+    if(!activeTab || !platformConfig.headers?.[activeView]?.[activeTab]) return null;
     
-    const tableHeaders = Object.values(config.headers?.[activeView]?.[activeTab]);
+    const tableHeaders = Object.values(platformConfig.headers?.[activeView]?.[activeTab]);
     const currentData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     const showPaginator = data.length > pageSize;
 
@@ -69,7 +69,7 @@ const TableRow = ({token, activeTab}) => {
     if(activeTab === "History") {
         return <HistoryRow token={token} />
     }
-    return activeTab === config.tabs.trade.positions ? <TradeRow token={token} /> : <LiquidityRow token={token} />
+    return activeTab === platformConfig.tabs.trade.positions ? <TradeRow token={token} /> : <LiquidityRow token={token} />
 }
 
 export default Table;

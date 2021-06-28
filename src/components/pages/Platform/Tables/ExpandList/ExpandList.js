@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Expand from 'components/Expand';
-import config, { activeViews } from 'config/config';
 import './ExpandList.scss';
 import LiquidityRow from '../Rows/LiquidityRow';
 import TradeRow from '../Rows/TradeRow';
 import HistoryRow from '../Rows/HistoryRow';
 import { uniqueId } from 'lodash';
 import Paginator from 'components/Paginator';
+import platformConfig, { activeViews } from 'config/platformConfig';
 
 const ExpandList = ({activeTab, data = [], pageSize = 5 }) => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -19,9 +19,9 @@ const ExpandList = ({activeTab, data = [], pageSize = 5 }) => {
 
     const renderView = (token, isHeader) => {
         switch(activeTab) {
-            case config.tabs.trade.positions:
+            case platformConfig.tabs.trade.positions:
                 return <TradeRow isHeader={isHeader} token={token} />
-            case config.tabs[activeViews['view-liquidity']].liquidity:
+            case platformConfig.tabs[activeViews['view-liquidity']].liquidity:
                 return  <LiquidityRow isHeader={isHeader} token={token} />
             default:
                 return <HistoryRow token={token} isHeader={isHeader} />

@@ -2,14 +2,14 @@ import { useIsMobile, useIsTablet } from "components/hooks";
 import { useContext, useMemo } from "react";
 import RowItem from './RowItem';
 import Value from '../Values/Value';
-import config, { activeViews } from "config/config";
 import { platformViewContext } from "components/Context";
+import platformConfig, { activeViews } from "config/platformConfig";
 
 const HistoryRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const { activeView } = useContext(platformViewContext); 
-    const headers = useMemo(() => Object.values(config.headers?.[activeView]?.History), [activeView]);
+    const headers = useMemo(() => Object.values(platformConfig.headers?.[activeView]?.History), [activeView]);
   
     const historyData = activeView === activeViews["view-liquidity"] ? {
         date: "07/11/2020",

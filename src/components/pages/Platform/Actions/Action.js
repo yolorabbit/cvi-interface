@@ -1,11 +1,11 @@
-import Button from 'components/Elements/Button';
-import config from 'config/config';
-import React from 'react'
 import { useActionController } from './ActionController';
+import Button from 'components/Elements/Button';
+import React from 'react'
 import SellInfo from '../Info/SellInfo';
 import Countdown from 'components/Countdown/Countdown';
 import WithdrawInfo from '../Info/WithdrawInfo';
 import './Action.scss';
+import platformConfig from 'config/platformConfig';
 
 const Action = () => {
     const { type, token, isModal, isOpen, setIsOpen, amount, setAmount, leverage } = useActionController();
@@ -43,7 +43,7 @@ const Action = () => {
 
     const renderView = () => {
         switch(type) {
-            case config.actionsConfig.sell.key:
+            case platformConfig.actionsConfig.sell.key:
                 return <div className="sell-component">
                 <div className="sell-component__container">
                     {(isOpen && !isModal) && <SellInfo />}
@@ -55,7 +55,7 @@ const Action = () => {
                     />
                 </div>
             </div>
-            case config.actionsConfig.withdraw.key:
+            case platformConfig.actionsConfig.withdraw.key:
                 return  <div className="withdraw-component">
                     <div className="withdraw-component__container">
                         {(isOpen && !isModal) && <WithdrawInfo />}
@@ -68,7 +68,7 @@ const Action = () => {
                     </div>
                 </div>
 
-            case config.actionsConfig.claim.key: {
+            case platformConfig.actionsConfig.claim.key: {
                 console.log(type);
                 return  <div className="claim-component">
                 <b>100,587.01164174</b>
@@ -82,7 +82,7 @@ const Action = () => {
                 return <div className="buy-component">
                 <Button 
                     className="button" 
-                    buttonText={config.actionsConfig[type ?? 'buy'].key?.toUpperCase()}
+                    buttonText={platformConfig.actionsConfig[type ?? 'buy'].key?.toUpperCase()}
                     onClick={() => onClick?.()?.[type]?.()}
                 />
             </div>;

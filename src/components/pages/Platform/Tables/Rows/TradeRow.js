@@ -1,17 +1,17 @@
 import { useIsMobile, useIsTablet } from "components/hooks";
-import config, { activeViews } from "config/config";
 import { useMemo, useState } from "react";
+import { Coin, Pnl, Value } from "../Values";
 import ActionController from "../../Actions/ActionController";
 import Claim from "../../Actions/Claim";
-import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
+import platformConfig, { activeViews } from "config/platformConfig";
 
 const TradeRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
 
-    const header = useMemo(() => config.headers[activeViews.trade][config.tabs.trade.positions], []);
+    const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
 
     const sellController = useMemo(() => {
         return <ActionController 
@@ -20,7 +20,7 @@ const TradeRow = ({token, isHeader}) => {
             token={token}
             amount={amount}
             setAmount={setAmount}
-            type={config.actionsConfig.sell.key}
+            type={platformConfig.actionsConfig.sell.key}
         />
     }, [token, amount]);
 

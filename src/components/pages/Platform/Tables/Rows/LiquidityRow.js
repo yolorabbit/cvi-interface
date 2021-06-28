@@ -4,14 +4,14 @@ import RowItem from './RowItem';
 import Coin from '../Values/Coin';
 import Value from '../Values/Value';
 import Pnl from '../Values/Pnl';
-import config, { activeViews } from "config/config";
 import ActionController from "../../Actions/ActionController";
+import platformConfig, { activeViews } from "config/platformConfig";
 
 const LiquidityRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
-    const header = useMemo(() => config.headers[activeViews["view-liquidity"]][config.tabs["view-liquidity"].liquidity], []);
+    const header = useMemo(() => platformConfig.headers[activeViews["view-liquidity"]][platformConfig.tabs["view-liquidity"].liquidity], []);
 
     const withdrawController = useMemo(() => {
         return <ActionController 
@@ -20,7 +20,7 @@ const LiquidityRow = ({token, isHeader}) => {
             token={token}
             amount={amount}
             setAmount={setAmount}
-            type={config.actionsConfig.withdraw.key}
+            type={platformConfig.actionsConfig.withdraw.key}
         />
     }, [token, amount]);
 
