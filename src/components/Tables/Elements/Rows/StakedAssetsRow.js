@@ -15,7 +15,7 @@ const StakedAssetsRow = ({token, isHeader}) => {
 
     const unstakeController = useMemo(() => {
         return <ActionController 
-            amountLabel="Select amount to unstake"
+            amountLabel="Select amount to unstake*"
             isModal 
             token={token}
             amount={amount}

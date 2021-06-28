@@ -129,6 +129,30 @@
                         margin-top: 4.444vw;
                     }
                 }
+
+                & span {
+                    margin-top: 0.833vw;
+                    font-size: 0.625vw;
+                    line-height: 1.25vw;
+
+                    @media (max-width: 1365px){   
+                        margin-top: 1.172vw;
+                        font-size: 0.879vw;
+                        line-height: 1.758vw;
+                    }
+
+                    @media (max-width: 1024px){ 
+                        margin-top: 2.086vw;
+                        font-size: 1.565vw;
+                        line-height: 3.129vw;
+                    }
+
+                    @media (max-width: 767px){
+                        margin-top: 4.444vw;
+                        font-size: 3.333vw;
+                        line-height: 6.667vw;
+                    }
+                }
             }
         }
     }

@@ -42,6 +42,9 @@ const StakingActions = () => {
                         buttonText="Unstake" 
                         onClick={() => onClick?.()?.[type]?.()}
                     />
+                    {!isModal && isOpen && <span>
+                     * Pay Attention: After unstaking your LP tokens, you won't be able to withdraw your liquidity for up to 72 hours.
+                    </span>}
                 </div>
             </div>
 

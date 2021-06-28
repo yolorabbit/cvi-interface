@@ -46,13 +46,30 @@
 
     &.basic {
         & .modal__container {
-            padding: 96px 50px;
-            width: 656px;
-            min-height: 392px;
-            border-radius: 16px;
-            box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.25);
             background-color: #1b1d38;
             position: relative;
+            max-width: 100%;
+            padding: 2.083vw 2.5vw 2.5vw 2.5vw;
+            width: 28.333vw;
+            min-height: 10.417vw;
+            border-radius: 0.833vw;
+            box-shadow: 0 0.104vw 1.042vw 0 rgba(0, 0, 0, 0.25);
+            
+            @media (max-width: 1365px){   
+                padding: 2.93vw 3.516vw 3.516vw 3.516vw;
+                width: 39.853vw;
+                min-height: 14.652vw;
+                border-radius: 1.172vw;
+                box-shadow: 0 0.147vw 1.465vw 0 rgba(0, 0, 0, 0.25);
+            }
+
+            @media (max-width: 1024px){ 
+                padding: 5.215vw 6.258vw 6.258vw 6.258vw;
+                width: 70.926vw;
+                min-height: 26.076vw;
+                border-radius: 2.086vw;
+                box-shadow: 0 0.261vw 2.608vw 0 rgba(0, 0, 0, 0.25);
+            }
 
             @media (max-width: 767px) {
                 width: 100%;
