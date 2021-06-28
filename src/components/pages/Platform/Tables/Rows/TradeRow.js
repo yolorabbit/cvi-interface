@@ -1,5 +1,5 @@
 import { useIsMobile, useIsTablet } from "components/hooks";
-import config from "config/config";
+import config, { activeViews } from "config/config";
 import { useMemo, useState } from "react";
 import ActionController from "../../Actions/ActionController";
 import Claim from "../../Actions/Claim";
@@ -10,6 +10,8 @@ const TradeRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
+
+    const header = useMemo(() => config.headers[activeViews.trade][config.tabs.trade.positions], []);
 
     const sellController = useMemo(() => {
         return <ActionController 
@@ -30,25 +32,25 @@ const TradeRow = ({token, isHeader}) => {
             </>}
             
             <RowItem 
-                header={config.headers[config.tabs.trade.positions]["P&L"].label}
-                tooltip={config.headers[config.tabs.trade.positions]["P&L"].tooltip}
+                header={header["P&L"].label}
+                tooltip={header["P&L"].tooltip}
                 content={<Pnl value="112,000.30024285" token={`${token?.toUpperCase()}`} precents={5.6} /> } 
             />
 
             <RowItem 
-                header={config.headers[config.tabs.trade.positions]["Rewards (claimable today)"].label} 
-                tooltip={config.headers[config.tabs.trade.positions]["Rewards (claimable today)"].tooltip}
+                header={header["Rewards (claimable today)"].label} 
+                tooltip={header["Rewards (claimable today)"].tooltip}
                 content={<Claim />} 
             />
 
             <RowItem 
-                header={config.headers[config.tabs.trade.positions].Leverage.label} 
+                header={header.Leverage.label} 
                 content={<Value text="X1" />} 
             />
 
             <RowItem 
-                header={config.headers[config.tabs.trade.positions]["Estimated Liquidation"].label} 
-                tooltip={config.headers[config.tabs.trade.positions]["Estimated Liquidation"].tooltip}
+                header={header["Estimated Liquidation"].label} 
+                tooltip={header["Estimated Liquidation"].tooltip}
                 content={<Value text="22.06.2021" />} 
             />
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }

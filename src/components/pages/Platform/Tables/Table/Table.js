@@ -12,16 +12,16 @@ import './Table.scss';
 const Table = ({activeTab, data = [], pageSize = 5}) => {
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
-    const currentData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-    const showPaginator = data.length > pageSize;
-
-    const tableHeaders = activeTab === "History" ? 
-        Object.values(config.headers?.[activeTab]?.[activeView]) : 
-        ["", ...Object.values(config.headers?.[activeTab]), ""];
 
     useEffect(() => {
         setCurrentPage(1);
     }, [activeTab]);
+    
+    if(!activeTab || !config.headers?.[activeView]?.[activeTab]) return null;
+    
+    const tableHeaders = Object.values(config.headers?.[activeView]?.[activeTab]);
+    const currentData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const showPaginator = data.length > pageSize;
 
     return (
         <div className={`table-component ${activeTab?.toLowerCase()}`}>

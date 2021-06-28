@@ -4,13 +4,14 @@ import RowItem from './RowItem';
 import Coin from '../Values/Coin';
 import Value from '../Values/Value';
 import Pnl from '../Values/Pnl';
-import config from "config/config";
+import config, { activeViews } from "config/config";
 import ActionController from "../../Actions/ActionController";
 
 const LiquidityRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
+    const header = useMemo(() => config.headers[activeViews["view-liquidity"]][config.tabs["view-liquidity"].liquidity], []);
 
     const withdrawController = useMemo(() => {
         return <ActionController 
@@ -31,13 +32,13 @@ const LiquidityRow = ({token, isHeader}) => {
             </>}
 
             <RowItem 
-                header={config.headers[config.tabs["view-liquidity"].liquidity]["P&L"].label} 
-                tooltip={config.headers[config.tabs["view-liquidity"].liquidity]["P&L"].tooltip} 
+                header={header["P&L"].label} 
+                tooltip={header["P&L"].tooltip} 
                 content={<Pnl value="88,158.30024285" token={`${token?.toUpperCase()}`} precents={5.6} /> } 
             />
             
             <RowItem 
-                header={config.headers[config.tabs["view-liquidity"].liquidity]["Pool size"].label} 
+                header={header["Pool size"].label} 
                 content={<Value text="768.20820509" subText={token?.toUpperCase()} /> } 
             />
 

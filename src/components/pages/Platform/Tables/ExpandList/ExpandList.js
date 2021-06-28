@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Expand from 'components/Expand';
-import config from 'config/config';
+import config, { activeViews } from 'config/config';
 import './ExpandList.scss';
 import LiquidityRow from '../Rows/LiquidityRow';
 import TradeRow from '../Rows/TradeRow';
@@ -21,7 +21,7 @@ const ExpandList = ({activeTab, data = [], pageSize = 5 }) => {
         switch(activeTab) {
             case config.tabs.trade.positions:
                 return <TradeRow isHeader={isHeader} token={token} />
-            case config.tabs['view-liquidity'].liquidity:
+            case config.tabs[activeViews['view-liquidity']].liquidity:
                 return  <LiquidityRow isHeader={isHeader} token={token} />
             default:
                 return <HistoryRow token={token} isHeader={isHeader} />
