@@ -1,20 +1,36 @@
 .value-component {
     line-height: 1;
-  & b, & span {
-      font-size: 0.729vw;
+    & div {
+        margin-top: 0.104vw;
 
-      @media (max-width: 1365px) {
-          font-size: 1.026vw;       
-      }
+        @media (max-width: 1365px){   
+            margin-top: 0.147vw;
+        }
 
-      @media (max-width: 1024px) {
-          font-size: 1.825vw;      
-      }
+        @media (max-width: 1024px){ 
+            margin-top: 0.195vw;
+        }
 
-      @media (max-width: 767px) {
-          font-size: 3.889vw;    
-      }
-  }
+        @media (max-width: 767px){
+            margin-top: 0.556vw;
+        }
+    }
+
+    & b, & span, & div {
+        font-size: 0.729vw;
+
+        @media (max-width: 1365px) {
+            font-size: 1.026vw;       
+        }
+
+        @media (max-width: 1024px) {
+            font-size: 1.825vw;      
+        }
+
+        @media (max-width: 767px) {
+            font-size: 3.889vw;    
+        }
+    }
 }
 
 .pnl-component {

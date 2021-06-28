@@ -1,7 +1,7 @@
 import Button from 'components/Elements/Button';
 import React from 'react'
 
-const Claim = () => {
+const PlatformClaim = () => {
     return (
         <div className="claim-component">
             <b>100,587.01164174</b>
@@ -11,4 +11,4 @@ const Claim = () => {
     )
 }
 
-export default Claim;
+export default PlatformClaim;

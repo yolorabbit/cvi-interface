@@ -1,10 +1,10 @@
 import { useIsMobile, useIsTablet } from "components/hooks";
 import { useMemo, useState } from "react";
+import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
 import platformConfig, { activeViews } from "config/platformConfig";
 import ActionController from "components/pages/Platform/Actions/ActionController";
-import Claim from "components/pages/Platform/Actions/Claim";
-import { Coin, Pnl, Value } from "../Values";
+import PlatformClaim from "components/pages/Platform/Actions/PlatformClaim";
 
 const TradeRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
@@ -40,7 +40,7 @@ const TradeRow = ({token, isHeader}) => {
             <RowItem 
                 header={header["Rewards (claimable today)"].label} 
                 tooltip={header["Rewards (claimable today)"].tooltip}
-                content={<Claim />} 
+                content={<PlatformClaim />} 
             />
 
             <RowItem 
