@@ -3,10 +3,10 @@ import { platformViewContext } from '../../../Context';
 import { useIsTablet } from 'components/hooks';
 import Container from '../../../Layout/Container';
 import TabsForm from '../../../TabsForm';
-import Table from './Table';
-import ExpandList from './ExpandList';
-import './Tables.scss';
-import platformConfig from 'config/platformConfig';
+import platformConfig, { activeViews } from 'config/platformConfig';
+import ExpandList from 'components/Tables/ExpandList';
+import Table from 'components/Tables/Table';
+import './PlatformTables.scss';
 
 const historyData = [{
     date: "07/11/2020",
@@ -52,25 +52,19 @@ const historyData = [{
     netAmount: `-`
 }];
 
-const Tables = () => {
+const PlatformTables = () => {
     const isTablet = useIsTablet();
     const { activeView } = useContext(platformViewContext);
     const [activeTab, setActiveTab] = useState();
 
     const renderView = () => {
         if(!activeTab) return null;
-
-        switch(activeTab) {
-            case "History": 
-                return isTablet ? <ExpandList activeTab={activeTab} data={historyData} /> : <Table activeTab={activeTab} data={historyData} />
-
-            default:
-                return isTablet ? <ExpandList activeTab={activeTab} data={platformConfig.tokens} /> : <Table activeTab={activeTab} data={platformConfig.tokens} />
-        }
+        const data = activeTab === activeViews.history ? historyData : platformConfig.tokens;
+        return isTablet ? <ExpandList activeTab={activeTab} data={data} /> : <Table activeTab={activeTab} data={data} />
     }
 
     return (
-        <Container className="tables-component">
+        <Container className="platform-tables-component">
             <TabsForm 
                 id="table"
                 tabs={Object.values(platformConfig.tabs[activeView ?? 'trade'] ?? [])} 
@@ -83,4 +77,4 @@ const Tables = () => {
     )
 }
 
-export default Tables;
+export default PlatformTables;

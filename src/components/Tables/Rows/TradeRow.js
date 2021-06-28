@@ -1,10 +1,10 @@
 import { useIsMobile, useIsTablet } from "components/hooks";
 import { useMemo, useState } from "react";
 import { Coin, Pnl, Value } from "../Values";
-import ActionController from "../../Actions/ActionController";
-import Claim from "../../Actions/Claim";
 import RowItem from './RowItem';
 import platformConfig, { activeViews } from "config/platformConfig";
+import ActionController from "components/pages/Platform/Actions/ActionController";
+import Claim from "components/pages/Platform/Actions/Claim";
 
 const TradeRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();

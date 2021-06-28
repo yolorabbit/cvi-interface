@@ -1,6 +1,7 @@
 export const activeViews = {
   "trade": "trade",
-  "view-liquidity": "view-liquidity"
+  "view-liquidity": "view-liquidity",
+  "history": "History"
 }
 
 const tabs = {

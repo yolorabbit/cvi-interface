@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { platformViewContext } from 'components/Context';
 import SubNavbar from 'components/SubNavbar';
 import Graphs from './Graphs';
-import Tables from './Tables';
 import Statistics from './Statistics';
 import CviStats from './CviStats';
 import Column from 'components/Layout/Column';
@@ -12,6 +11,7 @@ import Container from 'components/Layout/Container';
 import Form from './Form';
 import './Platform.scss';
 import platformConfig from 'config/platformConfig';
+import PlatformTables from './PlatformTables';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
@@ -51,7 +51,7 @@ const Platform = () => {
                     </Row>
 
                     <Row>
-                        <Tables />
+                        <PlatformTables />
                     </Row>
                 </Layout>
             </platformViewContext.Provider>
