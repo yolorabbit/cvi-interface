@@ -1,9 +1,9 @@
 import React from 'react'
 import './Layout.scss';
 
-const Layout = ({children}) => {
+const Layout = ({children, className}) => {
     return (
-        <div className="layout-component">
+        <div className={`layout-component ${className ?? ''}`}>
             {children}
         </div>
     )

@@ -2,12 +2,12 @@ import { platformViewContext } from 'components/Context';
 import Paginator from 'components/Paginator';
 import Tooltip from 'components/Tooltip';
 import platformConfig from 'config/platformConfig';
+import stakingConfig, { stakingViews } from 'config/stakingConfig';
 import { uniqueId } from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
-import HistoryRow from '../Rows/HistoryRow';
-import LiquidityRow from '../Rows/LiquidityRow';
-import TradeRow from '../Rows/TradeRow';
+import ActiveRow from '../Elements/Rows/ActiveRow';
 import './Table.scss';
+
 
 const Table = ({activeTab, data = [], pageSize = 5}) => {
     const { activeView } = useContext(platformViewContext);
@@ -17,9 +17,11 @@ const Table = ({activeTab, data = [], pageSize = 5}) => {
         setCurrentPage(1);
     }, [activeTab]);
     
-    if(!activeTab || !platformConfig.headers?.[activeView]?.[activeTab]) return null;
-    
-    const tableHeaders = Object.values(platformConfig.headers?.[activeView]?.[activeTab]);
+    if(!activeTab || 
+        (activeView && !platformConfig.headers?.[activeView]?.[activeTab]) ||
+        (!activeView && !stakingConfig.headers?.[activeTab])) return null;
+
+    const tableHeaders = stakingViews[activeTab] ? Object.values(stakingConfig.headers?.[activeTab]) :  Object.values(platformConfig.headers?.[activeView]?.[activeTab]);
     const currentData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
     const showPaginator = data.length > pageSize;
 
@@ -47,7 +49,7 @@ const Table = ({activeTab, data = [], pageSize = 5}) => {
                 </thead>
 
                 <tbody>
-                    {currentData.map(token => <TableRow key={uniqueId(token)} activeTab={activeTab} token={token} />)}
+                    {currentData.map(token => <ActiveRow key={uniqueId(token)} activeTab={activeTab} token={token} />)}
                 </tbody>
             </table>
 
@@ -63,13 +65,6 @@ const Table = ({activeTab, data = [], pageSize = 5}) => {
             />}
         </div>
     )
-}
-
-const TableRow = ({token, activeTab}) => {
-    if(activeTab === "History") {
-        return <HistoryRow token={token} />
-    }
-    return activeTab === platformConfig.tabs.trade.positions ? <TradeRow token={token} /> : <LiquidityRow token={token} />
 }
 
 export default Table;

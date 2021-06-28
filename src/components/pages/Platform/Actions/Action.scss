@@ -103,7 +103,7 @@
 
 .modal {
     &__container {
-        & .sell-component, & .withdraw-component {
+        & .sell-component, & .withdraw-component, & .unstake-component {
             &__container {
                 display: flex;
                 flex-direction: column;
@@ -134,7 +134,15 @@
     }
 }
 
-.sell-component, .withdraw-component {
+.unstake-component {
+    & .unstake-component__container {
+        & .unstake-component__container--button { 
+            background-color: #264fa1;
+        }
+    }
+}
+
+.sell-component, .withdraw-component, .unstake-component {
     height: inherit;
     vertical-align: middle;
     

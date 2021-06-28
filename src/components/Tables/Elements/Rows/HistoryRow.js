@@ -1,9 +1,9 @@
 import { useIsMobile, useIsTablet } from "components/hooks";
 import { useContext, useMemo } from "react";
 import RowItem from './RowItem';
-import Value from '../Values/Value';
 import { platformViewContext } from "components/Context";
 import platformConfig, { activeViews } from "config/platformConfig";
+import { Value } from "../Values";
 
 const HistoryRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();
