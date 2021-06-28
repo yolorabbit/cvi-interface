@@ -2,7 +2,9 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
-
+    align-self: stretch;
+    flex: 1;
+    
     & .column-component {
         padding: 0 12px;
 
@@ -12,7 +14,11 @@
 
         &:last-child {
             padding-right: 0;
-            flex: 70%;
+            max-width: 40vw;
+            
+            @media (max-width: 1024px){   
+               max-width: 100%;
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ const Platform = () => {
                         </Column>
 
                         <Column>
-                            <Row>
+                            <Row flex="unset">
                                 <Container>
                                     <CviStats />
                                 </Container>

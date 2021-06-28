@@ -1,9 +1,9 @@
 import React from 'react'
 import './Row.scss';
 
-const Row = ({children}) => {
+const Row = ({children, flex}) => {
     return (
-        <div className="row-component">
+        <div style={flex ? {flex} : {}} className="row-component">
             {children}
         </div>
     )
