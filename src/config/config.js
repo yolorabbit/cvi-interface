@@ -9,14 +9,10 @@ const config = {
             label: "Staking",
             path: '/staking'
         },
-        guides: {
-            label: "Guides",
-            path: '/guides'
+        "help-center": {
+            label: "Help center",
+            path: '/help'
         },
-        about: {
-            label: "About",
-            path: '/about'
-        }
     },
     socialLinks: [
         { iconName: 'github', to: 'https://github.com/coti-io/cvi-contracts' },
