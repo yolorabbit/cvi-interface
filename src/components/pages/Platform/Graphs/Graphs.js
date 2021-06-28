@@ -17,7 +17,7 @@ const Graphs = () => {
     useEffect(() => {
         if(!width) return;
         setTabsFormWidth(tabsFormRef.current.clientWidth);
-        setTabsFormHeight(width > 1365 ? (width * 0.212) : width > 767 ? tabsFormRef.current.clientHeight - 50 : tabsFormRef.current.clientHeight - 150);
+        setTabsFormHeight(width > 1365 ? (width * 0.213) : width > 767 ? tabsFormRef.current.clientHeight - 50 : tabsFormRef.current.clientHeight - 150);
     }, [width]);
 
     return useMemo(() => {
