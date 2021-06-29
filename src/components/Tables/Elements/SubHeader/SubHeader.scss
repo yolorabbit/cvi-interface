@@ -3,12 +3,23 @@
     
     @media (max-width: 1024px){ 
         padding: 2.086vw 2.086vw;
+        &:first-child {
+            border-bottom: 0.261vw solid #007acb;
+        }
+        &:not(:first-child) { 
+            border-top: 0.261vw solid #007acb;
+        }
     }
     
     @media (max-width: 767px){
+        &:first-child {
+            border-bottom: 0.556vw solid #007acb;
+        }
+
         &:not(:first-child) {
             background-color: #0f112d;
             border-color: #0f112d;
+            border-top: 0.556vw solid #007acb;
         }
         padding: 2.222vw;
     }
