@@ -1,16 +1,16 @@
 .footer-component {
-    height: 2.5vw;
+    height: 3.5vw;
     max-width: 100%;
     margin: 0 1.25vw;
     margin-top: auto;
-
+    
     @media (max-width: 1365px) {
-        height: 3.516vw;
+        height: 5.516vw;
         margin: 0 1.758vw;
     }
 
     @media (max-width: 1024px) {
-        height: 6.258vw;
+        height: 9.258vw;
         margin: 0 3.129vw;
     }
 
@@ -21,13 +21,12 @@
 
     &__container {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        justify-content: center;
         align-items: center;
         height: 100%;
 
         @media (max-width: 767px){
-        	flex-direction: column;
-            justify-content: center;
             align-items: flex-start;
         }
 
