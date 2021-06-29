@@ -30,7 +30,7 @@ const Form = () => {
                </div>
     
                <div className="platform-form-component__right">
-                    <Details selectedCurrency={selectedCurrency?.toUpperCase()} amount={amount} />
+                    <Details selectedCurrency={selectedCurrency?.toUpperCase()} amount={amount} leverage={leverage} />
                </div>
             
                 <SeeMore />    

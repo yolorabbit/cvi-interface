@@ -1,6 +1,18 @@
 .stat-component {
     position: relative;
 
+    &.high {
+        & p {
+            color: #2bdec1;
+        }
+    }
+
+    &.low {
+        & p {
+            color: #f96a9a;
+        }
+    }
+
     &.bold {
         & p {
             font-weight: bold;

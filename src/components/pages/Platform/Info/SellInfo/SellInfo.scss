@@ -22,6 +22,18 @@
             margin-top: 3.333vw;    	
         }
 
+        &.high {
+            & span, & b {
+                color: #2bdec1;
+            }
+        }
+
+        &.low {
+            & span, & b {
+                color: #f96a9a;
+            }
+        }
+
         & span, & b {
             font-size: 0.729vw;
             

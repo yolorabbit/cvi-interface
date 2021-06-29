@@ -12,7 +12,7 @@ const SellInfo = () => {
                 <span>{amount || "0"} {token?.toUpperCase()}</span>
             </div>
 
-            <div className="sell-info-component__row">
+            <div className="sell-info-component__row low">
                 <span>Sell fee</span>
                 <span>0.1 {token?.toUpperCase()}</span>
             </div>

@@ -4,7 +4,7 @@ import { commaFormatted } from "utils";
 import Stat from "components/Stat";
 import './Details.scss';
 
-const Details = ({selectedCurrency, amount}) => {
+const Details = ({selectedCurrency, amount, leverage}) => {
     const { activeView } = useContext(platformViewContext);
  
     return useMemo(() => {
@@ -14,6 +14,7 @@ const Details = ({selectedCurrency, amount}) => {
                     {activeView === "trade" ? <TradeView 
                         amount={amount} 
                         selectedCurrency={selectedCurrency} 
+                        leverage={leverage}
                     /> : <LiquidityView 
                             amount={amount} 
                             selectedCurrency={selectedCurrency} 
@@ -21,19 +22,19 @@ const Details = ({selectedCurrency, amount}) => {
                 </div>
             </div>
         )
-    }, [selectedCurrency, activeView, amount]); 
+    }, [selectedCurrency, activeView, amount, leverage]); 
 }
 
-const TradeView = ({amount, selectedCurrency}) => {
+const TradeView = ({amount, leverage, selectedCurrency}) => {
     return (
         <> 
-            <Stat name="collateralRatio" value="65%" />
+            <Stat name="collateralRatio" value="85%" className="bold low" />
 
-            <Stat className="bold" title="Leverage" value="X2" />
+            <Stat className="bold" title="Leverage" value={leverage} />
 
             <Amount title="Buy" amount={amount} selectedCurrency={selectedCurrency} />
 
-            <Stat title="Purchase fee" value={`0.10007213 ${selectedCurrency}`} />
+            <Stat title="Purchase fee" value={`0.10007213 ${selectedCurrency}`} className="low" />
 
             <Stat className="bold green" title="Your position" value={`3.93287142 ${selectedCurrency}`} />
 
