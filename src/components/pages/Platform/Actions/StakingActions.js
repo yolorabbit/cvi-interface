@@ -1,7 +1,5 @@
-import Countdown from "components/Countdown/Countdown";
 import Button from "components/Elements/Button";
 import stakingConfig from "config/stakingConfig";
-import WithdrawInfo from "../Info/WithdrawInfo";
 import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
@@ -49,13 +47,11 @@ const StakingActions = () => {
             </div>
 
             case stakingConfig.actionsConfig.stake.key:
-                return  <div className="withdraw-component">
-                    <div className="withdraw-component__container">
-                        {(isOpen && !isModal) && <WithdrawInfo />}
-                        <Countdown />
+                return  <div className="stake-component">
+                    <div className="stake-component__container">
                         <Button 
-                            className="withdraw-component__container--button"
-                            buttonText="Withdraw" 
+                            className="stake-component__container--button"
+                            buttonText="Stake" 
                             onClick={() => onClick?.()?.[type]?.()} 
                         />
                     </div>

@@ -2,11 +2,11 @@ import { useIsTablet } from 'components/hooks';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import { chainNames } from 'config/config';
-import stakingConfig, { stakingViews } from 'config/stakingConfig';
+import stakingConfig from 'config/stakingConfig';
 import React, { useMemo } from 'react'
-import './StakedAssets.scss';
+import './StakingAssets.scss';
 
-const StakedAssets = () => {
+const StakingAssets = ({type}) => {
     const isTablet = useIsTablet();
  
     return useMemo(() => {
@@ -14,16 +14,16 @@ const StakedAssets = () => {
         const liquidityMiningProtocols = stakingConfig.tokens[selectedNetwork];
         const liquidityMiningProtocolsValues = Object.values(liquidityMiningProtocols);
         const liquidityMiningTokens = liquidityMiningProtocolsValues.map(protocol => Object.values(protocol));
-        const stakedAssetsData = liquidityMiningTokens.reduce((prev, next) => prev.concat(next));
+        const stakingAssetsData = liquidityMiningTokens.reduce((prev, next) => prev.concat(next));
 
         return (
             <div className="staked-assets-component">
                 {isTablet ? 
-                    <ExpandList activeTab={stakingViews.staked} data={stakedAssetsData} /> 
-                    : <Table activeTab={stakingViews.staked} data={stakedAssetsData} />}
+                    <ExpandList activeTab={type} data={stakingAssetsData} /> 
+                    : <Table activeTab={type} data={stakingAssetsData} />}
             </div>
         )
-    }, [isTablet]);
+    }, [isTablet, type]);
 }
 
-export default StakedAssets;
+export default StakingAssets;

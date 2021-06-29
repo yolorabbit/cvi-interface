@@ -2,8 +2,7 @@ import { chainNames } from "./config";
 
 export const stakingViews = {
   "staked": "staked",
-  "liquidity-mining": "liquidity-mining",
-  "platform-tokens": "platform-tokens",
+  "available-to-stake": "available-to-stake",
 }
 
 export const stakingProtocols = {
@@ -76,7 +75,7 @@ const stakingConfig = {
         label: "Staked amount (pool share)"
       },
       "APY": {
-        label: "APY",
+        label: "APY (Yearly)",
       },
       "TVL": {
         label: "TVL",
@@ -86,6 +85,21 @@ const stakingConfig = {
       },
       "Claimable rewards": {
         label: "Claimable rewards"
+      },
+      action: ""
+    },
+    [stakingViews["available-to-stake"]]: {
+      "Assets": {
+        label: "Assets"
+      },
+      "Your wallet balance": {
+        label: "Your wallet balance",
+      },
+      "TVL": {
+        label: "TVL",
+      },
+      "APY": {
+        label: "APY",
       },
       action: ""
     },

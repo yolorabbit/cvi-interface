@@ -103,7 +103,7 @@
 
 .modal {
     &__container {
-        & .sell-component, & .withdraw-component, & .unstake-component {
+        & .sell-component, & .withdraw-component, & .unstake-component, & .stake-component {
             &__container {
                 display: flex;
                 flex-direction: column;
@@ -118,11 +118,21 @@
 
                 &--button {
                     margin-left: 0;
-                    margin-top: 16px;
-                    height: 56px;
+                    margin-top: 0.833vw;
+                    height: 2.917vw;
                     width: 100%;
                     font-weight: bold;
                     text-transform: uppercase;
+
+                    @media (max-width: 1365px){   
+                        margin-top: 1.172vw;
+                        height: 4.103vw;
+                    }
+
+                    @media (max-width: 1024px){ 
+                        margin-top: 2.086vw;
+                        height: 7.301vw;
+                    }
 
                     @media (max-width: 767px){
                         height: 15.556vw;
@@ -166,7 +176,7 @@
     }
 }
 
-.sell-component, .withdraw-component, .unstake-component {
+.sell-component, .withdraw-component, .unstake-component, .stake-component {
     height: inherit;
     vertical-align: middle;
     
