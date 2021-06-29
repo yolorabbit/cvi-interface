@@ -81,6 +81,29 @@
         }
     }
 
+    &.available-to-stake {
+        padding-top: 0;
+        & .expand-component  { 
+            &.expanded {
+                & .expand-component__header {
+                    background-color: #182f5d;
+                }
+            }
+
+            &__header {
+                background-color: #1b1d38;
+            }
+            
+            &:not(.expanded) {
+                &:nth-child(even) {
+                    & .expand-component__header {
+                        background-color: #1a2243;
+                    }
+                }
+            }
+        }
+    }
+
     @media (max-width: 767px) {
         padding: 0 0 6.667vw 0;
     }

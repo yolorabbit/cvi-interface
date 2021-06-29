@@ -1,11 +1,11 @@
 import { platformViewContext } from 'components/Context';
-import { useIsTablet } from 'components/hooks';
 import Paginator from 'components/Paginator';
 import Tooltip from 'components/Tooltip';
 import platformConfig from 'config/platformConfig';
 import stakingConfig, { stakingViews } from 'config/stakingConfig';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ActiveRow from '../Elements/Rows/ActiveRow';
+import SubHeader from '../Elements/SubHeader';
 import './Table.scss';
 
 
@@ -49,12 +49,11 @@ const Table = ({activeTab, data = [], pageSize = 5, subHeaders = {}, showPaginat
                 </thead>
 
                 <tbody>
-                
                     {currentData.map((rowData, index) => {
                         return [
-                        subHeaders?.[index] && <SubHeader title={subHeaders[index]} />,
-                        <ActiveRow key={index} activeTab={activeTab} rowData={rowData}  
-                    />]
+                            subHeaders?.[index] && <SubHeader title={subHeaders[index]} />,
+                            <ActiveRow key={index} activeTab={activeTab} rowData={rowData} />
+                        ]
                     })}
                 </tbody>
             </table>
@@ -71,17 +70,6 @@ const Table = ({activeTab, data = [], pageSize = 5, subHeaders = {}, showPaginat
             />}
         </div>
     )
-}
-
-const SubHeader = ({title}) => {
-    const isTablet = useIsTablet();
-
-    return useMemo(() => {
-        return <tr className="sub-header-component">
-            <td>{title}</td>
-        </tr>
-        //eslint-disable-next-line
-    }, [isTablet]) 
 }
 
 export default Table;

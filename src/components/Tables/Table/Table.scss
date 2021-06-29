@@ -197,8 +197,8 @@
     & td, & th {
         text-align: left;
         vertical-align: middle;
-        padding-right: 12px;
         position: relative;
+        padding-right: 12px;
 
         & > div {
             &:not(.tooltip):not(.pairs-component):not(.apy-component) {
@@ -214,28 +214,5 @@
             margin-left: auto;
             padding: 0;
         }
-    }
-}
-
-.table-component .sub-header-component {
-    height: auto;
-    
-    &:first-child {
-        & td {
-            margin-top: 0;
-        }
-    }
-
-    &:hover {
-        background-color: transparent;
-        border-color: transparent;
-    }
-    
-    & td {
-        vertical-align: middle;
-        color: #01b8bd;
-        font-size: 12px;
-        margin: 8px 0;
-
     }
 }

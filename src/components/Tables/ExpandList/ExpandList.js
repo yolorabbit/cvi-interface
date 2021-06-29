@@ -6,9 +6,10 @@ import platformConfig from 'config/platformConfig';
 import { platformViewContext } from 'components/Context';
 import stakingConfig from 'config/stakingConfig';
 import ActiveRow from '../Elements/Rows/ActiveRow';
+import SubHeader from '../Elements/SubHeader';
 import './ExpandList.scss';
 
-const ExpandList = ({activeTab, data = [], pageSize = 5, showPaginator }) => {
+const ExpandList = ({activeTab, data = [], subHeaders = {}, pageSize = 5, showPaginator }) => {
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
     const currentData = showPaginator ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data;
@@ -24,12 +25,16 @@ const ExpandList = ({activeTab, data = [], pageSize = 5, showPaginator }) => {
 
     return (
         <div className={`expand-list-component ${activeTab?.toLowerCase()}`}>
-            {currentData.map(rowData => <Expand 
-                key={uniqueId()} 
-                header={<ActiveRow rowData={rowData} activeTab={activeTab} isHeader />} 
-                expandedView={<ActiveRow rowData={rowData} activeTab={activeTab} />} 
-            />)}
-
+            {currentData.map((rowData, index) => [
+                    subHeaders?.[index] && <SubHeader title={subHeaders[index]} />, 
+                    <Expand 
+                        key={uniqueId()} 
+                        header={<ActiveRow rowData={rowData} activeTab={activeTab} isHeader />} 
+                        expandedView={<ActiveRow rowData={rowData} activeTab={activeTab} />} 
+                    />
+                ])
+            }
+         
             {_showPaginator && <Paginator 
                 currentPage={currentPage} 
                 totalRecords={data.length} 

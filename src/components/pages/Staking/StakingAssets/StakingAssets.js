@@ -23,6 +23,7 @@ const StakingAssets = ({type}) => {
                         activeTab={type} 
                         data={stakingAssetsData} 
                         showPaginator={type === stakingViews.staked} 
+                        subHeaders={stakingConfig.tableSubHeaders[type]}
                     /> 
                     : <Table 
                         activeTab={type} 
