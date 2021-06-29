@@ -196,7 +196,7 @@
         position: relative;
 
         & > div {
-            &:not(.tooltip):not(.pairs-component) {
+            &:not(.tooltip):not(.pairs-component):not(.apy-component) {
                 width: 100%;
                 vertical-align: middle;
                 display: table-cell;

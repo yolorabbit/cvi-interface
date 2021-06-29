@@ -1,18 +1,18 @@
 .value-component {
     line-height: 1;
     & div {
-        margin-top: 0.104vw;
+        margin-top: 0.204vw;
 
         @media (max-width: 1365px){   
-            margin-top: 0.147vw;
+            margin-top: 0.247vw;
         }
 
         @media (max-width: 1024px){ 
-            margin-top: 0.195vw;
+            margin-top: 0.395vw;
         }
 
         @media (max-width: 767px){
-            margin-top: 0.556vw;
+            margin-top: 0.756vw;
         }
     }
 
@@ -112,6 +112,54 @@
   }
 }
 
+.apy-component {
+    display: flex;
+    flex-wrap: wrap;
+
+    & .value-component {
+        margin-right: 1.25vw;
+        display: flex;
+
+        @media (max-width: 1024px){ 
+            width: 100%;
+        }
+
+        & b {
+            order: 1;
+            margin-left: 0.208vw;
+            
+            @media (max-width: 1365px){   
+                margin-left: 0.293vw;
+            }
+
+            @media (max-width: 1024px){ 
+                margin-left: 0.522vw;
+            }
+
+            @media (max-width: 767px){
+            	margin-left: 1.111vw;
+                margin-bottom: 2.222vw;
+            }
+        }
+        
+        @media (max-width: 1365px){   
+            margin-right: 1.758vw;   
+        }
+
+        @media (max-width: 1024px){ 
+            margin-right: 3.129vw;
+        }
+
+        @media (max-width: 767px){
+            margin-right: 6.667vw;
+        }
+
+        &:last-child {
+            margin: 0;
+        }
+    }
+}
+
 .table-component .pairs-component, .row-item-component .pairs-component {
     display: flex;
     align-items: center;
@@ -132,7 +180,7 @@
         @media (max-width: 767px){
             margin-right: 4.444vw;
         }
-        
+
         & img {
             margin-right: 0;
             &:first-child {

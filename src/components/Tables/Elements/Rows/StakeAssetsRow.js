@@ -6,6 +6,7 @@ import Value from '../Values/Value';
 import ActionController from "components/pages/Platform/Actions/ActionController";
 import stakingConfig, { stakingProtocols, stakingViews } from "config/stakingConfig";
 import { Pairs } from "../Values";
+import Apy from "../Values/Apy";
 
 const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => {
     const isTablet = useIsTablet();
@@ -33,7 +34,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
                     <Coin token={token} /> : 
                     <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
                 />
-                <RowItem content={<Value text="300" subText={`${token?.toUpperCase()} (0.03%)`} bottomText={"$468"} /> } />
+                <RowItem content={<Value text="300" subText={`${token?.toUpperCase()}`} bottomText={"$468"} /> } />
             </>}
 
             <RowItem 
@@ -43,7 +44,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
 
             <RowItem 
                 header={header.APY.label} 
-                content={<Value text="182.29%" /> } 
+                content={<Apy apyList={["0.28%", "2.01%", "189%"]} />} 
             />
 
             {(!isTablet || isMobile) && <RowItem content={stakeController} />}
