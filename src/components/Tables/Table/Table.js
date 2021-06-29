@@ -49,7 +49,7 @@ const Table = ({activeTab, data = [], pageSize = 5}) => {
                 </thead>
 
                 <tbody>
-                    {currentData.map(token => <ActiveRow key={uniqueId(token)} activeTab={activeTab} token={token} />)}
+                    {currentData.map(rowData => <ActiveRow key={uniqueId()} activeTab={activeTab} rowData={rowData}  />)}
                 </tbody>
             </table>
 

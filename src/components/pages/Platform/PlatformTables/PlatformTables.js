@@ -59,7 +59,7 @@ const PlatformTables = () => {
 
     const renderView = () => {
         if(!activeTab) return null;
-        const data = activeTab === activeViews.history ? historyData : platformConfig.tokens;
+        const data = activeTab === activeViews.history ? historyData : Object.values(platformConfig.tokens);
         return isTablet ? <ExpandList activeTab={activeTab} data={data} /> : <Table activeTab={activeTab} data={data} />
     }
 

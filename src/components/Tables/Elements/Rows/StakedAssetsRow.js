@@ -4,14 +4,16 @@ import RowItem from './RowItem';
 import Coin from '../Values/Coin';
 import Value from '../Values/Value';
 import ActionController from "components/pages/Platform/Actions/ActionController";
-import stakingConfig, { stakingViews } from "config/stakingConfig";
+import stakingConfig, { stakingProtocols, stakingViews } from "config/stakingConfig";
 import StakingClaim from "components/pages/Platform/Actions/StakingClaim";
+import { Pairs } from "../Values";
 
-const StakedAssetsRow = ({token, isHeader}) => {
+const StakedAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
+    const [leftToken, rightToken] = token?.split('-');
 
     const unstakeController = useMemo(() => {
         return <ActionController 
@@ -27,7 +29,11 @@ const StakedAssetsRow = ({token, isHeader}) => {
     const RowData = useMemo(() => (
         <> 
             {!isTablet && <> 
-                <RowItem content={<Coin token={token} />} />
+                <RowItem content={
+                    stakingProtocols[protocol] === stakingProtocols.platform ? 
+                    <Coin token={token} /> : 
+                    <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
+                />
                 <RowItem content={<Value text="300" subText={`${token?.toUpperCase()} (0.03%)`} bottomText={"$468"} /> } />
             </>}
 
@@ -58,8 +64,12 @@ const StakedAssetsRow = ({token, isHeader}) => {
 
     if(isHeader) {
         return <>
-            <RowItem content={<Coin token={token} />} />
-                  <RowItem content={<Value text="10,000" subText={`${token?.toUpperCase()} (0.01233%)`} bottomText={"$468"} /> } />
+            <RowItem content={
+                stakingProtocols[protocol] === stakingProtocols.platform ? 
+                <Coin token={token} /> : 
+                <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
+            />
+            <RowItem content={<Value text="10,000" subText={`${token?.toUpperCase()} (0.01233%)`} bottomText={"$468"} /> } />
             {!isMobile && <RowItem type="action" content={unstakeController} /> }
         </>
     }

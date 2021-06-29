@@ -24,10 +24,10 @@ const ExpandList = ({activeTab, data = [], pageSize = 5 }) => {
 
     return (
         <div className={`expand-list-component ${activeTab?.toLowerCase()}`}>
-            {currentData.map(token => <Expand 
-                key={uniqueId(token)} 
-                header={<ActiveRow token={token} activeTab={activeTab} isHeader />} 
-                expandedView={<ActiveRow token={token} activeTab={activeTab} />} 
+            {currentData.map(rowData => <Expand 
+                key={uniqueId()} 
+                header={<ActiveRow rowData={rowData} activeTab={activeTab} isHeader />} 
+                expandedView={<ActiveRow rowData={rowData} activeTab={activeTab} />} 
             />)}
 
             {showPaginator && <Paginator 

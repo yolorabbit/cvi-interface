@@ -25,7 +25,14 @@ const tabs = {
 
 const platformConfig = {
   tabs,
-  tokens: ["usdt", "eth"],
+  tokens: {
+    "usdt": {
+      key: "usdt"
+    },
+    "eth": {
+      key: "eth"
+    }
+  },
   headers: {
     [activeViews.trade]: {
       [tabs.trade.positions]: {

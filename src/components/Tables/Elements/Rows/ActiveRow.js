@@ -5,20 +5,21 @@ import LiquidityRow from "./LiquidityRow"
 import StakedAssetsRow from "./StakedAssetsRow"
 import TradeRow from "./TradeRow"
 
-const ActiveRow = ({token, activeTab, isHeader}) => {
+const ActiveRow = ({activeTab, isHeader, rowData}) => {
+    console.log(rowData);
     switch(activeTab) {
         case activeViews.history: {
-            return <HistoryRow token={token} isHeader={isHeader} />
+            return <HistoryRow token={rowData.key} isHeader={isHeader} />
         }
 
         case platformConfig.tabs.trade.positions:
-            return <TradeRow token={token} isHeader={isHeader} />
+            return <TradeRow token={rowData.key} isHeader={isHeader} />
         
         case platformConfig.tabs['view-liquidity'].liquidity:
-            return <LiquidityRow token={token} isHeader={isHeader} />
+            return <LiquidityRow token={rowData.key} isHeader={isHeader} />
 
         case stakingViews.staked:
-            return <StakedAssetsRow token={token} isHeader={isHeader} />
+            return <StakedAssetsRow rowData={rowData} isHeader={isHeader} />
 
         default:
             return null;

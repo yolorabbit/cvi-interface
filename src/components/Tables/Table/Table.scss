@@ -168,10 +168,15 @@
 
         &:first-child {
             padding: 0;
+            // max-width: 3.125vw;
+
+            // @media (max-width: 1365px){   
+            //     max-width: 6.396vw;
+            // }
         }
 
         & > div {
-            &:not(.tooltip) {
+            &:not(.tooltip):not(.pairs-component) {
                 width: 100%;
                 vertical-align: middle;
                 display: table-cell;

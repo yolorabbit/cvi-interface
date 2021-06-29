@@ -111,3 +111,110 @@
       margin-right: 2.222vw;
   }
 }
+
+.table-component .pairs-component, .row-item-component .pairs-component {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    &__coins {
+        white-space: nowrap;
+        margin-right: 0.833vw;
+
+        @media (max-width: 1365px){   
+            margin-right: 1.172vw;
+        }
+
+        @media (max-width: 1024px){ 
+            margin-right: 2.086vw;
+        }
+
+        @media (max-width: 767px){
+            margin-right: 4.444vw;
+        }
+        
+        & img {
+            margin-right: 0;
+            &:first-child {
+                margin-right: 0.417vw;
+                @media (max-width: 1365px){   
+                    margin-right: 0.586vw;
+                }
+            }
+        }
+    }
+
+    &__group {
+        display: flex;
+        align-items: center;
+        margin-right: 0.833vw;
+
+        @media (max-width: 1365px){   
+            margin-right: 1.172vw;
+        }
+
+        @media (max-width: 1024px){ 
+            margin-right: 2.086vw;
+        }
+
+        @media (max-width: 767px){
+            margin-right: 4.444vw;
+        }
+
+        & img {
+            width: 0.833vw;
+            height: 0.833vw;
+            margin-right: 0.417vw;
+
+            @media (max-width: 1365px){   
+                width: 1.172vw;
+                height: 1.172vw;
+                margin-right: 0.586vw; 
+            }
+                
+            @media (max-width: 1024px){ 
+                width: 2.086vw;
+                height: 2.086vw;
+                margin-right: 1.043vw; 
+            }
+
+            @media (max-width: 767px){
+                width: 15.998px;
+                height: 15.998px;
+                margin-right: 2.222vw; 
+            }
+        }
+
+        &--protocol {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            
+            & span {
+                font-size: 0.729vw;
+                white-space: nowrap;
+
+                @media (max-width: 1365px){   
+                    font-size: 1.026vw;
+                }
+
+                @media (max-width: 1024px){ 
+                    font-size: 1.826vw;
+                }
+    
+                @media (max-width: 767px){
+                    font-size: 3.89vw;
+                }
+
+                &:first-child {
+                    text-transform: uppercase;
+                }
+
+                &:last-child {
+                    text-transform: capitalize;
+                }
+            }
+        }
+        
+    }
+}
