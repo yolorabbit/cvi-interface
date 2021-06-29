@@ -1,7 +1,7 @@
 import React from 'react'
 import Coin from './Coin';
 
-const Pairs = ({leftToken, rightToken, protocol}) => {
+const Pairs = ({leftToken, rightToken, label, protocol}) => {
   return <div className="pairs-component">
       <div className="pairs-component__coins">
         <Coin token={leftToken}  />
@@ -11,7 +11,7 @@ const Pairs = ({leftToken, rightToken, protocol}) => {
       {protocol && <div className="pairs-component__group">
           <img src={require(`images/protocols/${protocol}.svg`).default} alt={protocol} />
           <div className="pairs-component__group--protocol">
-            <span>{leftToken}-{rightToken} LP</span>
+            <span>{label ?? `${leftToken?.toUpperCase()}-${rightToken?.toUpperCase()} LP`}</span>
             <span>{protocol}</span>
           </div>
       </div> }

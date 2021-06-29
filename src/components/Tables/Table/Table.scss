@@ -42,7 +42,7 @@
         }
     }
 
-    &.history {
+    &.history, &.available-to-stake {
         & thead {
             & tr {
                 & th {
@@ -71,13 +71,17 @@
         }
         
         & tbody {
-            & tr {
+            & tr:not(.sub-header-component) {
                 &:hover {
-                    background-color: transparent;
-                    border-color: transparent;
+                    background-color: #182f5d;
+                    border-color: #182f5d;
                 }
 
-                &:nth-child(odd) {
+                &:nth-child(even) {
+                    &:hover {
+                        background-color: #182f5d;
+                        border-color: #182f5d;
+                    }
                     background-color: #1a2243;
                     border-left: 0.833vw solid #1a2243;
                     border-right: 0.833vw solid #1a2243;
@@ -99,6 +103,7 @@
             }
         }
     }
+
 
     table {
         width: 100%;
@@ -209,5 +214,28 @@
             margin-left: auto;
             padding: 0;
         }
+    }
+}
+
+.table-component .sub-header-component {
+    height: auto;
+    
+    &:first-child {
+        & td {
+            margin-top: 0;
+        }
+    }
+
+    &:hover {
+        background-color: transparent;
+        border-color: transparent;
+    }
+    
+    & td {
+        vertical-align: middle;
+        color: #01b8bd;
+        font-size: 12px;
+        margin: 8px 0;
+
     }
 }

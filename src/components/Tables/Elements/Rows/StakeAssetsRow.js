@@ -32,19 +32,19 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
                     <Coin token={token} /> : 
-                    <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
+                    <Pairs leftToken={leftToken} rightToken={rightToken} label={label} protocol={protocol} />} 
                 />
-                <RowItem content={<Value text="300" subText={`${token?.toUpperCase()}`} bottomText={"$468"} /> } />
+                <RowItem content={<Value text="300" subText={label ?? `${token?.toUpperCase()}`} bottomText={"$468"} /> } />
             </>}
 
             <RowItem 
                 header={header.TVL.label} 
-                content={<Value text="$7,320,500.43" bottomText="3,012,551 CVI-USDT LP" /> } 
+                content={<Value text="$7,320,500.43" bottomText={`3,012,551 ${label ?? `${token?.toUpperCase()}`}`} /> } 
             />
 
             <RowItem 
                 header={header.APY.label} 
-                content={<Apy apyList={["0.28%", "2.01%", "189%"]} />} 
+                content={<Apy apyList={["189%", "2.01%", "0.28%"]} />} 
             />
 
             {(!isTablet || isMobile) && <RowItem content={stakeController} />}

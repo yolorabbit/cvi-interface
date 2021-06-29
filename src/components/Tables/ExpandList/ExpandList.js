@@ -8,11 +8,11 @@ import stakingConfig from 'config/stakingConfig';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import './ExpandList.scss';
 
-const ExpandList = ({activeTab, data = [], pageSize = 5 }) => {
+const ExpandList = ({activeTab, data = [], pageSize = 5, showPaginator }) => {
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
-    const currentData = data.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-    const showPaginator = data.length > pageSize;
+    const currentData = showPaginator ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data;
+    const _showPaginator = showPaginator && data.length > pageSize;
 
     useEffect(() => {
         setCurrentPage(1);
@@ -30,7 +30,7 @@ const ExpandList = ({activeTab, data = [], pageSize = 5 }) => {
                 expandedView={<ActiveRow rowData={rowData} activeTab={activeTab} />} 
             />)}
 
-            {showPaginator && <Paginator 
+            {_showPaginator && <Paginator 
                 currentPage={currentPage} 
                 totalRecords={data.length} 
                 onFirstClick={() => setCurrentPage(1)}

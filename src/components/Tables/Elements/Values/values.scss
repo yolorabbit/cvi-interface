@@ -115,14 +115,32 @@
 .apy-component {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
 
+    @media (max-width: 1024px){ 
+        flex-direction: column-reverse;
+    }
+    
     & .value-component {
-        margin-right: 1.25vw;
+        margin-left: 1.25vw;
         display: flex;
+        
+        @media (max-width: 1365px){   
+            margin-left: 1.758vw;   
+        }
 
         @media (max-width: 1024px){ 
+            margin-right: 3.129vw;
+            margin-left: 0;
             width: 100%;
         }
+
+        @media (max-width: 767px){
+            margin-right: 6.667vw;
+            margin-left: 0;
+        }
+
 
         & b {
             order: 1;
@@ -134,6 +152,7 @@
 
             @media (max-width: 1024px){ 
                 margin-left: 0.522vw;
+                margin-bottom: 1.043vw;
             }
 
             @media (max-width: 767px){
@@ -141,19 +160,7 @@
                 margin-bottom: 2.222vw;
             }
         }
-        
-        @media (max-width: 1365px){   
-            margin-right: 1.758vw;   
-        }
-
-        @media (max-width: 1024px){ 
-            margin-right: 3.129vw;
-        }
-
-        @media (max-width: 767px){
-            margin-right: 6.667vw;
-        }
-
+    
         &:last-child {
             margin: 0;
         }
@@ -252,10 +259,6 @@
     
                 @media (max-width: 767px){
                     font-size: 3.89vw;
-                }
-
-                &:first-child {
-                    text-transform: uppercase;
                 }
 
                 &:last-child {

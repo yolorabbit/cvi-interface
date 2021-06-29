@@ -44,7 +44,7 @@ const stakingConfig = {
         },
         "rhegic2-eth-lp": {
           key: "rhegic2-eth-lp",
-          label: "rHEGIC2-ETH-LP",
+          label: "rHEGIC2-ETH LP",
           protocol: stakingProtocols.uniswap
         },
       },
@@ -103,6 +103,12 @@ const stakingConfig = {
       },
       action: ""
     },
+  },
+  tableSubHeaders: {
+    [stakingViews["available-to-stake"]]: {
+      0: "Platform tokens", // 0 - index to add the sub header
+      3: "Liquidity mining"
+    }
   },
   actionsConfig: {
     "unstake": {

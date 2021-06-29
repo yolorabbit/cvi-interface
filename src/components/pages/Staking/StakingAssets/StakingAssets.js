@@ -2,7 +2,7 @@ import { useIsTablet } from 'components/hooks';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import { chainNames } from 'config/config';
-import stakingConfig from 'config/stakingConfig';
+import stakingConfig, { stakingViews } from 'config/stakingConfig';
 import React, { useMemo } from 'react'
 import './StakingAssets.scss';
 
@@ -19,8 +19,17 @@ const StakingAssets = ({type}) => {
         return (
             <div className="staked-assets-component">
                 {isTablet ? 
-                    <ExpandList activeTab={type} data={stakingAssetsData} /> 
-                    : <Table activeTab={type} data={stakingAssetsData} />}
+                    <ExpandList 
+                        activeTab={type} 
+                        data={stakingAssetsData} 
+                        showPaginator={type === stakingViews.staked} 
+                    /> 
+                    : <Table 
+                        activeTab={type} 
+                        data={stakingAssetsData} 
+                        showPaginator={type === stakingViews.staked} 
+                        subHeaders={stakingConfig.tableSubHeaders[type]}
+                    />}
             </div>
         )
     }, [isTablet, type]);
