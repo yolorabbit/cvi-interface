@@ -32,7 +32,7 @@ const Tabs = ({type, isDropdown, tabs, activeTab, setActiveTab}) => {
                         key={tab} 
                         className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
                         buttonText={formattedTabs[tab] ?? tab} 
-                        onClick={() => onTabChange(tabs[index])} 
+                        onClick={() => onTabChange(tab)} 
                     />)}
                 </div>}
             </div> : <> 

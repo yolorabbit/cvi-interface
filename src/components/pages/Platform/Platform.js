@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, {  useMemo, useState } from 'react';
 import { platformViewContext } from 'components/Context';
 import SubNavbar from 'components/SubNavbar';
 import Graphs from './Graphs';
@@ -19,7 +19,7 @@ const Platform = () => {
     return useMemo(() => (
         <div className="platform-component">
             <SubNavbar tabs={Object.keys(platformConfig.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
-            
+           
             <platformViewContext.Provider value={{activeView}}>
                 <Layout>
                     <Row>
