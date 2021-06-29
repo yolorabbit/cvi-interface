@@ -1,5 +1,5 @@
+import { useActionController } from 'components/Actions/ActionController';
 import React from 'react'
-import { useActionController } from '../../Actions/ActionController';
 import './WithdrawInfo.scss';
 
 const WithdrawInfo = () => {

@@ -3,8 +3,8 @@ import { useMemo, useState } from "react";
 import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
 import platformConfig, { activeViews } from "config/platformConfig";
-import ActionController from "components/pages/Platform/Actions/ActionController";
-import PlatformClaim from "components/pages/Platform/Actions/PlatformClaim";
+import ActionController from "components/Actions/ActionController";
+import PlatformClaim from "components/Actions/PlatformClaim";
 
 const TradeRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();

@@ -2,28 +2,13 @@ import React, { useEffect } from 'react';
 import Button from '../Elements/Button';
 import { useLocation } from 'react-router';
 import './CurrencySelect.scss';
+import platformConfig from 'config/platformConfig';
+import { chainNames } from 'config/config';
 
-const currenciesMock = {
-    "usdt": {
-        name: "USDT",
-        symbol: "usdt",
-        activeNetworks: ['Ethereum']
-    },
-    eth: {
-       name: "ETH",
-       symbol: "eth",
-       activeNetworks: ['Ethereum']
-    },
-    coti: {
-      name: "COTI",
-      symbol: "coti",
-      soon: true,
-      activeNetworks: ['Ethereum']
-   },
-}
-
-const CurrencySelect = ({currencies = currenciesMock, selectedCurrency, setSelectedCurrency}) => {
+const CurrencySelect = ({selectedCurrency, setSelectedCurrency}) => {
     const location = useLocation();
+    const selectedNetwork = chainNames.Ethereum;
+    const currencies = platformConfig.tokens[selectedNetwork];
 
     useEffect(() => {
         const getCurrencyQuery = new URLSearchParams(location?.search).get('currency');
@@ -43,10 +28,10 @@ const CurrencySelect = ({currencies = currenciesMock, selectedCurrency, setSelec
                 .map(key => 
                     <Currency 
                         key={key} 
-                        state={selectedCurrency === currencies[key].symbol ? 'selected' : ''} 
+                        state={selectedCurrency === currencies[key].key ? 'selected' : ''} 
                         soon={currencies[key].soon} 
-                        name={currencies[key].name} 
-                        symbol={currencies[key].symbol} 
+                        name={currencies[key].key?.toUpperCase()} 
+                        symbol={currencies[key].key} 
                         setSelectedCurrency={setSelectedCurrency}
                 />)}
             </div>

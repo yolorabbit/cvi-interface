@@ -3,9 +3,9 @@ import React, { useContext, useMemo, useState } from 'react'
 import CurrencySelect from 'components/CurrencySelect';
 import SelectLeverage from 'components/SelectLeverage';
 import Details from './Details/Details';
-import './Form.scss';
-import ActionController from '../Actions/ActionController';
 import platformConfig, { activeViews } from 'config/platformConfig';
+import ActionController from 'components/Actions/ActionController';
+import './Form.scss';
 
 const Form = () => {
     const { activeView } = useContext(platformViewContext);

@@ -1,3 +1,5 @@
+import { chainNames } from "./config";
+
 export const activeViews = {
   "trade": "trade",
   "view-liquidity": "view-liquidity",
@@ -26,11 +28,29 @@ const tabs = {
 const platformConfig = {
   tabs,
   tokens: {
-    "usdt": {
-      key: "usdt"
+    [chainNames.Ethereum]: {
+      "usdt": {
+        key: "usdt",
+        decimals: 6
+      },
+      eth: {
+        key: "eth",
+        decimals: 18,
+      },
+      coti: {
+        key: "coti",
+        soon: true,
+      },
     },
-    "eth": {
-      key: "eth"
+    [chainNames.Matic]: {
+      "usdt": {
+        key: "usdt",
+        decimals: 6,
+      },
+      eth: {
+        key: "eth",
+        soon: true
+      },
     }
   },
   headers: {

@@ -7,6 +7,7 @@ import platformConfig, { activeViews } from 'config/platformConfig';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import './PlatformTables.scss';
+import { chainNames } from 'config/config';
 
 const historyData = [{
     date: "07/11/2020",
@@ -56,10 +57,11 @@ const PlatformTables = () => {
     const isTablet = useIsTablet();
     const { activeView } = useContext(platformViewContext);
     const [activeTab, setActiveTab] = useState();
+    const selectedNetwork = chainNames.Ethereum;
 
     const renderView = () => {
         if(!activeTab) return null;
-        const data = activeTab === activeViews.history ? historyData : Object.values(platformConfig.tokens);
+        const data = activeTab === activeViews.history ? historyData : Object.values(platformConfig.tokens[selectedNetwork]);
         return isTablet ? <ExpandList activeTab={activeTab} data={data} /> : <Table activeTab={activeTab} data={data} />
     }
 

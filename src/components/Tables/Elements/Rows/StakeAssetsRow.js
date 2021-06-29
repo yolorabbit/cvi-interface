@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import RowItem from './RowItem';
 import Coin from '../Values/Coin';
 import Value from '../Values/Value';
-import ActionController from "components/pages/Platform/Actions/ActionController";
+import ActionController from "components/Actions/ActionController";
 import stakingConfig, { stakingProtocols, stakingViews } from "config/stakingConfig";
 import { Pairs } from "../Values";
 import Apy from "../Values/Apy";

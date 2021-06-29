@@ -5,7 +5,7 @@ import Coin from '../Values/Coin';
 import Value from '../Values/Value';
 import Pnl from '../Values/Pnl';
 import platformConfig, { activeViews } from "config/platformConfig";
-import ActionController from "components/pages/Platform/Actions/ActionController";
+import ActionController from "components/Actions/ActionController";
 
 const LiquidityRow = ({token, isHeader}) => {
     const isTablet = useIsTablet();

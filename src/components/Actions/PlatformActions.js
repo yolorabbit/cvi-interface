@@ -1,8 +1,8 @@
 import Countdown from "components/Countdown/Countdown";
 import Button from "components/Elements/Button";
+import SellInfo from "components/pages/Platform/Info/SellInfo";
+import WithdrawInfo from "components/pages/Platform/Info/WithdrawInfo";
 import platformConfig from "config/platformConfig";
-import SellInfo from "../Info/SellInfo";
-import WithdrawInfo from "../Info/WithdrawInfo";
 import { useActionController } from "./ActionController";
 
 const PlatformActions = () => {
