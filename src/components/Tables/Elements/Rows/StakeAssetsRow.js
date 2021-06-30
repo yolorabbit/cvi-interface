@@ -59,7 +59,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
                 <Coin token={token} /> : 
                 <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
             />
-            <RowItem content={<Value text="10,000" subText={`${token?.toUpperCase()} (0.01233%)`} bottomText={"$468"} /> } />
+            <RowItem content={<Value text="300" subText={label ?? `${token?.toUpperCase()}`} bottomText={"$468"} /> } />
             {!isMobile && <RowItem type="action" content={stakeController} /> }
         </>
     }
