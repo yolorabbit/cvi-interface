@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-export const mappedSeriesData = (series = []) => {
-    if(!series?.length) return historicalData;
+export const mappedSeriesData = (series) => {
+    if (!series?.length) return;
     const lastHistoryDate = moment.utc(historicalData[historicalData.length -1][0]).format('l');
     const findIndex = series.findIndex((item) => {
         return moment.utc(item[0]).format('l') === lastHistoryDate;

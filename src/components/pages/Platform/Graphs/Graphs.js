@@ -1,5 +1,7 @@
 import { viewportContext } from 'components/Context';
+import CviIndexGraph from 'components/CviIndexGraph';
 import FundingFeesGraph from 'components/FundingFeesGraph';
+import platformConfig from 'config/platformConfig';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import Container from '../../../Layout/Container';
 import TabsForm from '../../../TabsForm';
@@ -29,7 +31,21 @@ const Graphs = () => {
                     tabs={["cvi index", "funding fee"]} 
                     activeTab={activeTab} 
                     setActiveTab={(tab) => setActiveTab(tab)}>
-                        <FundingFeesGraph key={width} series={feesInfo} cviValue={100} maxWidth={tabsFormWidth ?? 400} maxHeight={tabsFormHeight ?? 400} />
+                        {activeTab === platformConfig.tabs.graphs['cvi index']?.toLowerCase() ? 
+                            <CviIndexGraph    
+                                key={width}  
+                                maxWidth={tabsFormWidth ?? 400} 
+                                maxHeight={tabsFormHeight ?? 400}  
+                                series={[]} 
+                            /> :  
+                            <FundingFeesGraph 
+                                key={width} 
+                                series={feesInfo} 
+                                cviValue={100} 
+                                maxWidth={tabsFormWidth ?? 400} 
+                                maxHeight={tabsFormHeight ?? 400} 
+                            />
+                        }
                 </TabsForm>
             </Container>
         )
