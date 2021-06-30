@@ -7,17 +7,22 @@ import { platformViewContext } from 'components/Context';
 import stakingConfig from 'config/stakingConfig';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
+import ConnectWallet from '../../ConnectWallet/ConnectWallet';
 import './ExpandList.scss';
 
-const ExpandList = ({activeTab, data = [], subHeaders = {}, pageSize = 5, showPaginator }) => {
+const ExpandList = ({activeTab, data = [], subHeaders = {}, pageSize = 5, authGuard = true, showPaginator }) => {
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
     const currentData = showPaginator ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data;
     const _showPaginator = showPaginator && data.length > pageSize;
+    const account = "";
+    const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? activeTab?.toLowerCase();
 
     useEffect(() => {
         setCurrentPage(1);
     }, [activeTab]);
+
+    if(!account && authGuard) return <ConnectWallet type="table expand-list-component" buttonText={`to view ${activeTabLabel}`} />
 
     if(!activeTab || 
         (activeView && !platformConfig.headers?.[activeView]?.[activeTab]) ||
@@ -26,7 +31,7 @@ const ExpandList = ({activeTab, data = [], subHeaders = {}, pageSize = 5, showPa
     return (
         <div className={`expand-list-component ${activeTab?.toLowerCase()}`}>
             {currentData.map((rowData, index) => [
-                    subHeaders?.[index] && <SubHeader title={subHeaders[index]} />, 
+                    subHeaders?.[index] && <SubHeader key={uniqueId()} title={subHeaders[index]} />, 
                     <Expand 
                         key={uniqueId()} 
                         header={<ActiveRow rowData={rowData} activeTab={activeTab} isHeader />} 

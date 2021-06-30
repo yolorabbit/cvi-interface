@@ -23,7 +23,16 @@ const ActionController = ({type, amountLabel = "Amount", token, leverage, amount
   const { activeView } = useContext(platformViewContext);
 
   const renderActionComponent = (isModal = false) => {
-    return <ActionControllerContext type={type} token={token} leverage={leverage} amount={amount} setAmount={setAmount} isOpen={isOpen} isModal={isModal} setIsOpen={setIsOpen} />
+    return <ActionControllerContext 
+        type={type} 
+        token={token} 
+        leverage={leverage} 
+        amount={amount} 
+        setAmount={setAmount} 
+        isOpen={isOpen} 
+        isModal={isModal} 
+        setIsOpen={setIsOpen} 
+      />
   }
 
   useEffect(() => {

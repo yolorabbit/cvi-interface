@@ -13,6 +13,9 @@ export const stakingProtocols = {
 }
 
 const stakingConfig = {
+  stakingConnectLabels: {
+    [stakingViews.staked]: "staked assets" 
+  },
   protocolsByNetwork: {
     [chainNames.Ethereum]: [stakingProtocols.uniswap, stakingProtocols.sushiswap],
     [chainNames.Matic]: [stakingProtocols.quickswap],

@@ -6,17 +6,23 @@ import stakingConfig, { stakingViews } from 'config/stakingConfig';
 import React, { useContext, useEffect, useState } from 'react';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
+import ConnectWallet from '../../ConnectWallet/ConnectWallet';
 import './Table.scss';
+import { uniqueId } from 'lodash';
 
 
-const Table = ({activeTab, data = [], pageSize = 5, subHeaders = {}, showPaginator = true}) => {
+const Table = ({activeTab, data = [], pageSize = 5, subHeaders = {}, authGuard = true, showPaginator = true}) => {
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
+    const account = "";
+    const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? activeTab?.toLowerCase();
 
     useEffect(() => {
         setCurrentPage(1);
     }, [activeTab]);
-    
+
+    if(!account && authGuard) return <ConnectWallet type="table table-component" buttonText={`to view ${activeTabLabel}`} />
+
     if(!activeTab || 
         (activeView && !platformConfig.headers?.[activeView]?.[activeTab]) ||
         (!activeView && !stakingConfig.headers?.[activeTab])) return null;
@@ -51,7 +57,7 @@ const Table = ({activeTab, data = [], pageSize = 5, subHeaders = {}, showPaginat
                 <tbody>
                     {currentData.map((rowData, index) => {
                         return [
-                            subHeaders?.[index] && <SubHeader title={subHeaders[index]} />,
+                            subHeaders?.[index] && <SubHeader key={uniqueId()} title={subHeaders[index]} />,
                             <ActiveRow key={index} activeTab={activeTab} rowData={rowData} />
                         ]
                     })}
