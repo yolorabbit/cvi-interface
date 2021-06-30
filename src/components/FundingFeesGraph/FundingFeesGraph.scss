@@ -1,6 +1,10 @@
 #funding-fees-graph { 
   position: relative;
   transform: translateX(20px) scale(0.9);
+  background-image: url('../../images/chart.svg');
+  background-size: 154.1px;
+  background-position: 48% 51.3%;
+  background-repeat: no-repeat;
 
   @media (max-width: 767px) {
     background-position-x: calc(50% - 24px);
