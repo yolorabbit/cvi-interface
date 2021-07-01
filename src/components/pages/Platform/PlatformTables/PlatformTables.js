@@ -8,6 +8,7 @@ import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import './PlatformTables.scss';
 import { chainNames } from 'config/config';
+import DataController from 'components/Tables/DataController';
 
 const historyData = [{
     date: "07/11/2020",
@@ -62,7 +63,13 @@ const PlatformTables = () => {
     const renderView = () => {
         if(!activeTab) return null;
         const data = activeTab === activeViews.history ? historyData : Object.values(platformConfig.tokens[selectedNetwork]);
-        return isTablet ? <ExpandList activeTab={activeTab} data={data} /> : <Table activeTab={activeTab} data={data} />
+        return <DataController 
+            activeTab={activeTab} 
+            data={data}
+        >
+            {isTablet ? <ExpandList /> : <Table />}
+        </DataController>
+   
     }
 
     return (

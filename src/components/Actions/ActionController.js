@@ -4,7 +4,7 @@ import InputAmount from 'components/InputAmount';
 import { platformViewContext } from 'components/Context';
 import Action from './Action';
 
-export const actionControllerContext = createContext({});
+const actionControllerContext = createContext({});
 export const ActionControllerContext = ({token, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen}) => {
   return (
     <actionControllerContext.Provider value={{ type, token, leverage, amount, setAmount, isModal, isOpen, setIsOpen }}>

@@ -1,35 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import Expand from 'components/Expand';
 import { uniqueId } from 'lodash';
 import Paginator from 'components/Paginator';
-import platformConfig from 'config/platformConfig';
-import { platformViewContext } from 'components/Context';
-import stakingConfig from 'config/stakingConfig';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
-import ConnectWallet from '../../ConnectWallet/ConnectWallet';
 import './ExpandList.scss';
-import EmptyData from 'components/EmptyData/EmptyData';
+import { useDataController } from '../DataController/DataController';
 
-const ExpandList = ({activeTab, data = [], subHeaders = {}, pageSize = 5, authGuard = true, showPaginator }) => {
-    const { activeView } = useContext(platformViewContext);
-    const [currentPage, setCurrentPage] = useState(1);
-    const currentData = showPaginator ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data;
-    const _showPaginator = showPaginator && data.length > pageSize;
-    const account = "sdg";
-    const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? activeTab?.toLowerCase();
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [activeTab]);
-
-    if(!account && authGuard) return <ConnectWallet type="table expand-list-component" buttonText={`to view ${activeTabLabel}`} />
-
-    if(!data?.length) return <EmptyData text={`You have no ${activeTabLabel ?? 'data'}`} />
-
-    if(!activeTab || 
-        (activeView && !platformConfig.headers?.[activeView]?.[activeTab]) ||
-        (!activeView && !stakingConfig.headers?.[activeTab])) return null;
+const ExpandList = () => {
+    const { 
+        currentData,
+        currentPage,
+        showPaginator,
+        setCurrentPage,
+        totalRecords,
+        pageSize,
+        activeTab,
+        subHeaders
+    } = useDataController();
 
     return (
         <div className={`expand-list-component ${activeTab?.toLowerCase()}`}>
@@ -43,9 +31,9 @@ const ExpandList = ({activeTab, data = [], subHeaders = {}, pageSize = 5, authGu
                 ])
             }
          
-            {_showPaginator && <Paginator 
+            {showPaginator && <Paginator 
                 currentPage={currentPage} 
-                totalRecords={data.length} 
+                totalRecords={totalRecords} 
                 onFirstClick={() => setCurrentPage(1)}
                 onLastClick={(last) => setCurrentPage(last)}
                 onBackClick={() => setCurrentPage(currentPage - 1)}

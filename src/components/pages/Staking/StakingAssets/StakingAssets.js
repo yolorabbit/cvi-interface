@@ -1,4 +1,5 @@
 import { useIsTablet } from 'components/hooks';
+import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import { chainNames } from 'config/config';
@@ -18,21 +19,15 @@ const StakingAssets = ({type}) => {
 
         return (
             <div className="staked-assets-component">
-                {isTablet ? 
-                    <ExpandList 
-                        activeTab={type} 
-                        data={stakingAssetsData} 
-                        showPaginator={type === stakingViews.staked} 
-                        authGuard={type === stakingViews.staked}
-                        subHeaders={stakingConfig.tableSubHeaders[type]}
-                    /> 
-                    : <Table 
-                        activeTab={type} 
-                        data={stakingAssetsData} 
-                        showPaginator={type === stakingViews.staked} 
-                        authGuard={type === stakingViews.staked}
-                        subHeaders={stakingConfig.tableSubHeaders[type]}
-                    />}
+                <DataController
+                    activeTab={type} 
+                    data={stakingAssetsData} 
+                    showPaginator={type === stakingViews.staked} 
+                    authGuard={type === stakingViews.staked}
+                    subHeaders={stakingConfig.tableSubHeaders[type]}
+                >
+                    {isTablet ? <ExpandList /> : <Table />}
+                </DataController>
             </div>
         )
     }, [isTablet, type]);
