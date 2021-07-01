@@ -1,3 +1,157 @@
 .help-center-component {
     height: 100%;
+    color: #04050f;
+    
+    &__header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        position: relative;
+        height: 10vw;
+        margin-bottom: 4.167vw;
+            
+        @media (max-width: 1365px){   
+            height: 14.066vw;
+            margin-bottom: 5.861vw;
+        }
+
+        @media (max-width: 1024px){ 
+            height: 25.033vw;
+            margin-bottom: 10.43vw;
+        }
+
+        @media (max-width: 767px){
+            height: 53.333vw;
+            margin-bottom: 8.889vw;
+        }
+
+        &--background {
+            position: absolute;
+            background: url('../../../images/backgrounds/header-faq.svg') no-repeat;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+
+            @media (max-width: 1024px){ 
+                background-image: url('../../../images/backgrounds/header-faq-tablet.svg');
+            }
+    
+            @media (max-width: 767px){
+                background-image: url('../../../images/backgrounds/header-faq-mobile.svg');
+            }
+        }
+
+        & h2 {
+            font-size: 2.5vw;
+            font-weight: normal;
+            color: #04050f;
+            z-index: 1;
+
+            @media (max-width: 1365px){   
+                font-size: 3.516vw;
+            }
+    
+            @media (max-width: 1024px){ 
+                font-size: 6.258vw;
+            }
+    
+            @media (max-width: 767px){
+                font-size: 6.667vw;
+            }
+        }
+    }
+
+    
+    & .help-center-component__header ~ h2 {
+        font-size: 1.25vw;
+        @media (max-width: 1365px){   
+            font-size: 1.758vw;
+        }
+
+        @media (max-width: 1024px){ 
+            font-size: 3.129vw;
+        }
+
+        @media (max-width: 767px){
+            font-size: 5vw;
+        }
+    }
+    
+    & .help-center-component__header ~ h2, .help-center-component__header > h2 {
+        margin: 0 13.75vw;
+        color: #11254d;
+        font-weight: normal;
+
+        @media (max-width: 1365px){   
+            margin: 0 1.758vw;
+        }
+
+        @media (max-width: 1024px){ 
+            margin: 0 8.344vw;
+        }
+
+        @media (max-width: 767px){
+            margin: 0 6.667vw;
+        }
+    }
+
+    &__body {
+        position: relative;
+        display: flex;
+        width: 100%;
+        margin-left: 13.75vw;
+
+        @media (max-width: 1365px){   
+            margin-left: 1.758vw;
+        }
+
+        @media (max-width: 1024px){ 
+            margin-left: 8.344vw;
+            flex-direction: column;
+        }
+
+        @media (max-width: 767px){
+            margin-left: 6.667vw;
+        }
+
+        &--left, &--right {
+            max-width: 35.208vw;
+            width: 100%;
+
+            @media (max-width: 1365px){   
+                max-width: 49.524vw;
+            }
+    
+            @media (max-width: 1024px){ 
+                max-width: 88.136vw;
+            }
+    
+            @media (max-width: 767px){
+                max-width: 77.778vw;
+            }
+        }
+
+        & h3 {
+            margin-top: 2.083vw;
+            margin-bottom: 0;
+            font-size: 0.729vw;
+            font-weight: bold;
+            color: #007acb;
+
+            @media (max-width: 1365px){   
+                margin-top: 2.93vw;
+                font-size: 1.026vw;
+            }
+    
+            @media (max-width: 1024px){ 
+                margin-top: 7.301vw;
+                font-size: 1.825vw;
+            }
+    
+            @media (max-width: 767px){
+                margin-top: 6.667vw;
+                font-size: 3.889vw;  
+            }
+        }
+    }
 }
