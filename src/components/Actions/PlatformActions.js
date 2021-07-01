@@ -7,7 +7,7 @@ import { useActionController } from "./ActionController";
 
 const PlatformActions = () => {
     const { type, token, isModal, isOpen, setIsOpen, amount, setAmount, leverage } = useActionController();
-    const acount = false;
+    const acount = "sdgsdg";
 
     const resetForm = () => {
         setAmount("")
