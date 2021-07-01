@@ -296,7 +296,7 @@
 .documents-component {
     display: flex;
     justify-content: space-between;
-
+ 
     @media (max-width: 1024px){ 
         flex-wrap: wrap;
     }
@@ -309,6 +309,11 @@
 .document-component {
     display: flex;
     align-items: center;
+    cursor: pointer;
+
+    &:hover {
+        transform: scale(1.02);
+    }
 
     @media (max-width: 1024px){ 
         flex: 50%;

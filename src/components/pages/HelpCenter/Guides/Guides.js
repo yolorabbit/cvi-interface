@@ -2,6 +2,21 @@ import React, { useMemo } from 'react'
 
 const Guides = () => {
   return useMemo(() => {
+    const onWhitepaperClick = () => {
+        // track('Whitepaper');
+        window.open('/files/cvi-white-paper.pdf');
+    }
+
+    const onUsdtAnnouncementClick = () => {
+        // track('USDT Audit');
+        window.open('/files/usdt-audit.pdf');
+    }
+
+    const onEthAnnouncementClick = () => {
+        // track('ETH Audit');
+        window.open('/files/eth-audit.pdf');
+    }
+
     return (
       <div className="guides-component">
         <h2>Guides</h2>
@@ -17,19 +32,19 @@ const Guides = () => {
         <h2>Documents & Audits</h2>
 
         <div className="documents-component">
-          <Document title="Whitepaper" />
-          <Document title="Volatility token" />
-          <Document title="USDT Audit" date="January 6th, 2021" />
-          <Document title="ETH Audit" date="March 29th, 2021" />
+          <Document title="Whitepaper" onClick={onWhitepaperClick} />
+          <Document title="Volatility token" onClick={() => {}}  />
+          <Document title="USDT Audit" date="January 6th, 2021" onClick={onUsdtAnnouncementClick}  />
+          <Document title="ETH Audit" date="March 29th, 2021" onClick={onEthAnnouncementClick}  />
         </div>
       </div>
     )
   }, [])
 }
 
-const Document = ({title, date}) => {
+const Document = ({title, date, onClick}) => {
   return (
-    <div className="document-component">
+    <div className="document-component" onClick={onClick}>
       <img src={require('../../../../images/icons/document.svg').default} alt="document" />
       <div className="document-component__content">
         <span>{title}</span>
