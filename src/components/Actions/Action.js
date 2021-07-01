@@ -9,7 +9,7 @@ import './Action.scss';
 
 const Action = () => {
     const { type } = useActionController();
-    const account = "";
+    const account = "sdg";
     if(!account) return <ConnectWallet type="action" />
     if(platformConfig.actionsConfig?.[type]) return <PlatformActions />;
     if(stakingConfig.actionsConfig?.[type]) return <StakingActions />;

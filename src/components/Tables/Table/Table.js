@@ -9,12 +9,13 @@ import SubHeader from '../Elements/SubHeader';
 import ConnectWallet from '../../ConnectWallet/ConnectWallet';
 import './Table.scss';
 import { uniqueId } from 'lodash';
+import EmptyData from 'components/EmptyData/EmptyData';
 
 
 const Table = ({activeTab, data = [], pageSize = 5, subHeaders = {}, authGuard = true, showPaginator = true}) => {
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
-    const account = "";
+    const account = "sdg";
     const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? activeTab?.toLowerCase();
 
     useEffect(() => {
@@ -22,6 +23,8 @@ const Table = ({activeTab, data = [], pageSize = 5, subHeaders = {}, authGuard =
     }, [activeTab]);
 
     if(!account && authGuard) return <ConnectWallet type="table table-component" buttonText={`to view ${activeTabLabel}`} />
+
+    if(!data?.length) return <EmptyData text={`You have no ${activeTabLabel ?? 'data'}`} />
 
     if(!activeTab || 
         (activeView && !platformConfig.headers?.[activeView]?.[activeTab]) ||
