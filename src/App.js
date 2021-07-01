@@ -6,11 +6,11 @@ import {
   Redirect,
 } from "react-router-dom";
 import Platform from './components/pages/Platform';
-import './App.scss';
 import Staking from './components/pages/Staking';
 import HelpCenter from './components/pages/HelpCenter';
 import Footer from './components/Footer/Footer';
 import config from './config/config';
+import './App.scss';
 
 const App = () => {
   return (

@@ -1,22 +1,21 @@
 .footer-component {
     height: 3.5vw;
     max-width: 100%;
-    margin: 0 1.25vw;
+    margin: 0;
     margin-top: auto;
+    background-color: #0f112d;
     
     @media (max-width: 1365px) {
         height: 5.516vw;
-        margin: 0 1.758vw;
     }
 
     @media (max-width: 1024px) {
         height: 9.258vw;
-        margin: 0 3.129vw;
     }
 
     @media (max-width: 767px) {
         height: 27.778vw;
-        margin: 0 6.667vw;
+        padding: 0 7.1vw;
     }
 
     &__container {
