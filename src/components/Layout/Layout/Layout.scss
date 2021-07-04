@@ -1,7 +1,8 @@
 .layout-component {
     width: 100%;
     padding: 1.667vw 1.25vw 0 1.25vw;
-
+    flex: 1;
+    
     @media (max-width: 1365px) { 
         padding: 2.344vw 1.758vw 0 1.758vw;
     }

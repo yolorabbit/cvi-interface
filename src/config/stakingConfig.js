@@ -42,7 +42,7 @@ const stakingConfig = {
           protocol: stakingProtocols.uniswap
         },
         "govi-eth-lp": {
-          key: "coti-eth-lp",
+          key: "govi-eth-lp",
           protocol: stakingProtocols.uniswap
         },
         "rhegic2-eth-lp": {
@@ -57,15 +57,29 @@ const stakingConfig = {
           protocol: stakingProtocols.sushiswap
         },
         "govi-eth-lp": {
-          key: "coti-eth-lp",
+          key: "govi-eth-lp",
           protocol: stakingProtocols.sushiswap
         },
       },
     },
     [chainNames.Matic]: {
+      [stakingProtocols.platform]: {
+        "cvi-usdt-lp": {
+          key: "cvi-usdt-lp",
+          protocol: stakingProtocols.platform
+        },
+        "cvi-eth-lp": {
+          key: "cvi-eth-lp",
+          protocol: stakingProtocols.platform
+        },
+        "govi": {
+          key: "govi",
+          protocol: stakingProtocols.platform
+        }
+      },
       [stakingProtocols.quickswap]: {
         "govi-eth-lp": {
-          key: "coti-eth-lp",
+          key: "govi-eth-lp",
           protocol: stakingProtocols.quickswap
         },
       }
