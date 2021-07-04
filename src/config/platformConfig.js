@@ -1,4 +1,4 @@
-import { chainNames } from "./config";
+import { chainNames } from "connectors";
 
 export const activeViews = {
   "trade": "trade",

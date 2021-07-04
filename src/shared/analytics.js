@@ -1,6 +1,6 @@
 import { networksFormattedByEnv } from 'connectors';
 import ReactGA from 'react-ga';
-import { parseHex } from 'utilities/utils';
+import { parseHex } from 'utils';
 
 const getPage = () => {
     return window.location.pathname;

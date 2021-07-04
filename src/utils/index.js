@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
+import { ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
 
 const removeZerosFromEndOfNumber = (number) => {
     if(number.includes('.')){
@@ -93,3 +94,25 @@ export const fromBN = (amount, magnitude = 0) => {
     const unsigned = `${whole}.${fraction}`;
     return wei.isNeg() ? -unsigned : +unsigned;
 };
+
+export const parseHex = (hex) => {
+    return parseInt(Number(hex), 10);
+ }
+
+ export const getCurrentProviderName = (currentProvider) => {
+     if(currentProvider?.isMetaMask) {
+         return ConnectorNames.MetaMask;
+     }
+
+     if(currentProvider?.isWalletConnect) {
+         return ConnectorNames.WalletConnect;
+     }
+
+     return ConnectorNames.Network;
+ }
+
+export const chainNameToChainId = (_chainName) => {
+    const network = Object.values(supportedNetworksConfigByEnv).find(({chainName}) => chainName === _chainName);
+    if(!network) return defaultChainId;
+    return parseHex(network.chainId);
+ }

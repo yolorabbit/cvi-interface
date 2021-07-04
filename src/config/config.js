@@ -1,9 +1,5 @@
-export const chainNames = {
-  Matic: "Matic",
-  Ethereum: "Ethereum"
-}
-
 const config = {
+  isMainnet: process.env.NODE_ENV === "production",
   routes: {
     platform: {
       label: "Platform",
@@ -26,6 +22,20 @@ const config = {
     { iconName: 'defipulse', to: 'https://defipulse.com' },
     { iconName: 'discord', to: 'https://discord.gg/jXba8HmTs5' },
   ],
+  alerts: {
+    types: {
+       PROCESSING: "PROCESSING",
+       CONFIRMED: "CONFIRMED",
+       FAILED: "FAILED",
+       NOTICE: "NOTICE"
+    },
+  },
+  web3ProviderId: "NETWORK",
+  networkStatuses: {
+     pending: 'pending',
+     connected: 'connected',
+     disconnected: 'disconnected'
+  },
   statisticsDetails: {
     totalValueLocked: {
       title: "Total value locked",

@@ -10,22 +10,37 @@ import Staking from './components/pages/Staking';
 import HelpCenter from './components/pages/HelpCenter';
 import Footer from './components/Footer/Footer';
 import config from './config/config';
+import NotificationList from 'components/NotificationList';
+import Web3ReactManager from 'components/Web3ReactManager';
 import './App.scss';
+import { useEffect, useRef } from 'react';
 
 const App = () => {
-  return (
-    <div className="app-component">
-      <Router>
-        <Navbar />
-          <Switch>
-            <Route path={config.routes.staking.path} component={Staking} />
-            <Route path={config.routes['help-center'].path} component={HelpCenter} />
-            <Route path={ config.routes.platform.path} component={Platform} />
+  // fix a bug in Web3ReactProvider - render a text element ",". 
+  const appRef = useRef(null);
+  useEffect(() => {
+    if(appRef.current) {
+      if(appRef.current?.nextSibling?.textContent === ",") {
+        appRef.current?.nextSibling.remove();
+      }
+    }
+  }, [appRef]);
 
-            <Redirect to="/platform" />
-          </Switch>
-        <Footer />
-      </Router>
+  return (
+    <div className="app-component" ref={appRef}>
+      <Web3ReactManager>
+        <NotificationList />
+        <Router>
+          <Navbar />
+            <Switch>
+              <Route path={config.routes.staking.path} component={Staking} />
+              <Route path={config.routes['help-center'].path} component={HelpCenter} />
+              <Route path={ config.routes.platform.path} component={Platform} />
+              <Redirect to="/platform" />
+            </Switch>
+          <Footer />
+        </Router>
+      </Web3ReactManager>
     </div>
   );
 }

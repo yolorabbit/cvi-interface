@@ -1,0 +1,41 @@
+.title{
+    font-size: 32px;
+    font-weight: bold;
+    color: #6885bf;
+    position: relative;
+
+    @media (max-width: 1365px) {
+        font-size: 18px;
+    }
+
+    &.border{
+        padding-bottom: 24px;
+
+        &:before {
+            content: ' ';
+            position: absolute;
+            border-bottom: 3px solid;
+            bottom: 0;
+            width: 64px;
+            border-color: inherit;
+        }
+
+        @media (max-width: 767px) {
+            &.xs-center {
+                &:before {
+                    content: ' ';
+                    position: absolute;
+                    border-bottom: 3px solid;
+                    bottom: 0;
+                    width: 64px;
+                    border-color: inherit;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+            }
+        }
+
+        
+    }
+}
+

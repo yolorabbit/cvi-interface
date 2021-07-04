@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import config from '../../config/config';
 import './Navbar.scss';
 import Button from '../Elements/Button';
+import SelectNetwork from 'components/SelectNetwork';
 
 const Navbar = () => {
     const [pageYOffset, setPageYOffset] = useState(0);
@@ -36,7 +37,9 @@ const Navbar = () => {
                     <Link className={path === activePath ? 'active' : ''} to={path}>{label}</Link>
                 </div>)}    
 
-                {isTablet && <Hamburger activePath={activePath} links={links} />}
+                {isTablet ? <Hamburger activePath={activePath} links={links} /> : <div className="navbar-component__connect">
+                    <SelectNetwork />
+                </div>}
             </>
         )
         //eslint-disable-next-line

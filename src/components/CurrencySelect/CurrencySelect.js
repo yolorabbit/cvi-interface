@@ -3,11 +3,11 @@ import Button from '../Elements/Button';
 import { useLocation } from 'react-router';
 import './CurrencySelect.scss';
 import platformConfig from 'config/platformConfig';
-import { chainNames } from 'config/config';
+import { useSelector } from 'react-redux';
 
 const CurrencySelect = ({selectedCurrency, setSelectedCurrency}) => {
     const location = useLocation();
-    const selectedNetwork = chainNames.Ethereum;
+    const { selectedNetwork } = useSelector(({app}) => app);
     const currencies = platformConfig.tokens[selectedNetwork];
 
     useEffect(() => {
