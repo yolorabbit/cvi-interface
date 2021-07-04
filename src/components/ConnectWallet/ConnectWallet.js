@@ -5,7 +5,6 @@ import { networksFormatted, supportedNetworksConfig } from 'connectors';
 import { useWeb3React } from '@web3-react/core';
 import { useSelector } from 'react-redux';
 import Spinner from 'components/Spinner/Spinner';
-import './ConnectWallet.scss';
 import { useActiveWeb3React, useIsWrongNetwork } from 'components/hooks/wallet';
 import config from 'config/config';
 import MyWalletModal from 'components/Modals/MyWalletModal';
@@ -13,6 +12,7 @@ import ErrorModal from 'components/Modals/ErrorModal';
 import WalletProviderModal from 'components/Modals/WalletProviderModal';
 import { getCurrentProviderName } from 'utils';
 import Button from 'components/Elements/Button';
+import './ConnectWallet.scss';
 
 const ConnectWallet = ({type, buttonText, hasErrorButtonText = "Connect Wallet"}) => {
     const [walletInfoModalIsOpen, setWalletInfoModalIsOpen] = useState(false);
