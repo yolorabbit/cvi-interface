@@ -36,6 +36,15 @@ const config = {
      connected: 'connected',
      disconnected: 'disconnected'
   },
+  walletErrors: {
+    network: {
+       wrong: {
+          type: 'wrong-network',
+          class: 'wrong-network',
+          title: "Wrong Network",
+       }
+    }
+  },
   statisticsDetails: {
     totalValueLocked: {
       title: "Total value locked",

@@ -1,0 +1,39 @@
+.error-modal {
+    @media (max-width: 767px) {
+        &.basic .modal__container {
+            align-items: flex-start;
+            padding: 96px 24px;
+        }
+    }
+
+    & h2 {
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 24px;
+        color: white;
+        margin: 20px 0;
+        margin-bottom: 0;
+        text-align: center;
+    }
+
+    & h3 {
+        font-size: 16px;
+        font-weight: normal;
+        line-height: 24px;
+        color: white;
+    }
+
+    &__close {
+        width: 224px;
+        height: 56px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
+        background-color: #264fa1;
+        margin-top: 24px;
+
+        @media (max-width: 767px) {
+            width: 312px;
+            max-width: 100%;
+        }
+    }
+}
