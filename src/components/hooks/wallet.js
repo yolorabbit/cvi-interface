@@ -2,9 +2,10 @@ import { useWeb3React } from "@web3-react/core";
 import config from "config/config";
 import { injected, network, supportedNetworksConfigByEnv } from "connectors";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSelectNetwork } from "store/actions";
 import { parseHex } from "utils";
+import { useIsDesktop } from ".";
 
 export const useActiveWeb3React = () => {
   const context = useWeb3React();
@@ -15,7 +16,7 @@ export const useActiveWeb3React = () => {
 export function useEagerConnect() {
   const { activate, active, chainId } = useWeb3React() // specifically using useWeb3ReactCore because of what this hook does
   const [tried, setTried] = useState(false);
-  const { isDesktop } = useSelector(({ app }) => app);
+  const isDesktop = useIsDesktop();
   const dispatch = useDispatch();
 
   useEffect(() => {

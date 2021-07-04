@@ -1,25 +1,33 @@
 .navbar-component {
     & .connect-wallet-button__connected {
         & .button {
-           width: 112px;
-           height: 40px;
-           border-radius: 4px;
-           background-color: transparent;
-           font-size: 12px;
-           font-weight: normal;
-           color: white;
-           line-height: 1.42;
-           border: solid 1px #fea716;
+            background-color: transparent;
+            font-weight: normal;
+            color: white;
+            line-height: 1;
+            border: solid 0.052vw #fea716;
+            width: 5.833vw;
+            height: 2.083vw;
+            border-radius: 0.208vw;
+            font-size: 0.625vw;
+
+            @media (max-width: 1365px) {
+                border: solid 0.073vw #fea716;
+                width: 8.205vw;
+                height: 2.93vw;
+                border-radius: 0.293vw;
+                font-size: 0.879vw;
+            }
         }
     }
 
     & .wrong-network {
         & .connect-wallet-button__has-address--address {
-           display: none;
-        } 
+            display: none;
+        }
 
         & .connect-wallet-button__connected {
-            @media (max-width: 767px) {
+            @media (max-width: 767px){
                 width: calc(100% + 32px);
                 transform: translateX(-16px);
             }
@@ -28,33 +36,47 @@
         & .connect-wallet-button__connected .button:not(.network-pending) {
             color: white;
             border: 0;
-            background-color: #bb1e52;  
-            
+            background-color: #bb1e52;
+
             @media (max-width: 767px) {
                 box-shadow: none;
                 height: 56px;
             }
         }
-     }
+    }
 }
 
 .connect-wallet-button {
-   
     @media (max-width: 767px) {
         max-width: 100%;
         width: 100%;
     }
 
     & .button {
-        width: 134px;
-        max-width: 100%;
-        height: 28px;
-        border-radius: 4px;
         background-color: transparent;
-        font-size: 11px;
         font-weight: normal;
-        color: white;
-        line-height: 14px;
+        color: white;   
+        width: 6.979vw;
+        max-width: 100%;
+        height: 1.458vw;
+        border-radius: 0.208vw;
+        font-size: 0.573vw;
+
+        @media (max-width: 1365px){   
+            width: 9.817vw;
+            max-width: 100%;
+            height: 2.051vw;
+            border-radius: 0.293vw;
+            font-size: 0.806vw;
+        }
+
+        @media (max-width: 1024px){ 
+            width: 100%;
+        }
+
+        @media (max-width: 767px){
+        
+        }
 
         &.network-pending {
             display: flex;
@@ -65,13 +87,43 @@
             & .spinner-container {
                 min-height: auto;
                 padding: 0;
-                width: 12px;
+                width: 0.625vw;
+
+                @media (max-width: 1365px){   
+                    width: 0.879vw;
+                }
+    
+                @media (max-width: 1024px){ 
+                    width: 12px;
+                }
+    
+                @media (max-width: 767px){
+                    width: 12px;
+                }
 
                 & .spinner {
-                    height: 2px;
-                    width: 2px;
-                    font-size: 2px;
+                    height: 0.104vw;
+                    width: 0.104vw;
+                    font-size: 0.104vw;
                     padding-right: 0;
+
+                    @media (max-width: 1365px){   
+                        height: 0.147vw;
+                        width: 0.147vw;
+                        font-size: 0.147vw;
+                    }
+        
+                    @media (max-width: 1024px){ 
+                        height: 2px;
+                        width: 2px;
+                        font-size: 2px;
+                    }
+        
+                    @media (max-width: 767px){
+                        height: 2px;
+                        width: 2px;
+                        font-size: 2px;
+                    }
                 }
             }
         }
@@ -85,15 +137,25 @@
     }
 
     &__has-address {
-        width: 112px;
-        height: 40px;
-        border-radius: 4px;
+        width: 5.833vw;
+        height: 2.083vw;
+        border-radius: 0.208vw;
+        border: solid 0.052vw #2bdec1;
         position: relative;
         display: flex;
         align-items: center;
-        border-radius: 4px;
-        border: solid 1px #2bdec1;
         background-color: black;
+
+        @media (max-width: 1365px){   
+            width: 8.205vw;
+            height: 2.93vw;
+            border-radius: 0.293vw;
+            border: solid 0.073vw #2bdec1;
+        }
+
+        @media (max-width: 1024px){ 
+    
+        }
 
         @media (max-width: 767px) {
             margin: 4px 0;
@@ -107,7 +169,7 @@
             transform: translateX(-16px);
         }
 
-        &--address { 
+        &--address {
             display: flex;
             align-items: center;
             max-width: 100%;
@@ -122,12 +184,24 @@
             & .dot {
                 width: 100%;
                 height: 100%;
-                max-width: 8px;
-                max-height: 8px;
+                max-width: 0.417vw;
+                max-height: 0.417vw;
+                margin-right: 0.208vw;
                 background-color: #2bdec1;
                 border-radius: 100%;
-                margin-right: 4px;
 
+                @media (max-width: 1365px){   
+                    max-width: 0.586vw;
+                    max-height: 0.586vw;
+                    margin-right: 0.293vw;
+                }
+    
+                @media (max-width: 1024px){ 
+                    max-width: 8px;
+                    max-height: 8px;
+                    margin-right: 4px;
+                }
+    
                 @media (max-width: 767px) {
                     min-width: 12px;
                     min-height: 12px;
@@ -137,84 +211,128 @@
             }
 
             & span {
-                font-size: 11px;
                 font-weight: normal;
-                line-height: 14px;
-                
+                font-size: 0.573vw;
+                line-height: 0.729vw;
+
+                @media (max-width: 1365px){   
+                    font-size: 0.806vw;
+                    line-height: 1.026vw;
+                }
+    
+                @media (max-width: 1024px){ 
+                    font-size: 11px;
+                    line-height: 14px;
+                }
+    
+                @media (max-width: 767px){
+                    font-size: 16px;
+                    margin-bottom: 1px;
+                }
+
                 &.full--address {
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    max-width: 55px;
+                    max-width: 3.021vw;
 
-                    @media (max-width: 767px) {
+                    @media (max-width: 1365px){   
+                        max-width: 4.249vw;
+                    }
+        
+                    @media (max-width: 1024px){ 
                         max-width: 100%;
                     }
                 }
-                
+
                 &.sliced--address {
                     text-overflow: unset;
                     overflow: visible;
                     max-width: none;
                 }
-
-                @media (max-width: 767px) {
-                    font-size: 16px;
-                    font-weight: normal;
-                    margin-bottom: 1px;
-                }
             }
-
         }
-
     }
 }
-
 
 .change-provider-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 12px;
+    margin-top: 0.625vw;
 
-    @media(max-width: 767px) {
+    @media (max-width: 1365px){   
+        margin-top: 0.879vw;
+    }
+
+    @media (max-width: 1024px){ 
+        margin-top: 12px;
+    }
+
+    @media (max-width: 767px) {
         justify-content: flex-start;
         margin-top: 0;
         margin-left: 2px;
     }
 
     & span {
-        font-size: 14px;
+        font-size: 0.729vw;
         font-weight: normal;
-        line-height: 24px;
         color: white;
+
+        @media (max-width: 1365px){   
+            font-size: 1.026vw;
+        }
+
+        @media (max-width: 1024px){ 
+            font-size: 14px;
+        }
+
+        @media (max-width: 767px){
+            font-size: 14px;
+        }
     }
 
     & .button {
-        font-size: 14px;
-        line-height: 24px;
+        font-size: 0.729vw;
+        line-height: 1.25vw;
         color: #2bbede;
         box-shadow: none;
         background-color: transparent;
         text-decoration: underline;
         min-width: auto;
         width: auto;
+
+        @media (max-width: 1365px){   
+            font-size: 1.026vw;
+            line-height: 1.758vw;
+        }
+
+        @media (max-width: 1024px){ 
+            font-size: 14px;
+            line-height: 24px;
+        }
+
+        @media (max-width: 767px){
+            font-size: 14px;
+            line-height: 24px;
+        }
     }
 }
 
-
-table .connect-wallet-button, .expand-list-component .connect-wallet-button {
+table .connect-wallet-button,
+.expand-list-component .connect-wallet-button {
     &.action {
-        & .button { 
+        & .button {
             margin-top: 0;
             box-shadow: unset;
             background-color: transparent;
-            
-            @media (min-width: 1024px){ 
+
+            @media (min-width: 1024px) {
                 height: 100%;
             }
-            
-            @media (max-width: 767px){
+
+            @media (max-width: 767px) {
                 background-color: #14204b;
                 box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
             }
@@ -223,9 +341,29 @@ table .connect-wallet-button, .expand-list-component .connect-wallet-button {
 }
 
 .connect-wallet-button {
-    &.action, &.auth-guard {
+    &.table-component {
+        & .button {
+            padding-left: 0.833vw;
+
+            @media (max-width: 1365px) {
+                padding-left: 1.172vw;
+            }
+
+            @media (max-width: 1024px) {
+                padding-left: 32px;
+            }
+
+            @media (max-width: 767px) {
+                padding: 0;
+            }
+        }
+    }
+
+    &.action,
+    &.auth-guard {
         & .button {
             width: 100%;
+
             &::before {
                 color: #fea716;
                 content: "CONNECT\00a0";

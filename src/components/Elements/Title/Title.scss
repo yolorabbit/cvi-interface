@@ -1,15 +1,35 @@
 .title{
-    font-size: 32px;
+    font-size: 1.667vw;
     font-weight: bold;
     color: #6885bf;
     position: relative;
 
-    @media (max-width: 1365px) {
+    @media (max-width: 1365px){   
+        font-size: 1.319vw;
+    }
+
+    @media (max-width: 1024px){ 
+        font-size: 18px;
+    }
+
+    @media (max-width: 767px){
         font-size: 18px;
     }
 
     &.border{
-        padding-bottom: 24px;
+        padding-bottom: 1.25vw;
+
+        @media (max-width: 1365px){   
+            padding-bottom: 1.758vw;
+        }
+
+        @media (max-width: 1024px){ 
+            padding-bottom: 24px;
+        }
+
+        @media (max-width: 767px){
+            padding-bottom: 24px;
+        }
 
         &:before {
             content: ' ';
@@ -34,8 +54,6 @@
                 }
             }
         }
-
-        
     }
 }
 
