@@ -83,11 +83,11 @@ export const WalletProviderModal = ({setModalIsOpen, metaMaskInstalled }) => {
         <Modal closeIcon className="wallet-connect-modal" handleCloseModal={() => setModalIsOpen(false)}>
             <Title className="connect-wallet-title xs-center" color="white" text="Connect your wallet" borderColor="#f8ba15"/>
 
-            <div>
+            <div className="wallet-connect-modal__container">
 
                 {Object.keys(connectorsByName).filter(name => name !== 'Network' )?.length > 0 ? <h2>Select a wallet provider</h2> : <h2>No wallet providers.</h2>}
                 
-                <div>
+                <div className="wallet-connect-modal__container--providers">
                     {Object.keys(connectorsByName).filter(name => name !== 'Network' ).map((name, idx) => {
                         const currentConnector = connectorsByName[name];
                         const img = ConnectorNames[name].toLowerCase();

@@ -17,14 +17,13 @@ const DataController = ({children, data = [], subHeaders = {}, activeTab, authGu
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
     const { account } = useActiveWeb3React();
-
     const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? activeTab?.toLowerCase();
 
     useEffect(() => {
         setCurrentPage(1);
     }, [activeTab]);
 
-    if(!account && authGuard) return <ConnectWallet type="table table-component" buttonText={`to view ${activeTabLabel}`} />
+    if(!account && authGuard) return <ConnectWallet type="table table-component auth-guard" buttonText={`to view ${activeTabLabel}`} />
 
     if(!data?.length) return <EmptyData text={`You have no ${activeTabLabel ?? 'data'}`} />
 

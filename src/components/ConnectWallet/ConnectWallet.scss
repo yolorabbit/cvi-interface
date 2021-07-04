@@ -167,20 +167,6 @@
 
         }
 
-        & .button {
-            box-shadow: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            @media (max-width: 767px) {
-                height: 40px;
-                font-size: 11px;
-                justify-content: flex-start;
-                align-items: flex-start;
-            }
-        }
     }
 }
 
@@ -217,13 +203,13 @@
 }
 
 
-table .connect-wallet-component, .expand-list-component .connect-wallet-component {
+table .connect-wallet-button, .expand-list-component .connect-wallet-button {
     &.action {
         & .button { 
             margin-top: 0;
             box-shadow: unset;
             background-color: transparent;
-
+            
             @media (min-width: 1024px){ 
                 height: 100%;
             }
@@ -236,13 +222,18 @@ table .connect-wallet-component, .expand-list-component .connect-wallet-componen
     }
 }
 
-.connect-wallet-component {
-    & .button {
-        &::before {
-            color: #fea716;
-            content: "CONNECT\00a0";
+.connect-wallet-button {
+    &.action, &.auth-guard {
+        & .button {
+            width: 100%;
+            &::before {
+                color: #fea716;
+                content: "CONNECT\00a0";
+            }
         }
+    }
 
+    & .button {
         height: 2.917vw;
         line-height: 1px;
         font-size: 0.833vw;

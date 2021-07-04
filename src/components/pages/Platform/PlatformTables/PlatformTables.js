@@ -64,6 +64,7 @@ const PlatformTables = () => {
         if(!activeTab) return null;
         const data = activeTab === activeViews.history ? historyData : Object.values(platformConfig.tokens[selectedNetwork]);
         return <DataController 
+            authGuard
             activeTab={activeTab} 
             data={data}
         >

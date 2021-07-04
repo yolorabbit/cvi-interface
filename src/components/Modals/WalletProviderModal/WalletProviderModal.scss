@@ -1,15 +1,12 @@
 .wallet-connect-modal {
-    &.basic .modal__container {
-        padding: 96px;
-
-        @media (max-width: 767px) {
-            align-items: flex-start;
-            flex-direction: column;
-            padding: 24px;
-            padding-top: 84px;
+    &__container {
+        text-align: center;
+        &--providers {
+            display: flex;
+            width: 100%;
         }
     }
-    
+
     & .select-network {
         width: 100%;
         & h2 { 

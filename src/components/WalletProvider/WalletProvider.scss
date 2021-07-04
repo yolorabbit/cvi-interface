@@ -4,6 +4,14 @@
     width: 100%;
     padding: 24px;
 
+    &:first-child {
+        margin-right: 8px;
+    }
+
+    &:last-child {
+        margin-left: 8px;
+    }
+
     &.provider-is-connected {
         background-color: #14204b;
         border: solid 1px #2bdec1;

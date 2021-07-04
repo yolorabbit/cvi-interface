@@ -14,7 +14,7 @@ import { getCurrentProviderName } from 'utils';
 import Button from 'components/Elements/Button';
 import './ConnectWallet.scss';
 
-const ConnectWallet = ({type, buttonText, hasErrorButtonText = "Connect Wallet"}) => {
+const ConnectWallet = ({type, buttonText = "", hasErrorButtonText = "Connect Wallet"}) => {
     const [walletInfoModalIsOpen, setWalletInfoModalIsOpen] = useState(false);
     const [walletProviderModalIsOpen, setWalletProviderModalIsOpen] = useState(false);
     const { active, account, chainId, library } = useActiveWeb3React();
@@ -65,7 +65,7 @@ const ConnectWallet = ({type, buttonText, hasErrorButtonText = "Connect Wallet"}
     }
 
     return (
-        <div className={`connect-wallet-button ${errorData ? errorData.class : ''}`}>
+        <div className={`connect-wallet-button ${errorData ? errorData.class : ''} ${type ?? ''}`}>
             {walletInfoModalIsOpen && <MyWalletModal address={account} setModalIsOpen={setWalletInfoModalIsOpen}/>}
             {walletProviderModalIsOpen && (!account || type === "change") && <WalletProviderModal metaMaskInstalled={mmInstalled} setModalIsOpen={setWalletProviderModalIsOpen}/>}
             {errorModalIsOpen && <ErrorModal 
@@ -90,7 +90,7 @@ const ConnectWallet = ({type, buttonText, hasErrorButtonText = "Connect Wallet"}
                 {(type === 'navbar' && networkStatus === config.networkStatuses.pending) ? <div className="button network-pending">
                     <Spinner className="spinner-container" />
                     <span>Connecting...</span>
-                </div> : <Button buttonText={errorData ? hasErrorButtonText : buttonText ? buttonText : "Connect"} onClick={onClick}/>}
+                </div> : <Button buttonText={errorData ? hasErrorButtonText : buttonText ?? ""} onClick={onClick}/>}
             </div> }
         </div>
     )
