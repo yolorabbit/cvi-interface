@@ -42,6 +42,7 @@
 
         @media (max-width: 767px) {
             &.xs-center {
+                text-align: center;
                 &:before {
                     content: ' ';
                     position: absolute;

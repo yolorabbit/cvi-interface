@@ -63,12 +63,12 @@
             }
 
             @media (max-width: 1024px){ 
-                font-size: 32px;
+                font-size: 4.172vw;
                 text-emphasis: none;
             }
 
             @media (max-width: 767px){
-                font-size: 32px;
+                font-size: 8.889vw;
                 text-align: center;
             }
         }
@@ -105,7 +105,11 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
+    
+                @media (max-width: 1024px){ 
+                    margin-top: 8px;
+                }
+    
                 @media (max-width: 480px) {
                     justify-content: space-between;
                 }
@@ -161,11 +165,11 @@
                         }
             
                         @media (max-width: 1024px){ 
-                            font-size: 14px;
+                            font-size: 1.825vw;
                         }
             
                         @media (max-width: 767px){
-                            font-size: 14px;
+                            font-size: 2.778vw;
                         }
                     }
                 }

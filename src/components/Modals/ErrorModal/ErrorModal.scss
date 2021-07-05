@@ -1,4 +1,4 @@
-.error-modal {
+.error-modal, .sell-all-modal {
     text-align: center;
 
     @media (max-width: 767px) {
@@ -19,13 +19,13 @@
                 }
         
                 @media (max-width: 1024px){ 
-                    width: 64px;
-                    height: 64px;
+                    width: 8.344vw;
+                    height: 8.344vw;
                 }
         
                 @media (max-width: 767px){
-                    width: 64px;
-                    height: 64px;
+                    width: 17.778vw;
+                    height: 17.778vw;
                 }
             }
         }
@@ -46,15 +46,15 @@
         }
 
         @media (max-width: 1024px){ 
-            font-size: 16px;
-            line-height: 24px;
-            margin: 20px 0;
+            font-size: 2.086vw;
+            line-height: 3.129vw;
+            margin: 2.608vw 0;
         }
 
         @media (max-width: 767px){
-            font-size: 16px;
-            line-height: 24px;
-            margin: 20px 0;
+            font-size: 4.444vw;
+            line-height: 6.667vw;
+            margin: 5.556vw 0;
         }
     }
 
@@ -70,13 +70,13 @@
         }
 
         @media (max-width: 1024px){ 
-            font-size: 16px;
-            line-height: 24px;
+            font-size: 2.086vw;
+            line-height: 3.129vw;
         }
 
         @media (max-width: 767px){
-            font-size: 16px;
-            line-height: 24px;
+            font-size: 4.444vw;
+            line-height: 6.667vw;
         }
     }
 
@@ -97,16 +97,20 @@
         }
 
         @media (max-width: 1024px){ 
-            width: 224px;
-            height: 56px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
-            margin-top: 24px;
+            width: 29.205vw;
+            height: 7.301vw;
+            border-radius: 1.043vw;
+            box-shadow: 0 0.261vw 1.304vw 0 rgba(0, 0, 0, 0.25);
+            margin-top: 3.129vw;
         }
 
         @media (max-width: 767px) {
-            width: 312px;
+            width: 86.667vw;
             max-width: 100%;
+            height: 15.556vw;
+            border-radius: 2.222vw;
+            box-shadow: 0 0.556vw 2.778vw 0 rgba(0, 0, 0, 0.25);
+            margin-top: 6.667vw;
         }
     }
 }

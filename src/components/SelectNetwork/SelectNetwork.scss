@@ -15,14 +15,14 @@
             }
 
             @media (max-width: 1024px){ 
-                font-size: 32px;
-                line-height: 24px;
-                padding-bottom: 20px;
+                font-size: 4.172vw;
+                line-height: 3.129vw;
+                padding-bottom: 2.608vw;
             }
 
             @media (max-width: 767px) {
-                font-size: 24px;
-                padding-bottom: 24px;
+                font-size: 6.667vw;
+                padding-bottom: 6.667vw;
             }
         }
 
@@ -40,14 +40,16 @@
             }
 
             @media (max-width: 1024px){ 
-                font-size: 15px;
-                line-height: 24px;
-                margin: 24px 0;
+                font-size: 1.956vw;
+                line-height: 3.129vw;
+                margin: 3.129vw 0;
             }
 
             @media (max-width: 767px) {
-                margin: 32px 0 24px 0;
-                text-align: center;
+                margin: 8.889vw 0 6.667vw 0;
+                font-size: 3.611vw;
+                line-height: 6.667vw;
+                text-align: left;
             }
         }
 
@@ -56,7 +58,6 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: 464px;
 
             & .button {
                 height: 2.917vw;

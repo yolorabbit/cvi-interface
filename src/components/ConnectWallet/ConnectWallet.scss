@@ -131,8 +131,8 @@
         @media (max-width: 767px) {
             min-width: 100%;
             max-width: 100%;
-            height: 40px;
-            font-size: 16px;
+            height: 11.111vw;
+            font-size: 4.444vw;
         }
     }
 
@@ -335,17 +335,22 @@ table .connect-wallet-button,
     &.table-component {
         & .button {
             padding-left: 0.833vw;
+            font-size: 0.833vw;
 
             @media (max-width: 1365px) {
                 padding-left: 1.172vw;
+                font-size: 1.172vw;
             }
 
             @media (max-width: 1024px) {
-                padding-left: 32px;
+                padding-left: 4.172vw;
+                font-size: 2.086vw;
+                padding: 3.129vw;
             }
 
             @media (max-width: 767px) {
                 padding: 0;
+                font-size: 4.444vw;
             }
         }
     }
@@ -358,19 +363,18 @@ table .connect-wallet-button,
             &::before {
                 color: #fea716;
                 content: "CONNECT\00a0";
+                font-weight: bold;
             }
         }
     }
 
     &.navbar {
         & .button {
-            height: 2.917vw;
             line-height: 1px;
             font-weight: bold;
             font-size: 0.625vw;
     
             @media (max-width: 1365px) {
-                height: 4.103vw;
                 font-size: 0.879vw;
             }
     
@@ -391,7 +395,6 @@ table .connect-wallet-button,
         }
     }
     
-
     &.action {
         & .button {
             margin-top: 1.146vw;
@@ -399,20 +402,24 @@ table .connect-wallet-button,
             box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.25);
             color: #fea716;
             background-color: #14204b;
+            font-size: 0.833vw;
 
             @media (max-width: 1365px) {
                 margin-top: 1.172vw;
                 height: 4.103vw;
+                font-size: 1.172vw;
             }
 
             @media (max-width: 1024px) {
                 margin-top: 2.086vw;
                 height: 7.301vw;
+                font-size: 2.086vw;
             }
 
             @media (max-width: 767px) {
                 margin-top: 4.444vw;
                 height: 15.556vw;
+                font-size: 4.444vw;
             }
         }
     }

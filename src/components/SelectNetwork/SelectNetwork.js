@@ -68,13 +68,15 @@ const SelectNetwork = ({view}) => {
     return (
         <div className={`select-network-component ${view ?? ''}`}>
             {warningModalIsOpen && <Modal className="error-modal sell-all-modal" closeIcon handleCloseModal={() => setWarningModalIsOpen(false)}> 
-                <img src={require('images/icons/notifications/notice.svg').default} alt="notice red icon" width="80" height="80" />
+                <div>
+                    <img src={require('images/icons/notifications/notice.svg').default} alt="notice red icon" width="80" height="80" />
 
-                <h2><br/>
-                    Please switch to Ethereum {config.isMainnet ? 'Mainnet' : 'Testnet'} in your wallet
-                </h2>
+                    <h2><br/>
+                        Please switch to Ethereum {config.isMainnet ? 'Mainnet' : 'Testnet'} in your wallet
+                    </h2>
 
-                <Button className="error-modal__close button navbar-button" buttonText="CLOSE" onClick={() => setWarningModalIsOpen(false)} />
+                    <Button className="error-modal__close button navbar-button" buttonText="CLOSE" onClick={() => setWarningModalIsOpen(false)} />
+                </div>   
             </Modal>}
 
             {isOpen && <Modal className="select-network-component__modal" closeIcon handleCloseModal={() => setIsOpen(false)}>

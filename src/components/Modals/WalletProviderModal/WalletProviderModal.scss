@@ -4,6 +4,10 @@
         &--providers {
             display: flex;
             width: 100%;
+
+            @media (max-width: 767px){
+                flex-direction: column;
+            }
         }
     }
 
@@ -16,24 +20,21 @@
 
     & .connect-wallet-title {
         font-size: 1.667vw;
-        line-height: 1.25vw;
+        line-height: 1;
         font-weight: normal;
         margin-top: 0;
 
         @media (max-width: 1365px){   
             font-size: 2.344vw;
-            line-height: 1.758vw;
         }
 
         @media (max-width: 1024px){ 
-            font-size: 32px;
-            line-height: 24px;
+            font-size: 4.172vw;
         }
 
         @media (max-width: 767px) {
-            font-size: 24px;
-            line-height: 24px;
-            margin: 24px auto 0 auto;
+            font-size: 6.667vw;
+            margin: 6.667vw auto 0 auto;
         }
     }
 
@@ -50,13 +51,13 @@
         }
 
         @media (max-width: 1024px){ 
-            font-size: 16px;
-            margin: 24px 0;
+            font-size: 2.086vw;
+            margin: 3.129vw 0;
         }
 
         @media (max-width: 767px){
-            font-size: 16px;
-            margin: 24px 0;
+            font-size: 3.889vw;
+            margin: 6.667vw 0;
         }
     }
 

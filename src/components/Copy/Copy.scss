@@ -20,37 +20,34 @@
             }
 
             @media (max-width: 1024px){ 
-                margin-right: 8px;
-                width: 24px;
-                height: 24px;
+                margin-right: 1.043vw;
+                width: 3.129vw;
+                height: 3.129vw;
             }
 
             @media (max-width: 767px){
-                margin-right: 8px;
-                width: 24px;
-                height: 24px;
+                margin-right: 2.222vw;
+                width: 6.667vw;
+                height: 6.667vw;
             }
         }
         
         & span {
             font-size: 0.729vw;
-            line-height: 1.25vw;
+            line-height: 1;
             font-weight: normal;
             color: white;
 
             @media (max-width: 1365px){   
                 font-size: 1.026vw;
-                line-height: 1.758vw;
             }
 
             @media (max-width: 1024px){ 
-                font-size: 14px;
-                line-height: 24px;
+                font-size: 1.825vw;
             }
 
             @media (max-width: 767px){
-                font-size: 14px;
-                line-height: 24px;
+                font-size: 2.778vw;
             }
         }
     }
