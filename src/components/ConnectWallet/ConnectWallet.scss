@@ -76,11 +76,6 @@
 
         @media (max-width: 1024px){ 
             width: 100%;
-
-        }
-
-        @media (max-width: 767px){
-          
         }
 
         &.network-pending {
@@ -264,13 +259,11 @@
     }
 
     @media (max-width: 1024px){ 
-        margin-top: 12px;
+        margin-top: 1.565vw;
     }
 
     @media (max-width: 767px) {
-        justify-content: flex-start;
-        margin-top: 0;
-        margin-left: 2px;
+        margin-left: 12px;
     }
 
     & span {
@@ -369,32 +362,35 @@ table .connect-wallet-button,
         }
     }
 
-    & .button {
-        height: 2.917vw;
-        line-height: 1px;
-        font-weight: bold;
-        font-size: 0.625vw;
-
-        @media (max-width: 1365px) {
-            height: 4.103vw;
-            font-size: 0.879vw;
-        }
-
-        @media (max-width: 1024px) {
-            height: 7.301vw;
-            font-size: 2.086vw;
-            width: 100%;
-            display: flex;
-            justify-content: flex-start;
-            padding-left: 2.086vw;
-        }
-
-        @media (max-width: 767px) {
-            height: 15.556vw;
-            font-size: 4.444vw;
-            padding-left: 3.8vw;
+    &.navbar {
+        & .button {
+            height: 2.917vw;
+            line-height: 1px;
+            font-weight: bold;
+            font-size: 0.625vw;
+    
+            @media (max-width: 1365px) {
+                height: 4.103vw;
+                font-size: 0.879vw;
+            }
+    
+            @media (max-width: 1024px) {
+                height: 7.301vw;
+                font-size: 2.086vw;
+                width: 100%;
+                display: flex;
+                justify-content: flex-start;
+                padding-left: 2.086vw;
+            }
+    
+            @media (max-width: 767px) {
+                height: 15.556vw;
+                font-size: 4.444vw;
+                padding-left: 3.8vw;
+            }
         }
     }
+    
 
     &.action {
         & .button {
