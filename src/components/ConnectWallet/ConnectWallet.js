@@ -15,7 +15,7 @@ import Button from 'components/Elements/Button';
 import './ConnectWallet.scss';
 import { useIsDesktop } from 'components/hooks';
 
-const ConnectWallet = ({type, buttonText = "", hasErrorButtonText}) => {
+const ConnectWallet = ({type, buttonText = "", hasErrorButtonText = "Error"}) => {
     const [walletInfoModalIsOpen, setWalletInfoModalIsOpen] = useState(false);
     const [walletProviderModalIsOpen, setWalletProviderModalIsOpen] = useState(false);
     const { active, account, chainId, library } = useActiveWeb3React();
@@ -92,7 +92,7 @@ const ConnectWallet = ({type, buttonText = "", hasErrorButtonText}) => {
                 {(type === 'navbar' && networkStatus === config.networkStatuses.pending) ? <div className="button network-pending">
                     <Spinner className="spinner-container" />
                     <span>Connecting...</span>
-                </div> : <Button buttonText={errorData ? hasErrorButtonText ?? buttonText ?? "" : ""} onClick={onClick}/>}
+                </div> : <Button buttonText={errorData ? hasErrorButtonText : buttonText ?? ""} onClick={onClick}/>}
             </div> }
         </div>
     )

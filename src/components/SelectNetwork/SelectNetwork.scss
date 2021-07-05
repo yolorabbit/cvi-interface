@@ -82,16 +82,22 @@
                 }
     
                 @media (max-width: 1024px){ 
-                    height: 56px;
-                    min-height: 56px;
-                    margin-top: 16px;
-                    border-radius: 8px;
-                    padding-left: 16px;
-                    font-size: 16px;
+                    height: 7.301vw;
+                    min-height: 7.301vw;
+                    margin-top: 2.086vw;
+                    border-radius: 1.043vw;
+                    padding-left: 2.086vw;
+                    font-size: 2.086vw;
                 }
     
 
                 @media (max-width: 767px) {
+                    height: 15.556vw;
+                    min-height: 15.556vw;
+                    margin-top: 4.444vw;
+                    border-radius: 2.222vw;
+                    padding-left: 4.444vw;
+                    font-size: 4.444vw;
                     width: 100%;
                 }
 
@@ -172,41 +178,48 @@
         }
 
         @media (max-width: 1024px){ 
-            width: 150px;
-            height: 40px;
-            margin-right: 12px;
-            border-radius: 4px;
-            border: solid 1px #2b387c;
-            font-size: 12px;
-            padding-left: 8px;
+            height: 7.301vw;
+            margin: 0.522vw 0;
+            border-radius: 0.522vw;
+            border: solid 0.13vw #2b387c;
+            background-color: #2b387c;
+            font-size: 2.086vw;
+            width: 100%;
         }
 
         @media (max-width: 767px) {
-            height: 56px;
-            margin: 4px 0;
-            border-radius: 4px;
-            border: solid 1px #2b387c;
+            height: 15.556vw;
+            margin: 1.111vw 0;
+            border-radius: 1.111vw;
+            border: solid 0.278vw #2b387c;
             background-color: #2b387c;
-            font-size: 16px;
-            width: calc(100% + 32px);
-            transform: translateX(-16px);
+            font-size: 4.444vw;
         }
 
         & img {
             padding-right: 0.417vw;
-
+            min-width: 1.25vw;
+            min-height: 1.25vw;
+            
             @media (max-width: 1365px){   
                 padding-right: 0.586vw;
+                min-width: 1.758vw;
+                min-height: 1.758vw;
+                padding-right: 1.172vw;
             }
-
+            
             @media (max-width: 1024px){ 
-                padding-right: 8px;
+                min-width: 3.129vw;
+                min-height: 3.129vw;
+                padding-right: 2.086vw;
+                padding-left: 1.043vw;
             }
 
             @media (max-width: 767px) {
-                min-width: 24px;
-                min-height: 24px;
-                padding-right: 16px;
+                min-width: 6.667vw;
+                min-height: 6.667vw;
+                padding-right: 4.444vw;
+                padding-left: 2.222vw;
             }
         }
     }

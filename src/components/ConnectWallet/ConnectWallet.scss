@@ -18,6 +18,22 @@
                 border-radius: 0.293vw;
                 font-size: 0.879vw;
             }
+
+            @media (max-width: 1024px){ 
+                height: 7.301vw;
+                margin: 0.522vw 0;
+                border-radius: 0.522vw;
+                font-size: 2.086vw;
+                width: 100%;
+            }
+
+            @media (max-width: 767px){
+                height: 15.555vw;
+                margin: 1.112vw 0;
+                border-radius: 1.112vw;
+                font-size: 4.444vw;
+                width: 100%;
+            }
         }
     }
 
@@ -26,22 +42,10 @@
             display: none;
         }
 
-        & .connect-wallet-button__connected {
-            @media (max-width: 767px){
-                width: calc(100% + 32px);
-                transform: translateX(-16px);
-            }
-        }
-
         & .connect-wallet-button__connected .button:not(.network-pending) {
             color: white;
             border: 0;
             background-color: #bb1e52;
-
-            @media (max-width: 767px) {
-                box-shadow: none;
-                height: 56px;
-            }
         }
     }
 }
@@ -72,10 +76,11 @@
 
         @media (max-width: 1024px){ 
             width: 100%;
+
         }
 
         @media (max-width: 767px){
-        
+          
         }
 
         &.network-pending {
@@ -154,19 +159,19 @@
         }
 
         @media (max-width: 1024px){ 
-    
+            background-color: #2b387c;
+            justify-content: center;
+            align-items: flex-start;
+            border: solid 0.13vw transparent;
+            margin: 0.522vw 0;
+            height: 7.301vw;
+            width: 100%;
         }
 
         @media (max-width: 767px) {
-            margin: 4px 0;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 8px 8px;
-            height: 56px;
-            border: solid 1px transparent;
-            background-color: #2b387c;
-            width: calc(100% + 32px);
-            transform: translateX(-16px);
+            border: solid 0.278vw transparent;
+            margin: 1.111vw 0;
+            height: 15.556vw;
         }
 
         &--address {
@@ -197,37 +202,29 @@
                 }
     
                 @media (max-width: 1024px){ 
-                    max-width: 8px;
-                    max-height: 8px;
-                    margin-right: 4px;
+                    max-width: 100%;
+                    max-height: 100%;
+                    width: 2.086vw;
+                    height: 2.086vw;
+                    margin-right: 2.868vw;
                 }
     
                 @media (max-width: 767px) {
-                    min-width: 12px;
-                    min-height: 12px;
-                    // align-self: baseline;
-                    margin-right: 22px;
+                    max-width: 100%;
+                    max-height: 100%;
+                    min-width: 4.444vw;
+                    min-height: 4.444vw;
+                    margin-right: 6.111vw;
                 }
             }
 
             & span {
                 font-weight: normal;
-                font-size: 0.573vw;
-                line-height: 0.729vw;
+                line-height: 1;
 
-                @media (max-width: 1365px){   
-                    font-size: 0.806vw;
-                    line-height: 1.026vw;
-                }
-    
-                @media (max-width: 1024px){ 
-                    font-size: 11px;
-                    line-height: 14px;
-                }
-    
+            
                 @media (max-width: 767px){
-                    font-size: 16px;
-                    margin-bottom: 1px;
+                    margin-bottom: 0.278vw;
                 }
 
                 &.full--address {
@@ -235,6 +232,7 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                     max-width: 3.021vw;
+                    line-height: 1;
 
                     @media (max-width: 1365px){   
                         max-width: 4.249vw;
@@ -374,22 +372,27 @@ table .connect-wallet-button,
     & .button {
         height: 2.917vw;
         line-height: 1px;
-        font-size: 0.833vw;
         font-weight: bold;
+        font-size: 0.625vw;
 
         @media (max-width: 1365px) {
             height: 4.103vw;
-            font-size: 1.172vw;
+            font-size: 0.879vw;
         }
 
         @media (max-width: 1024px) {
             height: 7.301vw;
             font-size: 2.086vw;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            padding-left: 2.086vw;
         }
 
         @media (max-width: 767px) {
             height: 15.556vw;
             font-size: 4.444vw;
+            padding-left: 3.8vw;
         }
     }
 

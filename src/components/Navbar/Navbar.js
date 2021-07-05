@@ -34,7 +34,7 @@ const Navbar = () => {
             <> 
                 <Logo />
 
-                {!isTablet && links.map(({label, path}) => <div key={path} className="navbar-component__list">
+                {!isTablet && links.map(({label, path}) => <div key={path} className="navbar-component__list-item">
                     <Link className={path === activePath ? 'active' : ''} to={path}>{label}</Link>
                 </div>)}    
 
@@ -62,13 +62,21 @@ const Hamburger = ({links, activePath}) => {
     return (
         <> 
             {isOpen && <div className="mobile-menu">
-                {links.map(({label, path}) => <div key={path} className="navbar-component__list">
+                {links.map(({label, path}) => <div key={path} className="navbar-component__list-item">
                         <Link 
                             className={path === activePath ? 'active' : ''} 
                             to={path}
                             onClick={() => setIsOpen(false)}
                         >{label}</Link>
                 </div>)}
+
+                <div className="navbar-component__list-item">
+                    <SelectNetwork />
+                </div>
+
+                <div className="navbar-component__list-item">
+                    <ConnectWallet type="navbar" buttonText="CONNECT" hasErrorButtonText="Wrong network" />
+                </div>
             </div>}
             
             <Button className={`hamburger-component ${isOpen ? 'opened' : 'closed'}`} onClick={() => setIsOpen(!isOpen)} >

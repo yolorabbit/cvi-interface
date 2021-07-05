@@ -58,7 +58,7 @@
         }
     }
 
-    &__list {
+    &__list-item {
         width: 6.25vw;
         height: inherit;
 
@@ -257,7 +257,7 @@
     animation: NavbarfadeOut 0.5s;
     animation-fill-mode: forwards;
 
-    .navbar-component__list {
+    .navbar-component__list-item {
         height: auto;
         width: 100%;
 
@@ -267,7 +267,7 @@
             }
         }
 
-        & a {
+        & a, & .select-network-component, & .connect-wallet-button__connected, & .connect-wallet-button.navbar {
             font-size: 2.086vw;
             padding: 2.868vw 5.215vw 2.608vw 5.215vw;
             border-bottom: solid 1px #182f5d;
@@ -281,6 +281,16 @@
             
             &.active {
                 color: #fea716;
+            }
+        }
+
+        & .select-network-component, & .connect-wallet-button__connected, & .connect-wallet-button.navbar {
+            padding-top: 0.652vw;
+            padding-bottom: 0.652vw;
+                
+            @media (max-width: 767px){
+                padding-top: 1.389vw;
+                padding-bottom: 1.389vw;
             }
         }
     }
