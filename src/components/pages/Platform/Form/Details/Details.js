@@ -30,7 +30,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
         <> 
             <Stat name="collateralRatio" value="85%" className="bold low" />
 
-            <Stat className="bold" title="Leverage" value={leverage} />
+            {leverage && <Stat className="bold" title="Leverage" value={leverage} /> }
 
             <Amount title="Buy" amount={amount} selectedCurrency={selectedCurrency} />
 
