@@ -22,7 +22,7 @@ const Statistics = () => {
             return platformBalance?.map((item, index) => `${commonApi.getTradersPoolSize(item[1], liquidityPools[index][1])} (${item[2]?.toUpperCase()} pool)`)
         }
         const openTrades = _openTrades(); // calculate open trades for active tokens
-        const platformBalanceReduced = platformBalance?.length > 0 && platformBalance?.reduce((a, b) => a[1].add(b[1])); // sum active tokens tvl
+        const platformBalanceReduced = platformBalance?.length > 1 ? platformBalance?.reduce((a, b) => a[1].add(b[1])) : platformBalance?.[0]?.[1]; // sum active tokens tvl
 
         return  (
             <div className="statistics-component">

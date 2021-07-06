@@ -58,6 +58,15 @@ export async function getChainId() {
     return networkChainId ? parseHex(networkChainId) : window.ethereum.chainId;
 }
 
+export const getChainName = async () => {
+    try {
+        const chainId = await getChainId();
+        return supportedNetworksConfigByEnv[chainId]?.chainName;
+    } catch(error) {
+        console.log(error);
+    }
+}
+
 export async function getPrice(token1, token2) {
     const chainId = await getChainId();
  

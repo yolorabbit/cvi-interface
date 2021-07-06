@@ -27,6 +27,14 @@ const tabs = {
 
 const platformConfig = {
   tabs,
+  contractsMapped: {
+    [chainNames.Matic]: { 
+      "PositionRewards": "PositionRewardsV3",
+      "Staking": "StakingV2",
+      "FeesCalculatorV3": "FeesCalculatorV4",
+      "CVIOracle": "CVIOracleV3"
+    }, 
+  },
   tokens: {
     [chainNames.Ethereum]: {
       usdt: {
@@ -37,7 +45,6 @@ const platformConfig = {
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
-          feesCalculator: "FeesCalculatorV2"
         },
       },
       eth: {
@@ -48,12 +55,7 @@ const platformConfig = {
         rel: {
           contractKey: "WETH",
           platform: "ETHPlatform",
-          feesCalculator: "FeesCalculatorV3"
         },
-      },
-      usdc: {
-        key: "usdc",
-        soon: true,
       },
       coti: {
         key: "coti",
@@ -61,13 +63,23 @@ const platformConfig = {
       },
     },
     [chainNames.Matic]: {
-      "usdt": {
+      usdt: {
         key: "usdt",
         decimals: 6,
+        rel: {
+          contractKey: "USDT",
+          platform: "USDTPlatform",
+        },
       },
       eth: {
         key: "eth",
-        soon: true
+        decimals: 18,
+        fixedDecimals: 8,
+        soon: true,
+        rel: {
+          contractKey: "WETH",
+          platform: "ETHPlatform",
+        },
       },
     }
   },

@@ -4,7 +4,7 @@ import { contractsContext } from "./ContractContext";
 import platformConfig from '../config/platformConfig';
 import { customFixed, toBN, toDisplayAmount } from "utils";
 import { useActiveWeb3React } from "components/Hooks/wallet";
-import { convert, getPrice } from "./utils";
+import { convert, getPrice, getChainName } from './utils';
 import * as TheGraph from 'graph/queries';
 
 export const getTokenData = async (contract) => {
@@ -111,8 +111,12 @@ const web3Api = {
             return "N/A"
         }
     },
-    getTotalGoviRewards: async ({PositionRewards, PositionRewardsV2}) => {
+    getTotalGoviRewards: async (contracts) => {
         try {
+            const chainName = await getChainName();
+            const PositionRewards = contracts[platformConfig.contractsMapped?.[chainName]?.["PositionRewards"] ?? "PositionRewards"];
+            const PositionRewardsV2 = contracts[platformConfig.contractsMapped?.[chainName]?.["PositionRewardsV2"] ?? "PositionRewardsV2"];
+
             let usdtMaxPositionRewards = toBN("0"), 
             ethMaxPositionRewards = toBN("0"),
             errorCounter = 0;
@@ -128,9 +132,6 @@ const web3Api = {
             } catch(error) {
                 errorCounter++;
             }
-
-            console.log(usdtMaxPositionRewards.toString());
-            console.log(ethMaxPositionRewards.toString());
 
             return errorCounter < 2 ? toBN(usdtMaxPositionRewards).add(toBN(ethMaxPositionRewards)).toString() : "N/A";
         } catch(error) {
