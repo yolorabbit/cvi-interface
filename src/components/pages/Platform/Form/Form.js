@@ -6,9 +6,11 @@ import Details from './Details/Details';
 import platformConfig, { activeViews } from 'config/platformConfig';
 import ActionController from 'components/Actions/ActionController';
 import './Form.scss';
+import { useSelector } from 'react-redux';
 
 const Form = () => {
     const { activeView } = useContext(platformViewContext);
+    const { selectedNetwork } = useSelector(({app}) => app);
     const [selectedCurrency, setSelectedCurrency] = useState("usdt");
     const [leverage, setLeverage] = useState("X1");
     const [amount, setAmount] = useState("");
@@ -18,7 +20,7 @@ const Form = () => {
             <div className="platform-form-component">
                <div className="platform-form-component__left">
                     <CurrencySelect selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />
-                    {activeView === 'trade' && <SelectLeverage leverage={leverage} setLeverage={setLeverage} /> }
+                    {activeView === 'trade' && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage && <SelectLeverage leverage={leverage} setLeverage={setLeverage} /> }
                   
                     <ActionController 
                         amount={amount}

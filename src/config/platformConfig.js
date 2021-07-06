@@ -29,13 +29,26 @@ const platformConfig = {
   tabs,
   tokens: {
     [chainNames.Ethereum]: {
-      "usdt": {
+      usdt: {
         key: "usdt",
-        decimals: 6
+        decimals: 6,
+        leverage: true,
+        rel: {
+          contractKey: "USDTPlatform",
+          feesCalculator: "FeesCalculatorV2"
+        },
       },
       eth: {
         key: "eth",
         decimals: 18,
+        rel: {
+          contractKey: "ETHPlatform",
+          feesCalculator: "FeesCalculatorV3"
+        },
+      },
+      usdc: {
+        key: "usdc",
+        soon: true,
       },
       coti: {
         key: "coti",
