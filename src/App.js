@@ -14,30 +14,35 @@ import NotificationList from 'components/NotificationList';
 import Web3ReactManager from 'components/Web3ReactManager';
 import './App.scss';
 import { useEffect, useRef } from 'react';
+import { ContractsContext } from 'components/Context';
 
 const App = () => {
   // fix a bug in Web3ReactProvider - render a text element ",". 
   const appRef = useRef(null);
+
   useEffect(() => {
-    if(appRef.current?.nextSibling?.textContent === ",") {
+    if (appRef.current?.nextSibling?.textContent === ",") {
       appRef.current?.nextSibling.remove();
     }
   }, [appRef]);
+
 
   return (
     <div className="app-component" ref={appRef}>
       <Web3ReactManager>
         <NotificationList />
-        <Router>
-          <Navbar />
-          <Switch>
-            <Route path={config.routes.staking.path} component={Staking} />
-            <Route path={config.routes['help-center'].path} component={HelpCenter} />
-            <Route path={ config.routes.platform.path} component={Platform} />
-            <Redirect to="/platform" />
-          </Switch>
-          <Footer />
-        </Router>
+        <ContractsContext>
+          <Router>
+            <Navbar />
+            <Switch>
+              <Route path={config.routes.staking.path} component={Staking} />
+              <Route path={config.routes['help-center'].path} component={HelpCenter} />
+              <Route path={config.routes.platform.path} component={Platform} />
+              <Redirect to="/platform" />
+            </Switch>
+            <Footer />
+          </Router>
+        </ContractsContext>
       </Web3ReactManager>
     </div>
   );

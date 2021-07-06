@@ -1,7 +1,17 @@
 import { createContext, useEffect, useRef, useState } from "react";
+import { useContracts } from '../Hooks/contracts';
 
 export const viewportContext = createContext({});
 export const platformViewContext = createContext("");
+export const contractsContext = createContext(null);
+
+export const ContractsContext = ({children}) => {
+  const contracts = useContracts();
+
+  return <contractsContext.Provider value={contracts}>
+    {children}
+  </contractsContext.Provider>
+}
 
 export const ViewportProvider = ({ children }) => {
   // This is the exact same logic that we previously had in our hook

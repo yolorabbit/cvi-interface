@@ -1,10 +1,12 @@
+import { contractsContext } from 'components/Context';
 import { useIsLaptop } from 'components/Hooks';
 import Stat from 'components/Stat/Stat'
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import './Statistics.scss';
 
 const Statistics = () => {
     const isLaptop = useIsLaptop();
+    const contracts = useContext(contractsContext);
 
     return useMemo(() => {
         return  (
