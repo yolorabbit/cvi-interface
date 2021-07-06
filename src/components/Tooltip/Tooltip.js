@@ -1,4 +1,4 @@
-import { useIsDesktop } from 'components/hooks';
+import { useIsDesktop } from 'components/Hooks';
 import React, { useMemo } from 'react'
 import './Tooltip.scss';
 

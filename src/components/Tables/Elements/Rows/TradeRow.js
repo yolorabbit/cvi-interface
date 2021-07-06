@@ -1,4 +1,4 @@
-import { useIsMobile, useIsTablet } from "components/hooks";
+import { useIsMobile, useIsTablet } from "components/Hooks";
 import { useMemo, useState } from "react";
 import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';

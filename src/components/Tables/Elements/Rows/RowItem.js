@@ -1,4 +1,4 @@
-import { useIsTablet } from "components/hooks";
+import { useIsTablet } from "components/Hooks";
 import Tooltip from "components/Tooltip";
 
 const RowItem = ({type, header, content, tooltip}) => {

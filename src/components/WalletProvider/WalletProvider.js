@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'components/Elements/Button';
-import { useActiveWeb3React } from 'components/hooks/wallet';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
 import './WalletProvider.scss';
 
 

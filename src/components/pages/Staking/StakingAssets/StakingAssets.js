@@ -1,4 +1,4 @@
-import { useIsTablet } from 'components/hooks';
+import { useIsTablet } from 'components/Hooks';
 import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';

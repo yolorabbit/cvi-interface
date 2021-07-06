@@ -1,4 +1,4 @@
-import { useOnClickOutside } from "components/hooks";
+import { useOnClickOutside } from "components/Hooks";
 import React, { useRef } from "react";
 import ReactDOM from "react-dom";
 import "./Modal.scss";

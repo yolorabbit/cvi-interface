@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom';
 import Tabs from 'components/Tabs';
-import { useInDOM } from 'components/hooks';
+import { useInDOM } from 'components/Hooks';
 import './TabsForm.scss';
 
 const TabsForm = React.forwardRef(({id = "view", tabs = [], isDropdown, dontChangeQuery, activeTab, setActiveTab, className, rightContent, children}, ref) => {

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { platformViewContext } from '../../../Context';
-import { useIsTablet } from 'components/hooks';
+import { useIsTablet } from 'components/Hooks';
 import Container from '../../../Layout/Container';
 import TabsForm from '../../../TabsForm';
 import platformConfig, { activeViews } from 'config/platformConfig';

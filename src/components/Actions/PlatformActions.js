@@ -1,5 +1,6 @@
 import Countdown from "components/Countdown/Countdown";
 import Button from "components/Elements/Button";
+import { useActiveWeb3React } from "components/Hooks/wallet";
 import SellInfo from "components/pages/Platform/Info/SellInfo";
 import WithdrawInfo from "components/pages/Platform/Info/WithdrawInfo";
 import platformConfig from "config/platformConfig";
@@ -7,14 +8,14 @@ import { useActionController } from "./ActionController";
 
 const PlatformActions = () => {
     const { type, token, isModal, isOpen, setIsOpen, amount, setAmount, leverage } = useActionController();
-    const acount = "sdgsdg";
+    const { account } = useActiveWeb3React();
 
     const resetForm = () => {
         setAmount("")
     }
 
     const onClick = () => {
-        if(!acount) return; // ask to connect
+        if(!account) return; // ask to connect
         
         if(isModal && !isOpen) return setIsOpen(true);
         resetForm();

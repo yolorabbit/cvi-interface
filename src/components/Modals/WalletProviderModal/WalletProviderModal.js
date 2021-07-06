@@ -5,7 +5,7 @@ import { addAlert } from 'store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import config from 'config/config';
 import './WalletProviderModal.scss';
-import { useActiveWeb3React } from 'components/hooks/wallet';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { chainNameToChainId } from 'utils';
 import Modal from 'components/Modal/Modal';
 import Title from 'components/Elements/Title';

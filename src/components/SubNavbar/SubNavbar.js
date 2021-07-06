@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import './SubNavbar.scss';
 import TabsForm from '../TabsForm';
-import { useIsDesktop, useIsTablet } from '../hooks';
+import { useIsDesktop, useIsTablet } from '../Hooks';
 
 const SubNavbar = ({tabs, setActiveView, activeView}) => {
     const isDesktop = useIsDesktop();

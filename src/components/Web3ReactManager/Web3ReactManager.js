@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
-import { useEagerConnect, useInactiveListener } from 'components/hooks/wallet';
+import { useEagerConnect, useInactiveListener } from 'components/Hooks/wallet';
 import config from 'config/config';
 import { network } from 'connectors';
 import React, { useEffect, useState } from 'react';

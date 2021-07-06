@@ -1,4 +1,4 @@
-import { useIsTablet } from 'components/hooks';
+import { useIsTablet } from 'components/Hooks';
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import config from '../../config/config';

@@ -1,4 +1,4 @@
-import { useIsLaptop } from 'components/hooks';
+import { useIsLaptop } from 'components/Hooks';
 import Stat from 'components/Stat/Stat'
 import React, { useMemo } from 'react'
 import './Statistics.scss';

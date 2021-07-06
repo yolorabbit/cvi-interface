@@ -1,4 +1,4 @@
-import { useIsTablet } from "components/hooks";
+import { useIsTablet } from "components/Hooks";
 import { useMemo } from "react";
 import './SubHeader.scss';
 

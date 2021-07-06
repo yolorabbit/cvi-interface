@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from 'components/Elements/Button';
 import config from 'config/config';
-import { useCopyToClipboard } from 'components/hooks';
+import { useCopyToClipboard } from 'components/Hooks';
 import { useDispatch } from 'react-redux';
 import { addAlert } from 'store/actions';
 import './Copy.scss';

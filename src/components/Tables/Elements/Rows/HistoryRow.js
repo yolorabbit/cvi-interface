@@ -1,4 +1,4 @@
-import { useIsMobile, useIsTablet } from "components/hooks";
+import { useIsMobile, useIsTablet } from "components/Hooks";
 import { useContext, useMemo } from "react";
 import RowItem from './RowItem';
 import { platformViewContext } from "components/Context";

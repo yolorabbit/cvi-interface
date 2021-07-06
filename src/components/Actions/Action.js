@@ -5,7 +5,7 @@ import stakingConfig from 'config/stakingConfig';
 import PlatformActions from './PlatformActions';
 import StakingActions from './StakingActions';
 import ConnectWallet from 'components/ConnectWallet/ConnectWallet';
-import { useActiveWeb3React } from 'components/hooks/wallet';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
 import './Action.scss';
 
 const Action = () => {

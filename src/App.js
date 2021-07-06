@@ -19,10 +19,8 @@ const App = () => {
   // fix a bug in Web3ReactProvider - render a text element ",". 
   const appRef = useRef(null);
   useEffect(() => {
-    if(appRef.current) {
-      if(appRef.current?.nextSibling?.textContent === ",") {
-        appRef.current?.nextSibling.remove();
-      }
+    if(appRef.current?.nextSibling?.textContent === ",") {
+      appRef.current?.nextSibling.remove();
     }
   }, [appRef]);
 
@@ -32,12 +30,12 @@ const App = () => {
         <NotificationList />
         <Router>
           <Navbar />
-            <Switch>
-              <Route path={config.routes.staking.path} component={Staking} />
-              <Route path={config.routes['help-center'].path} component={HelpCenter} />
-              <Route path={ config.routes.platform.path} component={Platform} />
-              <Redirect to="/platform" />
-            </Switch>
+          <Switch>
+            <Route path={config.routes.staking.path} component={Staking} />
+            <Route path={config.routes['help-center'].path} component={HelpCenter} />
+            <Route path={ config.routes.platform.path} component={Platform} />
+            <Redirect to="/platform" />
+          </Switch>
           <Footer />
         </Router>
       </Web3ReactManager>
