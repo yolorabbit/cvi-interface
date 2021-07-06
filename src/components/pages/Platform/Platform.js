@@ -9,9 +9,9 @@ import Layout from 'components/Layout/Layout';
 import Row from 'components/Layout/Row';
 import Container from 'components/Layout/Container';
 import Form from './Form';
-import './Platform.scss';
 import platformConfig from 'config/platformConfig';
 import PlatformTables from './PlatformTables';
+import './Platform.scss';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
