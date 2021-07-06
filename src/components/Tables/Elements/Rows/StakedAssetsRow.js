@@ -8,7 +8,7 @@ import stakingConfig, { stakingProtocols, stakingViews } from "config/stakingCon
 import StakingClaim from "components/Actions/StakingClaim";
 import { Pairs } from "../Values";
 
-const StakedAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => {
+const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");

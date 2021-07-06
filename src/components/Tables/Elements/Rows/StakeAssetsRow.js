@@ -7,8 +7,10 @@ import ActionController from "components/Actions/ActionController";
 import stakingConfig, { stakingProtocols, stakingViews } from "config/stakingConfig";
 import { Pairs } from "../Values";
 import Apy from "../Values/Apy";
+import { useActiveWeb3React } from '../../../Hooks/wallet';
 
 const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => {
+    const { account } = useActiveWeb3React();
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
@@ -47,7 +49,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
                 content={<Apy apyList={["189%", "2.01%", "0.28%"]} />} 
             />
 
-            {(!isTablet || isMobile) && <RowItem content={stakeController} />}
+            {(!isTablet || isMobile) && <RowItem content={stakeController} hide={!account} />}
         </>
         //eslint-disable-next-line
     ), [token, isTablet, isMobile, amount]);
