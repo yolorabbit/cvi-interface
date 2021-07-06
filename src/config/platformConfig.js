@@ -32,7 +32,7 @@ const platformConfig = {
       usdt: {
         key: "usdt",
         decimals: 6,
-        leverage: true,
+        leverage: ["X1", "X2", "X4"],
         rel: {
           contractKey: "USDTPlatform",
           feesCalculator: "FeesCalculatorV2"
@@ -41,6 +41,7 @@ const platformConfig = {
       eth: {
         key: "eth",
         decimals: 18,
+        leverage: ["X1", "X3", "X4"],
         rel: {
           contractKey: "ETHPlatform",
           feesCalculator: "FeesCalculatorV3"

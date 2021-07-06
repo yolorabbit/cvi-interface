@@ -1,5 +1,5 @@
 import { platformViewContext } from 'components/Context';
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import CurrencySelect from 'components/CurrencySelect';
 import SelectLeverage from 'components/SelectLeverage';
 import Details from './Details/Details';
@@ -12,15 +12,25 @@ const Form = () => {
     const { activeView } = useContext(platformViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
     const [selectedCurrency, setSelectedCurrency] = useState("usdt");
-    const [leverage, setLeverage] = useState("X1");
+    const tokenLeverageList = platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage;
+    const [leverage, setLeverage] = useState(tokenLeverageList?.[0]);
     const [amount, setAmount] = useState("");
-  
+    
+    useEffect(() => {
+        if(tokenLeverageList?.length > 0) {
+            setLeverage(tokenLeverageList?.[0]);
+        }
+        //eslint-disable-next-line
+    }, [selectedCurrency]);
+
     return useMemo(() => {
         return (
             <div className="platform-form-component">
                <div className="platform-form-component__left">
                     <CurrencySelect selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />
-                    {activeView === 'trade' && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage && <SelectLeverage leverage={leverage} setLeverage={setLeverage} /> }
+                    {activeView === 'trade' 
+                        && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage 
+                        && <SelectLeverage leverage={leverage} tokenLeverageList={tokenLeverageList} setLeverage={setLeverage} /> }
                   
                     <ActionController 
                         amount={amount}
@@ -39,7 +49,7 @@ const Form = () => {
             </div>
         )
         //eslint-disable-next-line
-    }, [activeView, selectedCurrency, amount, leverage]) 
+    }, [activeView, selectedCurrency, selectedNetwork, amount, leverage]) 
 }
 
 const SeeMore = () => {
