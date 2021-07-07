@@ -11,7 +11,7 @@ const Stat = ({name, hideTooltip, prefix = "", title, format, className, formats
     return (
         <div className={`stat-component ${className ?? ''} ${_className ?? ''} ${values?.length > 0 ? 'multiline' : ''}`}>
             <h2>{title ?? configTitle} {!hideTooltip && content && <Tooltip type="question" left={left ?? -30} mobileLeft={mobileLeft} maxWidth={400} minWidth={250} content={content} /> }</h2>
-            {values?.length > 0 && values.map((item, i) => item ? 
+            {values !== "N/A" && values?.length > 0 && values.map((item, i) => item ? 
                item.defaultValue ? <p key={i}>{item.defaultValue}</p> :
                 <p key={i}>{item !== "N/A" && !suffix && _prefix}{item === "N/A" ? !hideNa && item : formats?.[i] ? commaFormatted(formats[i]) : commaFormatted(item)} {item !== "N/A" && suffix}</p> 
                 : 

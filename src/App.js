@@ -15,9 +15,12 @@ import Web3ReactManager from 'components/Web3ReactManager';
 import './App.scss';
 import { useEffect, useRef } from 'react';
 import { ContractsContext } from 'contracts/ContractContext';
+import { uniqueId } from 'lodash';
+import { useSelector } from 'react-redux';
 
 const App = () => {
   // fix a bug in Web3ReactProvider - render a text element ",". 
+  const { selectedNetwork } = useSelector(({app}) => app);
   const appRef = useRef(null);
 
   useEffect(() => {
@@ -29,7 +32,7 @@ const App = () => {
 
   return (
     <div className="app-component" ref={appRef}>
-      <Web3ReactManager>
+      <Web3ReactManager key={uniqueId(selectedNetwork)}>
         <NotificationList />
         <ContractsContext>
           <Router>

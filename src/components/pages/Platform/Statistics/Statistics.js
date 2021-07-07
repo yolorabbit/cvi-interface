@@ -2,30 +2,32 @@ import { useIsLaptop } from 'components/Hooks';
 import Stat from 'components/Stat/Stat'
 import commonApi from 'contracts/commonApi';
 import React, { useMemo } from 'react'
+import { useSelector } from 'react-redux';
 import { customFixed, toDisplayAmount } from 'utils';
 import { useTokensApi } from '../../../../contracts/web3Api';
 import './Statistics.scss';
 
 const Statistics = () => {
+    const { selectedNetwork } = useSelector(({app}) => app)
     const isLaptop = useIsLaptop();
     const platformBalance = useTokensApi("getPlatformBalance");
     const liquidityPools = useTokensApi("getLiquidityPoolsBalance");
     const goviPrice = useTokensApi("getGoviPrice");
     const feesCollected = useTokensApi("getFeesCollected");
     const totalGoviRewards = useTokensApi("getTotalGoviRewards");
-    console.log(feesCollected);
 
     return useMemo(() => {
         const _openTrades = () => {
             if(!liquidityPools || !platformBalance) return null;
             if(liquidityPools?.length !== platformBalance?.length) return "N/A";
+            if(liquidityPools === "N/A" || platformBalance === "N/A") return "N/A";
             return platformBalance?.map((item, index) => `${commonApi.getTradersPoolSize(item[1], liquidityPools[index][1])} (${item[2]?.toUpperCase()} pool)`)
         }
         const openTrades = _openTrades(); // calculate open trades for active tokens
-        const platformBalanceReduced = platformBalance?.length > 1 ? platformBalance?.reduce((a, b) => a[1].add(b[1])) : platformBalance?.[0]?.[1]; // sum active tokens tvl
+        const platformBalanceReduced = platformBalance !== "N/A" && platformBalance?.length > 1 ? platformBalance?.reduce((a, b) => a[1].add(b[1])) : platformBalance?.[0]?.[1]; // sum active tokens tvl
 
         return  (
-            <div className="statistics-component">
+            <div key={selectedNetwork} className="statistics-component">
                 <div className="statistics-component__container">
                     <Stat 
                         name="totalValueLocked" 
@@ -33,7 +35,7 @@ const Statistics = () => {
                         format={customFixed(toDisplayAmount(platformBalanceReduced, 6), 2)}
                     />
     
-                    <Stat name="liquidityPoolBalance" values={liquidityPools?.map(item => item[0])} />
+                    <Stat name="liquidityPoolBalance" values={liquidityPools !== "N/A" && liquidityPools !== null ? liquidityPools?.map(item => item[0]) : liquidityPools} />
     
                     <Stat name="openTrades" values={openTrades} />
                     {isLaptop && <div className="statistics-component__container--breaker"></div>}
@@ -53,7 +55,7 @@ const Statistics = () => {
                 </div>
             </div>
         )
-    }, [isLaptop, platformBalance, liquidityPools, goviPrice, feesCollected, totalGoviRewards]);
+    }, [isLaptop, platformBalance, liquidityPools, goviPrice, feesCollected, totalGoviRewards, selectedNetwork]);
 }
 
 export default Statistics;
