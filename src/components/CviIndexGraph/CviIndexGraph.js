@@ -4,17 +4,18 @@ import { useRef } from "react";
 import { mappedSeriesData } from "shared/historicalData";
 import { viewportContext } from "components/Context";
 import "./CviIndexGraph.scss";
+import { useSelector } from "react-redux";
 
 const chartInitialize = {
     id: "vix-graph"
 }
 
-const CviIndexGraph = ({id, series = [], maxWidth = 700, maxHeight = 370}) => {
+const CviIndexGraph = ({id, maxWidth = 700, maxHeight = 370}) => {
     const ref = useRef();
     const [chart, setChart] = useState();
     const { width: windowWidth } = useContext(viewportContext);
     const [activeRange, setActiveRange] = useState();
-
+    const { series } = useSelector(({app}) => app.cviInfo);
     
     useEffect(() => {
         const getChartSize = () => {
