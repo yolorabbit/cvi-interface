@@ -41,7 +41,6 @@ const platformConfig = {
         key: "usdt",
         decimals: 6,
         fixedDecimals: 2,
-        leverage: ["X1", "X2", "X4"],
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
@@ -51,7 +50,6 @@ const platformConfig = {
         key: "eth",
         decimals: 18,
         fixedDecimals: 8,
-        leverage: ["X1", "X3", "X4"],
         rel: {
           contractKey: "WETH",
           platform: "ETHPlatform",
@@ -66,6 +64,17 @@ const platformConfig = {
       usdt: {
         key: "usdt",
         decimals: 6,
+        fixedDecimals: 2,
+        rel: {
+          contractKey: "USDT",
+          platform: "USDTPlatform",
+        },
+      },
+      usdc: {
+        key: "usdc",
+        decimals: 6,
+        fixedDecimals: 2,
+        leverage: ["X1", "X3", "X4"],
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
