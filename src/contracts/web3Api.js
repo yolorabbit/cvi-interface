@@ -8,19 +8,19 @@ import { convert, getPrice, getChainName } from './utils';
 import * as TheGraph from 'graph/queries';
 
 export const getTokenData = async (contract) => {
-    console.log(contract);
+    if(!contract) return null;
     const address = await contract.options.address;
     const symbol = await contract.methods.symbol().call();
     const decimals = await contract.methods.decimals().call();
     return { address, symbol, decimals, contract };
 }
 
-export async function getFeesCollected(staking, USDTData, tokens, tokensData, library) {
+export async function getFeesCollected(USDTData, tokensData) {
     let res = await TheGraph.collectedFees();
     //console.log(res);
     //console.log(`res collectedFees size ${res.collectedFees.length}`);
     let sum = toBN(0);
-    for (const token of tokensData) {
+    for (const token of tokensData.filter(item => item !== null)) {
       //console.log(`token ${token.symbol}`);
       let filtered = res.collectedFees.filter((e) => e.tokenAddress.toLowerCase() === token.address.toLowerCase());
       //console.log(`filtered ${filtered.length}`);
@@ -97,14 +97,11 @@ const web3Api = {
             return "N/A"
         }
     },
-    getFeesCollected: async (contracts, tokens) => {
+    getFeesCollected: async ({USDT, WETH}) => {
         try {
-            const USDTData = await getTokenData(contracts["USDT"]);
-            const ETHData = await getTokenData(contracts["WETH"]);
-            const tokens = [contracts["USDT"], contracts["WETH"]];
-            const tokensData = ETHData ? [USDTData, ETHData] : [USDTData];
-            const totalFeesCollected = await getFeesCollected(contracts["Staking"], USDTData, tokens, tokensData);
-
+            const USDTData = await getTokenData(USDT);
+            const tokensData = [USDTData, await getTokenData(WETH)];
+            const totalFeesCollected = await getFeesCollected(USDTData, tokensData);
             return customFixed(totalFeesCollected, 2);
         } catch(error) {
             console.log(error);
