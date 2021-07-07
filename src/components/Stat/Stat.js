@@ -9,9 +9,9 @@ const Stat = ({name, hideTooltip, prefix = "", title, format, className, formats
     const { prefix: _prefix = prefix, suffix = "", title: configTitle = "", className: _className, tooltip: { left, content, mobileLeft} = {} } = config?.statisticsDetails?.[name] ?? {};
  
     return (
-        <div className={`stat-component ${className ?? ''} ${_className ?? ''} ${values?.length > 0 ? 'multiline' : ''}`}>
+        <div className={`stat-component ${className ?? ''} ${_className ?? ''} ${values !== "N/A" && values?.length > 0 ? 'multiline' : ''}`}>
             <h2>{title ?? configTitle} {!hideTooltip && content && <Tooltip type="question" left={left ?? -30} mobileLeft={mobileLeft} maxWidth={400} minWidth={250} content={content} /> }</h2>
-            {values !== "N/A" && values?.length > 0 && values.map((item, i) => item ? 
+            {values === "N/A" ? <p>N/A</p> : values?.length > 0 && values.map((item, i) => item ? 
                item.defaultValue ? <p key={i}>{item.defaultValue}</p> :
                 <p key={i}>{item !== "N/A" && !suffix && _prefix}{item === "N/A" ? !hideNa && item : formats?.[i] ? commaFormatted(formats[i]) : commaFormatted(item)} {item !== "N/A" && suffix}</p> 
                 : 
