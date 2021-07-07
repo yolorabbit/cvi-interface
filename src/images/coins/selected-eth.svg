@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="ethereum_coin_selected" width="64" height="64" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" id="ethereum_coin_selected" width="64" height="64.001" viewBox="0 0 64 64.001">
     <defs>
         <style>
             .cls-2{fill:#fff;opacity:.8}.cls-3{opacity:.1}
@@ -14,8 +14,5 @@
             <path id="Path_3820" d="M28.549 17.4l-12.4 7.108V34.6z" class="cls-3" transform="translate(-3.153 5.4)"/>
         </g>
     </g>
-    <g id="Ellipse_73" fill="none" stroke="#f8ba15" stroke-width="2px">
-        <circle cx="32" cy="32" r="32" stroke="none"/>
-        <circle cx="32" cy="32" r="31"/>
-    </g>
+    <path id="Path_4858" fill="#f8ba15" d="M717.768 788.751a32 32 0 1 1 32-32 32.036 32.036 0 0 1-32 32zm0-60a28 28 0 1 0 28 28 28.031 28.031 0 0 0-28-28z" transform="translate(-685.768 -724.75)"/>
 </svg>
