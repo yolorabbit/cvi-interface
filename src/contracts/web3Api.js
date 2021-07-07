@@ -1,9 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { contractsContext } from "./ContractContext";
-import platformConfig from '../config/platformConfig';
 import { customFixed, toBN, toDisplayAmount } from "utils";
-import { useActiveWeb3React } from "components/Hooks/wallet";
 import { convert, getPrice, getChainName } from './utils';
 import * as TheGraph from 'graph/queries';
 import config from "config/config";
@@ -137,30 +132,35 @@ const web3Api = {
             return "N/A";
         }
     },
-}
+    getCollateralRatio: async (contracts, token, library) => {
+        try {
+            let platformBalance;
 
-export const useTokensApi = (type) => {
-    const { library } = useActiveWeb3React();
-    const { selectedNetwork } = useSelector(({app}) => app);
-    const contracts = useContext(contractsContext);
-    const [data, setData] = useState();
+            if(token.key === "eth") {
+                platformBalance = toBN(await library.eth.getBalance(contracts[token.rel.platform].options.address));
+            } else {
+                platformBalance = toBN(await contracts[token.rel.contractKey].methods.balanceOf(contracts[token.rel.platform].options.address).call());
+            }
     
-    useEffect(() => {
-        if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
-        const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
-
-        if(web3Api[type]) {
-            web3Api[type](contracts, tokens, library).then(data => {
-                setData(data);
-            }).catch(error => {
-                console.log(error);
-                setData("N/A");
-            });
-        } else setData("N/A");
-
-    }, [selectedNetwork, contracts, library, type]);
-
-    return data
+            let totalPositionUnitsAmount = toBN(await contracts[token.rel.platform].methods.totalPositionUnitsAmount().call());
+            let decimals = toBN(await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call());
+            let collateralRatio = platformBalance.toString() !== "0" ? totalPositionUnitsAmount.mul(decimals).div(platformBalance) : 0;
+            
+            return {
+                collateralRatio,
+                currentRatioValue: totalPositionUnitsAmount,
+                platformBalance
+            }
+        } catch (error) {
+            console.log(error);
+            return {
+                collateralRatio: "N/A",
+                currentRatioValue: "N/A",
+                platformBalance: "N/A"
+            }
+        }
+    }
 }
+
 
 export default web3Api;

@@ -1,20 +1,20 @@
 import { useIsLaptop } from 'components/Hooks';
 import Stat from 'components/Stat/Stat'
 import commonApi from 'contracts/commonApi';
+import { useWeb3Api } from 'contracts/useWeb3Api';
 import React, { useMemo } from 'react'
 import { useSelector } from 'react-redux';
 import { customFixed, toDisplayAmount } from 'utils';
-import { useTokensApi } from '../../../../contracts/web3Api';
 import './Statistics.scss';
 
 const Statistics = () => {
     const { selectedNetwork } = useSelector(({app}) => app)
     const isLaptop = useIsLaptop();
-    const platformBalance = useTokensApi("getPlatformBalance");
-    const liquidityPools = useTokensApi("getLiquidityPoolsBalance");
-    const goviPrice = useTokensApi("getGoviPrice");
-    const feesCollected = useTokensApi("getFeesCollected");
-    const totalGoviRewards = useTokensApi("getTotalGoviRewards");
+    const platformBalance = useWeb3Api("getPlatformBalance");
+    const liquidityPools = useWeb3Api("getLiquidityPoolsBalance");
+    const goviPrice = useWeb3Api("getGoviPrice");
+    const feesCollected = useWeb3Api("getFeesCollected");
+    const totalGoviRewards = useWeb3Api("getTotalGoviRewards");
 
     return useMemo(() => {
         const _openTrades = () => {
