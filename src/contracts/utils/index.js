@@ -9,6 +9,10 @@ let contracts = {
     [chainNames.Matic]: {}
 };
 
+export const toTokenAmount = (amount, decimals) => {
+  return toBN(amount, decimals);
+};
+
 export function getWeb3Contract(contractName, chainName) {
     if (contracts[chainName][contractName] === undefined) {
         const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);

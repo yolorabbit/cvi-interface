@@ -36,6 +36,10 @@ const platformConfig = {
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
+          feesCalc: "FeesCalculatorV2",
+          feesCalcV3: "FeesCalculatorV3",
+          feesModel: "USDTPlatform",
+          cviOracle: "CVIOracle"
         },
       },
       eth: {
@@ -45,6 +49,9 @@ const platformConfig = {
         rel: {
           contractKey: "WETH",
           platform: "ETHPlatform",
+          feesCalc: "FeesCalculatorV4",
+          feesModel: "FeesModelV2",
+          cviOracle: "CVIOracle"
         },
       },
       coti: {

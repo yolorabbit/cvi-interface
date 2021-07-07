@@ -2,6 +2,7 @@ import { customFixed, toBN, toDisplayAmount } from "utils";
 import { convert, getPrice, getChainName } from './utils';
 import * as TheGraph from 'graph/queries';
 import config from "config/config";
+import positionApi from "./apis/position";
 
 export const getTokenData = async (contract) => {
     if(!contract) return null;
@@ -32,7 +33,7 @@ export async function getFeesCollected(USDTData, tokensData) {
 
 
 const web3Api = {
-    getPlatformBalance: async (contracts, tokens = [], library) => {
+    getPlatformBalance: async (contracts, tokens = [], {library}) => {
         try {
             const USDTData = await getTokenData(contracts["USDT"]);
             
@@ -132,7 +133,7 @@ const web3Api = {
             return "N/A";
         }
     },
-    getCollateralRatio: async (contracts, token, library) => {
+    getCollateralRatio: async (contracts, token, {library}) => {
         try {
             let platformBalance;
 
@@ -159,7 +160,8 @@ const web3Api = {
                 platformBalance: "N/A"
             }
         }
-    }
+    },
+    ...positionApi
 }
 
 

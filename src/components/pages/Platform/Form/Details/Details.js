@@ -1,6 +1,6 @@
 import { platformViewContext } from "components/Context";
 import { useContext, useMemo } from "react";
-import { commaFormatted, customFixed, toDisplayAmount } from "utils";
+import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
 import Stat from "components/Stat";
 import { useSelector } from "react-redux";
 import { useWeb3Api } from "contracts/useWeb3Api";
@@ -28,9 +28,19 @@ const Details = ({selectedCurrency, amount, leverage}) => {
 }
 
 const TradeView = ({amount, leverage, selectedCurrency}) => {
+    console.log(amount);
     const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
-    const { cviInfo } = useSelector(({app}) => app.cviInfo);
+    const body = useMemo(() => {
+        return {
+            amount: toBN(amount)
+        }
+    }, [amount])
 
+    const purchaseFee = useWeb3Api("getOpenPositionFee", selectedCurrency, body);
+
+    console.log(purchaseFee);
+
+    const { cviInfo } = useSelector(({app}) => app.cviInfo);
     return useMemo(() => {
 
         return  (
@@ -41,7 +51,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     format={`${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0)}%`}
                     className={`bold ${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0) >= 80 ? 'low' : 'high'}`} 
                 />
-    
+        
                 {leverage && <Stat className="bold" title="Leverage" value={leverage} /> }
     
                 <Amount title="Buy" amount={amount} selectedCurrency={selectedCurrency} />
