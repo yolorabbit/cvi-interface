@@ -34,7 +34,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
             {!isTablet && <> 
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
-                    <Coin token={token} /> : 
+                    <Coin token={token} showName /> : 
                     <Pairs leftToken={leftToken} rightToken={rightToken} label={label} protocol={protocol} />} 
                 />
                 <RowItem content={<Value text="300" subText={label ?? `${token?.toUpperCase()}`} bottomText={"$468"} /> } />

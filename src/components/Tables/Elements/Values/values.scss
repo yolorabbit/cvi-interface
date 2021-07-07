@@ -88,15 +88,32 @@
   }
 }
 
-.coin-component {
+.coin-component--text {
+    font-size: 0.729vw;
+    white-space: nowrap;
+    @media (max-width: 1365px){   
+        font-size: 1.026vw;
+    }
+
+    @media (max-width: 1024px){ 
+        font-size: 1.826vw;
+    }
+
+    @media (max-width: 767px){
+        font-size: 3.89vw;
+    }
+}
+
+.coin-component--img {
   width: 1.667vw;
   height: 1.667vw;
   vertical-align: middle;
-  
+  margin-right: 0.833vw;
+
   @media (max-width: 1365px) {
       width: 2.344vw;
       height: 2.344vw;
-      margin-right: 1.758vw;
+      margin-right: 1.172vw;
   }
 
   @media (max-width: 1024px) {
