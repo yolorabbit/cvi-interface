@@ -27,14 +27,6 @@ const tabs = {
 
 const platformConfig = {
   tabs,
-  contractsMapped: {
-    [chainNames.Matic]: { 
-      "PositionRewards": "PositionRewardsV3",
-      "Staking": "StakingV2",
-      "FeesCalculatorV3": "FeesCalculatorV4",
-      "CVIOracle": "CVIOracleV3"
-    }, 
-  },
   tokens: {
     [chainNames.Ethereum]: {
       usdt: {

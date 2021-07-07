@@ -6,6 +6,7 @@ import { customFixed, toBN, toDisplayAmount } from "utils";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { convert, getPrice, getChainName } from './utils';
 import * as TheGraph from 'graph/queries';
+import config from "config/config";
 
 export const getTokenData = async (contract) => {
     if(!contract) return null;
@@ -111,8 +112,8 @@ const web3Api = {
     getTotalGoviRewards: async (contracts) => {
         try {
             const chainName = await getChainName();
-            const PositionRewards = contracts[platformConfig.contractsMapped?.[chainName]?.["PositionRewards"] ?? "PositionRewards"];
-            const PositionRewardsV2 = contracts[platformConfig.contractsMapped?.[chainName]?.["PositionRewardsV2"] ?? "PositionRewardsV2"];
+            const PositionRewards = contracts[config.contractsMapped?.[chainName]?.["PositionRewards"]];
+            const PositionRewardsV2 = contracts[config.contractsMapped?.[chainName]?.["PositionRewardsV2"] ?? "PositionRewardsV2"];
 
             let usdtMaxPositionRewards = toBN("0"), 
             ethMaxPositionRewards = toBN("0"),
@@ -160,7 +161,6 @@ export const useTokensApi = (type) => {
     }, [selectedNetwork, contracts, library, type]);
 
     return data
-
 }
 
 export default web3Api;

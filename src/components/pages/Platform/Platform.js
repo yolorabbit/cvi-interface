@@ -11,11 +11,13 @@ import Container from 'components/Layout/Container';
 import Form from './Form';
 import platformConfig from 'config/platformConfig';
 import PlatformTables from './PlatformTables';
+import useCvi from 'components/Hooks/Cvi';
 import './Platform.scss';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
-    
+    useCvi();
+
     return useMemo(() => {
         return (
             <div className="platform-component">

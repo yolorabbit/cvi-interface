@@ -15,7 +15,6 @@ import Web3ReactManager from 'components/Web3ReactManager';
 import './App.scss';
 import { useEffect, useRef } from 'react';
 import { ContractsContext } from 'contracts/ContractContext';
-import { uniqueId } from 'lodash';
 import { useSelector } from 'react-redux';
 
 const App = () => {

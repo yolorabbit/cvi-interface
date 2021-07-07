@@ -1,4 +1,20 @@
+import { chainNames } from "connectors";
+
 const config = {
+  contractsMapped: {
+    [chainNames.Matic]: { 
+      "PositionRewards": "PositionRewardsV3",
+      "Staking": "StakingV2",
+      "FeesCalculatorV3": "FeesCalculatorV4",
+      "CVIOracle": "CVIOracleV3"
+    }, 
+    [chainNames.Ethereum]: { 
+      "PositionRewards": "PositionRewards",
+      "Staking": "Staking",
+      "FeesCalculatorV3": "FeesCalculatorV3",
+      "CVIOracle": "CVIOracle"
+    }, 
+  },
   isMainnet: process.env.NODE_ENV === "production",
   routes: {
     platform: {
@@ -29,6 +45,15 @@ const config = {
        FAILED: "FAILED",
        NOTICE: "NOTICE"
     },
+  },
+  cviInfoCurrencyIndex: { // index of api.cvx.finance/cvx (cvxInfo[index][cviInfCurrencyIndex])
+    CVI: 1,
+    BTC: 2,
+    ETH: 3
+  },
+  volatilityKey: {
+    BTC: "btcVolatilityInfo",
+    ETH: "ethVolatilityInfo"
   },
   web3ProviderId: "NETWORK",
   networkStatuses: {

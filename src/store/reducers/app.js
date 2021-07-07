@@ -7,7 +7,13 @@ import config from 'config/config';
 const initialState = {
     alerts: [],
     selectedNetwork: chainNames[localStorage.getItem('selectedNetwork')] || chainNames.Ethereum,
-    networkStatus: 'disconnected'
+    networkStatus: 'disconnected',
+    cviInfo: {
+        cviInfo: null,
+        btcVolatilityInfo: null,
+        ethVolatilityInfo: null,
+        series: []
+    },
 };
 
 export const appReducer = (state = initialState, action) => {
@@ -29,6 +35,15 @@ export const appReducer = (state = initialState, action) => {
         case actionTypes.SET_NETWORK_STATUS: {
             if(!config.networkStatuses[action.status]) return state;
             return { ...state, networkStatus: action.status}
+        }
+        case actionTypes.SET_CVI_INFO: {
+            return { 
+                ...state, 
+                cviInfo: {
+                    ...state.cviInfo,
+                    ...action.data
+                }
+            }
         }
         default:
             return state;
