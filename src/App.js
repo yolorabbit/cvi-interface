@@ -32,8 +32,8 @@ const App = () => {
 
   return (
     <div className="app-component" ref={appRef}>
+      <NotificationList />
       <Web3ReactManager key={selectedNetwork}>
-        <NotificationList />
         <ContractsContext>
           <Router>
             <Navbar />

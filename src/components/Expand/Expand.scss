@@ -1,6 +1,22 @@
 .expand-component {
    width: 100%;
 
+   & .row-item-component {
+      & .row-item-component {
+         @media (max-width: 1365px){    
+            margin-top: 0.586vw;
+         }
+
+         @media (max-width: 1024px){    
+            margin-top: 1.043vw;
+         }
+
+         @media (max-width: 767px){    
+            margin-top: 2.222vw;
+         }
+      }
+   }
+
    &.expanded {
       .expand-component__header {
          background-color: #182f5d;
@@ -94,7 +110,6 @@
          }
 
          &:nth-last-child(2) {
-            margin-left: auto;
             margin-right: 2.608vw;
          }
 

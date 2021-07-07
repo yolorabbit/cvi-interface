@@ -31,7 +31,7 @@ const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
             {!isTablet && <> 
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
-                    <Coin token={token} /> : 
+                    <Coin token={token} showName /> : 
                     <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
                 />
                 <RowItem content={<Value text="300" subText={`${token?.toUpperCase()} (0.03%)`} bottomText={"$468"} /> } />
@@ -67,9 +67,12 @@ const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
             <RowItem content={
                 stakingProtocols[protocol] === stakingProtocols.platform ? 
                 <Coin token={token} /> : 
-                <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
+                <> 
+                    <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} hideNames />
+                    {protocol !== "platform" && <RowItem content={<Value text="10,000" subText={`${token?.toUpperCase()} (0.01233%)`} bottomText={`$468 (${protocol})`} /> } /> }
+                </>} 
             />
-            <RowItem content={<Value text="10,000" subText={`${token?.toUpperCase()} (0.01233%)`} bottomText={"$468"} /> } />
+            {protocol === "platform" && <RowItem content={<Value text="10,000" subText={`${token?.toUpperCase()} (0.01233%)`} bottomText={`$468 (${protocol})`} /> } /> }
             {!isMobile && <RowItem type="action" content={unstakeController} /> }
         </>
     }

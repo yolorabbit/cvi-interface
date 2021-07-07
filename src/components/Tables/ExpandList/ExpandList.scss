@@ -87,6 +87,10 @@
             &.expanded {
                 & .expand-component__header {
                     background-color: #182f5d;
+
+                    & .stake-component__container--button {
+                        margin-left: auto;
+                    }
                 }
             }
 

@@ -37,8 +37,14 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
                     <Coin token={token} showName /> : 
                     <Pairs leftToken={leftToken} rightToken={rightToken} label={label} protocol={protocol} />} 
                 />
-                <RowItem content={<Value text="300" subText={label ?? `${token?.toUpperCase()}`} bottomText={"$468"} /> } />
             </>}
+
+            <RowItem 
+                header={header["Your wallet balance"].label}
+                content={<Value text="300" 
+                subText={label ?? `${token?.toUpperCase()}`} 
+                bottomText={"$468"} /> } 
+            />
 
             <RowItem 
                 header={header.TVL.label} 
@@ -59,10 +65,9 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
         return <>
             <RowItem content={
                 stakingProtocols[protocol] === stakingProtocols.platform ? 
-                <Coin token={token} /> : 
+                <Coin token={token} showName /> : 
                 <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
             />
-            <RowItem content={<Value text="300" subText={label ?? `${token?.toUpperCase()}`} bottomText={"$468"} /> } />
             {!isMobile && <RowItem type="action" content={stakeController} /> }
         </>
     }
