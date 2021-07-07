@@ -24,7 +24,9 @@ const App = () => {
 
   useEffect(() => {
     if (appRef.current?.nextSibling?.textContent === ",") {
-      appRef.current?.nextSibling.remove();
+      setTimeout(() => {
+        appRef.current?.nextSibling.remove();
+      }, 1000)
     }
   }, [appRef]);
 
