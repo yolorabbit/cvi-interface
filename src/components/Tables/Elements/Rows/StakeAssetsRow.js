@@ -19,6 +19,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
 
     const stakeController = useMemo(() => {
         return <ActionController 
+            disabled={!account}
             amountLabel="Select amount to stake"
             isModal 
             token={token}
@@ -26,7 +27,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
             setAmount={setAmount}
             type={stakingConfig.actionsConfig.stake.key}
         />
-    }, [token, amount]);
+    }, [token, amount, account]);
 
     const RowData = useMemo(() => (
         <> 
@@ -49,7 +50,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
                 content={<Apy apyList={["189%", "2.01%", "0.28%"]} />} 
             />
 
-            {(!isTablet || isMobile) && <RowItem content={stakeController} hide={!account} />}
+            {(!isTablet || isMobile) && <RowItem content={stakeController} />}
         </>
         //eslint-disable-next-line
     ), [token, isTablet, isMobile, amount]);

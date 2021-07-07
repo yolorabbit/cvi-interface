@@ -1,3 +1,12 @@
+.action-controller-component {
+    & button {
+        &:disabled {
+            opacity: 0.4;
+            cursor: initial;
+        }
+    }
+}
+
 .claim-component {
     background-color: rgba(43, 222, 193, 0.1);
     vertical-align: middle;

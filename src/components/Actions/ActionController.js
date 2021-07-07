@@ -5,9 +5,9 @@ import { platformViewContext } from 'components/Context';
 import Action from './Action';
 
 const actionControllerContext = createContext({});
-export const ActionControllerContext = ({token, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen}) => {
+export const ActionControllerContext = ({disabled, token, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen}) => {
   return (
-    <actionControllerContext.Provider value={{ type, token, leverage, amount, setAmount, isModal, isOpen, setIsOpen }}>
+    <actionControllerContext.Provider value={{disabled, type, token, leverage, amount, setAmount, isModal, isOpen, setIsOpen }}>
       <Action />
     </actionControllerContext.Provider>
   )
@@ -18,12 +18,13 @@ export const useActionController = () => {
   return context;
 }
 
-const ActionController = ({type, amountLabel = "Amount", token, leverage, amount, setAmount, isModal}) => {
+const ActionController = ({type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, isModal}) => {
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
 
   const renderActionComponent = (isModal = false) => {
     return <ActionControllerContext 
+        disabled={disabled}
         type={type} 
         token={token} 
         leverage={leverage} 

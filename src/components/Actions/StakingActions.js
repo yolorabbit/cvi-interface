@@ -3,19 +3,16 @@ import stakingConfig from "config/stakingConfig";
 import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
-    const { type, token, isModal, isOpen, setIsOpen, amount, setAmount, leverage } = useActionController();
+    const {disabled, type, token, isModal, isOpen, setIsOpen, amount, setAmount, leverage } = useActionController();
 
     const resetForm = () => {
         setAmount("")
     }
 
     const onClick = () => {
+        if(disabled) return;
         if(isModal && !isOpen) return setIsOpen(true);
         resetForm();
-
-        console.log(token);
-        console.log(amount);
-        console.log(leverage);
 
         return {
             stake: () => {
@@ -39,6 +36,7 @@ const StakingActions = () => {
                         className="unstake-component__container--button" 
                         buttonText="Unstake" 
                         onClick={() => onClick?.()?.[type]?.()}
+                        disabled={disabled}
                     />
                     {!isModal && isOpen && <span className="pay-attention">
                      * Pay Attention: After unstaking your LP tokens, you won't be able to withdraw your liquidity for up to 72 hours.
@@ -53,6 +51,7 @@ const StakingActions = () => {
                             className="stake-component__container--button"
                             buttonText="Stake" 
                             onClick={() => onClick?.()?.[type]?.()} 
+                            disabled={disabled}
                         />
                     </div>
                 </div>
@@ -61,7 +60,12 @@ const StakingActions = () => {
                 return  <div className="claim-component">
                     <b>100,587.01164174</b>
                     <span>&nbsp;GOVI (2,700 GOVI) </span>
-                    <Button className="claim-button" buttonText="Claim" onClick={() => {}} /> 
+                    <Button 
+                        className="claim-button" 
+                        buttonText="Claim" 
+                        onClick={() => {}} 
+                        disabled={disabled} 
+                    /> 
                 </div>
             }
                 
