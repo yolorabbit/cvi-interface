@@ -17,7 +17,6 @@ export const useWeb3Api = (type, selectedCurrency, body) => {
     const ref = useRef(null);
 
     const fetchWeb3ApiData = async (contracts, tokens) => {
-        console.log("fetch");
         try {
             if(web3Api[type]) {
                 if(selectedCurrency) {
@@ -35,9 +34,9 @@ export const useWeb3Api = (type, selectedCurrency, body) => {
     }
 
     useEffect(() => {
-        console.log(body);
         if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
         const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
+        setData(null);
         ref.current = setTimeout(() => {
             fetchWeb3ApiData(contracts, tokens);
         }, 300);

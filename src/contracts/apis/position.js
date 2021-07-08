@@ -1,4 +1,4 @@
-import { getBalance, toTokenAmount } from "contracts/utils";
+import { getBalance } from "contracts/utils";
 import { getTokenData } from "contracts/web3Api";
 import { getPlatformType, toBN } from "utils";
 

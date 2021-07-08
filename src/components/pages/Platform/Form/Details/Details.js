@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveToken } from '../../../../Hooks';
 import './Details.scss';
-import { toTokenAmount } from "contracts/utils";
 
 const Details = ({selectedCurrency, amount, leverage}) => {
     const { activeView } = useContext(platformViewContext);
@@ -32,13 +31,13 @@ const Details = ({selectedCurrency, amount, leverage}) => {
 const TradeView = ({amount, leverage, selectedCurrency}) => {
     const activeToken = useActiveToken(selectedCurrency);
     const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
-    const tokenAmount = toBN(toBNAmount(amount, activeToken.decimals));
+    const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const body = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
     const purchaseFee = useWeb3Api("getOpenPositionFee", selectedCurrency, body);
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
    
     return useMemo(() => {
-        const receiveAmount = toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
+        const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
         
         return  (
             <> 
@@ -75,7 +74,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat title="CVI Index" value={cviInfo?.price} />
             </>
         )
-    }, [collateralRatioData, cviInfo?.price, amount, tokenAmount, leverage, purchaseFee, selectedCurrency, activeToken]) 
+    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount]) 
    
 }
 
