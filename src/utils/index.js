@@ -43,8 +43,6 @@ export const customFixed = (num, fixed) => {
     return Number(fixed_num)
 }
 
-const DECIMALS = 6;
-
 
 export const toFixed = (x) => {
     var data= String(x).split(/[eE]/);
@@ -67,6 +65,7 @@ export function fromTokenAmountToUnits(tokenAmount, index) {
 }
 
 export const toDisplayAmount = (amount, magnitude = 0) => {
+    if(amount === "N/A") return BigNumber("0");
     const mag = BigNumber(10).pow(BigNumber(magnitude));
     return BigNumber(amount).div(mag).toString();
 }
@@ -77,13 +76,11 @@ export const toBNAmount = (amount, magnitude = 0) => {
 };
 
 export const toBN = (amount, magnitude = 0) => {
+    console.log(amount);
+    if(amount === "N/A") return new BN("0");
     const mag = new BN(10).pow(new BN(magnitude));
     if(amount === null) return new BN("0");
     return new BN(isNaN(amount) || !amount ? "0" : amount).mul(mag);
-};
-
-export const toTokenAmount = amount => {
-    return toBN(amount, DECIMALS);
 };
 
 export const fromBN = (amount, magnitude = 0) => {

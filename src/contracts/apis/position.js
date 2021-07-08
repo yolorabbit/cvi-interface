@@ -1,6 +1,6 @@
-import { getBalance } from "contracts/utils";
+import { getBalance, toTokenAmount } from "contracts/utils";
 import { getTokenData } from "contracts/web3Api";
-import { getPlatformType, toBN, toTokenAmount } from "utils";
+import { getPlatformType, toBN } from "utils";
 
 const MAX_CVI_VALUE = 20000;
 async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount, cviValue, leverage, type) {
@@ -67,12 +67,11 @@ async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {
     return maxFeePercent !== 0 ? tokenAmount.mul(openFeePrecent).div(maxFeePercent) : 0;
 }
 
-async function getOpenPositionFee(contracts, token, {leverage = 1, amount}) {
+async function getOpenPositionFee(contracts, token, {leverage = 1, tokenAmount}) {
     try {
         const tokenData = await getTokenData(contracts[token.rel.contractKey]);
         const { getCVILatestRoundData  } = contracts[token.rel.cviOracle].methods || {};
         const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
-        const tokenAmount = toTokenAmount(amount, token.decimals);
         let openFeeAmount = await getOpenPositionFeePercent(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenAmount);
         const { fee, percent } = await getBuyingPremiumFee(contracts[token.rel.platform], tokenData, contracts[token.rel.feesCalc], contracts[token.rel.feesModel], tokenAmount, cviValue, leverage, token.key);
         return { openFee: openFeeAmount.add(fee).mul(toBN(leverage)), buyingPremiumFeePercent: percent }

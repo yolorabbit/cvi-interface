@@ -11,6 +11,7 @@ let contracts = {
 };
 
 export const toTokenAmount = (amount, decimals) => {
+  if(amount === "N/A") return toBN("0");
   return toBN(amount, decimals);
 };
 
