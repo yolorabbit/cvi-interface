@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { commaFormatted, customFixed } from 'utils';
 import Button from 'components/Elements/Button';
 import Input from 'components/Elements/Input';
@@ -7,7 +7,11 @@ import './InputAmount.scss';
 import InputGroup from 'components/InputGroup';
 
 const InputAmount = ({label = "Amount", breakLine, amount, setAmount, symbol, decimals = 6, balance, availableBalanceDecimals, availableText = "Your available balance:", error}) => {
-    
+    useEffect(() => {
+        setAmount("");
+        //eslint-disable-next-line
+    }, [symbol])
+
     const _onChangeNumber = (value) => {
         if(value?.split && value?.split('.')?.length > 0 && value?.split('.')?.[1]?.length > decimals) return;
         
