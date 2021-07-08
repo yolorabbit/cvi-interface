@@ -32,6 +32,7 @@ export async function getERC20Contract(address) {
   try {
     const chainName = await getChainName();
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
+    console.log(contractsJSON);
     return new Contract(contractsJSON["ERC20"].abi, address);
   } catch(error) {
     console.log(error);
@@ -138,7 +139,9 @@ export async function convert(amount, fromToken, toToken) {
 
 
 export async function getBalance(address, tokenAddress = undefined) {
+  console.log(window.web3);
   const web3 = new Web3(window.web3.currentProvider);
+  console.log(web3.eth);
   if (tokenAddress) return (await getERC20Contract(tokenAddress)).methods.balanceOf(address).call();
   else return await web3.eth.getBalance(address);
 }
