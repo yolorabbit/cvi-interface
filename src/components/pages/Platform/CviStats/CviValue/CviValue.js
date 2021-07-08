@@ -15,7 +15,7 @@ const CviValue = () => {
                     <b className="cvi-info-component__top--value">{cviInfo?.price}</b>
                     <div className={`cvi-info-component__top--info ${isPositive ? 'high' : 'low'}`}>
                         <span>{cviInfo?.lastTimeChange}</span> 
-                        <span>({`${isPositive ? '+' : '-'}`}{cviInfo?.lastTimeChangePrecentage}%)</span>
+                        <span>({`${isPositive ? '+' : ''}`}{cviInfo?.lastTimeChangePrecentage}%)</span>
                         <img src={require(`images/icons/${isPositive ? 'up-arrow' : 'down-arrow'}.svg`).default} alt="arrow" />
                     </div>
                 </div>
