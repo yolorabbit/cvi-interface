@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useContext } from "react";
+import { useSelector } from "react-redux";
 import { viewportContext } from "../Context";
+import platformConfig from '../../config/platformConfig';
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);
@@ -25,6 +27,11 @@ export const useIsTablet = () => {
 export const useIsLaptop = () => {
   const { width } = useContext(viewportContext);
   return width <= 1365
+}
+
+export const useActiveToken = (selectedCurrency) => {
+  const { selectedNetwork } = useSelector(({app}) => app);
+  return platformConfig.tokens[selectedNetwork][selectedCurrency?.toLowerCase()];
 }
 
 export const useInDOM = () => {

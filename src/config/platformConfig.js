@@ -32,24 +32,23 @@ const platformConfig = {
       usdt: {
         key: "usdt",
         decimals: 6,
-        fixedDecimals: 2,
+        fixedDecimals: 6,
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
           feesCalc: "FeesCalculatorV2",
-          feesCalcV3: "FeesCalculatorV3",
-          feesModel: "USDTPlatform",
+          feesModel: "FeesModelV2",
           cviOracle: "CVIOracle"
         },
       },
       eth: {
         key: "eth",
         decimals: 18,
-        fixedDecimals: 8,
+        fixedDecimals: 6,
         rel: {
           contractKey: "WETH",
           platform: "ETHPlatform",
-          feesCalc: "FeesCalculatorV4",
+          feesCalc: "FeesCalculatorV3",
           feesModel: "FeesModelV2",
           cviOracle: "CVIOracle"
         },

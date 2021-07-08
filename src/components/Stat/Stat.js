@@ -5,8 +5,8 @@ import React from 'react'
 import { commaFormatted } from 'utils';
 import './Stat.scss';
 
-const Stat = ({name, hideTooltip, prefix = "", title, format, className, formats, value, values, hideNa }) => {
-    const { prefix: _prefix = prefix, suffix = "", title: configTitle = "", className: _className, tooltip: { left, content, mobileLeft} = {} } = config?.statisticsDetails?.[name] ?? {};
+const Stat = ({name, hideTooltip, prefix = "", _suffix, title, format, className, formats, value, values, hideNa }) => {
+    const { prefix: _prefix = prefix, suffix = _suffix, title: configTitle = "", className: _className, tooltip: { left, content, mobileLeft} = {} } = config?.statisticsDetails?.[name] ?? {};
  
     return (
         <div className={`stat-component ${className ?? ''} ${_className ?? ''} ${values !== "N/A" && values?.length > 0 ? 'multiline' : ''}`}>

@@ -3,6 +3,7 @@ import { parseHex, toBN } from '../../utils';
 import { supportedNetworksConfigByEnv, chainNames, graphEndpoints } from '../../connectors';
 import { Pair, Route, Token, TokenAmount, WETH } from '@uniswap/sdk';
 import Contract from 'web3-eth-contract';
+import Web3 from 'web3';
 
 let contracts = {
     [chainNames.Ethereum]: {},
@@ -23,8 +24,18 @@ export function getWeb3Contract(contractName, chainName) {
 }
 
 export function getUNIV2Contract(address, chainName) {
+  const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
+  return new Contract(contractsJSON["UNIV2"].abi, address);
+}
+
+export async function getERC20Contract(address) {
+  try {
+    const chainName = await getChainName();
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
-    return new Contract(contractsJSON["UNIV2"].abi, address);
+    return new Contract(contractsJSON["ERC20"].abi, address);
+  } catch(error) {
+    console.log(error);
+  }
 }
 
 
@@ -123,4 +134,11 @@ export async function convert(amount, fromToken, toToken) {
     return toBN(multipliedPrice.toFixed(0))
       .mul(toBN(amount))
       .div(toBN(10).pow(toBN(fromToken.decimals)));
+}
+
+
+export async function getBalance(address, tokenAddress = undefined) {
+  const web3 = new Web3(window.web3.currentProvider);
+  if (tokenAddress) return (await getERC20Contract(tokenAddress)).methods.balanceOf(address).call();
+  else return await web3.eth.getBalance(address);
 }

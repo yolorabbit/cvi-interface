@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
-import { ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
+import { chainNames, ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
+import { getChainName } from '../contracts/utils';
 
 const removeZerosFromEndOfNumber = (number) => {
     if(number.includes('.')){
@@ -115,4 +116,20 @@ export const chainNameToChainId = (_chainName) => {
     const network = Object.values(supportedNetworksConfigByEnv).find(({chainName}) => chainName === _chainName);
     if(!network) return defaultChainId;
     return parseHex(network.chainId);
+ }
+
+ export const customFixedTokenValue = (value, toFixed, decimals) => {
+     return customFixed(toDisplayAmount(value, decimals), toFixed)
+ }
+
+ export const getPlatformType = async (tokenName) => {
+    try {
+         const chainName = await getChainName();
+         if(tokenName === "usdt" && chainName === chainNames.Ethereum) return "v1";
+         if(tokenName === "eth" && chainName === chainNames.Ethereum) return "eth";
+         return "v2";
+    } catch(error) {
+        console.log(error);
+        return "v2";
+    }
  }

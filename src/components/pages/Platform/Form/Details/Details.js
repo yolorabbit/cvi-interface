@@ -1,9 +1,10 @@
 import { platformViewContext } from "components/Context";
 import { useContext, useMemo } from "react";
-import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
+import { commaFormatted, customFixed, customFixedTokenValue, toBN, toDisplayAmount } from "utils";
 import Stat from "components/Stat";
 import { useSelector } from "react-redux";
 import { useWeb3Api } from "contracts/useWeb3Api";
+import { useActiveToken } from '../../../../Hooks';
 import './Details.scss';
 
 const Details = ({selectedCurrency, amount, leverage}) => {
@@ -28,19 +29,16 @@ const Details = ({selectedCurrency, amount, leverage}) => {
 }
 
 const TradeView = ({amount, leverage, selectedCurrency}) => {
-    console.log(amount);
+    const activeToken = useActiveToken(selectedCurrency);
+    
     const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
-    const body = useMemo(() => {
-        return {
-            amount: toBN(amount)
-        }
-    }, [amount])
-
+    const body = useMemo(() => ({
+        amount: toBN(amount)
+    }), [amount])
+    
     const purchaseFee = useWeb3Api("getOpenPositionFee", selectedCurrency, body);
-
-    console.log(purchaseFee);
-
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
+   
     return useMemo(() => {
 
         return  (
@@ -48,15 +46,21 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat 
                     name="collateralRatio" 
                     value={collateralRatioData?.collateralRatio} 
-                    format={`${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0)}%`}
-                    className={`bold ${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0) >= 80 ? 'low' : 'high'}`} 
+                    format={`${customFixedTokenValue(collateralRatioData?.collateralRatio, 0, 8)}%`}
+                    className={`bold ${customFixedTokenValue(collateralRatioData?.collateralRatio, 0, 8) >= 80 ? 'low' : 'high'}`} 
                 />
         
                 {leverage && <Stat className="bold" title="Leverage" value={leverage} /> }
     
                 <Amount title="Buy" amount={amount} selectedCurrency={selectedCurrency} />
     
-                <Stat title="Purchase fee" value={`0.10007213 ${selectedCurrency}`} className="low" />
+                <Stat 
+                    title="Purchase fee" 
+                    value={purchaseFee === "N/A" ? purchaseFee : purchaseFee?.openFee?.toString()} 
+                    _suffix={selectedCurrency}
+                    className="low" 
+                    format={customFixedTokenValue(purchaseFee?.openFee?.toString(), activeToken.fixedDecimals, activeToken.fixedDecimals)}
+                />
     
                 <Stat className="bold green" title="Your position" value={`3.93287142 ${selectedCurrency}`} />
     
@@ -67,7 +71,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat title="CVI Index" value={cviInfo?.price} />
             </>
         )
-    }, [collateralRatioData, cviInfo?.price, amount, leverage, selectedCurrency]) 
+    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken]) 
    
 }
 
