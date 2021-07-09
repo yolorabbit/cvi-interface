@@ -25,15 +25,31 @@ const stakingConfig = {
       [stakingProtocols.platform]: {
         "cvi-usdt-lp": {
           key: "cvi-usdt-lp",
-          protocol: stakingProtocols.platform
+          protocol: stakingProtocols.platform,
+          decimals: 18,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            platform: "USDTPlatform",
+            stakingRewards: "USDTLPStakingRewards",
+            token: "USDT"
+          }
         },
         "cvi-eth-lp": {
           key: "cvi-eth-lp",
-          protocol: stakingProtocols.platform
+          protocol: stakingProtocols.platform,
+          decimals: 18,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            platform: "ETHPlatform",
+            stakingRewards: "ETHLPStakingRewards",
+            token: "WETH"
+          }
         },
         "govi": {
           key: "govi",
-          protocol: stakingProtocols.platform
+          protocol: stakingProtocols.platform,
+          decimals: 18,
+          rewardsTokens: ["USDT", "WETH"],
         }
       },
       [stakingProtocols.uniswap]: {

@@ -146,3 +146,16 @@ export async function getBalance(address, tokenAddress = undefined) {
   if (tokenAddress) return (await getERC20Contract(tokenAddress)).methods.balanceOf(address).call();
   else return await web3.eth.getBalance(address);
 }
+
+export const aprToAPY = (apr, period = 365 * 24 * 60) => {
+  const blocksPerMin = period === 365 ? 1 : 4;
+  const n = period * blocksPerMin;
+  const apy = ((1 + apr / 100 / n) ** n - 1) * 100;
+  return apy === Infinity || apy > 1000000 ? 1000000 : apy;
+};
+
+export async function fromLPTokens(platform, lpTokenAmount) {
+  let totalSupply = toBN(await platform.methods.totalSupply().call());
+  let totalBalance = toBN(await platform.methods.totalBalanceWithAddendum().call());
+  return totalSupply.isZero() ? toBN(0)  : lpTokenAmount.mul(totalBalance).div(totalSupply);
+}
