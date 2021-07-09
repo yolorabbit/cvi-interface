@@ -1,6 +1,6 @@
 import Paginator from 'components/Paginator';
 import Tooltip from 'components/Tooltip';
-import React from 'react';
+import React, { useMemo } from 'react';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
 import './Table.scss';
@@ -19,8 +19,8 @@ const Table = () => {
         activeTab,
         subHeaders
     } = useDataController();
-
-    return (
+    return useMemo(() => {
+        return (
         <div className={`table-component ${activeTab?.toLowerCase()}`}>
             <table>
                 <thead>
@@ -64,7 +64,8 @@ const Table = () => {
                 numOfpageBtndsToDispay={0}
             />}
         </div>
-    )
+        //eslint-disable-next-line
+    )}, []);
 }
 
 export default Table;

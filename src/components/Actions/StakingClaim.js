@@ -1,10 +1,10 @@
 import Button from 'components/Elements/Button';
 import React from 'react'
 
-const StakingClaim = () => {
+const StakingClaim = ({claim}) => {
     return (
         <div className="claim-component">
-            <b>779.5548595 GOVI</b>
+            <b>{`${claim.amount} ${claim.symbol }`}</b>
             <span>&nbsp;</span>
             <Button className="claim-button" buttonText="Claim" onClick={() => {}} /> 
         </div>

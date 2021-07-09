@@ -29,8 +29,8 @@ const StakingAssets = ({type}) => {
                     {isTablet ? <ExpandList /> : <Table />}
                 </DataController>
             </div>
-        )
-    }, [isTablet, type, selectedNetwork]);
+        ) //eslint-disable-next-line
+    }, [isTablet, selectedNetwork]);
 }
 
 export default StakingAssets;
