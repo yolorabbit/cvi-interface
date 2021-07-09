@@ -76,7 +76,6 @@ export const toBNAmount = (amount, magnitude = 0) => {
 };
 
 export const toBN = (amount, magnitude = 0) => {
-    console.log(amount);
     if(amount === "N/A") return new BN("0");
     const mag = new BN(10).pow(new BN(magnitude));
     if(amount === null) return new BN("0");
