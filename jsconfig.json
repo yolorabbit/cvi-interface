@@ -2,6 +2,7 @@
     "compilerOptions": {
       "baseUrl": "./src",
       "paths": {
+        "**/*": ["**/*"],
         "SASS_PATH": ["./node_modules;./src"]
       }
     }
