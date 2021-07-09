@@ -31,7 +31,8 @@ const stakingConfig = {
           rel: {
             platform: "USDTPlatform",
             stakingRewards: "USDTLPStakingRewards",
-            token: "USDT"
+            token: "USDT",
+            tokenDecimals: [18]
           }
         },
         "cvi-eth-lp": {
@@ -42,7 +43,8 @@ const stakingConfig = {
           rel: {
             platform: "ETHPlatform",
             stakingRewards: "ETHLPStakingRewards",
-            token: "WETH"
+            token: "WETH",
+            tokenDecimals: [18]
           }
         },
         "govi": {
@@ -50,6 +52,10 @@ const stakingConfig = {
           protocol: stakingProtocols.platform,
           decimals: 18,
           rewardsTokens: ["USDT", "WETH"],
+          rel: {
+            stakingRewards: "Staking",
+            tokenDecimals: [6, 18]
+          }
         }
       },
       [stakingProtocols.uniswap]: {

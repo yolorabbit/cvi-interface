@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { contractsContext } from "contracts/ContractContext";
 import stakingConfig from 'config/stakingConfig';
 import { useWeb3React } from "@web3-react/core";
-import { commaFormatted, customFixed, toDisplayAmount } from "utils";
+import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { convert } from "contracts/utils";
 
@@ -20,10 +20,10 @@ const initialState = {
       symbol: null
     },
     apy: null,
-    claim: {
+    claim: [{
       amount: null,
       symbol: null
-    },
+    }],
     status: null
 }
 
@@ -38,10 +38,17 @@ const useStakedData = (chainName, protocol, tokenName) => {
   const decimalsCountDisplay = 8;
 
   const getStakedAmountAndPoolShare = async (cb) => {
-    const data = await web3Api.getStakedAmountAndPoolShare(contracts[tokenRel.stakingRewards], account, token.decimals);
+    const getDataByTokenName = async () => {
+      switch (tokenName) {
+        case 'govi':
+          return web3Api.getStakedAmountAndPoolShareGOVI(contracts[tokenRel.stakingRewards], account, token.decimals)
+        default: 
+          return web3Api.getStakedAmountAndPoolShare(contracts[tokenRel.stakingRewards], account, token.decimals)
+      }
+    }
+    const data = await getDataByTokenName();
     const USDTData = await getTokenData(contracts.USDT);
     const tokenData = await getTokenData(contracts[tokenRel.token]);
-
     // TODO: Fix ETH conver price
     const stakedAmountUSD = await convert(data.stakedTokenAmount, tokenData, USDTData);
 
@@ -53,14 +60,24 @@ const useStakedData = (chainName, protocol, tokenName) => {
   }
 
   const getClaimableRewards = async (cb) => {
-    const claimableRewards = await contracts[tokenRel.stakingRewards].methods.earned(account).call();
-    const claim = {
-        amount: commaFormatted(customFixed(toDisplayAmount(claimableRewards, token.decimals), decimalsCountDisplay)),
-        symbol: "GOVI"
+    const getClaimableRewardsByTokenName = async () => {
+      switch (tokenName) {
+        case 'govi':
+          return await token.rewardsTokens.map(async t => await contracts[tokenRel.stakingRewards].methods.profitOf(account, contracts[t]._address).call());
+        default: 
+          return [await contracts[tokenRel.stakingRewards].methods.earned(account).call()]
+      }
     }
+    const claimableRewards = await (await Promise.allSettled(await getClaimableRewardsByTokenName()))
+    .filter(({status}) => status === "fulfilled")
+    .map(({value}, idx) => ({
+        amount: commaFormatted(customFixed(toDisplayAmount(value, tokenRel.tokenDecimals[idx]), decimalsCountDisplay)),
+        symbol: token.rewardsTokens[idx]
+    }));
+
     cb(() => setStakedData((prev)=> ({
       ...prev,
-      claim
+      claim: claimableRewards
     })));
   }
   
@@ -89,6 +106,7 @@ const useStakedData = (chainName, protocol, tokenName) => {
     const fetchData = async (cb) => {
       getStakedAmountAndPoolShare(cb);
       getClaimableRewards(cb);
+      if(tokenName === "govi") return
       getDailyReward(cb);
       getAPY(cb);
     }

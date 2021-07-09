@@ -19,6 +19,23 @@ const stakingApi = {
             lastStakedAmount: {...lastStakedAmount}
         }
     },
+    getStakedAmountAndPoolShareGOVI: async (staking, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
+        const stakedTokenAmount = await staking.methods.stakes(account).call();
+        const poolSize = await staking.methods.totalStaked().call();
+        const mySharePercentage =  BigNumber(stakedTokenAmount).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
+
+        const lastStakedAmount = {
+          class: mySharePercentage < 0 ? 'low' : 'high',
+          value: `(${customFixed(mySharePercentage, percentageDecimals)}%)`
+        }
+        
+        return {
+            stakedTokenAmount,
+            stakedAmount: commaFormatted(customFixed(toDisplayAmount(stakedTokenAmount, tokenDecimals), decimalsCountDisplay)),
+            poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toDisplayAmount(poolSize, tokenDecimals), decimalsCountDisplay)),
+            lastStakedAmount: {...lastStakedAmount}
+        }
+    },
     getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData, period = 31536000, enforceMax = false) => {
         try {
           const cname = await platform.methods.name().call();
