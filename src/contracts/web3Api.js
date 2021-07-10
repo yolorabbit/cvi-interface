@@ -4,6 +4,7 @@ import * as TheGraph from 'graph/queries';
 import config from "config/config";
 import positionApi from "./apis/position";
 import stakingApi from "./apis/staking";
+import rewardsApi from './apis/rewards';
 
 export const getTokenData = async (contract) => {
     if(!contract) return null;
@@ -164,6 +165,7 @@ const web3Api = {
     },
     ...positionApi,
     ...stakingApi
+    ...rewardsApi
 }
 
 export default web3Api;

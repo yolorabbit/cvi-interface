@@ -10,6 +10,7 @@ import './StakingAssets.scss';
 const StakingAssets = ({type}) => {
     const isTablet = useIsTablet();
     const { selectedNetwork } = useSelector(({app}) => app);
+    console.log("stakling assets");
     
     return useMemo(() => {
         const liquidityMiningProtocols = stakingConfig.tokens[selectedNetwork];

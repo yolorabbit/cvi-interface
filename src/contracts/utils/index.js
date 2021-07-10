@@ -34,6 +34,7 @@ export async function getERC20Contract(address) {
     const chainName = await getChainName();
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
     console.log(contractsJSON);
+    if(!contractsJSON) return;
     return new Contract(contractsJSON["ERC20"].abi, address);
   } catch(error) {
     console.log(error);

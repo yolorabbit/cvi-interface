@@ -117,15 +117,3 @@ export const chainNameToChainId = (_chainName) => {
  export const customFixedTokenValue = (value, toFixed, decimals) => {
      return customFixed(toDisplayAmount(value, decimals), toFixed)
  }
-
- export const getPlatformType = async (tokenName) => {
-    try {
-         const chainName = await getChainName();
-         if(tokenName === "usdt" && chainName === chainNames.Ethereum) return "v1";
-         if(tokenName === "eth" && chainName === chainNames.Ethereum) return "eth";
-         return "v2";
-    } catch(error) {
-        console.log(error);
-        return "v2";
-    }
- }

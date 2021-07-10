@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveToken } from '../../../../Hooks';
 import './Details.scss';
+import { useActiveWeb3React } from "components/Hooks/wallet";
 
 const Details = ({selectedCurrency, amount, leverage}) => {
     const { activeView } = useContext(platformViewContext);
@@ -29,16 +30,21 @@ const Details = ({selectedCurrency, amount, leverage}) => {
 }
 
 const TradeView = ({amount, leverage, selectedCurrency}) => {
+    const { cviInfo } = useSelector(({app}) => app.cviInfo);
+    const { account } = useActiveWeb3React();
     const activeToken = useActiveToken(selectedCurrency);
     const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
-    const body = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
-    const purchaseFee = useWeb3Api("getOpenPositionFee", selectedCurrency, body);
-    const { cviInfo } = useSelector(({app}) => app.cviInfo);
-   
+    const purchaseFeePayload = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
+    const purchaseFee = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload);
+
+    const positionRewardsPayload = useMemo(() => ({ tokenAmount, account} ), [tokenAmount, account]);
+    const positionRewards = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload)
+    console.log(positionRewards);
+
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
-        
+ 
         return  (
             <> 
                 <Stat 
@@ -67,14 +73,19 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     _suffix={selectedCurrency} 
                 />
     
-                <Stat title="Open position reward" value="100 GOVI" />
+                <Stat 
+                    title="Open position reward" 
+                    value={positionRewards === "N/A" ? "N/A" : positionRewards?.toString()}
+                    _suffix="GOVI"
+                    format={customFixedTokenValue(positionRewards?.toString(), 8, activeToken.goviDecimals)}
+                />
     
                 <Stat title="Current funding fee" value={`0.01 ${selectedCurrency}`} />
     
                 <Stat title="CVI Index" value={cviInfo?.price} />
             </>
         )
-    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount]) 
+    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards]) 
    
 }
 

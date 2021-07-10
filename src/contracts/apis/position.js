@@ -1,8 +1,13 @@
 import { getBalance } from "contracts/utils";
 import { getTokenData } from "contracts/web3Api";
-import { getPlatformType, toBN } from "utils";
+import { toBN } from "utils";
 
 const MAX_CVI_VALUE = 20000;
+
+export function fromTokenAmountToUnits(tokenAmount, index) {
+  return toBN(tokenAmount).mul(toBN(MAX_CVI_VALUE)).div(toBN(index));
+}
+
 async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount, cviValue, leverage, type) {
     let tokenContract = tokenData ? tokenData.contract : undefined;
     let balance = toBN(await getBalance(platform._address, tokenContract ? tokenContract._address : undefined));
@@ -39,9 +44,7 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
     return collateralRatio;
 }
 
-async function getBuyingPremiumFee(platform, tokenData, feesCalc, feesModel, tokenAmount, cviValue, leverage = 1, tokenName) {
-    const type = await getPlatformType(tokenName);
-
+async function getBuyingPremiumFee(platform, tokenData, feesCalc, feesModel, tokenAmount, cviValue, leverage = 1, type) {
     let collateralRatio = await getCollateralRatio(platform, feesCalc, tokenData, tokenAmount, cviValue, leverage, type);
     // console.log(`collateralRatio: ${collateralRatio} (${fromBN(collateralRatio, 10) * 100}%)`);
     const turbulence = await feesModel.methods.calculateLatestTurbulenceIndicatorPercent().call();
@@ -67,13 +70,15 @@ async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {
     return maxFeePercent !== 0 ? tokenAmount.mul(openFeePrecent).div(maxFeePercent) : 0;
 }
 
-async function getOpenPositionFee(contracts, token, {leverage = 1, tokenAmount}) {
+export async function getOpenPositionFee(contracts, token, {leverage = 1, tokenAmount}) {
     try {
         const tokenData = await getTokenData(contracts[token.rel.contractKey]);
+        console.log(tokenData);
         const { getCVILatestRoundData  } = contracts[token.rel.cviOracle].methods || {};
         const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
+        console.log(cviValue);
         let openFeeAmount = await getOpenPositionFeePercent(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenAmount);
-        const { fee, percent } = await getBuyingPremiumFee(contracts[token.rel.platform], tokenData, contracts[token.rel.feesCalc], contracts[token.rel.feesModel], tokenAmount, cviValue, leverage, token.key);
+        const { fee, percent } = await getBuyingPremiumFee(contracts[token.rel.platform], tokenData, contracts[token.rel.feesCalc], contracts[token.rel.feesModel], tokenAmount, cviValue, leverage, token.type);
         return { openFee: openFeeAmount.add(fee).mul(toBN(leverage)), buyingPremiumFeePercent: percent }
     } catch(error) {
         console.log(error);

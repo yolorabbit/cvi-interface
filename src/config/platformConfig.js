@@ -33,24 +33,30 @@ const platformConfig = {
         key: "usdt",
         decimals: 6,
         fixedDecimals: 6,
+        goviDecimals: 18,
+        type: "v1",
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
           feesCalc: "FeesCalculatorV2",
           feesModel: "FeesModelV2",
-          cviOracle: "CVIOracle"
+          cviOracle: "CVIOracle",
+          rewards: "PositionRewards"
         },
       },
       eth: {
         key: "eth",
         decimals: 18,
-        fixedDecimals: 6,
+        fixedDecimals: 8,
+        goviDecimals: 18,
+        type: "eth",
         rel: {
           contractKey: "WETH",
           platform: "ETHPlatform",
           feesCalc: "FeesCalculatorV3",
           feesModel: "FeesModelV2",
-          cviOracle: "CVIOracle"
+          cviOracle: "CVIOracle",
+          rewards: "PositionRewardsV2"
         },
       },
       coti: {
@@ -62,10 +68,16 @@ const platformConfig = {
       usdt: {
         key: "usdt",
         decimals: 6,
-        fixedDecimals: 2,
+        fixedDecimals: 6,
+        goviDecimals: 18,
+        type: "v2",
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
+          feesCalc: "FeesCalculatorV4",
+          feesModel: "USDTPlatform",
+          rewards: "PositionRewardsV3",
+          cviOracle: "CVIOracleV3"
         },
       },
       usdc: {
