@@ -4,7 +4,7 @@ import stakingConfig from 'config/stakingConfig';
 import { useWeb3React } from "@web3-react/core";
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
-import { convert, fromLPTokens } from "contracts/utils";
+import { convert, fromLPTokens, getPrice } from "contracts/utils";
 import { useEvents } from "../useEvents";
 
 const initialState = {
@@ -145,9 +145,31 @@ const useStakedData = (chainName, protocol, tokenName) => {
     })));
   }
 
+  const getGoviValueStaked = async (cb) => {
+    try {
+        const GOVIData = await getTokenData(contracts.GOVI);
+        const USDTData = await getTokenData(contracts.USDT);
+        const goviPrice = await getPrice(GOVIData, USDTData);
+        const stakedAmount = await contracts[tokenRel.stakingRewards].methods.totalStaked().call();
+        console.log('stakedAmountLP: ', stakedAmount);
+        const goviValueStaked = customFixed(toDisplayAmount(stakedAmount, GOVIData.decimals) * goviPrice, USDTData.decimals);
+        const tvl = {
+          stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(stakedAmount, token.decimals), decimalsCountDisplay)),
+          stakedAmountUSD: `${String(goviValueStaked) !== "0"  ? `$${commaFormatted(customFixed(goviValueStaked, 2))}` : "$0"}`
+        }
+        cb(() => setStakedData((prev)=> ({
+          ...prev,
+          tvl
+        })));
+    } catch(error) {
+        console.log(error);
+        return "N/A";
+    }
+  }
+
   const getStakedTVL = async (cb) => {
     try {
-      if(tokenName === "govi") return
+      if(tokenName === "govi") return getGoviValueStaked(cb);
       const [platform, stakingRewards] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards]];
       const stakedAmount = await stakingRewards.methods.totalSupply().call();
       const stakedAmountToken = await fromLPTokens(platform, toBN(stakedAmount));
