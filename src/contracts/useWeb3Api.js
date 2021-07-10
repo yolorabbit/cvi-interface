@@ -40,7 +40,7 @@ export const useWeb3Api = (type, selectedCurrency, body) => {
         setData(null);
         ref.current = setTimeout(() => {
             fetchWeb3ApiData(contracts, tokens);
-        }, 300);
+        }, 500);
 
         return () => {
             if(ref.current) return clearTimeout(ref.current);

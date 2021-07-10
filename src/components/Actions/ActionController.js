@@ -49,7 +49,6 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
           <InputAmount 
             label={amountLabel}
             symbol={token} 
-            balance="100000" 
             amount={amount} 
             setAmount={setAmount} 
           />
@@ -60,7 +59,6 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         {!isModal && <InputAmount 
           label={amountLabel}
           symbol={token} 
-          balance="100000" 
           amount={amount} 
           setAmount={setAmount} /> 
         }

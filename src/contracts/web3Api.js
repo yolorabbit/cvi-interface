@@ -1,5 +1,5 @@
 import { customFixed, toBN, toDisplayAmount } from "utils";
-import { convert, getPrice, getChainName } from './utils';
+import { convert, getPrice, getChainName, getBalance } from './utils';
 import * as TheGraph from 'graph/queries';
 import config from "config/config";
 import positionApi from "./apis/position";
@@ -162,6 +162,16 @@ const web3Api = {
                 currentRatioValue: "N/A",
                 platformBalance: "N/A"
             }
+        }
+    },
+    getAvailableBalance: async (contracts, token, {account}) => {
+        try {
+            const tokenData = await getTokenData(contracts[token.rel.contractKey]);
+            const balance = await getBalance(account, token.key !== "eth" && tokenData.address);
+            return balance;
+        } catch(error) {
+            console.log(error);
+            return "N/A";
         }
     },
     ...positionApi,

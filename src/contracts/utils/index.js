@@ -169,8 +169,12 @@ export async function convert(amount, fromToken, toToken) {
 
 
 export async function getBalance(address, tokenAddress = undefined) {
-  if (tokenAddress) return (await getERC20Contract(tokenAddress)).methods.balanceOf(address).call();
-  else return await getWebProvider().eth.getBalance(address);
+  try {
+    if (tokenAddress) return (await getERC20Contract(tokenAddress)).methods.balanceOf(address).call();
+    else return await getWebProvider().eth.getBalance(address);
+  } catch(error) {
+    console.log(error);
+  }
 }
 
 export const aprToAPY = (apr, period = 365 * 24 * 60) => {

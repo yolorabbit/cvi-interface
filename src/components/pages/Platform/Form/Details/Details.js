@@ -5,9 +5,8 @@ import Stat from "components/Stat";
 import { useSelector } from "react-redux";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveToken } from '../../../../Hooks';
-import './Details.scss';
 import { useActiveWeb3React } from "components/Hooks/wallet";
-import { toLPTokens } from "contracts/utils";
+import './Details.scss';
 
 const Details = ({selectedCurrency, amount, leverage}) => {
     const { activeView } = useContext(platformViewContext);
@@ -107,7 +106,6 @@ const LiquidityView = ({amount, selectedCurrency}) => {
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lpTokenPayload = useMemo(() => ({tokenAmount}), [tokenAmount]);
     const lpTokenAmount = useWeb3Api("toLPTokens", selectedCurrency, lpTokenPayload)
-
 
     return useMemo(() => {
 

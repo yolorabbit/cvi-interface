@@ -210,6 +210,8 @@
         color: white;
         font-weight: normal;
         line-height: 2;
+        display: block;
+
         @media (max-width: 1365px){ 
             font-size: 0.879vw;
             margin-left: 0.147vw;
@@ -224,9 +226,16 @@
             font-size: 2.778vw;
             margin-left: 0.557vw;
         }
+        
+        & span { 
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
 
         & b {
             text-transform: uppercase;
+            white-space: nowrap;
             display: contents;
         }
     }
