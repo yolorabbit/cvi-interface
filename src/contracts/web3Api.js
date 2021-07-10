@@ -107,7 +107,7 @@ const web3Api = {
             return "N/A"
         }
     },
-    getTotalGoviRewards: async (contracts) => {
+    getTotalGoviRewards: async (contracts) => { // @TODO: use promise all
         try {
             const chainName = await getChainName();
             const PositionRewards = contracts[config.contractsMapped?.[chainName]?.["PositionRewards"]];
@@ -164,7 +164,7 @@ const web3Api = {
         }
     },
     ...positionApi,
-    ...stakingApi
+    ...stakingApi,
     ...rewardsApi
 }
 

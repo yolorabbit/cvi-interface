@@ -73,10 +73,10 @@ async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {
 export async function getOpenPositionFee(contracts, token, {leverage = 1, tokenAmount}) {
     try {
         const tokenData = await getTokenData(contracts[token.rel.contractKey]);
-        console.log(tokenData);
+        // console.log(tokenData);
         const { getCVILatestRoundData  } = contracts[token.rel.cviOracle].methods || {};
         const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
-        console.log(cviValue);
+        // console.log(cviValue);
         let openFeeAmount = await getOpenPositionFeePercent(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenAmount);
         const { fee, percent } = await getBuyingPremiumFee(contracts[token.rel.platform], tokenData, contracts[token.rel.feesCalc], contracts[token.rel.feesModel], tokenAmount, cviValue, leverage, token.type);
         return { openFee: openFeeAmount.add(fee).mul(toBN(leverage)), buyingPremiumFeePercent: percent }

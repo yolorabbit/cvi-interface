@@ -5,6 +5,9 @@ import { Pair, Route, Token, TokenAmount, WETH } from '@uniswap/sdk';
 import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
 
+// @TODO: use caching
+const getWebProvider = () => new Web3(window.web3.currentProvider);
+
 let contracts = {
     [chainNames.Ethereum]: {},
     [chainNames.Matic]: {}
@@ -14,6 +17,32 @@ export const toTokenAmount = (amount, decimals) => {
   if(amount === "N/A") return toBN("0");
   return toBN(amount, decimals);
 };
+
+let diff;
+const MAX_TIME = 0;
+let lastBlockFetch = 0;
+let cachedBlock;
+
+const localTimestamp = () => {
+  return Math.floor(new Date().getTime() / 1000);
+};
+
+export async function getNow(forceSync = true) {
+  if (forceSync || !diff) {
+    let timestamp = parseInt((await getBlockCached(getWebProvider().eth.getBlock)).timestamp);
+    diff = timestamp - localTimestamp();
+    return timestamp;
+  }
+  return localTimestamp() + diff;
+}
+
+async function getBlockCached(getBlock) {
+  if (!cachedBlock || new Date().getTime() > lastBlockFetch + MAX_TIME) {
+    cachedBlock = await getBlock("latest");
+    lastBlockFetch = new Date().getTime();
+  }
+  return cachedBlock;
+}
 
 export function getWeb3Contract(contractName, chainName) {
     if (contracts[chainName][contractName] === undefined) {
@@ -33,7 +62,6 @@ export async function getERC20Contract(address) {
   try {
     const chainName = await getChainName();
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
-    console.log(contractsJSON);
     if(!contractsJSON) return;
     return new Contract(contractsJSON["ERC20"].abi, address);
   } catch(error) {
@@ -141,11 +169,8 @@ export async function convert(amount, fromToken, toToken) {
 
 
 export async function getBalance(address, tokenAddress = undefined) {
-  console.log(window.web3);
-  const web3 = new Web3(window.web3.currentProvider);
-  console.log(web3.eth);
   if (tokenAddress) return (await getERC20Contract(tokenAddress)).methods.balanceOf(address).call();
-  else return await web3.eth.getBalance(address);
+  else return await getWebProvider().eth.getBalance(address);
 }
 
 export const aprToAPY = (apr, period = 365 * 24 * 60) => {
@@ -159,4 +184,19 @@ export async function fromLPTokens(platform, lpTokenAmount) {
   let totalSupply = toBN(await platform.methods.totalSupply().call());
   let totalBalance = toBN(await platform.methods.totalBalanceWithAddendum().call());
   return totalSupply.isZero() ? toBN(0)  : lpTokenAmount.mul(totalBalance).div(totalSupply);
+}
+
+export const getPositionRewardsContract = async (token) => { 
+  try {
+    const chainName = await getChainName();
+    const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
+    if(!contractsJSON) return;
+
+    const HELPER_ADDRESS = "0xd5A222B80788E36F707adDc74c3Cb5de7e43F1B0";
+    const HELPER_V2_ADDRESS = "0x1C746415D73D4cBc995E5eB80dDD07E698a32C8c";
+    const [address, abi] = token.key === "eth" ? [HELPER_V2_ADDRESS, contractsJSON["PositionRewardsV2"].abi] : [HELPER_ADDRESS, contractsJSON["PositionRewards"].abi];
+    return new Contract(abi, address)
+  } catch(error) {
+    console.log(error);
+  }
 }

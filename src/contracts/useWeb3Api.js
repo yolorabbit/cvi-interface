@@ -35,6 +35,7 @@ export const useWeb3Api = (type, selectedCurrency, body) => {
 
     useEffect(() => {
         if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
+        if(body?.hasOwnProperty('account') && !body.account) return setData("0");
         const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
         setData(null);
         ref.current = setTimeout(() => {

@@ -37,10 +37,8 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const purchaseFeePayload = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
     const purchaseFee = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload);
-
     const positionRewardsPayload = useMemo(() => ({ tokenAmount, account} ), [tokenAmount, account]);
     const positionRewards = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload)
-    console.log(positionRewards);
 
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
