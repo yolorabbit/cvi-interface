@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
 import * as TheGraph from 'graph/queries';
 import { chainNames, supportedNetworksConfigByEnv } from "connectors";
 import { useWeb3React } from "@web3-react/core";
