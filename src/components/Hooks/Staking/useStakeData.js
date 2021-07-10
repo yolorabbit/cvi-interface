@@ -208,7 +208,7 @@ const useStakedData = (chainName, protocol, tokenName) => {
       getStakedTVL(cb);
     }
 
-    if(!tokenRel) return
+    if(!tokenRel || !contracts) return
     fetchData((cb)=>{
       if(canceled) return
       cb()
@@ -218,7 +218,7 @@ const useStakedData = (chainName, protocol, tokenName) => {
       canceled = true;
     }
     // eslint-disable-next-line
-  }, []);
+  }, [contracts]);
     
   return useMemo(() => {
     if(!tokenRel) return [stakedData];
