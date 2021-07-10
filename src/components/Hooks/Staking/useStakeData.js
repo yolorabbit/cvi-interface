@@ -151,7 +151,6 @@ const useStakedData = (chainName, protocol, tokenName) => {
         const USDTData = await getTokenData(contracts.USDT);
         const goviPrice = await getPrice(GOVIData, USDTData);
         const stakedAmount = await contracts[tokenRel.stakingRewards].methods.totalStaked().call();
-        console.log('stakedAmountLP: ', stakedAmount);
         const goviValueStaked = customFixed(toDisplayAmount(stakedAmount, GOVIData.decimals) * goviPrice, USDTData.decimals);
         const tvl = {
           stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(stakedAmount, token.decimals), decimalsCountDisplay)),
@@ -176,14 +175,9 @@ const useStakedData = (chainName, protocol, tokenName) => {
       const USDTData = await getTokenData(contracts.USDT);
       const tokenData = await getTokenData(contracts[tokenRel.token]);
       const totalBalanceWithAddendumUSDT = await convert(stakedAmountToken, tokenData, USDTData);
-      // const totalStaked = await platform.methods.totalBalanceWithAddendum().call();
-      // const poolSizeUsdt = await convert(totalStaked, tokenData, USDTData);
-      // const value = totalBalanceWithAddendumUSDT.mul(toBN(toBNAmount("10000")));
-      // const sizeOfThePool = value.isZero() ? toBN("0") : value.div(toBN(poolSizeUsdt));
       const tvl = {
         stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(stakedAmount, token.decimals), decimalsCountDisplay)),
-        stakedAmountUSD: toBN(stakedAmount).isZero() ? "0" : `$${commaFormatted(customFixed(toDisplayAmount(totalBalanceWithAddendumUSDT, USDTData.decimals), 2))}`,
-        // poolSize: sizeOfThePool.isZero() ? "0%" : `${customFixed(toDisplayAmount(sizeOfThePool, 2), 2)}% of the pool`
+        stakedAmountUSD: toBN(stakedAmount).isZero() ? "0" : `$${commaFormatted(customFixed(toDisplayAmount(totalBalanceWithAddendumUSDT, USDTData.decimals), 2))}`
       };
 
       cb(() => setStakedData((prev)=> ({
