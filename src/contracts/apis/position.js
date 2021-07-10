@@ -1,4 +1,4 @@
-import { getBalance } from "contracts/utils";
+import { getBalance, getCviValue } from "contracts/utils";
 import { getTokenData } from "contracts/web3Api";
 import { toBN } from "utils";
 
@@ -73,10 +73,7 @@ async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {
 export async function getOpenPositionFee(contracts, token, {leverage = 1, tokenAmount}) {
     try {
         const tokenData = await getTokenData(contracts[token.rel.contractKey]);
-        // console.log(tokenData);
-        const { getCVILatestRoundData  } = contracts[token.rel.cviOracle].methods || {};
-        const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
-        // console.log(cviValue);
+        const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
         let openFeeAmount = await getOpenPositionFeePercent(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenAmount);
         const { fee, percent } = await getBuyingPremiumFee(contracts[token.rel.platform], tokenData, contracts[token.rel.feesCalc], contracts[token.rel.feesModel], tokenAmount, cviValue, leverage, token.type);
         return { openFee: openFeeAmount.add(fee).mul(toBN(leverage)), buyingPremiumFeePercent: percent }
@@ -86,8 +83,35 @@ export async function getOpenPositionFee(contracts, token, {leverage = 1, tokenA
     }   
 }
 
+async function getCurrentFundingFeeV1(platform, account) {
+  return await platform.methods.calculatePositionPendingFees(account).call();
+}
+
+async function getCurrentFundingFeeV2(platform, account) {
+  let pos = await platform.methods.positions(account).call();
+  return await platform.methods.calculatePositionPendingFees(account, pos.positionUnitsAmount).call();
+}
+
+async function getCurrentFundingFee(contracts, token, {account}) {
+  if (token.type === "v1") {
+    return await getCurrentFundingFeeV1(contracts[token.rel.platform], account);
+  }
+  return await getCurrentFundingFeeV2(contracts[token.rel.platform], account);
+}
+
+async function getFundingFeePerTimePeriod(contracts, token, {tokenAmount, period = 86400}) {
+  const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
+  let positionUnitsAmount = fromTokenAmountToUnits(tokenAmount, toBN(cviValue));
+  let decimals = await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call();
+  let fee = toBN(await contracts[token.rel.feesCalc].methods.calculateSingleUnitFundingFee([{ period, cviValue }]).call());
+  return fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
+}
+
+
 const positionApi = {
-    getOpenPositionFee
+    getOpenPositionFee,
+    getCurrentFundingFee,
+    getFundingFeePerTimePeriod
 }
 
 export default positionApi;

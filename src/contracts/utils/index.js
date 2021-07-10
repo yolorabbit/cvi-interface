@@ -200,3 +200,13 @@ export const getPositionRewardsContract = async (token) => {
     console.log(error);
   }
 }
+
+export const getCviValue = async (cviOracle) => {
+  try {
+    const { cviValue } = await cviOracle.methods.getCVILatestRoundData().call();
+    return cviValue;
+  } catch(error) {
+    console.log(error);
+    return "N/A";
+  }
+}

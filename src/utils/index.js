@@ -1,7 +1,6 @@
 import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
-import { chainNames, ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
-import { getChainName } from '../contracts/utils';
+import { ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
 
 const removeZerosFromEndOfNumber = (number) => {
     if(number.includes('.')){

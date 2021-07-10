@@ -84,20 +84,11 @@ const platformConfig = {
         key: "usdc",
         decimals: 6,
         fixedDecimals: 2,
+        soon: true,
         leverage: ["X1", "X3", "X4"],
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
-        },
-      },
-      eth: {
-        key: "eth",
-        decimals: 18,
-        fixedDecimals: 8,
-        soon: true,
-        rel: {
-          contractKey: "WETH",
-          platform: "ETHPlatform",
         },
       },
     }

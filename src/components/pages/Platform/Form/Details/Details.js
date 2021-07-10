@@ -32,13 +32,20 @@ const Details = ({selectedCurrency, amount, leverage}) => {
 const TradeView = ({amount, leverage, selectedCurrency}) => {
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
     const { account } = useActiveWeb3React();
+
     const activeToken = useActiveToken(selectedCurrency);
-    const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
+
+    const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
+
     const purchaseFeePayload = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
     const purchaseFee = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload);
+
     const positionRewardsPayload = useMemo(() => ({ tokenAmount, account} ), [tokenAmount, account]);
-    const positionRewards = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload)
+    const positionRewards = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload);
+
+    const currentFundingFeePayload = useMemo(() => ({account, tokenAmount}), [account, tokenAmount]);
+    const currentFundingFee = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload);
 
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
@@ -78,12 +85,17 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     format={customFixedTokenValue(positionRewards?.toString(), 8, activeToken.goviDecimals)}
                 />
     
-                <Stat title="Current funding fee" value={`0.01 ${selectedCurrency}`} />
+                <Stat 
+                    title="Current funding fee" 
+                    value={currentFundingFee === "N/A" ? "N/A" : currentFundingFee?.toString()} 
+                    format={customFixedTokenValue(currentFundingFee?.toString(), activeToken.fixedDecimals, activeToken.decimals)}
+                    _suffix={selectedCurrency}
+                />
     
                 <Stat title="CVI Index" value={cviInfo?.price} />
             </>
         )
-    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards]) 
+    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
    
 }
 
