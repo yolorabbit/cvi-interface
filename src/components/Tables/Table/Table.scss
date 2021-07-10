@@ -170,6 +170,16 @@
             & td {
                 height: inherit;
                 border-collapse: separate;
+                width: 20.833vw;
+                max-width: 100%;
+
+                @media (max-width: 1365px) {
+                    width: 29.304vw; 
+                }
+
+                &:last-child {
+                    width: auto;
+                }
             }
 
             &:hover {

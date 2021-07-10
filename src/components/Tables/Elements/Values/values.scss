@@ -5,6 +5,7 @@
 
         @media (max-width: 1365px){   
             margin-top: 0.247vw;
+            white-space: nowrap;
         }
 
         @media (max-width: 1024px){ 
@@ -131,11 +132,11 @@
 
 .apy-component {
     display: flex;
-    flex-wrap: wrap;
     flex-direction: row-reverse;
     justify-content: flex-end;
 
     @media (max-width: 1024px){ 
+        flex-wrap: wrap;
         flex-direction: column-reverse;
     }
     
@@ -187,7 +188,10 @@
 .table-component .pairs-component, .row-item-component .pairs-component {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
+
+    @media (max-width: 1024px) {
+        flex-wrap: wrap;
+    }
 
     &__coins {
         white-space: nowrap;
