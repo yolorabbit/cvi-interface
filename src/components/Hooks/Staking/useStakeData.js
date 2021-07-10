@@ -5,6 +5,7 @@ import { useWeb3React } from "@web3-react/core";
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { convert } from "contracts/utils";
+import { useEvents } from "../useEvents";
 
 const initialState = {
     stakedTokenAmount: null,
@@ -15,10 +16,10 @@ const initialState = {
       value: null
     },
     poolSize: null,
-    dailyReward: {
+    dailyReward: [{
       amount: null,
       symbol: null
-    },
+    }],
     apy: null,
     claim: [{
       amount: null,
@@ -31,10 +32,9 @@ const useStakedData = (chainName, protocol, tokenName) => {
   const contracts = useContext(contractsContext);
   const { account } = useWeb3React();
   const [stakedData, setStakedData] = useState(initialState);
-
+  const eventsUtils = useEvents();
   const token = stakingConfig.tokens[chainName][protocol][tokenName];
   const tokenRel = token.rel;
-
   const decimalsCountDisplay = 8;
 
   const getStakedAmountAndPoolShare = async (cb) => {
@@ -82,7 +82,23 @@ const useStakedData = (chainName, protocol, tokenName) => {
   }
   
   const getDailyReward = async (cb) => {
-    const dailyReward = await web3Api.getDailyReward(contracts[tokenRel.stakingRewards], account, token.decimals);
+    const getDailyRewardsByTokenName = async () => {
+      switch (tokenName) {
+        case 'govi': {
+          return await token.rewardsTokens.map(async (t,idx) => {
+            const events = await eventsUtils.getTransferEvents(contracts[tokenRel.stakingRewards], contracts[t], 30);
+            const now = await eventsUtils.getNow();
+            return await web3Api.getDailyRewardPerToken(contracts[tokenRel.stakingRewards], account, events, now, t.replace("W",""), tokenRel.tokenDecimals[idx]);
+          })
+        }
+        default: 
+          return [await web3Api.getDailyReward(contracts[tokenRel.stakingRewards], account, token.decimals)]
+      }
+    }
+    const dailyReward = await (await Promise.allSettled(await getDailyRewardsByTokenName()))
+    .filter(({status}) => status === "fulfilled")
+    .map(({value}) => value);
+
     cb(() => setStakedData((prev)=> ({
       ...prev,
       dailyReward
@@ -90,13 +106,33 @@ const useStakedData = (chainName, protocol, tokenName) => {
   }
 
   const getAPY = async (cb) => {
-      const [platform, stakingRewards, token] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards], contracts[tokenRel.token]];
-      const USDTData = await getTokenData(contracts.USDT);
-      const GOVIData = await getTokenData(contracts.GOVI);
-      const tokenData = await getTokenData(token);
-      const apy = await web3Api.getAPYPerToken(platform, stakingRewards, USDTData, GOVIData, tokenData);
-      cb(() => setStakedData((prev)=> ({
-        ...prev,
+    const [platform, stakingRewards] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards]];
+    const USDTData = await getTokenData(contracts.USDT);
+    const GOVIData = await getTokenData(contracts.GOVI);
+
+    const getAPYByTokenName = async () => {
+      switch (tokenName) {
+        case 'govi': {
+          const tokensData = await Promise.all(
+            await token.rewardsTokens.map(async t => {
+              const tokenData = await getTokenData(contracts[t])
+              tokenData.events = await eventsUtils.getTransferEvents(stakingRewards, contracts[t], 30);
+              return tokenData;
+            })
+          );
+          return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData);
+        }
+        default: {
+          const tokenData = await getTokenData(contracts[tokenRel.token]);
+          return await web3Api.getAPYPerToken(platform, stakingRewards, USDTData, GOVIData, tokenData);
+        }
+      }
+    }
+
+    const apy = await getAPYByTokenName();
+
+    cb(() => setStakedData((prev)=> ({
+      ...prev,
         apy: apy ? `${customFixed(apy, 2)}%` : "N/A"
       })));   
   }
@@ -106,7 +142,6 @@ const useStakedData = (chainName, protocol, tokenName) => {
     const fetchData = async (cb) => {
       getStakedAmountAndPoolShare(cb);
       getClaimableRewards(cb);
-      if(tokenName === "govi") return
       getDailyReward(cb);
       getAPY(cb);
     }
@@ -116,6 +151,10 @@ const useStakedData = (chainName, protocol, tokenName) => {
       if(canceled) return
       cb()
     });
+
+    return () => {
+      canceled = true;
+    }
     // eslint-disable-next-line
   }, []);
     
@@ -128,4 +167,3 @@ const useStakedData = (chainName, protocol, tokenName) => {
 }
 
 export default useStakedData;
-

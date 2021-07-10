@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { aprToAPY, convert, fromLPTokens } from "contracts/utils";
+import { aprToAPY, convert, fromLPTokens, getChainName, getWeb3Contract, getBalance } from "contracts/utils";
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
 
 const stakingApi = {
@@ -73,6 +73,72 @@ const stakingApi = {
             return 0;
         }
     },
+    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, days = 30) {
+
+        try {
+            async function getTotalProfits(token, events, days = 30) {
+                try {
+                    const selectedNetwork = await getChainName();
+                    let isETH = false;
+                    if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
+                    let initialValue = isETH ? toBN(await getBalance(getWeb3Contract("ETHStakingProxy", selectedNetwork)._address)): toBN(0);
+                    // console.log(`initialValue ${initialValue}`);
+                    // console.log(events);
+                    return events.reduce((p, e) => p.add(toBN(selectedNetwork === "Matic" ? e.tokenAmount : e.returnValues[2])), initialValue);
+
+                } catch(error) {
+                    console.log(error);
+                    return 0;
+                }
+            }
+
+            async function getTokenYearlyProfitInUSD(tokenData, USDTData, days = 30) {
+                // console.log(`checking relative to the last ${days} days`);
+                const DAY = 86400;
+                const YEAR = DAY*365;
+                try {
+                    // console.log(`checking relative to the last ${days} days`);
+                    const totalProfits = await getTotalProfits(tokenData.contract, tokenData.events, days);
+                    // console.log(`totalProfits ${totalProfits}`);
+                    const yearlyProfits = toBN(totalProfits)
+                      .mul(toBN(YEAR))
+                      .div(toBN(DAY * days));
+                    // console.log(`yearlyProfits ${yearlyProfits}`);
+                    let USDYearlyProfits = (await convert(yearlyProfits, tokenData, USDTData)).div(toBN(1).pow(toBN(USDTData.decimals)));
+                    // console.log(`USDYearlyProfits ${USDYearlyProfits}`);
+                    return USDYearlyProfits;
+                } catch(error) {
+                    console.log(error);
+                    return 0;
+                }
+            }
+
+            async function getAPR() {
+               // yearly profits = totalProfits * seconds in year / time since contract creation
+                // APR = value of (yearly profits) / value of (total staked GOVI) * 100
+                let USDYearlyProfits = toBN("0");
+                for (const tokenData of tokensData) {
+                    USDYearlyProfits = USDYearlyProfits.add(await getTokenYearlyProfitInUSD(tokenData, USDTData, days));
+                }
+                USDYearlyProfits = toBN(USDYearlyProfits, USDTData.decimals);
+                // console.log(`USDYearlyProfits ${USDYearlyProfits.toString()}`);
+                const totalStaked = await staking.methods.totalStaked().call();
+                // console.log(`totalStaked ${totalStaked}`);
+                let USDTotalStaked = (await convert(totalStaked, GOVIData, USDTData))
+                // console.log(`USDTotalStaked ${USDTotalStaked}`);
+                // console.log(toDisplayAmount(USDYearlyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals));
+
+                if (USDTotalStaked.isZero()) return toBN("0");
+                return toDisplayAmount(USDYearlyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals);
+            }
+            const apr = await getAPR();
+            // console.log(apr.toString());
+            return aprToAPY(apr, days);
+        } catch (error) {
+            console.log(error);
+            return 0;
+        }
+    },
     getDailyReward: async (stakingRewards, account, tokenDecimals, decimalsCountDisplay = 8) => {
         let rate = await stakingRewards.methods.rewardRate().call();
         let total = toBN(await stakingRewards.methods.totalSupply().call());
@@ -94,7 +160,27 @@ const stakingApi = {
             symbol: "GOVI",
         }
         return dailyReward
-    }
+    },
+    getDailyRewardPerToken: async function (staking, account, events, now, symbol, tokenDecimals, decimalsCountDisplay = 8) {
+        const selectedNetwork = await getChainName();
+        const sum = events.reduce((p, e) => p.add(toBN(selectedNetwork === "Matic" ? e.tokenAmount : e.returnValues[2] )), toBN(0));
+        const creationTimestamp = await staking.methods.creationTimestamp().call();
+        const timePassedSinceCreation = now - creationTimestamp;
+        const secondsInDay = 86400;
+        const reward = sum.mul(toBN(secondsInDay)).div(toBN(timePassedSinceCreation));
+        // console.log(`daily reward ${reward}`);
+
+        let balance = await staking.methods.stakes(account).call();
+        let total = await staking.methods.totalStaked().call();
+        
+        const dailyRewards = toBN(total).isZero() ? toBN(0) : reward.mul(toBN(balance)).div(toBN(total));
+
+        const dailyReward = {
+            amount: commaFormatted(customFixed(toDisplayAmount(dailyRewards, tokenDecimals), decimalsCountDisplay)),
+            symbol,
+        }
+        return dailyReward
+    },
 }
 
 export default stakingApi;

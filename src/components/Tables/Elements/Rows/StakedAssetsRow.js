@@ -61,6 +61,7 @@ const RowData = ({token, protocol, unstakeController}) => {
     const [stakedData] = useStakedData(chainName, protocol, token);
     
     return useMemo(() => {
+
         return (
         <> 
             {!isTablet && <> 
@@ -81,10 +82,14 @@ const RowData = ({token, protocol, unstakeController}) => {
                 header={header.TVL.label} 
                 content={<Value text="$7,320,500.43" bottomText="3,012,551 CVI-USDT LP" /> } 
             />
-
+            {
+                // TODO: 
+                // Estimated reward should displaying with loop on stakedData.dailyReward
+                // TMP: stakedData.dailyReward[0]
+            }
             <RowItem 
                 header={header["Estimated rewards per day"].label} 
-                content={<Value text={`${stakedData.dailyReward.amount} ${stakedData.dailyReward.symbol}`} /> } 
+                content={<Value text={`${stakedData.dailyReward[0].amount} ${stakedData.dailyReward[0].symbol}`} /> } 
             />
 
             <RowItem 
