@@ -31,6 +31,10 @@
         }
     }
 
+    & .suffix {
+        white-space: nowrap;
+    }
+
     &.multiline {
         & p {
             font-size: 0.573vw;

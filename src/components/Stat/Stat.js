@@ -19,7 +19,7 @@ const Stat = ({name, hideTooltip, prefix = "", _suffix, title, format, className
             )}
 
             {value ? 
-                <p>{value !== "N/A" && !suffix && _prefix}{value === "N/A" ? value : format ? commaFormatted(format) : commaFormatted(value)} {value !== "N/A" && suffix}</p> 
+                <p>{value !== "N/A" && !suffix && _prefix}{value === "N/A" ? value : format ? commaFormatted(format) : commaFormatted(value)} {value !== "N/A" && <span className="suffix">{suffix}</span>}</p> 
                 : !values?.length > 0 && <Spinner className="statistics-spinner" />
             }
         </div>

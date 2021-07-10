@@ -7,6 +7,7 @@ import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveToken } from '../../../../Hooks';
 import './Details.scss';
 import { useActiveWeb3React } from "components/Hooks/wallet";
+import { toLPTokens } from "contracts/utils";
 
 const Details = ({selectedCurrency, amount, leverage}) => {
     const { activeView } = useContext(platformViewContext);
@@ -102,8 +103,14 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
 const LiquidityView = ({amount, selectedCurrency}) => {
     const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
+    const activeToken = useActiveToken(selectedCurrency);
+    const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
+    const lpTokenPayload = useMemo(() => ({tokenAmount}), [tokenAmount]);
+    const lpTokenAmount = useWeb3Api("toLPTokens", selectedCurrency, lpTokenPayload)
+
 
     return useMemo(() => {
+
         return  <> 
            <Stat 
                 name="collateralRatio" 
@@ -114,11 +121,17 @@ const LiquidityView = ({amount, selectedCurrency}) => {
 
             <Amount title="Deposit" amount={amount} selectedCurrency={selectedCurrency} />
 
-            <Stat className="bold" title="You will receive" value={`0.4 CVI-${selectedCurrency}-LP`} />
+            <Stat 
+                className="bold" 
+                title="You will receive" 
+                value={lpTokenAmount} 
+                format={customFixedTokenValue(lpTokenAmount, 6, activeToken.goviDecimals)}
+                _suffix={`CVI-${selectedCurrency} LP`}
+            />
 
             <Stat title="CVI Index" value={cviInfo?.price} />
         </>
-    }, [collateralRatioData, amount, selectedCurrency, cviInfo?.price])
+    }, [collateralRatioData, amount, selectedCurrency, cviInfo?.price, lpTokenAmount, activeToken])
 }
 
 const Amount = ({title, amount, selectedCurrency}) => {
