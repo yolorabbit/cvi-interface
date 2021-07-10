@@ -202,7 +202,8 @@ const useStakedData = (chainName, protocol, tokenName) => {
       getStakedTVL(cb);
     }
 
-    if(!tokenRel || !contracts) return
+    if(!contracts || !tokenRel) return
+
     fetchData((cb)=>{
       if(canceled) return
       cb()

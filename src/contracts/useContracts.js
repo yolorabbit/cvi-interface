@@ -24,11 +24,12 @@ export const useContracts = () => {
         }
 
         loadContracts();
-    }, [selectedNetwork, library]);
+        // eslint-disable-next-line
+    }, []);
     
     return useMemo(() => {
         return contracts;
         //eslint-disable-next-line
-    }, [selectedNetwork, contracts]);
+    }, [contracts]);
 }
 
