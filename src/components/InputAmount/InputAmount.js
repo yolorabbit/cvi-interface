@@ -18,6 +18,7 @@ const InputAmount = ({label = "Amount", breakLine, amount, setAmount, symbol, av
     const availableBalance = useWeb3Api("getAvailableBalance", symbol, availableBalancePayload);
 
     const availableBalanceAmount = useMemo(() => customFixedTokenValue(availableBalance, activeToken.decimals, activeToken.decimals), [activeToken, availableBalance]);
+    const inufficientBalance = useMemo(() => amount > availableBalanceAmount, [amount, availableBalanceAmount]);
 
     useEffect(() => {
         setAmount("");
@@ -45,7 +46,7 @@ const InputAmount = ({label = "Amount", breakLine, amount, setAmount, symbol, av
     }
 
     return (
-        <InputGroup className={`amount-component__group ${error ? 'error' : ''}`} label={label}>
+        <InputGroup className={`amount-component__group ${(error || inufficientBalance) ? 'error' : ''}`} label={label}>
             <div className="amount-component__group__input-container">
                 <Input 
                     className="amount-component__group__amount" 
