@@ -38,24 +38,31 @@ const useStakedData = (chainName, protocol, tokenName) => {
   const decimalsCountDisplay = 8;
 
   const getStakedAmountAndPoolShare = async (cb) => {
+    let tokenData, 
+    convertAmountDecimals; // TMP: convertAmountDecimals 
     const getDataByTokenName = async () => {
       switch (tokenName) {
-        case 'govi':
+        case 'govi':{
+          tokenData = await getTokenData(contracts.GOVI)
+          convertAmountDecimals=6
           return web3Api.getStakedAmountAndPoolShareGOVI(contracts[tokenRel.stakingRewards], account, token.decimals)
-        default: 
+        }
+        default: {
+          convertAmountDecimals=18
+          tokenData = await getTokenData(contracts[tokenRel.token]);
           return web3Api.getStakedAmountAndPoolShare(contracts[tokenRel.stakingRewards], account, token.decimals)
+        }
       }
     }
     const data = await getDataByTokenName();
     const USDTData = await getTokenData(contracts.USDT);
-    const tokenData = await getTokenData(contracts[tokenRel.token]);
-    // TODO: Fix ETH conver price
-    const stakedAmountUSD = await convert(data.stakedTokenAmount, tokenData, USDTData);
 
+    // TODO: Fix convert ETH or GOVI price to $ 
+    const stakedAmountUSD = await convert(toBN(data.stakedTokenAmount), tokenData, USDTData);
     cb(() => setStakedData((prev)=>({
       ...prev,
       ...data,
-      stakedAmountUSD: commaFormatted(customFixed(toDisplayAmount(stakedAmountUSD, token.decimals), decimalsCountDisplay))
+      stakedAmountUSD: commaFormatted(customFixed(toDisplayAmount(stakedAmountUSD.toString(), convertAmountDecimals), decimalsCountDisplay))
     })));
   }
 
