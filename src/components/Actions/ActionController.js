@@ -19,12 +19,13 @@ export const useActionController = () => {
 }
 
 const ActionController = ({type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, isModal}) => {
+  const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
 
   const renderActionComponent = (isModal = false) => {
     return <ActionControllerContext 
-        disabled={disabled}
+        disabled={!(!disabled && !insufficientBalance)}
         type={type} 
         token={token} 
         leverage={leverage} 
@@ -43,6 +44,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
     //eslint-disable-next-line
   }, [isOpen, activeView]);
 
+  
   return useMemo(() => {
     return <div className="action-controller-component">
         {(isModal && isOpen) && <Modal closeIcon handleCloseModal={() => setIsOpen(false)}>
@@ -51,22 +53,25 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             symbol={token} 
             amount={amount} 
             setAmount={setAmount} 
+            setInsufficientBalance={setInsufficientBalance}
           />
 
           {renderActionComponent()}
         </Modal>}
 
         {!isModal && <InputAmount 
-          label={amountLabel}
-          symbol={token} 
-          amount={amount} 
-          setAmount={setAmount} /> 
+            label={amountLabel}
+            symbol={token} 
+            amount={amount} 
+            setAmount={setAmount} 
+            setInsufficientBalance={setInsufficientBalance}
+          /> 
         }
 
         {renderActionComponent(isModal)}
     </div>
     //eslint-disable-next-line
-  }, [type, activeView, amount, isOpen, isModal, token, amountLabel])
+  }, [type, activeView, amount, isOpen, isModal, token, amountLabel, insufficientBalance])
 };
 
 export default ActionController;

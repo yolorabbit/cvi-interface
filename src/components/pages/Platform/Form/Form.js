@@ -35,6 +35,7 @@ const Form = () => {
                         && <SelectLeverage leverage={leverage} tokenLeverageList={tokenLeverageList} setLeverage={setLeverage} /> }
                   
                     <ActionController 
+                        disabled={!amount}
                         amount={amount}
                         setAmount={setAmount}
                         token={selectedCurrency}

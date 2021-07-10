@@ -7,7 +7,7 @@ import platformConfig from "config/platformConfig";
 import { useActionController } from "./ActionController";
 
 const PlatformActions = () => {
-    const { type, token, isModal, isOpen, setIsOpen, amount, setAmount, leverage } = useActionController();
+    const { disabled, type, token, isModal, isOpen, setIsOpen, amount, setAmount, leverage } = useActionController();
     const { account } = useActiveWeb3React();
 
     const resetForm = () => {
@@ -18,13 +18,9 @@ const PlatformActions = () => {
         if(!account) return; // ask to connect
         
         if(isModal && !isOpen) return setIsOpen(true);
-        resetForm();
+        resetForm();    
 
-        console.log(token);
-        console.log(amount);
-        console.log(leverage);
-
-        return {
+        const events = {
             buy: () => {
                 console.log("buy");
             },
@@ -41,6 +37,8 @@ const PlatformActions = () => {
                 console.log("claim");
             },
         }
+
+        return events[type]()
     }
 
     const renderView = () => {
@@ -53,7 +51,8 @@ const PlatformActions = () => {
                     <Button 
                         className="sell-component__container--button" 
                         buttonText="Sell" 
-                        onClick={() => onClick?.()?.[type]?.()}
+                        onClick={onClick}
+                        disabled={disabled}
                     />
                 </div>
             </div>
@@ -65,7 +64,8 @@ const PlatformActions = () => {
                         <Button 
                             className="withdraw-component__container--button"
                             buttonText="Withdraw" 
-                            onClick={() => onClick?.()?.[type]?.()} 
+                            onClick={onClick}
+                            disabled={disabled}
                         />
                     </div>
                 </div>
@@ -77,7 +77,8 @@ const PlatformActions = () => {
                     <Button 
                         className="claim-button" 
                         buttonText="Claim" 
-                        onClick={() => {}} 
+                        onClick={onClick} 
+                        disabled={disabled}
                     /> 
                 </div>
             }
@@ -88,7 +89,8 @@ const PlatformActions = () => {
                 <Button 
                     className="button" 
                     buttonText={platformConfig.actionsConfig?.[type]?.key?.toUpperCase()}
-                    onClick={() => onClick?.()?.[type]?.()}
+                    onClick={onClick}
+                    disabled={disabled}
                 />
             </div>;
         }

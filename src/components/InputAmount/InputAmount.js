@@ -10,7 +10,7 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useActiveToken } from 'components/Hooks';
 import Spinner from 'components/Spinner/Spinner';
 
-const InputAmount = ({label = "Amount", breakLine, amount, setAmount, symbol, availableText = "Your available balance:", error}) => {
+const InputAmount = ({label = "Amount", breakLine, amount = "", setAmount, symbol, availableText = "Your available balance:", setInsufficientBalance, error}) => {
     const activeToken = useActiveToken(symbol); 
     const { account } = useActiveWeb3React();
     
@@ -18,7 +18,12 @@ const InputAmount = ({label = "Amount", breakLine, amount, setAmount, symbol, av
     const availableBalance = useWeb3Api("getAvailableBalance", symbol, availableBalancePayload);
 
     const availableBalanceAmount = useMemo(() => customFixedTokenValue(availableBalance, activeToken.decimals, activeToken.decimals), [activeToken, availableBalance]);
-    const inufficientBalance = useMemo(() => amount > availableBalanceAmount, [amount, availableBalanceAmount]);
+    const insufficientBalance = useMemo(() => amount > availableBalanceAmount, [amount, availableBalanceAmount]);
+
+    useEffect(() => {
+        setInsufficientBalance(insufficientBalance);
+        //eslint-disable-next-line
+    }, [insufficientBalance]);
 
     useEffect(() => {
         setAmount("");
@@ -46,7 +51,7 @@ const InputAmount = ({label = "Amount", breakLine, amount, setAmount, symbol, av
     }
 
     return (
-        <InputGroup className={`amount-component__group ${(error || inufficientBalance) ? 'error' : ''}`} label={label}>
+        <InputGroup className={`amount-component__group ${(error || insufficientBalance) ? 'error' : ''}`} label={label}>
             <div className="amount-component__group__input-container">
                 <Input 
                     className="amount-component__group__amount" 
