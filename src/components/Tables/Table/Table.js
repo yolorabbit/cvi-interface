@@ -65,7 +65,7 @@ const Table = () => {
             />}
         </div>
         //eslint-disable-next-line
-    )}, []);
+    )}, [currentPage]);
 }
 
 export default Table;
