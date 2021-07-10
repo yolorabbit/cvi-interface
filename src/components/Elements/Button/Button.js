@@ -13,7 +13,6 @@ const Button = ({
   processing,
   ...props
 }) => {
-
   const upHandler = (event) => {
     if(event.keyCode === 13 && !disabled){
         onClick();
@@ -27,6 +26,7 @@ const Button = ({
       };
       // eslint-disable-next-line
   });
+
   return (
     <button
       className="button"
@@ -36,7 +36,7 @@ const Button = ({
       {...(disabled ? {} : { onClick })}
       {...props}
     >
-      {!processing ? children || buttonText : <div className="processing">Processing <div className="dot-flashing"></div></div>}
+      {processing ? <div className="processing">Processing <div className="dot-flashing"></div></div> : (children || buttonText) }
     </button>
   );
 };

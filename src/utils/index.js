@@ -2,6 +2,9 @@ import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
 import { ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
 
+export const gas = { gas: 6721975, gasPrice: 5 * 10 ** 9 };
+export const maxUint256 = new BN(2).pow(new BN(256)).sub(new BN(1));
+
 const removeZerosFromEndOfNumber = (number) => {
     if(number.includes('.')){
         while (number.charAt(number.length -1) === "0")

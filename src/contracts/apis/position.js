@@ -1,11 +1,36 @@
 import { getBalance, getCviValue } from "contracts/utils";
 import { getTokenData } from "contracts/web3Api";
-import { toBN } from "utils";
+import { fromBN, gas, maxUint256, toBN, toBNAmount } from "utils";
 
 const MAX_CVI_VALUE = 20000;
 
 export function fromTokenAmountToUnits(tokenAmount, index) {
   return toBN(tokenAmount).mul(toBN(MAX_CVI_VALUE)).div(toBN(index));
+}
+
+export async function approve(contract, from, to, amount = maxUint256) {
+  if (!contract) return;
+  let allowance = await contract.methods.allowance(from, to).call();
+  if (allowance.toString() !== "0") await contract.methods.approve(to, 0).send({ from, ...gas });
+  const res = await contract.methods.approve(to, amount).send({ from, ...gas });
+  allowance = await contract.methods.allowance(from, to).call();
+  console.log(`approve ${res.status ? "success" : "failed"}: allowance ${allowance}`);
+}
+
+export async function openPosition(contracts, token, { amount, account, maxCVIValue = MAX_CVI_VALUE }) {
+  const tokenData = await getTokenData(contracts[token.rel.platform]);
+  const tokenAmount = toBN(toBNAmount(amount, token.decimals));
+  await approve(contracts[token.rel.platform], account, tokenData.address);
+  // const res = await this.contract.methods.openPosition(tokenAmount, maxCVIValue, maxBPFee, leverage).send({ from: account, ...gas });
+  const res = await contracts[token.rel.platform].methods.openPosition(tokenAmount, maxCVIValue).send({ from: account, ...gas });
+  const positionUnitsAmount = res.events.OpenPosition.returnValues.positionUnitsAmount;
+  const fee = res.events.OpenPosition.returnValues.feeAmount;
+  const cviValue = res.events.OpenPosition.returnValues.cviValue;
+  const feePercent = ((fromBN(fee, token.decimals) / fromBN(tokenAmount, token.decimals)) * 100).toFixed(2);
+
+  // console.log(`OpenPosition ${res.status ? "success" : "failed"}: fee ${this.token.fromAmount(fee)} (${feePercent}%)`);
+  // console.log(`Minted Units ${this.token.fromAmount(positionUnitsAmount)} for ${this.token.fromAmount(tokenAmount)}`);
+  return { tokenAmount, positionUnitsAmount, fee, feePercent, cviValue };
 }
 
 async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount, cviValue, leverage, type) {
