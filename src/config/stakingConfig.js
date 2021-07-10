@@ -118,6 +118,9 @@ const stakingConfig = {
       },
       "TVL": {
         label: "TVL",
+        "cvi-usdt-lp": "CVI-USDT LP",
+        "cvi-eth-lp": "CVI-ETH LP",
+        "govi": "GOVI",
       },
       "Estimated rewards per day": {
         label: "Estimated rewards per day",

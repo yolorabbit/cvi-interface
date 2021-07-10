@@ -8,24 +8,28 @@ import { convert, fromLPTokens } from "contracts/utils";
 import { useEvents } from "../useEvents";
 
 const initialState = {
-    stakedTokenAmount: null,
-    stakedAmount: null,
-    stakedAmountUSD: null,
-    lastStakedAmount: {
-      class: null,
-      value: null
-    },
-    poolSize: null,
-    dailyReward: [{
-      amount: null,
-      symbol: null
-    }],
-    apy: null,
-    claim: [{
-      amount: null,
-      symbol: null
-    }],
-    status: null
+  stakedTokenAmount: null,
+  stakedAmount: null,
+  stakedAmountUSD: null,
+  lastStakedAmount: {
+    class: null,
+    value: null
+  },
+  poolSize: null,
+  dailyReward: [{
+    amount: null,
+    symbol: null
+  }],
+  apy: null,
+  claim: [{
+    amount: null,
+    symbol: null
+  }],
+  status: null,
+  tvl: {
+    stakedAmountLP: null,
+    stakedAmountUSD: null
+  }
 }
 
 const useStakedData = (chainName, protocol, tokenName) => {
@@ -137,9 +141,40 @@ const useStakedData = (chainName, protocol, tokenName) => {
 
     cb(() => setStakedData((prev)=> ({
       ...prev,
-        apy: apy ? `${customFixed(apy, 2)}%` : "N/A"
-      })));   
+      apy: apy ? `${customFixed(apy, 2)}%` : "N/A"
+    })));
   }
+
+  const getStakedTVL = async (cb) => {
+    try {
+      if(tokenName === "govi") return
+      const [platform, stakingRewards] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards]];
+      const stakedAmount = await stakingRewards.methods.totalSupply().call();
+      const stakedAmountToken = await fromLPTokens(platform, toBN(stakedAmount));
+      const USDTData = await getTokenData(contracts.USDT);
+      const tokenData = await getTokenData(contracts[tokenRel.token]);
+      const totalBalanceWithAddendumUSDT = await convert(stakedAmountToken, tokenData, USDTData);
+      // const totalStaked = await platform.methods.totalBalanceWithAddendum().call();
+      // const poolSizeUsdt = await convert(totalStaked, tokenData, USDTData);
+      // const value = totalBalanceWithAddendumUSDT.mul(toBN(toBNAmount("10000")));
+      // const sizeOfThePool = value.isZero() ? toBN("0") : value.div(toBN(poolSizeUsdt));
+      const tvl = {
+        stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(stakedAmount, token.decimals), decimalsCountDisplay)),
+        stakedAmountUSD: toBN(stakedAmount).isZero() ? "0" : `$${commaFormatted(customFixed(toDisplayAmount(totalBalanceWithAddendumUSDT, USDTData.decimals), 2))}`,
+        // poolSize: sizeOfThePool.isZero() ? "0%" : `${customFixed(toDisplayAmount(sizeOfThePool, 2), 2)}% of the pool`
+      };
+
+      cb(() => setStakedData((prev)=> ({
+        ...prev,
+        tvl
+      })));
+
+    } catch(error) {
+        console.log(error);
+        return "N/A";
+    }
+  }
+
       
   useEffect(()=>{
     let canceled = false;
@@ -148,6 +183,7 @@ const useStakedData = (chainName, protocol, tokenName) => {
       getClaimableRewards(cb);
       getDailyReward(cb);
       getAPY(cb);
+      getStakedTVL(cb);
     }
 
     if(!tokenRel) return

@@ -80,7 +80,7 @@ const RowData = ({token, protocol, unstakeController}) => {
 
             <RowItem 
                 header={header.TVL.label} 
-                content={<Value text="$7,320,500.43" bottomText="3,012,551 CVI-USDT LP" /> } 
+                content={<Value text={`${stakedData.tvl.stakedAmountUSD}`} bottomText={`${stakedData.tvl.stakedAmountLP} ${header.TVL[token]}`} /> } 
             />
             {
                 // TODO: 
