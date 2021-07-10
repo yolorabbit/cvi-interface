@@ -4,7 +4,7 @@ import stakingConfig from 'config/stakingConfig';
 import { useWeb3React } from "@web3-react/core";
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
-import { convert } from "contracts/utils";
+import { convert, fromLPTokens } from "contracts/utils";
 import { useEvents } from "../useEvents";
 
 const initialState = {
@@ -38,17 +38,14 @@ const useStakedData = (chainName, protocol, tokenName) => {
   const decimalsCountDisplay = 8;
 
   const getStakedAmountAndPoolShare = async (cb) => {
-    let tokenData, 
-    convertAmountDecimals; // TMP: convertAmountDecimals 
+    let tokenData;
     const getDataByTokenName = async () => {
       switch (tokenName) {
         case 'govi':{
           tokenData = await getTokenData(contracts.GOVI)
-          convertAmountDecimals=6
           return web3Api.getStakedAmountAndPoolShareGOVI(contracts[tokenRel.stakingRewards], account, token.decimals)
         }
         default: {
-          convertAmountDecimals=18
           tokenData = await getTokenData(contracts[tokenRel.token]);
           return web3Api.getStakedAmountAndPoolShare(contracts[tokenRel.stakingRewards], account, token.decimals)
         }
@@ -56,13 +53,13 @@ const useStakedData = (chainName, protocol, tokenName) => {
     }
     const data = await getDataByTokenName();
     const USDTData = await getTokenData(contracts.USDT);
+    const getAmount = async () => tokenName === "govi" ? data.stakedTokenAmount : await fromLPTokens(contracts[tokenRel.platform], toBN(data.stakedTokenAmount));
 
-    // TODO: Fix convert ETH or GOVI price to $ 
-    const stakedAmountUSD = await convert(toBN(data.stakedTokenAmount), tokenData, USDTData);
+    const stakedAmountUSD = await convert(await getAmount(), tokenData, USDTData);
     cb(() => setStakedData((prev)=>({
       ...prev,
       ...data,
-      stakedAmountUSD: commaFormatted(customFixed(toDisplayAmount(stakedAmountUSD.toString(), convertAmountDecimals), decimalsCountDisplay))
+      stakedAmountUSD: commaFormatted(customFixed(toDisplayAmount(stakedAmountUSD.toString(), USDTData.decimals), decimalsCountDisplay))
     })));
   }
 
