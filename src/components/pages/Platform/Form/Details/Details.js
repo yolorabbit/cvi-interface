@@ -1,5 +1,5 @@
 import { platformViewContext } from "components/Context";
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { commaFormatted, customFixed, customFixedTokenValue, toBN, toBNAmount, toDisplayAmount } from "utils";
 import Stat from "components/Stat";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveToken } from '../../../../Hooks';
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import './Details.scss';
+import platformConfig from "config/platformConfig";
 
 const Details = ({selectedCurrency, amount, leverage}) => {
     const { activeView } = useContext(platformViewContext);
@@ -47,6 +48,15 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount}), [account, tokenAmount]);
     const currentFundingFee = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload);
 
+    const [isHighCollateralRatio, setIsHighCollateralRatio] = useState();
+
+    useEffect(() => {
+        if(purchaseFee === "N/A" || collateralRatioData === "N/A") return;
+        if(collateralRatioData?.currentRatioValue && purchaseFee?.turbulence) {
+            setIsHighCollateralRatio(toBN(purchaseFee?.turbulence).cmp(toBN(100)) > -1 || toBN(toBNAmount(collateralRatioData.collateralRatio.toString(), 8)).cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0);
+        }
+    }, [collateralRatioData, purchaseFee]);
+
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
  
@@ -56,7 +66,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     name="collateralRatio" 
                     value={collateralRatioData?.collateralRatio} 
                     format={`${customFixedTokenValue(collateralRatioData?.collateralRatio, 0, 8)}%`}
-                    className={`bold ${customFixedTokenValue(collateralRatioData?.collateralRatio, 0, 8) >= 80 ? 'low' : 'high'}`} 
+                    className={`bold ${isHighCollateralRatio ? 'low' : 'high'}`} 
                 />
         
                 {leverage && <Stat className="bold" title="Leverage" value={leverage} /> }

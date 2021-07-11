@@ -9,6 +9,7 @@ import { openPosition } from "contracts/apis/position";
 import { contractsContext } from "contracts/ContractContext";
 import { useContext, useState } from "react";
 import { useActionController } from "./ActionController";
+import Buy from "./Buy";
 
 const PlatformActions = () => {
     const { account } = useActiveWeb3React();
@@ -67,8 +68,6 @@ const PlatformActions = () => {
         }
     }
 
-    console.log(isProcessing);
-
     const renderView = () => {
         switch(type) {
             case platformConfig.actionsConfig.sell.key:
@@ -116,15 +115,7 @@ const PlatformActions = () => {
                 
 
             default:
-                return <div className="buy-component">
-                <Button 
-                    className="button" 
-                    buttonText={platformConfig.actionsConfig?.[type]?.key?.toUpperCase()}
-                    onClick={onClick}
-                    disabled={disabled}
-                    processing={isProcessing}
-                />
-            </div>
+                return <Buy />
         }
     }
 

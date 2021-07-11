@@ -2,7 +2,11 @@ import { getBalance, getCviValue } from "contracts/utils";
 import { getTokenData } from "contracts/web3Api";
 import { fromBN, gas, maxUint256, toBN, toBNAmount } from "utils";
 
-const MAX_CVI_VALUE = 20000;
+export const MAX_CVI_VALUE = 20000;
+
+export function fromUnitsToTokenAmount(units, index) {
+  return units.mul(toBN(index)).div(toBN('20000'));
+}
 
 export function fromTokenAmountToUnits(tokenAmount, index) {
   return toBN(tokenAmount).mul(toBN(MAX_CVI_VALUE)).div(toBN(index));
@@ -86,7 +90,7 @@ async function getBuyingPremiumFee(platform, tokenData, feesCalc, feesModel, tok
         .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, turbulence)
         .call());
     }
-    return { fee: toBN(buyingPremiumFee), percent: combinedPremiumFeePercentage };
+    return { fee: toBN(buyingPremiumFee), percent: combinedPremiumFeePercentage, turbulence};
 }
 
 async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {

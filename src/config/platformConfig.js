@@ -165,7 +165,20 @@ const platformConfig = {
     "claim": {
         key: "claim",
     }
-  }
+  },
+  collateralRatios: {
+    buy: {
+       id: "buy",
+       text: "Please note that when the collateral ratio is above 80%, the purchase fee will increase.",
+       type: "negative",
+       markedLevel: 80
+    },
+    deposit: {
+       text: "Please note that when the collateral ratio is above 80%, the purchase fee will increase, resulting in higher profits for the liquidity providers.",
+       type: "positive",
+       markedLevel: 80
+    }
+  },
 }
 
 export default platformConfig;
