@@ -9,6 +9,7 @@ import { contractsContext } from "contracts/ContractContext";
 import { useContext, useState } from "react";
 import { useActionController } from "./ActionController";
 import Buy from "./Buy";
+import Deposit from './Deposit';
 
 const PlatformActions = () => {
     const { account } = useActiveWeb3React();
@@ -107,7 +108,10 @@ const PlatformActions = () => {
                 </div>
             }
                 
-
+            case platformConfig.actionsConfig.deposit.key: {
+                return <Deposit />
+            }
+            
             default:
                 return <Buy />
         }
