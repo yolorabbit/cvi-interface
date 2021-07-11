@@ -1,9 +1,18 @@
 import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
 import { ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
+import moment from "moment";
 
 export const gas = { gas: 6721975, gasPrice: 5 * 10 ** 9 };
 export const maxUint256 = new BN(2).pow(new BN(256)).sub(new BN(1));
+
+export const getTimeDurationFormatted = (lockedTime) => {
+    const minutesDuration = moment.duration(lockedTime).asMinutes();
+    const hours = parseInt(minutesDuration / 60);
+    const minutes = parseInt(minutesDuration % 60);
+    const timeDurationFormatted = `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
+    return timeDurationFormatted;
+};
 
 const removeZerosFromEndOfNumber = (number) => {
     if(number.includes('.')){
