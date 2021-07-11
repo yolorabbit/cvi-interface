@@ -61,26 +61,60 @@ const stakingConfig = {
       [stakingProtocols.uniswap]: {
         "coti-eth-lp": {
           key: "coti-eth-lp",
-          protocol: stakingProtocols.uniswap
+          protocol: stakingProtocols.uniswap,
+          decimals: 18,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            stakingRewards: "COTIETHStakingRewards",
+            tokenDecimals: [18],
+            token: "UNIV2COTIETH"
+          }
         },
         "govi-eth-lp": {
           key: "govi-eth-lp",
-          protocol: stakingProtocols.uniswap
+          protocol: stakingProtocols.uniswap,
+          decimals: 18,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            stakingRewards: "GOVIETHStakingRewards",
+            tokenDecimals: [18],
+            token: "UNIV2GOVIETH"
+          }
         },
         "rhegic2-eth-lp": {
           key: "rhegic2-eth-lp",
           label: "rHEGIC2-ETH LP",
-          protocol: stakingProtocols.uniswap
+          protocol: stakingProtocols.uniswap,
+          decimals: 18,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            stakingRewards: "RHEGIC2ETHStakingRewards",
+            tokenDecimals: [18],
+            token: "UNIV2RHEGIC2ETH"
+          }
         },
       },
       [stakingProtocols.sushiswap]: {
         "coti-eth-lp": {
           key: "coti-eth-lp",
-          protocol: stakingProtocols.sushiswap
+          protocol: stakingProtocols.sushiswap,
+          decimals: 18,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            stakingRewards: "COTIETHSLPStakingRewards",
+            tokenDecimals: [18],
+            token: "SLPCOTIETH"
+          }
         },
         "govi-eth-lp": {
           key: "govi-eth-lp",
-          protocol: stakingProtocols.sushiswap
+          protocol: stakingProtocols.sushiswap,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            stakingRewards: "GOVIETHSLPStakingRewards",
+            tokenDecimals: [18],
+            token: "SLPGOVIETH"
+          }
         },
       },
     },
@@ -134,6 +168,9 @@ const stakingConfig = {
         label: "TVL",
         "cvi-usdt-lp": "CVI-USDT LP",
         "cvi-eth-lp": "CVI-ETH LP",
+        "coti-eth-lp": "COTI-ETH LP",
+        "govi-eth-lp": "GOVI-ETH LP",
+        "rhegic2-eth-lp": "RHEGIC2-ETH LP",
         "govi": "GOVI",
       },
       "Estimated rewards per day": {

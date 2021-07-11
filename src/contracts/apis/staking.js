@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { aprToAPY, convert, fromLPTokens, getChainName, getWeb3Contract, getBalance } from "contracts/utils";
-import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
+import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount } from "utils";
 
 const stakingApi = {
     getStakedAmountAndPoolShare: async (stakingRewards, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
@@ -180,6 +180,70 @@ const stakingApi = {
             symbol,
         }
         return dailyReward
+    },
+    uniswapLPTokenToUSD: async (amount, USDTToken, uniswapLPToken, uniswapToken) => {
+        let totalSupply = toBN(await uniswapLPToken.contract.methods.totalSupply().call());
+        // console.log("totalSupply: " + totalSupply);
+        if (totalSupply.isZero()) return 0;
+        let token1 = await uniswapLPToken.contract.methods.token1().call();
+        // let swapped = token1.toLowerCase() !== uniswapToken.address;
+        let swapped = token1.toLowerCase() !== uniswapToken.address.toLowerCase();
+    
+        let reserves = await uniswapLPToken.contract.methods.getReserves().call();
+        // console.log("reserves: " + JSON.stringify(reserves));
+        let reserve0 = reserves[swapped ? "1" :"0"];
+        // console.log("reserve0: " + reserve0);
+        let reserve1 = reserves[swapped ? "0" :"1"];
+        // console.log("reserve1: " + reserve1);
+      
+        let ETHValueInUSDFull = await convert(reserve0, undefined, USDTToken);
+        // console.log("ETHValueInUSDFull: " + ETHValueInUSDFull);
+        let ETHValueInUSD = toDisplayAmount(ETHValueInUSDFull, USDTToken.decimals);
+        // console.log("ETHValueInUSD: " + ETHValueInUSD);
+      
+        let tokenValueInUSDFull = await convert(reserve1, uniswapToken, USDTToken);
+        // console.log("tokenValueInUSDFull: " + tokenValueInUSDFull);
+        let tokenValueInUSD = toDisplayAmount(tokenValueInUSDFull, USDTToken.decimals);
+        // console.log("tokenValueInUSD: " + tokenValueInUSD);
+      
+        let totalSupplyTokens = toDisplayAmount(totalSupply, uniswapLPToken.decimals);
+        // console.log("totalSupplyTokens: " + totalSupplyTokens);
+      
+        let totalValue = parseFloat(tokenValueInUSD) + parseFloat(ETHValueInUSD);
+        // console.log("totalValue: " + totalValue);
+      
+        let lpTokenValue = totalValue / parseFloat(totalSupplyTokens);
+        // console.log("lpTokenValue: " + lpTokenValue);
+        let amountTokens = fromBN(amount, uniswapLPToken.decimals);
+        // console.log("amountTokens: " + amountTokens);
+        return amountTokens * lpTokenValue;
+    },
+    getUniswapAPY: async function(stakingRewards, USDTToken, GOVIData, uniswapLPToken, uniswapToken) {
+        // console.log("ETHToken: ", ETHToken);
+        let rate = await stakingRewards.methods.rewardRate().call();
+        // console.log(`reward rate ${rate}`);
+        let total = await stakingRewards.methods.totalSupply().call();
+        // console.log(`total ${total}`);
+        
+        // const apyPeriods = [86400, 86400*7, 86400*365];
+        const apyPeriods = [86400*365];
+        const apysPeriods = [];
+        
+        for(const period of apyPeriods) {
+            let periodRewards = toBN(period).mul(toBN(rate));
+            // console.log(`GOVI periodRewards ${periodRewards}`);
+            let USDPeriodRewards = toDisplayAmount(await convert(periodRewards, GOVIData, USDTToken), USDTToken.decimals);
+            // console.log(`USDPeriodRewards ${USDPeriodRewards}`);
+            
+            // convert from coti/eth or govi/eth to USDT using uniswapLPTokenToUSD (cant use uniswap for this)
+            let USDStakedTokens = await this.uniswapLPTokenToUSD(toBN(total), USDTToken, uniswapLPToken, uniswapToken);
+            // console.log(`USDStakedTokens ${USDStakedTokens}`);
+            const val = USDStakedTokens.toString() === "0" ? 0 : aprToAPY((USDPeriodRewards / USDStakedTokens) * 100, period);
+            apysPeriods.push(val)
+        }
+        // console.log(apysPeriods);
+        return apysPeriods
+        
     },
 }
 
