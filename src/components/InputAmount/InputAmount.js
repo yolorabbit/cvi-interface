@@ -3,12 +3,10 @@ import { commaFormatted, customFixed, customFixedTokenValue } from 'utils';
 import Button from 'components/Elements/Button';
 import Input from 'components/Elements/Input';
 import config from 'config/config';
-import './InputAmount.scss';
 import InputGroup from 'components/InputGroup';
-import { useWeb3Api } from 'contracts/useWeb3Api';
-import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useActiveToken } from 'components/Hooks';
 import Spinner from 'components/Spinner/Spinner';
+import './InputAmount.scss';
 
 const InputAmount = ({
     label = "Amount", 

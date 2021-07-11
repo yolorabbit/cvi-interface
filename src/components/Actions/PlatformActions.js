@@ -5,7 +5,6 @@ import { useActiveWeb3React } from "components/Hooks/wallet";
 import SellInfo from "components/pages/Platform/Info/SellInfo";
 import WithdrawInfo from "components/pages/Platform/Info/WithdrawInfo";
 import platformConfig from "config/platformConfig";
-import { openPosition } from "contracts/apis/position";
 import { contractsContext } from "contracts/ContractContext";
 import { useContext, useState } from "react";
 import { useActionController } from "./ActionController";
@@ -31,11 +30,6 @@ const PlatformActions = () => {
 
         try {
             switch(type) {
-                case "buy": {
-                    await openPosition(contracts, activeToken, { amount, account });
-                    console.log("openPosition");
-                    return;
-                }
 
                 case "sell": {
                     console.log("sell");
