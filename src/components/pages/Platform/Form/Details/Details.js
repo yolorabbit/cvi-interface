@@ -40,16 +40,16 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", selectedCurrency);
 
     const purchaseFeePayload = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
-    const [purchaseFee] = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload);
+    const [purchaseFee] = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload, { validAmount: true });
 
     const positionRewardsPayload = useMemo(() => ({ tokenAmount, account} ), [tokenAmount, account]);
-    const [positionRewards] = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload);
+    const [positionRewards] = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload, { validAmount: true });
 
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount}), [account, tokenAmount]);
-    const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload);
+    const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload, { validAmount: true });
 
     const [isHighCollateralRatio, setIsHighCollateralRatio] = useState();
-
+    
     useEffect(() => {
         if(purchaseFee === "N/A" || collateralRatioData === "N/A") return;
         if(collateralRatioData?.currentRatioValue && purchaseFee?.turbulence) {
@@ -75,10 +75,10 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     
                 <Stat 
                     title="Purchase fee" 
-                    value={purchaseFee === "N/A" ? purchaseFee : purchaseFee?.openFee?.toString()} 
+                    value={purchaseFee === "N/A" || purchaseFee === "0" ? purchaseFee : purchaseFee?.openFee?.toString()} 
                     _suffix={selectedCurrency}
                     className="low" 
-                    format={toDisplayAmount(purchaseFee?.openFee?.toString(), activeToken.decimals)}
+                    format={toDisplayAmount(purchaseFee === "0" ? "0" : purchaseFee?.openFee?.toString(), activeToken.decimals)}
                 />
     
                 <Stat 

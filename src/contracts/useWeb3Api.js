@@ -9,7 +9,7 @@ const getActiveToken = (tokens, token) => {
     return tokens.find(({key}) => key === token?.toLowerCase());
 }
 
-export const useWeb3Api = (type, selectedCurrency, body) => {
+export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const { library } = useActiveWeb3React();
     const { selectedNetwork } = useSelector(({app}) => app);
     const contracts = useContext(contractsContext);
@@ -54,6 +54,7 @@ export const useWeb3Api = (type, selectedCurrency, body) => {
         if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
         if(body?.hasOwnProperty('account') && !body.account) return setData("0");
         
+        if(options?.validAmount && body?.hasOwnProperty("tokenAmount") && (body?.tokenAmount?.isZero() || !body?.tokenAmount)) return setData("0");
         ref.current = setTimeout(() => {
             getData();
         }, 500);

@@ -30,7 +30,7 @@ const Buy = () => {
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const purchaseFeePayload = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
-    const [purchaseFee, getPurchaseFees] = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload);
+    const [purchaseFee, getPurchaseFees] = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload, { validAmount: true});
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", token);
 
     const allowance = async (_account) => {
