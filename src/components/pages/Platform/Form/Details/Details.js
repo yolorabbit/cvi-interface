@@ -115,7 +115,7 @@ const LiquidityView = ({amount, selectedCurrency}) => {
     const activeToken = useActiveToken(selectedCurrency);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lpTokenPayload = useMemo(() => ({tokenAmount}), [tokenAmount]);
-    const [lpTokenAmount] = useWeb3Api("toLPTokens", selectedCurrency, lpTokenPayload)
+    const [lpTokenAmount] = useWeb3Api("toLPTokens", selectedCurrency, lpTokenPayload, { validAmount: true })
 
     return useMemo(() => {
 
