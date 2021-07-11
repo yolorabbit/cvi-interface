@@ -56,19 +56,16 @@
     & h2 {
         font-size: 0.625vw;
         font-weight: normal;
-        line-height: 0.833vw;
         margin: 0;
         display: flex;
         align-items: flex-start;
         
         @media (max-width: 1365px){
             font-size: 0.879vw;	
-            line-height: 1.172vw;
         }
 
         @media (max-width: 1024px){
             font-size: 1.565vw;
-            line-height: 2.086vw;
         }
 
         @media (max-width: 767px){
@@ -80,23 +77,19 @@
 
     & p {
         font-size: 0.938vw;
-        line-height: 0.833vw;
         color: white;
         margin: 0;
 
         @media (max-width: 1365px){
             font-size: 1.025vw;
-            line-height: 1.172vw;	
         }
 
         @media (max-width: 1024px){
             font-size: 2.347vw;
-            line-height: 2.086vw;
         }
 
         @media (max-width: 767px){
             font-size: 5vw;
-            line-height: 4.444vw;
         }
     }
 }
