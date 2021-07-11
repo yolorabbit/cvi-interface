@@ -1,12 +1,23 @@
+import { useActionController } from 'components/Actions/ActionController';
 import { useInDOM } from 'components/Hooks';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
+import { useWeb3Api } from 'contracts/useWeb3Api';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { getTimeDurationFormatted } from 'utils';
 import './Countdown.scss';
 
 const useCountdown = () => {
-    const [_lockedTime, _setLockedTime] = useState(10000);
+    const { library, account } = useActiveWeb3React();
+    const { token, type } = useActionController();
+    const isLockedPayload = useMemo(() => ({type, library, account}), [type, library, account]);
+    const [isLocked] = useWeb3Api("isLocked", token, isLockedPayload);
+    const [_lockedTime, _setLockedTime] = useState(null);
     const _lockedDurationTimer = useRef();
     const isActiveInDOM = useInDOM();
+
+    useEffect(() => {
+        console.log(isLocked);
+    }, [isLocked]);
 
     useEffect(() => {
         _lockedDurationTimer.current = setInterval(() => {

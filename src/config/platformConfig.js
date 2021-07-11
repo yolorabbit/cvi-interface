@@ -179,6 +179,10 @@ const platformConfig = {
        markedLevel: 80
     }
   },
+  lockupPeriod: {
+    sell: 'buyersLockupPeriod',
+    withdraw: 'lpsLockupPeriod'
+  },
 }
 
 export default platformConfig;

@@ -9,7 +9,6 @@ import { gas, toBN, toBNAmount } from '../../utils/index';
 import { useDispatch } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
-import Countdown from 'components/Countdown/Countdown';
 import SellInfo from 'components/pages/Platform/Info/SellInfo';
 import { getPositionValue, MAX_CVI_VALUE } from 'contracts/apis/position';
 import useCountdown from 'components/Countdown/Countdown';
@@ -28,7 +27,7 @@ const Sell = () => {
         () => () => CountdownComponent, 
         //eslint-disable-next-line
     [lockedTime]);
-    
+
     const sell = async () => {
         try {
             let positionValue;
@@ -67,7 +66,10 @@ const Sell = () => {
     }
 
     const onClick = async () => {
-        if(!isOpen) return setIsOpen(true);
+        if(!isOpen) {
+            updateAvailableBalance();
+            return setIsOpen(true);
+        }
         setProcessing(true);
         // TODO: check isLocked and HasGoviToClaim
         

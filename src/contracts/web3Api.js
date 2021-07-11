@@ -6,6 +6,14 @@ import positionApi from "./apis/position";
 import stakingApi from "./apis/staking";
 import rewardsApi from './apis/rewards';
 import liquidityApi from "./apis/liquidity";
+import moment from "moment";
+
+export async function getLastOpenEvent(platformAddress, account) {
+    let _lastOpenEvent = await TheGraph.lastOpen(account, platformAddress);
+    return !!_lastOpenEvent.openPositions?.length ? _lastOpenEvent.openPositions[0] : null;
+}
+
+export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
 
 export const getTokenData = async (contract) => {
     if(!contract) return null;
@@ -174,6 +182,42 @@ const web3Api = {
             const tokenData = await getTokenData(contracts[token.rel.contractKey]);
             const balance = await getBalance(account, token.key !== "eth" && tokenData.address);
             return balance;
+        } catch(error) {
+            console.log(error);
+            return "N/A";
+        }
+    },
+    isLocked: async function(contracts, token, { type, customDuration, account, library }) {
+        try {
+            let openTime;
+
+            console.log(type);
+            console.log(token);
+            console.log(account);
+            console.log(library);
+
+            if(type === "sell"){
+                let event = await getLastOpenEvent(contracts[token.rel.platform]._address, account);
+                if(!event) return [0,0];
+                let block = await new Promise((res, rej)=> library.eth.getBlock(event.blockNumber, (err, data) => err ? rej(err) : res(data)));
+                if(!block) return [0,0];
+                openTime = (block.timestamp * 1000);
+            }
+            
+            if(type === "withdraw") { 
+                openTime = await contracts[token.rel.platform].methods.lastDepositTimestamp(account).call() * 1000;
+            }
+            
+            const lock = await contracts[token.rel.platform].methods[config.lockupPeriod[type]]().call();
+            const latestBlockTimestamp = await getLatestBlockTimestamp(library.eth.getBlock) * 1000;
+            const lockedTime = moment.utc(openTime).add(lock, 'seconds').valueOf() - latestBlockTimestamp;
+    
+            let customDurationTime;
+            if(customDuration) {
+                customDurationTime = moment.utc(openTime).add(customDuration, 'seconds').valueOf() - latestBlockTimestamp;
+            }
+            
+            return [lockedTime > 0, customDurationTime ?? lockedTime];
         } catch(error) {
             console.log(error);
             return "N/A";
