@@ -3,11 +3,13 @@ import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 import { platformViewContext } from 'components/Context';
 import Action from './Action';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
+import { useWeb3Api } from 'contracts/useWeb3Api';
 
 const actionControllerContext = createContext({});
-export const ActionControllerContext = ({disabled, token, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen}) => {
+export const ActionControllerContext = ({disabled, token, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance }) => {
   return (
-    <actionControllerContext.Provider value={{disabled, type, token, leverage, amount, setAmount, isModal, isOpen, setIsOpen }}>
+    <actionControllerContext.Provider value={{disabled, type, token, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance }}>
       <Action />
     </actionControllerContext.Provider>
   )
@@ -22,6 +24,13 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
+  const { account } = useActiveWeb3React();
+  const availableBalancePayload = useMemo(() => ({account}), [account]);
+  const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", token, availableBalancePayload);
+  
+  const updateAvailableBalance = () => {
+    getAvailableBalance();
+  }
 
   const renderActionComponent = (isModal = false) => {
     return <ActionControllerContext 
@@ -33,7 +42,8 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         setAmount={setAmount} 
         isOpen={isOpen} 
         isModal={isModal} 
-        setIsOpen={setIsOpen} 
+        setIsOpen={setIsOpen}
+        updateAvailableBalance={updateAvailableBalance} 
       />
   }
 
@@ -54,6 +64,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             amount={amount} 
             setAmount={setAmount} 
             setInsufficientBalance={setInsufficientBalance}
+            availableBalance={availableBalance}
           />
 
           {renderActionComponent()}
@@ -65,13 +76,14 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             amount={amount} 
             setAmount={setAmount} 
             setInsufficientBalance={setInsufficientBalance}
+            availableBalance={availableBalance}
           /> 
         }
 
         {renderActionComponent(isModal)}
     </div>
     //eslint-disable-next-line
-  }, [type, activeView, amount, isOpen, isModal, token, amountLabel, insufficientBalance])
+  }, [type, activeView, amount, isOpen, isModal, token, amountLabel, insufficientBalance, availableBalance])
 };
 
 export default ActionController;

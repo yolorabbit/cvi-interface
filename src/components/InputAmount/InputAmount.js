@@ -10,13 +10,18 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useActiveToken } from 'components/Hooks';
 import Spinner from 'components/Spinner/Spinner';
 
-const InputAmount = ({label = "Amount", breakLine, amount = "", setAmount, symbol, availableText = "Your available balance:", setInsufficientBalance, error}) => {
+const InputAmount = ({
+    label = "Amount", 
+    breakLine, 
+    amount = "", 
+    setAmount, 
+    symbol, 
+    availableText = "Your available balance:", 
+    setInsufficientBalance, 
+    error,
+    availableBalance
+}) => {
     const activeToken = useActiveToken(symbol); 
-    const { account } = useActiveWeb3React();
-    
-    const availableBalancePayload = useMemo(() => ({account}), [account]);
-    const [availableBalance] = useWeb3Api("getAvailableBalance", symbol, availableBalancePayload);
-
     const availableBalanceAmount = useMemo(() => customFixedTokenValue(availableBalance, activeToken.decimals, activeToken.decimals), [activeToken, availableBalance]);
     const insufficientBalance = useMemo(() => amount > availableBalanceAmount, [amount, availableBalanceAmount]);
 

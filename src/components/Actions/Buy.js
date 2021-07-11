@@ -18,10 +18,10 @@ import ErrorModal from 'components/Modals/ErrorModal';
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
 const Buy = () => {
-    const { disabled, type, token, amount, setAmount, leverage } = useActionController();
-    const { account, library } = useActiveWeb3React();
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
+    const { disabled, type, token, amount, setAmount, leverage, updateAvailableBalance } = useActionController();
+    const { account, library } = useActiveWeb3React();
     const [modalIsOpen, setModalIsOpen] = useState();
     const [errorMessage, setErrorMessage] = useState();
     const contracts = useContext(contractsContext);
@@ -161,7 +161,8 @@ const Buy = () => {
         } finally {
             if(isActiveInDOM()) {
                 setProcessing(false);
-                setAmount("")
+                setAmount("");
+                updateAvailableBalance();
                 // submitted();
             }
         }
