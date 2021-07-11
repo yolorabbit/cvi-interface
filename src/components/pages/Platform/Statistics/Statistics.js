@@ -10,11 +10,11 @@ import './Statistics.scss';
 const Statistics = () => {
     const { selectedNetwork } = useSelector(({app}) => app)
     const isLaptop = useIsLaptop();
-    const platformBalance = useWeb3Api("getPlatformBalance");
-    const liquidityPools = useWeb3Api("getLiquidityPoolsBalance");
-    const goviPrice = useWeb3Api("getGoviPrice");
-    const feesCollected = useWeb3Api("getFeesCollected");
-    const totalGoviRewards = useWeb3Api("getTotalGoviRewards");
+    const [platformBalance] = useWeb3Api("getPlatformBalance");
+    const [liquidityPools] = useWeb3Api("getLiquidityPoolsBalance");
+    const [goviPrice] = useWeb3Api("getGoviPrice");
+    const [feesCollected] = useWeb3Api("getFeesCollected");
+    const [totalGoviRewards] = useWeb3Api("getTotalGoviRewards");
 
     return useMemo(() => {
         const _openTrades = () => {

@@ -37,16 +37,16 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     const activeToken = useActiveToken(selectedCurrency);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
 
-    const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
+    const [collateralRatioData] = useWeb3Api("getCollateralRatio", selectedCurrency);
 
     const purchaseFeePayload = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
-    const purchaseFee = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload);
+    const [purchaseFee] = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload);
 
     const positionRewardsPayload = useMemo(() => ({ tokenAmount, account} ), [tokenAmount, account]);
-    const positionRewards = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload);
+    const [positionRewards] = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload);
 
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount}), [account, tokenAmount]);
-    const currentFundingFee = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload);
+    const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload);
 
     const [isHighCollateralRatio, setIsHighCollateralRatio] = useState();
 
@@ -105,17 +105,17 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat title="CVI Index" value={cviInfo?.price} />
             </>
         )
-    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
+    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee, isHighCollateralRatio]) 
    
 }
 
 const LiquidityView = ({amount, selectedCurrency}) => {
-    const collateralRatioData = useWeb3Api("getCollateralRatio", selectedCurrency);
+    const [collateralRatioData] = useWeb3Api("getCollateralRatio", selectedCurrency);
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
     const activeToken = useActiveToken(selectedCurrency);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lpTokenPayload = useMemo(() => ({tokenAmount}), [tokenAmount]);
-    const lpTokenAmount = useWeb3Api("toLPTokens", selectedCurrency, lpTokenPayload)
+    const [lpTokenAmount] = useWeb3Api("toLPTokens", selectedCurrency, lpTokenPayload)
 
     return useMemo(() => {
 

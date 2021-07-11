@@ -6,7 +6,6 @@ import { useContext } from 'react';
 import { contractsContext } from './../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useWeb3Api } from './../../contracts/useWeb3Api';
-import { useEffect } from 'react';
 import { commaFormatted, gas, maxUint256, toBN, toBNAmount, toDisplayAmount } from './../../utils/index';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -19,7 +18,7 @@ import ErrorModal from 'components/Modals/ErrorModal';
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
 const Buy = () => {
-    const { disabled, type, token, amount, leverage } = useActionController();
+    const { disabled, type, token, amount, setAmount, leverage } = useActionController();
     const { account, library } = useActiveWeb3React();
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
@@ -31,8 +30,8 @@ const Buy = () => {
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const purchaseFeePayload = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
-    const purchaseFee = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload);
-    const collateralRatioData = useWeb3Api("getCollateralRatio", token);
+    const [purchaseFee, getPurchaseFees] = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload);
+    const [collateralRatioData] = useWeb3Api("getCollateralRatio", token);
 
     const allowance = async (_account) => {
         return await contracts[activeToken.rel.contractKey].methods.allowance(account, _account).call();
@@ -56,9 +55,6 @@ const Buy = () => {
     }
 
     const toggleModal = async(flag) => {
-        if(errorMessage === feesHighWarningMessage) {
-            // await getFees()
-        }
         setModalIsOpen(flag);
     }
 
@@ -81,10 +77,10 @@ const Buy = () => {
         }
     }
 
-    const feesValidation = async (isFeesValdation = true) => {
-        // const contractName = await contracts[activeToken.rel.platform].methods.name().call();
-        // return contractName !== "USDT-LP" ? await getFees(isFeesValdation) : true;
-        return true;
+    const feesValidation = async () => {
+        let fees = await getPurchaseFees();
+        // true for valid fees
+        return fees !== "N/A" && purchaseFee !== "N/A" ? toBN(fees.buyingPremiumFeePercent).cmp(toBN(purchaseFee.buyingPremiumFeePercent)) !== 1 : true;
     }
 
     const buy = async () => {
@@ -109,12 +105,13 @@ const Buy = () => {
             return;
         }
 
-        // const feeIsValid = await feesValidation();
-        // if(!feeIsValid) {
-        //     setModalIsOpen(true);
-        //     setErrorMessage(feesHighWarningMessage);
-        //     return;
-        // }
+        const feeIsValid = await feesValidation();
+        
+        if(!feeIsValid) {
+            setModalIsOpen(true);
+            setErrorMessage(feesHighWarningMessage);
+            return;
+        }
 
         setProcessing(true);
         try {
@@ -164,6 +161,7 @@ const Buy = () => {
         } finally {
             if(isActiveInDOM()) {
                 setProcessing(false);
+                setAmount("")
                 // submitted();
             }
         }
@@ -178,7 +176,8 @@ const Buy = () => {
                     buttonText={platformConfig.actionsConfig?.[type]?.key?.toUpperCase()}
                     onClick={onClick}
                     disabled={disabled || purchaseFee === "N/A" || purchaseFee === null || collateralRatioData === null || collateralRatioData === "N/A"}
-                    processing={isProcessing}
+                    processing={isProcessing || purchaseFee === null}
+                    processingText={amount > 0 && purchaseFee === null && "Calculating"}
                 />
             </div>
         </>

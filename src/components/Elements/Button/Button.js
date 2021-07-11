@@ -11,6 +11,7 @@ const Button = ({
   boxShadow,
   height,
   processing,
+  processingText,
   ...props
 }) => {
   const upHandler = (event) => {
@@ -36,7 +37,7 @@ const Button = ({
       {...(disabled ? {} : { onClick })}
       {...props}
     >
-      {processing ? <div className="processing">Processing <div className="dot-flashing"></div></div> : (children || buttonText) }
+      {processing ? <div className="processing">{processingText || "Processing"} <div className="dot-flashing"></div></div> : (children || buttonText) }
     </button>
   );
 };

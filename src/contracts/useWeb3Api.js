@@ -23,23 +23,39 @@ export const useWeb3Api = (type, selectedCurrency, body) => {
                     const token = getActiveToken(tokens, selectedCurrency);
                     const data = await web3Api[type](contracts, token, {library, ...body});
                     setData(data);
+                    return data;
                 } else {
                     const data = await web3Api[type](contracts, tokens, {library, ...body});
                     setData(data);
+                    return data;
                 }
-            } else setData("N/A");
+            } else {
+                setData("N/A");
+                return "N/A";
+            }
         } catch(error) {
             setData("N/A");
+            return "N/A";
+        }
+    }
+
+    const getData = async () => {
+        try {
+            setData(null);
+            const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
+            return await fetchWeb3ApiData(contracts, tokens);
+        } catch(error) {
+            setData("N/A");
+            return "N/A";
         }
     }
 
     useEffect(() => {
         if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
         if(body?.hasOwnProperty('account') && !body.account) return setData("0");
-        const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
-        setData(null);
+        
         ref.current = setTimeout(() => {
-            fetchWeb3ApiData(contracts, tokens);
+            getData();
         }, 500);
 
         return () => {
@@ -48,5 +64,5 @@ export const useWeb3Api = (type, selectedCurrency, body) => {
         //eslint-disable-next-line
     }, [selectedNetwork, contracts, library, selectedCurrency, body]);
 
-    return data
+    return [data, getData];
 }
