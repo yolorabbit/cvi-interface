@@ -16,6 +16,10 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const [data, setData] = useState();
     const ref = useRef(null);
 
+    useEffect(() => {
+        setData(null);
+    }, [selectedCurrency]);
+
     const fetchWeb3ApiData = async (contracts, tokens) => {
         try {
             if(web3Api[type]) {
@@ -54,8 +58,8 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     useEffect(() => {
         if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
         if(body?.hasOwnProperty('account') && !body.account) return setData("0");
-        
         if(options?.validAmount && body?.hasOwnProperty("tokenAmount") && (body?.tokenAmount?.isZero() || !body?.tokenAmount)) return setData("0");
+        
         ref.current = setTimeout(() => {
             getData();
         }, 500);
