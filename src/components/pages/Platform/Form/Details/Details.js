@@ -53,7 +53,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     useEffect(() => {
         if(purchaseFee === "N/A" || collateralRatioData === "N/A") return;
         if(collateralRatioData?.currentRatioValue && purchaseFee?.turbulence) {
-            setIsHighCollateralRatio(toBN(purchaseFee?.turbulence).cmp(toBN(100)) > -1 || toBN(toBNAmount(collateralRatioData.collateralRatio.toString(), 8)).cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0);
+            setIsHighCollateralRatio(toBN(purchaseFee?.turbulence).cmp(toBN(100)) > -1 || collateralRatioData.collateralRatio.cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0);
         }
     }, [collateralRatioData, purchaseFee]);
 
