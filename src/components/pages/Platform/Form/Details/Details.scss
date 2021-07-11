@@ -82,6 +82,7 @@
             & > b {
                 font-size: 1.458vw;
                 margin-top: 0.208vw;
+                word-break: break-word;
 
                 @media (max-width: 1365px){
                     font-size: 2.051vw;

@@ -34,8 +34,7 @@ const InputAmount = ({
     }, [symbol])
 
     const _onChangeNumber = (value) => {
-        if(value?.split && value?.split('.')?.length > 0 && value?.split('.')?.[1]?.length > activeToken.fixedDecimals) return;
-        
+        if(value?.split && value?.split('.')?.length > 0 && value?.split('.')?.[1]?.length > activeToken.decimals) return;
         if(Number(value) > 999999999999) return;
 
         if (value?.match && value.match(/[+-]?([0-9]*[.])?[0-9]+/) && !isNaN(value)) {
