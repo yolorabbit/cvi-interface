@@ -10,6 +10,7 @@ import { useContext, useState } from "react";
 import { useActionController } from "./ActionController";
 import Buy from "./Buy";
 import Deposit from './Deposit';
+import Sell from "./Sell";
 
 const PlatformActions = () => {
     const { account } = useActiveWeb3React();
@@ -66,19 +67,8 @@ const PlatformActions = () => {
     const renderView = () => {
         switch(type) {
             case platformConfig.actionsConfig.sell.key:
-                return <div className="sell-component">
-                <div className="sell-component__container">
-                    {(isOpen && !isModal) && <SellInfo />}
-                    <Countdown />
-                    <Button 
-                        className="sell-component__container--button" 
-                        buttonText="Sell" 
-                        onClick={onClick}
-                        disabled={disabled}
-                        processing={isProcessing}
-                    />
-                </div>
-            </div>
+                return <Sell />
+                
             case platformConfig.actionsConfig.withdraw.key:
                 return  <div className="withdraw-component">
                     <div className="withdraw-component__container">

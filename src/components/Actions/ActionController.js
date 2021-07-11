@@ -25,7 +25,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
   const { account } = useActiveWeb3React();
-  const availableBalancePayload = useMemo(() => ({account}), [account]);
+  const availableBalancePayload = useMemo(() => ({account, type}), [account, type]);
   const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", token, availableBalancePayload);
   
   const updateAvailableBalance = () => {

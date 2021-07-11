@@ -4,6 +4,14 @@ import { gas, maxUint256, toBN } from "utils";
 
 export const MAX_CVI_VALUE = 20000;
 
+export const getPositionValue = async (platform, account) => {
+  try {
+    return await platform.methods.calculatePositionBalance(account).call();
+  } catch(error) {
+    return "N/A";
+  }
+}
+
 export function fromUnitsToTokenAmount(units, index) {
   return units.mul(toBN(index)).div(toBN('20000'));
 }
@@ -96,6 +104,17 @@ export async function getOpenPositionFee(contracts, token, {leverage = 1, tokenA
     }   
 }
 
+export async function getClosePositionFee(contracts, token, {tokenAmount, account}) {
+  let pos = await contracts[token.rel.platform].methods.positions(account).call();
+  if (toBN(pos.positionUnitsAmount).isZero()) {
+      return toBN(0);
+  }
+  let posTimestamp = pos.creationTimestamp;
+  let closeFeePrecent = toBN(await contracts[token.rel.feesCalc].methods.calculateClosePositionFeePercent(posTimestamp).call());
+  let maxFeePercent = toBN(await contracts[token.rel.platform].methods.MAX_FEE_PERCENTAGE().call());
+  return toBN(tokenAmount).mul(closeFeePrecent).div(maxFeePercent);
+}
+
 async function getCurrentFundingFeeV1(platform, account) {
   return await platform.methods.calculatePositionPendingFees(account).call();
 }
@@ -124,7 +143,8 @@ async function getFundingFeePerTimePeriod(contracts, token, {tokenAmount, period
 const positionApi = {
     getOpenPositionFee,
     getCurrentFundingFee,
-    getFundingFeePerTimePeriod
+    getFundingFeePerTimePeriod,
+    getClosePositionFee
 }
 
 export default positionApi;

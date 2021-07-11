@@ -164,8 +164,13 @@ const web3Api = {
             }
         }
     },
-    getAvailableBalance: async (contracts, token, {account}) => {
+    getAvailableBalance: async (contracts, token, {account, type}) => {
         try {
+            if(type === "sell") {
+                let positionValue = await contracts[token.rel.platform].methods.calculatePositionBalance(account).call();
+                return positionValue.currentPositionBalance;
+            }
+
             const tokenData = await getTokenData(contracts[token.rel.contractKey]);
             const balance = await getBalance(account, token.key !== "eth" && tokenData.address);
             return balance;
