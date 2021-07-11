@@ -21,6 +21,7 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
             if(web3Api[type]) {
                 if(selectedCurrency) {
                     const token = getActiveToken(tokens, selectedCurrency);
+                    if(!token) return setData("N/A");
                     const data = await web3Api[type](contracts, token, {library, ...body});
                     setData(data);
                     return data;
