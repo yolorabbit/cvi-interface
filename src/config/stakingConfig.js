@@ -150,7 +150,14 @@ const stakingConfig = {
       [stakingProtocols.quickswap]: {
         "govi-eth-lp": {
           key: "govi-eth-lp",
-          protocol: stakingProtocols.quickswap
+          protocol: stakingProtocols.quickswap,
+          decimals: 18,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            stakingRewards: "GOVIETHStakingRewards",
+            token: "UNIV2GOVIETH",
+            tokenDecimals: [18]
+          }
         },
       }
     }
