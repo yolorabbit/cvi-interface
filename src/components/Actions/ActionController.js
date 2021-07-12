@@ -57,7 +57,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   
   return useMemo(() => {
     return <div className="action-controller-component">
-        {(isModal && isOpen) && <Modal closeIcon handleCloseModal={() => setIsOpen(false)}>
+        {(isModal && isOpen) && <Modal clickOutsideDisabled closeIcon handleCloseModal={() => setIsOpen(false)}>
           <InputAmount 
             label={amountLabel}
             symbol={token} 

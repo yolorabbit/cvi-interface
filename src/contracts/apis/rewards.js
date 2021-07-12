@@ -1,9 +1,29 @@
-import { fromTokenAmountToUnits, toBN } from '../../utils';
+import { fromTokenAmountToUnits, toBN, toFixed } from '../../utils';
 import { getOpenPositionFee } from './position';
 import Web3 from 'web3';
 import { getNow, getPositionRewardsContract } from 'contracts/utils';
 
 var BN = Web3.utils.BN;
+
+async function getClaimablePositionUnits(platform, rewards, account) {
+  let { positionUnitsAmount, creationTimestamp } = await platform.methods.positions(account).call();
+  const unclaimedPositionUnits = await rewards.methods.unclaimedPositionUnits(account).call();
+  // positionUnitsAmount = positionUnitsAmount < unclaimedPositionUnits ? positionUnitsAmount : unclaimedPositionUnits;
+  positionUnitsAmount = Math.min(positionUnitsAmount, unclaimedPositionUnits);
+  // console.log(`getClaimablePositionUnits ${positionUnitsAmount} -- ${creationTimestamp}`);
+  return { positionUnitsAmount, creationTimestamp };
+}
+
+export async function getClaimableReward(contracts, token, { account }) {
+  const PositionRewardsHelper = await getPositionRewardsContract(token);
+  const { positionUnitsAmount, creationTimestamp } = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.rewards], account);
+  const units = toBN(toFixed(positionUnitsAmount.toString()));
+  return units.gt(toBN(0)) ? 
+      (PositionRewardsHelper ? 
+          await PositionRewardsHelper.methods.calculatePositionReward(units.toString(), creationTimestamp).call() 
+          : await contracts[token.rel.rewards].methods.calculatePositionReward(units.toString(), creationTimestamp).call()) 
+          : 0;
+}
 
 
 async function calculatePositionReward(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0}) {
@@ -44,7 +64,8 @@ async function calculatePositionReward(contracts, token, {account, tokenAmount, 
 
 
 const rewardsApi = {
-  calculatePositionReward
+  getClaimableReward,
+  calculatePositionReward,
 }
 
 export default rewardsApi;

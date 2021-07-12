@@ -12,6 +12,8 @@ import config from '../../config/config';
 import SellInfo from 'components/pages/Platform/Info/SellInfo';
 import { getPositionValue, MAX_CVI_VALUE } from 'contracts/apis/position';
 import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
+import web3Api from 'contracts/web3Api';
+import SellAllModal from './SellAllModal.js';
 
 const Sell = () => {
     const dispatch = useDispatch(); 
@@ -23,7 +25,8 @@ const Sell = () => {
     const [isProcessing, setProcessing] = useState();
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lockedTime = useIsLockedTime();
-    
+    const [sellAllModal, setSellAllModal] = useState(false);
+
     const sell = async () => {
         try {
             let positionValue;
@@ -62,15 +65,18 @@ const Sell = () => {
     }
 
     const onClick = async () => {
-        if(!isOpen) {
+        if(!isOpen && !sellAllModal) {
             updateAvailableBalance();
             return setIsOpen(true);
         }
         setProcessing(true);
         
-        // TODO: HasGoviToClaim
-        
         try {
+            if(!sellAllModal) {
+                const claimRewardData = toBN(await web3Api.getClaimableReward(contracts, activeToken, { account }));
+                if(claimRewardData?.gt(toBN("0"))) return setSellAllModal(true);
+            }
+
             dispatch(addAlert({
                 id: 'notice',
                 alertType: config.alerts.types.NOTICE,
@@ -79,7 +85,7 @@ const Sell = () => {
 
             await sell();
         } catch (error) {
-          console.log(error);
+            console.log(error);
             dispatch(addAlert({
                 id: 'closePositionFailed',
                 eventName: "Sell position - failed",
@@ -95,19 +101,22 @@ const Sell = () => {
         }
     }
 
-    return <div className="sell-component">
-        <div className="sell-component__container">
-            {(isOpen && !isModal) && <SellInfo />}
-            <CountdownComponent lockedTime={lockedTime} />
-            <Button 
-                className="sell-component__container--button" 
-                buttonText="Sell" 
-                onClick={onClick}
-                processing={isProcessing}
-                disabled={(isOpen && (disabled || tokenAmount?.isZero())) || lockedTime > 0 || lockedTime === null}
-            />
+    return <> 
+        {sellAllModal && <SellAllModal isProcessing={isProcessing} onSubmit={onClick} setSellAllModal={setSellAllModal} />}
+        <div className="sell-component">
+            <div className="sell-component__container">
+                {(isOpen && !isModal) && <SellInfo />}
+                <CountdownComponent lockedTime={lockedTime} />
+                <Button 
+                    className="sell-component__container--button" 
+                    buttonText="Sell" 
+                    onClick={onClick}
+                    processing={isProcessing}
+                    disabled={(isOpen && (disabled || tokenAmount?.isZero())) || lockedTime > 0 || lockedTime === null}
+                />
+            </div>
         </div>
-    </div>
+    </>
      
 }
 
