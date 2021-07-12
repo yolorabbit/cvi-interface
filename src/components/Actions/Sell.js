@@ -31,7 +31,7 @@ const Sell = () => {
         try {
             let positionValue;
             try {
-                positionValue = await getPositionValue();
+                positionValue = await getPositionValue(contracts[activeToken.rel.platform], account);
             } catch(error) {
                 console.log(error);
                 return;
@@ -40,10 +40,11 @@ const Sell = () => {
             const { getCVILatestRoundData } = contracts[activeToken.rel.cviOracle].methods;
             const { cviValue } = await getCVILatestRoundData().call();
             let positionUnitsAmount = false;
-            if(!toBN(toBNAmount(positionValue.currentPositionBalance, activeToken.decimals)).cmp(tokenAmount)) {
+         
+            if(!toBN(positionValue.currentPositionBalance).cmp(tokenAmount)) {
                 positionUnitsAmount = toBN(positionValue.positionUnitsAmount);
             };
-    
+            
             const _amount = !positionUnitsAmount ? toBN(toBNAmount(amount, activeToken.decimals)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue)) : toBN(positionUnitsAmount);
             await contracts[activeToken.rel.platform].methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
 
@@ -84,8 +85,17 @@ const Sell = () => {
             }));
 
             await sell();
+
+            if(isActiveInDOM()) {
+                if(sellAllModal) setSellAllModal(false);
+                setAmount("");
+                updateAvailableBalance();
+            }
+
         } catch (error) {
             console.log(error);
+            if(isActiveInDOM()) setAmount("");
+
             dispatch(addAlert({
                 id: 'closePositionFailed',
                 eventName: "Sell position - failed",
@@ -93,16 +103,12 @@ const Sell = () => {
                 message: "Transaction failed!"
             }));
         } finally {
-            if(isActiveInDOM()) {
-                setProcessing(false);
-                setAmount("");
-                updateAvailableBalance();
-            }
+            if(isActiveInDOM()) setProcessing(false);
         }
     }
 
     return <> 
-        {sellAllModal && <SellAllModal isProcessing={isProcessing} onSubmit={onClick} setSellAllModal={setSellAllModal} />}
+        {sellAllModal && <SellAllModal isProcessing={isProcessing} onSubmit={() => onClick()} setSellAllModal={setSellAllModal} />}
         <div className="sell-component">
             <div className="sell-component__container">
                 {(isOpen && !isModal) && <SellInfo />}
