@@ -11,7 +11,7 @@ import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import SellInfo from 'components/pages/Platform/Info/SellInfo';
 import { getPositionValue, MAX_CVI_VALUE } from 'contracts/apis/position';
-import useCountdown from 'components/Countdown/Countdown';
+import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
 
 const Sell = () => {
     const dispatch = useDispatch(); 
@@ -22,12 +22,8 @@ const Sell = () => {
     const activeToken = useActiveToken(token);
     const [isProcessing, setProcessing] = useState();
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
-    const [lockedTime, CountdownComponent] = useCountdown();
-    const Countdown = useMemo(
-        () => () => CountdownComponent, 
-        //eslint-disable-next-line
-    [lockedTime]);
-
+    const lockedTime = useIsLockedTime();
+    
     const sell = async () => {
         try {
             let positionValue;
@@ -103,13 +99,13 @@ const Sell = () => {
             <div className="sell-component">
                 <div className="sell-component__container">
                     {(isOpen && !isModal) && <SellInfo />}
-                    <Countdown />
+                    <CountdownComponent lockedTime={lockedTime} />
                     <Button 
                         className="sell-component__container--button" 
                         buttonText="Sell" 
                         onClick={onClick}
                         processing={isProcessing}
-                        disabled={(isOpen && disabled) || (!isOpen && lockedTime >= 0)}
+                        disabled={(isOpen && disabled) || lockedTime > 0 || lockedTime === null}
                     />
                 </div>
             </div>

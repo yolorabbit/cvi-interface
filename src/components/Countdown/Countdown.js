@@ -6,47 +6,58 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { getTimeDurationFormatted } from 'utils';
 import './Countdown.scss';
 
-const useCountdown = () => {
+export const useIsLockedTime = () => {
     const { library, account } = useActiveWeb3React();
     const { token, type } = useActionController();
     const isLockedPayload = useMemo(() => ({type, library, account}), [type, library, account]);
-    const [isLocked] = useWeb3Api("isLocked", token, isLockedPayload);
+    const [lockedData] = useWeb3Api("isLocked", token, isLockedPayload);
     const [_lockedTime, _setLockedTime] = useState(null);
     const _lockedDurationTimer = useRef();
     const isActiveInDOM = useInDOM();
 
     useEffect(() => {
-        console.log(isLocked);
-    }, [isLocked]);
+        if(lockedData && lockedData !== "N/A") {
+            console.log(lockedData);
+            _setLockedTime(lockedData[1]);
+        }
+    }, [lockedData]);
 
     useEffect(() => {
-        _lockedDurationTimer.current = setInterval(() => {
+        if(_lockedTime === null || _lockedTime < 0) return;
+        _lockedDurationTimer.current = setTimeout(() => {
             if(isActiveInDOM()) { 
-            _setLockedTime(prevTime => {
-                if(!prevTime) return;
-                return prevTime - 1000
-            });
+                _setLockedTime(prevTime => {
+                    if(!prevTime) return;
+                    if(_lockedTime <= 0) {
+                        clearTimeout(_lockedDurationTimer.current);
+                        return 0;
+                    }
+                    return prevTime - 1000
+                });
             }
         }, 1000);
 
         //eslint-disable-next-line
         return () => {
-            if(_lockedDurationTimer.current) clearInterval(_lockedDurationTimer.current);
+            if(_lockedDurationTimer.current) clearTimeout(_lockedDurationTimer.current);
         }
         //eslint-disable-next-line
-    }, []);
+    }, [_lockedTime]);
 
-    const Cd = useMemo(() => {
+    return _lockedTime;
+}
+
+export const CountdownComponent = ({lockedTime}) => {
+    return useMemo(() => {
+        if(lockedTime === "N/A" || !lockedTime) return null;
         return <div className="count-down-component">
-            {_lockedTime >= 0 ? <> 
+            {lockedTime && lockedTime > 0 ? <> 
                 <img src={require('../../images/icons/processing.svg').default} alt="processing" /> 
-                <b>{getTimeDurationFormatted(_lockedTime)}</b> 
+                <b>{getTimeDurationFormatted(lockedTime)}</b> 
                 <small>HH:MM</small>
             </> : null }  
         </div>
-    }, [_lockedTime]);
-
-    return [_lockedTime, Cd]
+    }, [lockedTime])
 }
 
-export default useCountdown;
+export default CountdownComponent;
