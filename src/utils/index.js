@@ -1,10 +1,10 @@
 import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
+import config from "config/config";
 import { ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
 import moment from "moment";
 
-export const gas = { gas: 6721975, gasPrice: 5 * 10 ** 9 };
-export const maxUint256 = new BN(2).pow(new BN(256)).sub(new BN(1));
+export const gas = config.isMainnet ? { } : { gas: 5000000, gasPrice: '25000000000' };
 
 export const getTimeDurationFormatted = (lockedTime) => {
     const minutesDuration = moment.duration(lockedTime).asMinutes();
@@ -128,3 +128,5 @@ export const chainNameToChainId = (_chainName) => {
  export const customFixedTokenValue = (value, toFixed, decimals) => {
      return customFixed(toDisplayAmount(value, decimals), toFixed)
  }
+
+export const maxUint256 = toBN(2).pow(toBN(256)).sub(toBN(1));
