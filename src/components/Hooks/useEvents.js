@@ -1,12 +1,14 @@
 import { useContext, useMemo } from "react";
 import * as TheGraph from 'graph/queries';
-import { chainNames, supportedNetworksConfigByEnv } from "connectors";
+import { chainNames } from "connectors";
 import { useWeb3React } from "@web3-react/core";
 import { contractsContext } from "contracts/ContractContext";
+import config from "config/config";
+import { useSelector } from "react-redux";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
-    [chainNames.Matic]: 15129735  
+    [chainNames.Matic]: 16509115  
 }
 
 export const DEFAULT_STEPS = 30;
