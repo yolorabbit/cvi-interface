@@ -6,7 +6,7 @@ import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
 
 // @TODO: use caching
-const getWebProvider = () => new Web3(window.web3.currentProvider);
+const getWebProvider = () => new Web3(window.ethereum);
 
 let contracts = {
     [chainNames.Ethereum]: {},

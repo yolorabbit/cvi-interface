@@ -25,7 +25,7 @@ export const useContracts = () => {
 
         loadContracts();
         // eslint-disable-next-line
-    }, []);
+    }, [library]);
     
     return useMemo(() => {
         return contracts;
