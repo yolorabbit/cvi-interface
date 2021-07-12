@@ -203,7 +203,7 @@ const web3Api = {
             return balance;
         } catch(error) {
             console.log(error);
-            return "N/A";
+            return toBN("0");
         }
     },
     isLocked: async function(contracts, token, { type, customDuration, account, library }) {

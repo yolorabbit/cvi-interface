@@ -19,12 +19,13 @@ const SellInfo = () => {
         const sellFeeAmount = sellFee !== null && sellFee !== "N/A" && customFixedTokenValue(sellFee?.toString(), activeToken.decimals, activeToken.decimals);
         // const receiveAmount = tokenAmount && sellFee !== null && sellFee !== "N/A" && tokenAmount.sub(toBN(sellFee));
         let receiveAmount = toBN("0");
+
         if(tokenAmount?.gt(toBN("0")) && toBN(sellFee)?.gt(toBN("0"))) {
             receiveAmount = customFixedTokenValue(tokenAmount.sub(toBN(sellFee)), activeToken.decimals, activeToken.decimals);
         }
 
         return (
-            <div div className="sell-info-component">
+            <div className="sell-info-component">
                 <div className="sell-info-component__row">
                     <span>Sell amount</span>
                     <span>{commaFormatted(amount) || "0"} {activeToken?.key?.toUpperCase()}</span>
