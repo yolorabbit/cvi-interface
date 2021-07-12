@@ -28,7 +28,7 @@ const TabsForm = React.forwardRef(({id = "view", tabs = [], isDropdown, dontChan
             }
         }
         //eslint-disable-next-line
-    }, [location.search]);
+    }, [history?.location]);
 
     return ( 
         <>
