@@ -1,5 +1,5 @@
 import Button from 'components/Elements/Button';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useActiveToken, useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
 import { useContext } from 'react';
@@ -33,15 +33,15 @@ const Buy = () => {
     const [purchaseFee, getPurchaseFees] = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload, { validAmount: true});
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", token);
 
-    const allowance = async (_account) => {
-        return await contracts[activeToken.rel.contractKey].methods.allowance(account, _account).call();
-    }
+    const allowance = useCallback(async (_account) => {
+        return await contracts[activeToken.rel.contractKey].methods.allowance(account, _account).call()
+    }, [account, activeToken, contracts]);
 
-    const approve = async (_address) => {
+    const approve = useCallback(() => async (_address) => {
         return await contracts[activeToken.rel.contractKey].methods.approve(_address, maxUint256).send({from: account});
-    }
+    }, [account, activeToken, contracts]);
     
-    const approvalValidation = async () => {
+    const approvalValidation = useCallback(async () => {
         const isETH = token === 'eth';
         if(isETH) return true;
         const { _address } = contracts[activeToken.rel.platform];
@@ -52,22 +52,22 @@ const Buy = () => {
             if(!allowanceRes.status) return false;
         }
         return true;
-    }
+    }, [activeToken, contracts, token, tokenAmount, approve, allowance]);
 
     const toggleModal = async(flag) => {
         setModalIsOpen(flag);
     }
 
-    const getMaxAmount = async (index) => {
+    const getMaxAmount = useCallback(async (index) => {
         let totalBalance = toBN(
             token === 'eth' ? await library.eth.getBalance(contracts[activeToken.rel.platform]._address) : 
             await contracts[activeToken.rel.contractKey].methods.balanceOf(contracts[activeToken.rel.platform]._address).call()
         )
         let totalUnits = await contracts[activeToken.rel.platform].methods.totalPositionUnitsAmount().call();
         return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index);
-    }
+    }, [library?.eth, activeToken, contracts, token]);
 
-    const getMaxAvailableToOpen = async () => {
+    const getMaxAvailableToOpen = useCallback(async () => {
         try {
             const index = toBNAmount(cviInfo.price, 2);
             let totalToOpen = await getMaxAmount(index);
@@ -75,28 +75,27 @@ const Buy = () => {
         } catch(error) {
             console.log(error);
         }
-    }
+    }, [cviInfo, activeToken, amount, getMaxAmount]);
 
-    const feesValidation = async () => {
+    const feesValidation = useCallback( async () => {
         let fees = await getPurchaseFees();
         // true for valid fees
         return fees !== "N/A" && purchaseFee !== "N/A" ? toBN(fees.buyingPremiumFeePercent).cmp(toBN(purchaseFee.buyingPremiumFeePercent)) !== 1 : true;
-    }
+    }, [purchaseFee, getPurchaseFees])
 
-    const buy = async () => {
+    const buy = useCallback(async () => {
         const _leverage = !leverage ? "1" : leverage;
         if (activeToken.type === "eth") {
-            return await contracts[activeToken.rel.platform].methods.openPositionETH(MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, value: toBN(toBNAmount(amount, activeToken.decimals)), ...gas });
+            return await contracts[activeToken.rel.platform].methods.openPositionETH(MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, value: tokenAmount, ...gas });
         } else if (activeToken.type === "v2") {
-            return await contracts[activeToken.rel.platform].methods.openPosition(toBN(toBNAmount(amount, activeToken.decimals)), MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, ...gas });
+            return await contracts[activeToken.rel.platform].methods.openPosition(tokenAmount, MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, ...gas });
         } else {
-            return await contracts[activeToken.rel.platform].methods.openPosition(toBN(toBNAmount(amount, activeToken.decimals)), MAX_CVI_VALUE).send({ from: account, ...gas });
+            return await contracts[activeToken.rel.platform].methods.openPosition(tokenAmount, MAX_CVI_VALUE).send({ from: account, ...gas });
         }
-    }
+    }, [account, activeToken, tokenAmount, contracts, leverage, purchaseFee])
 
-    const onClick = async () => {
+    const onClick = useCallback(async () => {
         const [allowToBuy, totalToOpen] = await getMaxAvailableToOpen();
-
         if(!allowToBuy) {
             if(isActiveInDOM()) {
                 setModalIsOpen(true);
@@ -166,23 +165,25 @@ const Buy = () => {
                 // submitted();
             }
         }
-    }
+    }, [approvalValidation, buy, dispatch, feesValidation, getMaxAvailableToOpen, isActiveInDOM, setAmount, token, updateAvailableBalance])
 
-    return (
-        <> 
-            {modalIsOpen && <ErrorModal error={errorMessage} setModalIsOpen={toggleModal} isWarning={errorMessage === feesHighWarningMessage}/> }
-            <div className="buy-component">
-                <Button 
-                    className="button" 
-                    buttonText={platformConfig.actionsConfig?.[type]?.key?.toUpperCase()}
-                    onClick={onClick}
-                    disabled={disabled || purchaseFee === "N/A" || purchaseFee === null || collateralRatioData === null || collateralRatioData === "N/A"}
-                    processing={isProcessing || purchaseFee === null}
-                    processingText={amount > 0 && purchaseFee === null && "Calculating"}
-                />
-            </div>
-        </>
-    )
+    return useMemo(() => {
+        return  (
+            <> 
+                {modalIsOpen && <ErrorModal error={errorMessage} setModalIsOpen={toggleModal} isWarning={errorMessage === feesHighWarningMessage}/> }
+                <div className="buy-component">
+                    <Button 
+                        className="button" 
+                        buttonText={platformConfig.actionsConfig?.[type]?.key?.toUpperCase()}
+                        onClick={onClick}
+                        disabled={disabled || purchaseFee === "N/A" || purchaseFee === null || collateralRatioData === null || collateralRatioData === "N/A"}
+                        processing={isProcessing || purchaseFee === null}
+                        processingText={amount > 0 && purchaseFee === null && "Calculating"}
+                    />
+                </div>
+            </>
+        )
+    }, [amount, collateralRatioData, disabled, errorMessage, isProcessing, modalIsOpen, onClick, purchaseFee, type])
 }
 
 export default Buy;

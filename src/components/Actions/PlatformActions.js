@@ -5,18 +5,19 @@ import Buy from "./Buy";
 import Deposit from './Deposit';
 import Sell from "./Sell";
 import Withdraw from "./Withdraw";
+import { useMemo } from 'react';
 
 const PlatformActions = () => {
     const { type } = useActionController();
 
-    const renderView = () => {
+    return useMemo(() => {
         switch(type) {
             case platformConfig.actionsConfig.sell.key:
                 return <Sell />
                 
             case platformConfig.actionsConfig.withdraw.key:
                 return  <Withdraw />
-
+    
             case platformConfig.actionsConfig.claim.key: {
                 return  <div className="claim-component">
                     <b>100,587.01164174</b>
@@ -38,9 +39,7 @@ const PlatformActions = () => {
             default:
                 return <Buy />
         }
-    }
-
-    return renderView();
+    }, [type]);
 }
 
 export default PlatformActions;
