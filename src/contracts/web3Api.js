@@ -1,5 +1,5 @@
 import { customFixed, toBN, toDisplayAmount } from "utils";
-import { convert, getPrice, getChainName, getBalance, getEventsFast } from './utils';
+import { convert, getPrice, getChainName, getBalance } from './utils';
 import * as TheGraph from 'graph/queries';
 import config from "config/config";
 import positionApi from "./apis/position";
@@ -7,31 +7,9 @@ import stakingApi from "./apis/staking";
 import rewardsApi from './apis/rewards';
 import liquidityApi from "./apis/liquidity";
 import moment from "moment";
-import { bottomBlockByNetwork } from "components/Hooks/useEvents";
 import platformConfig from "config/platformConfig";
 
  
-//@TODO: use graphql function instead of this.
-export async function getLastOpenEvent(platform, account, getBlock) {
-    try {
-        const selectedNetwork = await getChainName();
-        const latestBlockNumber = await (await getBlock("latest")).number;
-        const stepSize = latestBlockNumber - bottomBlockByNetwork[selectedNetwork]
-        const options = {eventsCount: 1, stepSize, days: 30 };
-        const eventsData = [{ contract: platform, events: { OpenPosition: [{ account }] } }];
-        const events = await getEventsFast(eventsData, options, getBlock);
-        return events[events.length - 1];
-    } catch(error) {
-        console.log(error);
-        return null;
-    }
-}
-
-// export async function getLastOpenEvent(platformAddress, account) {
-//     let _lastOpenEvent = await TheGraph.lastOpen(account, platformAddress);
-//     return !!_lastOpenEvent.openPositions?.length ? _lastOpenEvent.openPositions[0] : null;
-// }
-
 export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
 
 export const getTokenData = async (contract) => {
@@ -206,12 +184,11 @@ const web3Api = {
             return toBN("0");
         }
     },
-    isLocked: async function(contracts, token, { type, customDuration, account, library }) {
+    isLocked: async function(contracts, token, { type, customDuration, account, library, eventsUtils }) {
         try {
             let openTime;
-
             if(type === "sell"){
-                let event = await getLastOpenEvent(contracts[token.rel.platform], account, library.eth.getBlock);
+                let event = await eventsUtils.getLastOpenEvent(account, contracts[token.rel.platform]);
                 if(!event) return [0,0];
                 let block = await new Promise((res, rej)=> library.eth.getBlock(event.blockNumber, (err, data) => err ? rej(err) : res(data)));
                 if(!block) return [0,0];

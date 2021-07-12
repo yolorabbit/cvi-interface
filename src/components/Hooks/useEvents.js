@@ -23,9 +23,9 @@ const EventOptionsDefaults = {
 
 export const useEvents = () => {
     const contracts = useContext(contractsContext);
-    const {chainId, library} = useWeb3React();
-    const chainName = supportedNetworksConfigByEnv[chainId].chainName;
-    const { getBlock } = library.eth;
+    const { selectedNetwork: chainName } = useSelector(({app}) => app);
+    const {library} = useWeb3React();
+    const { getBlock } = library?.eth ?? {};
 
     async function getEvents(eventsData, opt) {
         opt = { ...EventOptionsDefaults, ...opt };
@@ -88,7 +88,7 @@ export const useEvents = () => {
     }
   
     async function getTransferEvents(staking, token, days) {
-      if(chainName === "Matic") {
+      if(chainName === chainNames.Matic) {
         const _events = await TheGraph.collectedFees();
         return _events.collectedFees;
       } 
@@ -101,6 +101,25 @@ export const useEvents = () => {
       const filter = { [isETH ? "dst" : "to"]: staking._address };
       const eventsData = [{ contract: token, events: { Transfer: [filter] } }];
       return await getEvents(eventsData, options, getBlock);
+    }
+
+    async function getLastOpenEvent(account, platform) {
+        try {
+            if(config.isMainnet) {
+                let _lastOpenEvent = await TheGraph.lastOpen(account, platform._address);
+                return !!_lastOpenEvent.openPositions?.length ? _lastOpenEvent.openPositions[0] : null;
+            }
+            const latestBlockNumber = await (await getBlock("latest")).number;
+            
+            const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName];
+            const options = {eventsCount: 1, stepSize, days: 30 };
+            const eventsData = [{ contract: platform, events: { OpenPosition: [{ account }] } }];
+            const events = await getEvents(eventsData, options, getBlock);
+            return events[events.length - 1];
+        } catch(error) {
+            console.log(error);
+            return null;
+        }
     }
 
     const getLatestBlockTimestamp = async() => (await getBlock("latest")).timestamp
@@ -119,13 +138,15 @@ export const useEvents = () => {
         return localTimestamp() + diff;
     }
 
-    return useMemo(()=>{
+    return useMemo(()=> {
+        if(!library) return null;
         return {
             getEvents, 
             getTransferEvents, 
             getPastEvents, 
             getNow, 
-            getLatestBlockTimestamp
+            getLatestBlockTimestamp,
+            getLastOpenEvent
         }
       // eslint-disable-next-line
     },[]);

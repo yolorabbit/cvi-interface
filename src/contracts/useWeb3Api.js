@@ -1,3 +1,4 @@
+import { useEvents } from "components/Hooks/useEvents";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import platformConfig from "config/platformConfig";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -15,6 +16,7 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const contracts = useContext(contractsContext);
     const [data, setData] = useState();
     const ref = useRef(null);
+    const eventsUtils = useEvents();
 
     useEffect(() => {
         setData(null);
@@ -26,11 +28,11 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
                 if(selectedCurrency) {
                     const token = getActiveToken(tokens, selectedCurrency);
                     if(!token) return setData("N/A");
-                    const data = await web3Api[type](contracts, token, {library, ...body});
+                    const data = await web3Api[type](contracts, token, {library, eventsUtils, ...body});
                     setData(data);
                     return data;
                 } else {
-                    const data = await web3Api[type](contracts, tokens, {library, ...body});
+                    const data = await web3Api[type](contracts, tokens, {library, eventsUtils, ...body});
                     setData(data);
                     return data;
                 }

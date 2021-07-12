@@ -4,18 +4,9 @@ import { supportedNetworksConfigByEnv, chainNames, graphEndpoints } from '../../
 import { Pair, Route, Token, TokenAmount, WETH } from '@uniswap/sdk';
 import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
-import { bottomBlockByNetwork } from 'components/Hooks/useEvents';
 
 // @TODO: use caching
 const getWebProvider = () => new Web3(window.web3.currentProvider);
-
-const EventOptionsDefaults = {
-  eventsCount: Number.MAX_SAFE_INTEGER,
-  blocks: Number.MAX_SAFE_INTEGER,
-  stepSize: Number.MAX_SAFE_INTEGER,
-  steps: 1,
-  bottomBlock: 0
-};
 
 let contracts = {
     [chainNames.Ethereum]: {},
@@ -222,55 +213,4 @@ export const getCviValue = async (cviOracle) => {
     console.log(error);
     return "N/A";
   }
-}
-
-const DAY = 86400;
-
-async function getBlockDaysAgo(days, from, getBlock) {
-  const selectedNetwork = await getChainName();
-  const BLOCK_RATE = selectedNetwork === chainNames.Matic ? 2 : 13.25;
-  from = from ? from : (await getBlockCached(getBlock)).number;
-  const blocksPerDay = DAY / BLOCK_RATE;
-  return Math.floor(from - blocksPerDay * days);
-}
-
-export async function getEventsFast(eventsData, opt, getBlock) {
-  opt = { ...EventOptionsDefaults, ...opt };
-  opt.chainName = opt.chainName ?? await getChainName();
-  if(opt.chainName) {
-      opt.bottomBlock = opt.bottomBlock ?? bottomBlockByNetwork[opt.chainName];
-      if(opt.chainName === chainNames.Ethereum) {
-          opt.stepSize = Number.MAX_SAFE_INTEGER;
-      }
-  }
-  opt.events = opt.events || [];
-  let to = opt.topBlock || (await getBlockCached(getBlock)).number;
-  if (opt.days) opt.bottomBlock = await getBlockDaysAgo(opt.days, to, getBlock);
-  let from = Math.max(to - opt.stepSize, to - opt.blocks, opt.bottomBlock);
-  let pairs = [{ from, to }];
-
-  while (opt.blocks > 0 && opt.steps > 0 && from >= opt.bottomBlock) {
-      opt.steps--;
-      opt.blocks = opt.blocks - (to - from);
-      to = from;
-      from = Math.max(to - opt.stepSize, to - opt.blocks, opt.bottomBlock);
-      pairs.push({ from, to });
-  }
-  // console.log(`pairs ${JSON.stringify(pairs.map((p) => ({ from: p.from, to: p.to, blocks: p.to - p.from })))}`);
-  const promises = pairs.map((p) => getPastEvents(eventsData, p.from, p.to));
-  const events = promises ? await Promise.all(promises) : [];
-  return [].concat(...events).slice(0, opt.eventsCount);
-}
-
-// [{ contract: token, contractName?:"USDT", events:{ Transfer: [filter]} }];
-export async function getPastEvents(eventsData, fromBlock = 0, toBlock = "latest") {
-  let eventList = [];
-  for (const event of eventsData) {
-    for (const eventName in event.events) {
-      for (const filter of event.events[eventName]) {
-        eventList.push(...(await event.contract.getPastEvents(eventName, { filter, fromBlock, toBlock })));
-      }
-    }
-  }
-  return eventList.sort((a, b) => b.blockNumber - a.blockNumber);
 }
