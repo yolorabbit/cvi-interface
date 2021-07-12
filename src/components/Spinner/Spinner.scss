@@ -19,9 +19,27 @@
 
     &.statistics-spinner {
       & .spinner {
-        font-size: 2px;
-        width: 3px;
-        height: 3px
+        font-size: 0.104vw;
+        width: 0.156vw;
+        height: 0.156vw;
+        
+        @media (max-width: 1365px) {
+          font-size: 0.147vw;
+          width: 0.22vw;
+          height: 0.22vw;
+        }
+
+        @media (max-width: 1024px) {
+          font-size: 2px;
+          width: 3px;
+          height: 3px;
+        }
+
+        @media (max-width: 767px) {
+          font-size: 2px;
+          width: 3px;
+          height: 3px;
+        }
       }
     }
 

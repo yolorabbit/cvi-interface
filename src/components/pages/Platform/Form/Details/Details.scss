@@ -104,21 +104,25 @@
         & .stat-component {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center ;
             margin-bottom: 0.837vw;
             padding-bottom: 0.827vw;
             border-bottom: 0.052vw solid #2f3250;
+            height: 1.458vw;
 
+            
             @media (max-width: 1365px){
                 margin-bottom: 1.136vw;
                 padding-bottom: 1.136vw;
                 border-bottom: 0.073vw solid #2f3250;
+                height: 2.051vw;
             }
 
             @media (max-width: 1024px){
                 margin-bottom: 2.021vw;
                 padding-bottom: 2.021vw;
                 border-bottom: 0.13vw solid #2f3250;
+                height: 3.651vw;
             }
 
             @media (max-width: 767px){
@@ -126,7 +130,9 @@
                 padding-bottom: 4.306vw;
                 border-bottom: 0.278vw solid #2f3250;
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: baseline;
+                justify-content: center;
+                height: 18vw;
             }
 
             & h2 {
@@ -138,7 +144,6 @@
 
             &:last-child {
                 margin-bottom: 0;
-                padding-bottom: 0;
                 border-bottom: 0;
             }
         }
