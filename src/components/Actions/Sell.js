@@ -67,7 +67,8 @@ const Sell = () => {
             return setIsOpen(true);
         }
         setProcessing(true);
-        // TODO: check isLocked and HasGoviToClaim
+        
+        // TODO: HasGoviToClaim
         
         try {
             dispatch(addAlert({
@@ -94,23 +95,20 @@ const Sell = () => {
         }
     }
 
-    return (
-        <> 
-            <div className="sell-component">
-                <div className="sell-component__container">
-                    {(isOpen && !isModal) && <SellInfo />}
-                    <CountdownComponent lockedTime={lockedTime} />
-                    <Button 
-                        className="sell-component__container--button" 
-                        buttonText="Sell" 
-                        onClick={onClick}
-                        processing={isProcessing}
-                        disabled={(isOpen && disabled) || lockedTime > 0 || lockedTime === null}
-                    />
-                </div>
-            </div>
-        </>
-    )
+    return <div className="sell-component">
+        <div className="sell-component__container">
+            {(isOpen && !isModal) && <SellInfo />}
+            <CountdownComponent lockedTime={lockedTime} />
+            <Button 
+                className="sell-component__container--button" 
+                buttonText="Sell" 
+                onClick={onClick}
+                processing={isProcessing}
+                disabled={(isOpen && disabled) || lockedTime > 0 || lockedTime === null}
+            />
+        </div>
+    </div>
+     
 }
 
 export default Sell;

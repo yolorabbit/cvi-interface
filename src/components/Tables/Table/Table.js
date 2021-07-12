@@ -6,6 +6,8 @@ import SubHeader from '../Elements/SubHeader';
 import './Table.scss';
 import { uniqueId } from 'lodash';
 import { useDataController } from '../DataController/DataController';
+import { useContext } from 'react';
+import { viewportContext } from 'components/Context';
 
 const Table = () => {
     const { 
@@ -19,7 +21,9 @@ const Table = () => {
         activeTab,
         subHeaders
     } = useDataController();
-    
+
+    const { activeView } = useContext(viewportContext);
+
     return useMemo(() => {
         return (
         <div className={`table-component ${activeTab?.toLowerCase()}`}>
@@ -66,7 +70,7 @@ const Table = () => {
             />}
         </div>
         //eslint-disable-next-line
-    )}, [currentPage, activeTab]);
+    )}, [currentPage, activeTab, activeView]);
 }
 
 export default Table;
