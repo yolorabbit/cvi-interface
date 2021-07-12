@@ -41,7 +41,8 @@ const platformConfig = {
           feesCalc: "FeesCalculatorV2",
           feesModel: "FeesModelV2",
           cviOracle: "CVIOracle",
-          rewards: "PositionRewards"
+          rewards: "PositionRewards",
+          stakingRewards: "USDTLPStakingRewards"
         },
       },
       eth: {
@@ -56,7 +57,8 @@ const platformConfig = {
           feesCalc: "FeesCalculatorV3",
           feesModel: "FeesModelV2",
           cviOracle: "CVIOracle",
-          rewards: "PositionRewardsV2"
+          rewards: "PositionRewardsV2",
+          stakingRewards: "ETHLPStakingRewards"
         },
       },
       coti: {
@@ -77,7 +79,8 @@ const platformConfig = {
           feesCalc: "FeesCalculatorV4",
           feesModel: "USDTPlatform",
           rewards: "PositionRewardsV3",
-          cviOracle: "CVIOracleV3"
+          cviOracle: "CVIOracleV3",
+          stakingRewards: "USDTLPStakingRewards"
         },
       },
       usdc: {
@@ -86,10 +89,6 @@ const platformConfig = {
         fixedDecimals: 2,
         soon: true,
         leverage: ["X1", "X3", "X4"],
-        rel: {
-          contractKey: "USDT",
-          platform: "USDTPlatform",
-        },
       },
     }
   },

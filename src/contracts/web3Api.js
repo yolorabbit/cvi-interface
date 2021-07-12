@@ -1,5 +1,5 @@
 import { customFixed, toBN, toDisplayAmount } from "utils";
-import { convert, getPrice, getChainName, getBalance } from './utils';
+import { convert, getPrice, getChainName, getBalance, fromLPTokens } from './utils';
 import * as TheGraph from 'graph/queries';
 import config from "config/config";
 import positionApi from "./apis/position";
@@ -169,15 +169,33 @@ const web3Api = {
             }
         }
     },
-    getAvailableBalance: async (contracts, token, {account, type}) => {
+    getAvailableBalance: async (contracts, token, {account, type, library}) => {
         try {
             if(type === "sell") {
                 let positionValue = await contracts[token.rel.platform].methods.calculatePositionBalance(account).call();
                 return positionValue.currentPositionBalance;
             }
 
+            if(type === "withdraw") {
+                const stakedAmount = toBN(await contracts[token.rel.stakingRewards].methods.balanceOf(account).call())
+                let lpBalance = toBN(await contracts[token.rel.platform].methods.balanceOf(account).call());
+
+                if(stakedAmount) {
+                    lpBalance = lpBalance.add(stakedAmount);
+                }
+
+                let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
+                let totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());
+                let tokenAmount = totalSupply !== 0 ? lpBalance.mul(totalBalance).div(totalSupply) : toBN(0);
+                const lpTokens = await fromLPTokens(contracts[token.rel.platform], stakedAmount)
+                const _tokenBalance = toBN(lpTokens).cmp(tokenAmount) > 0 ? "0" : toBN(tokenAmount).sub(lpTokens).toString();
+
+                return _tokenBalance.toString()
+            }
+
             const tokenData = await getTokenData(contracts[token.rel.contractKey]);
             const balance = await getBalance(account, token.key !== "eth" && tokenData.address);
+
             return balance;
         } catch(error) {
             console.log(error);
