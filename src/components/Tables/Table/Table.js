@@ -19,6 +19,7 @@ const Table = () => {
         activeTab,
         subHeaders
     } = useDataController();
+    
     return useMemo(() => {
         return (
         <div className={`table-component ${activeTab?.toLowerCase()}`}>
@@ -65,7 +66,7 @@ const Table = () => {
             />}
         </div>
         //eslint-disable-next-line
-    )}, [currentPage]);
+    )}, [currentPage, activeTab]);
 }
 
 export default Table;
