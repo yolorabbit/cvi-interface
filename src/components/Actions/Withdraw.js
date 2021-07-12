@@ -115,7 +115,7 @@ const Withdraw = () => {
                         buttonText="Withdraw" 
                         onClick={onClick}
                         processing={isProcessing}
-                        disabled={(isOpen && !isModal && disabled) || (lockedTime > 0 || lockedTime === null)}
+                        disabled={(isOpen && !isModal && (disabled || tokenAmount?.isZero())) || (lockedTime > 0 || lockedTime === null)}
                     />
                 </div>
             </div>

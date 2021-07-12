@@ -104,7 +104,7 @@ const Sell = () => {
                 buttonText="Sell" 
                 onClick={onClick}
                 processing={isProcessing}
-                disabled={(isOpen && disabled) || lockedTime > 0 || lockedTime === null}
+                disabled={(isOpen && (disabled || tokenAmount?.isZero())) || lockedTime > 0 || lockedTime === null}
             />
         </div>
     </div>
