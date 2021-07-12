@@ -49,12 +49,8 @@ const Withdraw = () => {
     }
 
     const withdraw = async () => {
-        try {
-            const lpTokens = await web3Api.toLPTokens(contracts, token, { tokenAmount });
-            await contracts[activeToken.rel.platform].methods.withdrawLPTokens(toBN(lpTokens)).send({from: account, ...gas});
-        } catch(error) {
-            console.log(error);
-        }
+        const lpTokens = await web3Api.toLPTokens(contracts, activeToken, { tokenAmount });
+        await contracts[activeToken.rel.platform].methods.withdrawLPTokens(toBN(lpTokens)).send({from: account, ...gas});
     }
 
     const onClick = async () => {
@@ -85,6 +81,7 @@ const Withdraw = () => {
                 alertType: config.alerts.types.CONFIRMED,
                 message: "Transaction success!"
             }));
+
         } catch (error) {
             console.log(error);
             if(error?.message.toLowerCase().search('revert collateral ratio broken') !== -1) {
@@ -106,8 +103,6 @@ const Withdraw = () => {
         }
     }
 
-    console.log(disabled);
-    console.log(isOpen);
     return (
         <> 
             {errorMessage && <ErrorModal error={errorMessage} setModalIsOpen={setErrorMessage}/>}
@@ -120,7 +115,7 @@ const Withdraw = () => {
                         buttonText="Withdraw" 
                         onClick={onClick}
                         processing={isProcessing}
-                        disabled={true}
+                        disabled={(isOpen && !isModal && disabled) || (lockedTime > 0 || lockedTime === null)}
                     />
                 </div>
             </div>

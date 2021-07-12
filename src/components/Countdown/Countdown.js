@@ -17,7 +17,6 @@ export const useIsLockedTime = () => {
 
     useEffect(() => {
         if(lockedData && lockedData !== "N/A") {
-            console.log(lockedData);
             _setLockedTime(lockedData[1]);
         }
     }, [lockedData]);
