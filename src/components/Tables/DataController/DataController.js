@@ -2,6 +2,7 @@ import ConnectWallet from 'components/ConnectWallet/ConnectWallet';
 import { platformViewContext } from 'components/Context';
 import EmptyData from 'components/EmptyData/EmptyData';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
+import Spinner from 'components/Spinner/Spinner';
 import platformConfig from 'config/platformConfig';
 import stakingConfig, { stakingViews } from 'config/stakingConfig';
 import React, { createContext, useContext, useEffect, useState } from 'react'
@@ -21,11 +22,11 @@ const DataController = ({children, data = [], subHeaders = {}, activeTab, authGu
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [activeTab]);
+    }, [activeTab, activeView]);
 
     if(!account && authGuard) return <ConnectWallet type="table table-component auth-guard" buttonText={`to view ${activeTabLabel}`} />
-
-    if(!data?.length) return <EmptyData text={`You have no ${activeTabLabel ?? 'data'}`} />
+    
+    if(!data?.length) return <EmptyData isSpinner={data === null} text={`You have no ${activeTabLabel ?? 'data'}`} />
 
     if(!activeTab || 
         (activeView && !platformConfig.headers?.[activeView]?.[activeTab]) ||

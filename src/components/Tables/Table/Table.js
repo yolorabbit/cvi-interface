@@ -6,8 +6,6 @@ import SubHeader from '../Elements/SubHeader';
 import './Table.scss';
 import { uniqueId } from 'lodash';
 import { useDataController } from '../DataController/DataController';
-import { useContext } from 'react';
-import { platformViewContext } from 'components/Context';
 
 const Table = () => {
     const { 
@@ -21,8 +19,6 @@ const Table = () => {
         activeTab,
         subHeaders
     } = useDataController();
-
-    const { activeView } = useContext(platformViewContext);
 
     return useMemo(() => {
         return (
@@ -69,8 +65,7 @@ const Table = () => {
                 numOfpageBtndsToDispay={0}
             />}
         </div>
-        //eslint-disable-next-line
-    )}, [currentPage, totalRecords, tableHeaders, activeTab, activeView]);
+    )}, [tableHeaders, currentData, currentPage, showPaginator, setCurrentPage, totalRecords, pageSize, activeTab, subHeaders]);
 }
 
 export default Table;

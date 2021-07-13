@@ -4,17 +4,21 @@ import RowItem from './RowItem';
 import { platformViewContext } from "components/Context";
 import platformConfig from "config/platformConfig";
 import { Value } from "../Values";
+import { omit } from "lodash";
 
 const HistoryRow = ({rowData, isHeader}) => {
     const isTablet = useIsTablet();
     const { activeView } = useContext(platformViewContext); 
     const headers = useMemo(() => Object.values(platformConfig.headers?.[activeView]?.History), [activeView]);
     
+  
     const RowData = useMemo(() => {
         if(!rowData || !activeView || !headers) return null;
+        const historyData = omit(rowData, ['transactionHash', 'timestamp']);
+
         return (
             <> 
-                {Object.values(rowData)?.map((value, index) => <RowItem 
+                {Object.values(historyData)?.map((value, index) => <RowItem 
                     key={index}
                     header={headers[index]} 
                     content={<Value subText={value} />} 

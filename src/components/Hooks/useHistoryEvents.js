@@ -1,6 +1,6 @@
 import platformConfig from 'config/platformConfig';
 import moment from 'moment';
-import { useCallback, useContext, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from 'utils';
 import { useEvents } from './useEvents';
@@ -13,7 +13,7 @@ import config from 'config/config';
 const useHistoryEvents = () => {
     const { selectedNetwork } = useSelector(({app}) => app); 
     const wallet = useSelector(({wallet}) => wallet);
- 
+    const [subs, setSubs] = useState([]);
     const { library, account } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const dispatch = useDispatch();
@@ -21,6 +21,12 @@ const useHistoryEvents = () => {
     let fromWei = library?.utils?.fromWei;
     let getBlock = library?.eth?.getBlock;
     const historyRef = useRef();
+
+    const opt = useMemo(() => ({
+        filter: { account },
+        fromBlock: 0,
+        toBlock: 'latest',
+    }), [account]);
 
     const contractState = useMemo(() => (config.isMainnet ? {
         positions: {
@@ -107,40 +113,50 @@ const useHistoryEvents = () => {
         dispatch(setData(view, events));
     }, [account, contractState, contracts, dispatch, getEventsFast, mapper, wallet]) 
 
-    useEffect(() => {
-       //@TODO: remove history on change network / account
-    }, [account, selectedNetwork]);
+    
+    const subscribe = useCallback(async function(view, type, eventType, activeToken) {
+        const sub = contracts[activeToken.rel.platform].events[eventType](({...opt, fromBlock: 'latest'}))
+        if(!!subs.find((s) => s[`${eventType}-${activeToken.key}`])) return;
+        
+        sub.on("connected", function(subscriptionId){
+            console.log(`Subscribe to event: ${`${eventType}-${activeToken.key}`}, Subscription ID: ${subscriptionId}`);
+        })
+        .on('data', async function(data) {
+            const d = await mapper[view]({
+                ...data,
+                returnValues: {
+                    ...data.returnValues,
+                    blockNumber: data.blockNumber,
+                    transactionHash: data.transactionHash
+                },
+            }, type, activeToken);
+
+            dispatch(setData(view, d, true));
+        })
+        .on('error', console.log);
+
+        setSubs(prev => prev.concat({ [`${eventType}-${activeToken.key}`]: sub }) );
+    }, [contracts, dispatch, mapper, opt, subs])
 
     useEffect(() => {
         if(!selectedNetwork || !contracts || !account || typeof getEventsFast !== 'function') return;
         historyRef.current = setTimeout(() => {
             Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon).forEach(token => {
                 fetchPastEvents("positions", token);   
+                subscribe("positions", "Buy", 'OpenPosition', token);
+                subscribe("positions", "Sell", 'ClosePosition', token);
+
                 fetchPastEvents("liquidities", token);
+                subscribe("liquidities", "Deposit", 'Deposit', token);
+                subscribe("liquidities", "Withdraw", 'Withdraw', token);
             });
         }, 1000);
         
         return () => {
             if(historyRef.current) clearTimeout(historyRef.current);
         }
-    }, [selectedNetwork, contracts, account, fetchPastEvents, getEventsFast])
+    }, [selectedNetwork, contracts, account, fetchPastEvents, getEventsFast, subscribe])
 
-
-    // const subscribe = useCallback(() => async function(view, type, eventType, symbol) {
-    //     const sub = contract.events[eventType](({...opt, fromBlock: 'latest'}))
-    //     if(!!subs.find((s) => s[`${eventType}-${symbol}`])) return;
-      
-    //     sub.on("connected", function(subscriptionId){
-    //         console.log(`Subscribe to event: ${`${eventType}-${symbol}`}, Subscription ID: ${subscriptionId}`);
-    //     })
-    //     .on('data', async function(data) {
-    //         const d = await mapper[view]({...data.returnValues, blockNumber: data.blockNumber, transactionHash: data.transactionHash}, type, symbol);
-    //         dispatch(setData(view, d, true));
-    //     })
-    //     .on('error', console.log);
-
-    //     setSubs(prev => prev.concat({ [`${eventType}-${symbol}`]: sub }) );
-    // }, [mapper, opt])
 
 
     return null;

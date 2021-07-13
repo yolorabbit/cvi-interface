@@ -57,13 +57,9 @@ const HistoryTable = ({activeTab}) => {
     const isTablet = useIsTablet();
     const { activeView } = useContext(platformViewContext);
     const wallet = useSelector(({wallet}) => wallet);
-
+    
     const historyData = useMemo(() => {
-        return wallet?.[activeView === activeViews["view-liquidity"] ? 'liquidities' : 'positions']?.map(item => {
-            delete item.transactionHash;
-            delete item.timestamp;
-            return item;
-        });
+        return wallet?.[activeView === activeViews["view-liquidity"] ? 'liquidities' : 'positions'];
     }, [activeView, wallet]);
     
     return useMemo(() => {
@@ -71,6 +67,7 @@ const HistoryTable = ({activeTab}) => {
             authGuard
             activeTab={activeTab} 
             data={historyData}
+            showPaginator
         >
             {isTablet ? <ExpandList /> : <Table />}
         </DataController>

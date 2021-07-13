@@ -4,6 +4,21 @@
     justify-content: center;
     padding: 1.25vw;
 
+    &.is-spinner {
+        justify-content: flex-start;
+        padding-left: 2.917vw;
+        padding-right: 2.917vw;
+        @media (max-width: 1024px) {
+            padding-left: 3.129vw;
+            padding-right: 3.129vw;
+        }
+
+        @media (max-width: 767px) {
+            justify-content: center;
+            width: 100%;
+        }
+
+    }
            
     @media (max-width: 1365px){   
         padding: 1.758vw;

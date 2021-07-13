@@ -14,7 +14,7 @@ const PaginatorPages = ({
       : currentPage - numOfpageBtndsToDispay + 1;
   const lst = first + numOfpageBtndsToDispay - 1;
   const last = lst > lastPage ? lastPage : lst;
-  const buttons = new Array(last - first + 1);
+  const buttons = new Array(((last - first) < 0 ? 0 : (last - first)) + 1);
   for (let i = first; i <= last; i++) {
     buttons[i - 1] = i;
   }
