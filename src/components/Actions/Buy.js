@@ -14,6 +14,7 @@ import { addAlert } from 'store/actions';
 import config from './../../config/config';
 import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
+import { toTokenAmount } from 'contracts/utils';
 
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
@@ -37,7 +38,7 @@ const Buy = () => {
         return await contracts[activeToken.rel.contractKey].methods.allowance(account, _account).call()
     }, [account, activeToken, contracts]);
 
-    const approve = useCallback(() => async (_address) => {
+    const approve = useCallback(async (_address) => {
         return await contracts[activeToken.rel.contractKey].methods.approve(_address, maxUint256).send({from: account});
     }, [account, activeToken, contracts]);
     
@@ -77,7 +78,7 @@ const Buy = () => {
         }
     }, [cviInfo, activeToken, amount, getMaxAmount]);
 
-    const feesValidation = useCallback( async () => {
+    const feesValidation = useCallback(async () => {
         let fees = await getPurchaseFees();
         // true for valid fees
         return fees !== "N/A" && purchaseFee !== "N/A" ? toBN(fees.buyingPremiumFeePercent).cmp(toBN(purchaseFee.buyingPremiumFeePercent)) !== 1 : true;
@@ -105,7 +106,7 @@ const Buy = () => {
         }
 
         const feeIsValid = await feesValidation();
-        
+
         if(!feeIsValid) {
             setModalIsOpen(true);
             setErrorMessage(feesHighWarningMessage);
@@ -128,7 +129,7 @@ const Buy = () => {
                 message: "Please confirm the transaction in your wallet."
             }));
             const res = await buy();
-            
+                
             if(res.status) {
                 dispatch(addAlert({
                     id: 'openPosition',
@@ -162,7 +163,6 @@ const Buy = () => {
                 setProcessing(false);
                 setAmount("");
                 updateAvailableBalance();
-                // submitted();
             }
         }
     }, [approvalValidation, buy, dispatch, feesValidation, getMaxAvailableToOpen, isActiveInDOM, setAmount, token, updateAvailableBalance])
