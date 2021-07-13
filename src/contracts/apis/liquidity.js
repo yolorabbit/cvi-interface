@@ -1,4 +1,9 @@
-import { toBN } from "utils";
+import { contractState } from "components/Hooks/useHistoryEvents";
+import config from "config/config";
+import { getChainName } from "contracts/utils";
+import * as TheGraph from 'graph/queries';
+import { toBN, toDisplayAmount } from "utils";
+import { bottomBlockByNetwork, DEFAULT_STEPS } from '../../components/Hooks/useEvents';
 
 export async function toLPTokens(contracts, token, { tokenAmount }) {
   let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
@@ -6,8 +11,83 @@ export async function toLPTokens(contracts, token, { tokenAmount }) {
   return totalBalance.isZero() ? toBN(0) : tokenAmount.mul(totalSupply).div(totalBalance);
 }
 
+async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}) {
+  try {
+    let events = [];
+    if(config.isMainnet) {
+      events = await TheGraph.account_liquidities(account, contracts[token.rel.platform]._address, 0);
+      events = Object.values(events).map((_events, idx) => _events.map((event) => ({...event, event: Object.keys(contractState.liquidities)[idx]}))).flat();
+    } else {
+      const chainName = await getChainName();
+      let options = {};
+      const latestBlockNumber = await (await library.eth.getBlock("latest")).number;
+      const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName]
+      options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS }
+      const filters = { Deposit: [{ account }], Withdraw: [{ account }] };
+      const eventsData = [{ contract: contracts[token.rel.platform], events: filters }];
+      events = await eventsUtils.getEventsFast(eventsData, options);
+    }
+
+    events.sort((a, b) => toBN(a.blockNumber).cmp(toBN(b.blockNumber)));
+    
+    let depositSum = toBN(0);
+    let withdrawSum = toBN(0);
+    let lpTokenSum = toBN(0);
+    events.forEach((_event) => {
+      const eventName = _event.event;
+      const event = _event.returnValues ?? _event;
+
+      switch (eventName) {
+        case Object.values(contractState.liquidities)[1]:
+              depositSum = depositSum.add(toBN(event.tokenAmount.toString()));
+
+              lpTokenSum = lpTokenSum.add(toBN(event.lpTokensAmount.toString()));
+              break;
+          case Object.values(contractState.liquidities)[0]:
+              withdrawSum = withdrawSum.add(toBN(event.tokenAmount.toString()));
+
+              lpTokenSum = lpTokenSum.sub(toBN(event.lpTokensAmount.toString()));
+              if (lpTokenSum.isZero()) {
+                depositSum = toBN(0);
+                withdrawSum = toBN(0);
+                lpTokenSum = toBN(0);
+              }
+              break;
+          default:
+              break;
+          }
+      });
+      
+      let totalSum = depositSum.sub(withdrawSum);
+      let lpBalance = toBN(await contracts[token.rel.platform].methods.balanceOf(account).call());
+      const stakedAmount = toBN(await contracts[token.rel.stakingRewards].methods.balanceOf(account).call());
+      if(stakedAmount) {
+          lpBalance = lpBalance.add(stakedAmount);
+      }
+
+      let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
+      let totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());
+      let tokenAmount = totalSupply !== 0 ? lpBalance.mul(totalBalance).div(totalSupply) : toBN(0);
+      
+      let pnl = tokenAmount.sub(totalSum);
+      let pnlPercent = 0;
+
+      try {
+          pnlPercent = !depositSum.isZero() ? toDisplayAmount(toBN(pnl.toString(), 4).div(depositSum), 2) : 0;
+      } catch(error) {
+          console.log(error);
+      }
+
+    return { amount: pnl.toString(), percent: pnlPercent };
+  } catch(error) {
+    console.log(error);
+    return "N/A";
+  }
+}
+
 const liquidityApi = {
-  toLPTokens
+  toLPTokens,
+  getLiquidityPNL
 }
 
 export default liquidityApi;

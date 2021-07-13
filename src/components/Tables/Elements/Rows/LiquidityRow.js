@@ -21,7 +21,10 @@ const LiquidityRow = ({token, isHeader}) => {
     const availableBalancePayload = useMemo(() => ({account, type: "withdraw", withStakeAmount: true}), [account]);
     const [liquidityShareData] = useWeb3Api("getAvailableBalance", tokenName, availableBalancePayload, {errorValue: "0"});
 
-    console.log(liquidityShareData?.toString());
+
+    const liquidityPnlPayload = useMemo(() => ({account}), [account]);
+    const [liquidityPnl] = useWeb3Api("getLiquidityPNL", tokenName, liquidityPnlPayload, {errorValue: "0"});
+
     const withdrawController = useMemo(() => {
         return <ActionController 
             amountLabel="Select amount to withdraw"
@@ -47,7 +50,12 @@ const LiquidityRow = ({token, isHeader}) => {
             <RowItem 
                 header={header["P&L"].label} 
                 tooltip={header["P&L"].tooltip} 
-                content={<Pnl value="88,158.30024285" token={`${tokenName.toUpperCase()}`} precents={5.6} /> } 
+                content={<Pnl 
+                    value={liquidityPnl} 
+                    token={`${tokenName.toUpperCase()}`} 
+                    format={customFixedTokenValue(liquidityPnl?.amount, token.fixedDecimals, token.decimals)}
+                    precents={liquidityPnl?.percent} 
+                /> } 
             />
             
             <RowItem 
@@ -57,7 +65,7 @@ const LiquidityRow = ({token, isHeader}) => {
 
             {(!isTablet || isMobile) && <RowItem content={withdrawController} />}
         </>
-    ), [isTablet, tokenName, liquidityShareData, token.fixedDecimals, token.decimals, header, isMobile, withdrawController]);
+    ), [isTablet, tokenName, liquidityShareData, token.fixedDecimals, token.decimals, header, liquidityPnl, isMobile, withdrawController]);
 
     if(isHeader) {
         return <>

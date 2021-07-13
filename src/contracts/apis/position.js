@@ -166,12 +166,18 @@ async function getPositionsPNL(contracts, token, {currentPositionBalance, accoun
 
     let openSum = toBN(0);
     let closeSum = toBN(0);
-    events.forEach((event) => {
-      switch (event.event) {
-        case "openPositions":
+    events.forEach((_event) => {
+      const eventName = _event.event;
+      const event = _event.returnValues ?? _event;
+
+      console.log(Object.keys(contractState.positions)[1]);
+      console.log(Object.keys(contractState.positions)[0]);
+      
+      switch (eventName) {
+        case Object.keys(contractState.positions)[0]:
           openSum = openSum.add(toBN(event.tokenAmount.toString()));
           break;
-        case "closePositions":
+        case Object.keys(contractState.positions)[1]:
           closeSum = closeSum.add(toBN(event.tokenAmount.toString()));
           if (toBN(event.positionUnitsAmount).isZero()) {
             openSum = toBN(0);
@@ -179,13 +185,18 @@ async function getPositionsPNL(contracts, token, {currentPositionBalance, accoun
           }
           break;
         case "liquidatePositions": // reset all sums.
-          openSum = toBN(0);
-          closeSum = toBN(0);
+            openSum = toBN(0);
+            closeSum = toBN(0);
+          break;
+        case  "LiquidatePosition": 
+            openSum = toBN(0);
+            closeSum = toBN(0);
           break;
         default:
           break;
       }
     });
+
 
     let totalSum = openSum.sub(closeSum);
     let pnl = toBN(currentPositionBalance).sub(totalSum);
@@ -201,7 +212,6 @@ async function getPositionsPNL(contracts, token, {currentPositionBalance, accoun
     console.log(error);
     return "N/A";
   }
- 
 }
 
 
