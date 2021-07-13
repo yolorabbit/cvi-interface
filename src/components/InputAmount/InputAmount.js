@@ -72,7 +72,7 @@ const InputAmount = ({
             {availableBalance !== "N/A" && <>
                 <span className="amount-component__group__balance">
                     <span>{availableText} {availableBalance === null ? <>&nbsp; <Spinner className="statistics-spinner" /></> : <b>
-                        &nbsp;<span> {commaFormatted(availableBalanceAmount ? customFixed(availableBalanceAmount, activeToken.decimals) : "0")} </span>
+                        &nbsp;<span> {commaFormatted(availableBalanceAmount ? customFixed(availableBalanceAmount, activeToken.fixedDecimals) : "0")} </span>
                         &nbsp;{symbol === 'rhegic2-eth' ? <span style={{textTransform: 'none'}}>rHEGIC2-ETH</span> : symbol}
                     </b> }</span> 
                 </span>

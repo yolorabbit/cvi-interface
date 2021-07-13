@@ -27,6 +27,7 @@ const stakingConfig = {
           key: "cvi-usdt-lp",
           protocol: stakingProtocols.platform,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
             platform: "USDTPlatform",
@@ -39,6 +40,7 @@ const stakingConfig = {
           key: "cvi-eth-lp",
           protocol: stakingProtocols.platform,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
             platform: "ETHPlatform",
@@ -51,6 +53,7 @@ const stakingConfig = {
           key: "govi",
           protocol: stakingProtocols.platform,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["USDT", "WETH"],
           rel: {
             stakingRewards: "Staking",
@@ -63,6 +66,7 @@ const stakingConfig = {
           key: "coti-eth-lp",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
             stakingRewards: "COTIETHStakingRewards",
@@ -74,6 +78,7 @@ const stakingConfig = {
           key: "govi-eth-lp",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
             stakingRewards: "GOVIETHStakingRewards",
@@ -86,6 +91,7 @@ const stakingConfig = {
           label: "rHEGIC2-ETH LP",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
             stakingRewards: "RHEGIC2ETHStakingRewards",
@@ -99,6 +105,7 @@ const stakingConfig = {
           key: "coti-eth-lp",
           protocol: stakingProtocols.sushiswap,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
             stakingRewards: "COTIETHSLPStakingRewards",
@@ -111,6 +118,7 @@ const stakingConfig = {
           protocol: stakingProtocols.sushiswap,
           rewardsTokens: ["GOVI"],
           decimals: 18,
+          fixedDecimals: 8,
           rel: {
             stakingRewards: "GOVIETHSLPStakingRewards",
             tokenDecimals: [18],
@@ -125,6 +133,7 @@ const stakingConfig = {
           key: "cvi-usdt-lp",
           protocol: stakingProtocols.platform,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
             platform: "USDTPlatform",
@@ -141,6 +150,7 @@ const stakingConfig = {
           key: "govi",
           protocol: stakingProtocols.platform,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["USDT", "WETH"],
           rel: {
             stakingRewards: "StakingV2",
@@ -153,6 +163,7 @@ const stakingConfig = {
           key: "govi-eth-lp",
           protocol: stakingProtocols.quickswap,
           decimals: 18,
+          fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
             stakingRewards: "GOVIETHStakingRewards",
