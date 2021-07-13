@@ -10,6 +10,7 @@ import { Pairs } from "../Values";
 import useStakedData from "components/Hooks/Staking";
 import { useWeb3React } from "@web3-react/core";
 import { supportedNetworksConfigByEnv } from 'connectors';
+import { useSelector } from "react-redux";
 
 const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
     const isTablet = useIsTablet();
@@ -52,13 +53,12 @@ const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
 export default StakedAssetsRow;
 
 const RowData = ({token, protocol, unstakeController}) => {
-    const {chainId} = useWeb3React();
-    const chainName = supportedNetworksConfigByEnv[chainId].chainName;
+    const { selectedNetwork } = useSelector(({app}) => app);
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
-    const [stakedData] = useStakedData(chainName, protocol, token);
+    const [stakedData] = useStakedData(selectedNetwork, protocol, token);
     
     return useMemo(() => {
 

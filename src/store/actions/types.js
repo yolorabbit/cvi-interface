@@ -7,3 +7,6 @@ export const SET_NETWORK_STATUS = 'SET_NETWORK_STATUS';
 
 // CVI
 export const SET_CVI_INFO = "SET_CVI_INFO"; 
+
+// WALLET 
+export const SET_DATA = 'SET_DATA';

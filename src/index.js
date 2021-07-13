@@ -13,6 +13,7 @@ import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core';
 import Web3 from 'web3';
 import reportWebVitals from './reportWebVitals';
 import './index.scss';
+import { walletReducer } from "store/reducers/wallet";
 
 const Web3ProviderNetwork = createWeb3ReactRoot("NETWORK");
 
@@ -22,7 +23,7 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : null || compose;
 
-const rootReducer = combineReducers({ app: appReducer });
+const rootReducer = combineReducers({ app: appReducer, wallet: walletReducer });
 
 const sagaMiddleware = createSagaMiddleware();
 

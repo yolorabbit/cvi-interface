@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
-    [chainNames.Matic]: 16509115  
+    [chainNames.Matic]: 16800000  
 }
 
 export const DEFAULT_STEPS = 30;
@@ -28,6 +28,34 @@ export const useEvents = () => {
     const { selectedNetwork: chainName } = useSelector(({app}) => app);
     const {library} = useWeb3React();
     const { getBlock } = library?.eth ?? {};
+
+    const getEventsFast = async (eventsData, opt) => {
+        opt = { ...EventOptionsDefaults, ...opt };
+        opt.chainName = opt.chainName ?? chainName;
+        if(opt.chainName) {
+            opt.bottomBlock = opt.bottomBlock ?? bottomBlockByNetwork[opt.chainName];
+            if(opt.chainName === chainNames.Ethereum) {
+                opt.stepSize = Number.MAX_SAFE_INTEGER;
+            }
+        }
+        opt.events = opt.events || [];
+        let to = opt.topBlock || (await getBlockCached(getBlock)).number;
+        if (opt.days) opt.bottomBlock = await getBlockDaysAgo(opt.days, to, getBlock);
+        let from = Math.max(to - opt.stepSize, to - opt.blocks, opt.bottomBlock);
+        let pairs = [{ from, to }];
+    
+        while (opt.blocks > 0 && opt.steps > 0 && from >= opt.bottomBlock) {
+            opt.steps--;
+            opt.blocks = opt.blocks - (to - from);
+            to = from;
+            from = Math.max(to - opt.stepSize, to - opt.blocks, opt.bottomBlock);
+            pairs.push({ from, to });
+        }
+        // console.log(`pairs ${JSON.stringify(pairs.map((p) => ({ from: p.from, to: p.to, blocks: p.to - p.from })))}`);
+        const promises = pairs.map((p) => getPastEvents(eventsData, p.from, p.to));
+        const events = promises ? await Promise.all(promises) : [];
+        return [].concat(...events).slice(0, opt.eventsCount);
+    }
 
     async function getEvents(eventsData, opt) {
         opt = { ...EventOptionsDefaults, ...opt };
@@ -141,8 +169,9 @@ export const useEvents = () => {
     }
 
     return useMemo(()=> {
-        if(!library) return null;
+        if(!library) return {};
         return {
+            getEventsFast,
             getEvents, 
             getTransferEvents, 
             getPastEvents, 
@@ -151,5 +180,5 @@ export const useEvents = () => {
             getLastOpenEvent
         }
       // eslint-disable-next-line
-    },[]);
+    }, [library]);
 }
