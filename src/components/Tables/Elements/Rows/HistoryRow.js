@@ -4,21 +4,17 @@ import RowItem from './RowItem';
 import { platformViewContext } from "components/Context";
 import platformConfig from "config/platformConfig";
 import { Value } from "../Values";
-import { useDataController } from "components/Tables/DataController/DataController";
 
-const HistoryRow = ({isHeader}) => {
-    const { currentData, currentPage } = useDataController();
+const HistoryRow = ({rowData, isHeader}) => {
     const isTablet = useIsTablet();
     const { activeView } = useContext(platformViewContext); 
     const headers = useMemo(() => Object.values(platformConfig.headers?.[activeView]?.History), [activeView]);
     
-    console.log(currentData);
-
     const RowData = useMemo(() => {
-        if(!currentData[currentPage]?.length || !activeView || !headers) return null;
+        if(!rowData || !activeView || !headers) return null;
         return (
             <> 
-                {currentData[currentPage]?.map((value, index) => <RowItem 
+                {Object.values(rowData)?.map((value, index) => <RowItem 
                     key={index}
                     header={headers[index]} 
                     content={<Value subText={value} />} 
@@ -26,12 +22,12 @@ const HistoryRow = ({isHeader}) => {
             </>
             //eslint-disable-next-line
         )
-    }, [currentData[currentPage], activeView, headers]);
+    }, [rowData, activeView, headers]);
 
     if(isHeader) {
         return <>
-            <RowItem content={<Value text={currentData[currentPage].date} /> } />
-            <RowItem content={<Value text={currentData[currentPage].type} /> } />
+            <RowItem content={<Value text={rowData.date} /> } />
+            <RowItem content={<Value text={rowData.type} /> } />
         </>
     }
 

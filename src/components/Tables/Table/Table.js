@@ -70,7 +70,7 @@ const Table = () => {
             />}
         </div>
         //eslint-disable-next-line
-    )}, [currentPage, activeTab, activeView]);
+    )}, [currentPage, totalRecords, tableHeaders, activeTab, activeView]);
 }
 
 export default Table;

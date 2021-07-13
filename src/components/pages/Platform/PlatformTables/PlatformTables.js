@@ -58,12 +58,14 @@ const HistoryTable = ({activeTab}) => {
     const { activeView } = useContext(platformViewContext);
     const wallet = useSelector(({wallet}) => wallet);
 
-    const historyData = wallet?.[activeView === activeViews["view-liquidity"] ? 'liquidities' : 'positions']?.map(item => {
-        delete item.transactionHash;
-        delete item.timestamp;
-        return item;
-    });
-
+    const historyData = useMemo(() => {
+        return wallet?.[activeView === activeViews["view-liquidity"] ? 'liquidities' : 'positions']?.map(item => {
+            delete item.transactionHash;
+            delete item.timestamp;
+            return item;
+        });
+    }, [activeView, wallet]);
+    
     return useMemo(() => {
         return <DataController 
             authGuard

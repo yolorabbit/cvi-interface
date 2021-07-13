@@ -22,12 +22,6 @@ const useHistoryEvents = () => {
     let getBlock = library?.eth?.getBlock;
     const historyRef = useRef();
 
-    const opt = useMemo(() => ({
-        filter: { account },
-        fromBlock: 0,
-        toBlock: 'latest',
-    }), [account]);
-
     const contractState = useMemo(() => (config.isMainnet ? {
         positions: {
             closePositions: 'Sell',
@@ -62,31 +56,30 @@ const useHistoryEvents = () => {
                     transactionHash: event.transactionHash,
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
-                    type,
+                    type: contractState.positions[type],
                     index: cviValue / 100,
                     leverage: 1,
-                    amount: `${commaFormatted(customFixed(amount, 6))} ${activeToken.key.toUpperCase()}`,
-                    fees: `${commaFormatted(customFixed(fees, 6))} ${activeToken.key.toUpperCase()}`,
-                    netAmount: `${commaFormatted(customFixed(netAmount, 6))} ${activeToken.key.toUpperCase()}`
+                    amount: `${commaFormatted(customFixed(amount, activeToken.decimals))} ${activeToken.key.toUpperCase()}`,
+                    fees: `${commaFormatted(customFixed(fees, activeToken.decimals))} ${activeToken.key.toUpperCase()}`,
+                    netAmount: `${commaFormatted(customFixed(netAmount, activeToken.decimals))} ${activeToken.key.toUpperCase()}`
                 });
             },
-            liquidities: async function(event, action, activeToken) {
+            liquidities: async function(event, type, activeToken) {
                 let block = await getBlock(event.blockNumber);
-                const { tokenAmount, feeAmount } = event;
+                const { tokenAmount, feeAmount } = config.isMainnet ? event : event.returnValues;
                 const actionDate = block.timestamp * 1000
                 const amount = activeToken.key === 'eth' ? fromWei(toBN(tokenAmount).sub(toBN(feeAmount))) : toDisplayAmount(toBN(tokenAmount).sub(toBN(feeAmount)).toString(), activeToken.decimals);
-    
+
                 return Promise.resolve({
                     transactionHash: event.transactionHash,
-                    actionDate: moment(actionDate).format('DD/MM/YYYY'),
+                    date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
-                    action,
-                    symbol: activeToken.key,
-                    amount: commaFormatted(customFixed(amount, activeToken.decimals)),
+                    type: contractState.liquidities[type],
+                    amount: `${commaFormatted(customFixed(amount, activeToken.decimals))} ${activeToken.key.toUpperCase()}`,
                 });
             }
         }
-    }, [fromWei, getBlock])
+    }, [fromWei, getBlock, contractState])
 
     const fetchPastEvents = useCallback(async function(view, activeToken) {
         if(!activeToken) return;
