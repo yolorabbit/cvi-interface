@@ -129,7 +129,7 @@ const useHistoryEvents = () => {
                     blockNumber: data.blockNumber,
                     transactionHash: data.transactionHash
                 },
-            }, type, activeToken);
+            }, eventType, activeToken);
 
             dispatch(setData(view, d, true));
         })
