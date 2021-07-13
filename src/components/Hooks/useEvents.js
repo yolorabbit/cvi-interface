@@ -127,7 +127,7 @@ export const useEvents = () => {
       let options = {};
       const latestBlockNumber = await (await getBlock("latest")).number;
       const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName]
-      options = { days, stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS }
+      options = { days, stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS };
       const filter = { [isETH ? "dst" : "to"]: staking._address };
       const eventsData = [{ contract: token, events: { Transfer: [filter] } }];
       return await getEvents(eventsData, options, getBlock);

@@ -73,10 +73,10 @@ const stakingApi = {
             return 0;
         }
     },
-    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, days = 30) {
+    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, days) {
 
         try {
-            async function getTotalProfits(token, events, days = 30) {
+            async function getTotalProfits(token, events) {
                 try {
                     const selectedNetwork = await getChainName();
                     let isETH = false;
@@ -92,7 +92,7 @@ const stakingApi = {
                 }
             }
 
-            async function getTokenYearlyProfitInUSD(tokenData, USDTData, days = 30) {
+            async function getTokenYearlyProfitInUSD(tokenData, USDTData) {
                 // console.log(`checking relative to the last ${days} days`);
                 const DAY = 86400;
                 const YEAR = DAY*365;
@@ -233,8 +233,8 @@ const stakingApi = {
         let total = await stakingRewards.methods.totalSupply().call();
         // console.log(`total ${total}`);
         
-        // const apyPeriods = [86400, 86400*7, 86400*365];
-        const apyPeriods = [86400*365];
+        const apyPeriods = [86400*365, 86400*7, 86400];
+        // const apyPeriods = [86400*365];
         const apysPeriods = [];
         
         for(const period of apyPeriods) {

@@ -110,6 +110,7 @@ const stakingConfig = {
           key: "govi-eth-lp",
           protocol: stakingProtocols.sushiswap,
           rewardsTokens: ["GOVI"],
+          decimals: 18,
           rel: {
             stakingRewards: "GOVIETHSLPStakingRewards",
             tokenDecimals: [18],

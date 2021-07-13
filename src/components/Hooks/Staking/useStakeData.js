@@ -1,13 +1,12 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { contractsContext } from "contracts/ContractContext";
 import stakingConfig from 'config/stakingConfig';
-import { useWeb3React } from "@web3-react/core";
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
-import { convert, fromLPTokens, getPrice } from "contracts/utils";
-import { useEvents } from "../useEvents";
-import stakingApi from "contracts/apis/staking";
+import { convert, fromLPTokens, getBalance, getPrice } from "contracts/utils";
+import { DAY, useEvents } from "../useEvents";
 import BigNumber from "bignumber.js";
+import { useActiveWeb3React } from "../wallet";
 
 const initialState = {
   stakedTokenAmount: null,
@@ -22,7 +21,7 @@ const initialState = {
     amount: null,
     symbol: null
   }],
-  apy: null,
+  apy: [null,null,null],
   claim: [{
     amount: null,
     symbol: null
@@ -31,6 +30,11 @@ const initialState = {
   tvl: {
     stakedAmountLP: null,
     stakedAmountUSD: null
+  },
+  balance: {
+    tokenBalance: null,
+    usdBalance: null,
+    formatted: null
   }
 }
 
@@ -123,30 +127,40 @@ const useStakedData = (chainName, protocol, tokenName) => {
     const USDTData = await getTokenData(contracts.USDT);
     const GOVIData = await getTokenData(contracts.GOVI);
 
-    const getAPYByTokenName = async () => {
+    const getAPYByTokenName = async (period) => {
       switch (tokenName) {
         case 'govi': {
-          const tokensData = await Promise.all(
-            await token.rewardsTokens.map(async t => {
-              const tokenData = await getTokenData(contracts[t])
-              tokenData.events = await eventsUtils.getTransferEvents(stakingRewards, contracts[t], 30);
-              return tokenData;
-            })
-          );
-          return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData);
+          try {
+            const periodInDays = period/DAY;
+            const tokensData = await (await Promise.all(
+              await token.rewardsTokens.map(async t => {
+                const tokenData = await getTokenData(contracts[t]);
+                tokenData.events = await eventsUtils.getTransferEvents(stakingRewards, contracts[t], periodInDays);
+                return tokenData;
+                })
+              ));
+              return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData, periodInDays);
+            } catch (error) {
+              console.log(error)
+              return []
+            }
         }
         default: {
           const tokenData = await getTokenData(contracts[tokenRel.token]);
-          return await web3Api.getAPYPerToken(platform, stakingRewards, USDTData, GOVIData, tokenData);
+          return await web3Api.getAPYPerToken(platform, stakingRewards, USDTData, GOVIData, tokenData, period);
         }
       }
     }
 
-    const apy = await getAPYByTokenName();
+
+    const apyByPeriods = [365*DAY, 7*DAY, DAY].map(async period => await getAPYByTokenName(period));
+    const apy = await(await Promise.allSettled(apyByPeriods))
+    .filter(({status}) =>  status === "fulfilled")
+    .map(({value}) => value);
 
     cb(() => setStakedData((prev)=> ({
       ...prev,
-      apy: apy ? `${customFixed(apy, 2)}%` : "N/A"
+      apy: apy.map((value)=>value ? `${customFixed(value, 2)}%` : "N/A")
     })));
   }
 
@@ -197,65 +211,76 @@ const useStakedData = (chainName, protocol, tokenName) => {
   }
 
   const getStakedAmountAndPoolShareLM = async (cb) => {
-    const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
-    const USDTData = await getTokenData(contracts.USDT);
-    const GOVIData = await getTokenData(contracts.GOVI);
-    const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
-    const uniswapLPToken = await getTokenData(platformLPToken);
-    const poolSize = await stakingRewards.methods.totalSupply().call();
-    // console.log("poolSize: ", poolSize);
-    const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDTData, uniswapLPToken, uniswapToken)
-    // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
-    
-    const totalStaked = await stakingRewards.methods.balanceOf(account).call();
-    // console.log("totalStaked: ", toDisplayAmount(totalStaked, token.decimals));
-
-    const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, USDTData, uniswapLPToken, uniswapToken)
-    // console.log(tokenName, protocol+" accountStakedUSD: ", accountStakedUSD);
-    const mySharePercentage = toBN(totalStaked).isZero() ? "0" : BigNumber(totalStaked).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
-    
-    getDailyRewardLM(mySharePercentage, cb);
-
-    const data = {
-      stakedTokenAmount: totalStaked,
-      stakedAmount: commaFormatted(customFixed(toDisplayAmount(totalStaked, token.decimals), decimalsCountDisplay)),
-      poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay)),
-      lastStakedAmount: {
-        class: mySharePercentage < 0 ? 'low' : 'high',
-        value: `(${customFixed(mySharePercentage, 2)}%)`
-      },
-      stakedAmountUSD: toBN(accountStakedUSD).isZero() ? "0" : `${commaFormatted(customFixed(toDisplayAmount(accountStakedUSD, USDTData.decimals), 2))}`
-    };
-    
-    const tvl = {
-      stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay)),
-      stakedAmountUSD: toBN(poolSize).isZero() ? "0" : `$${commaFormatted(customFixed(tvlUSD, 2))}`
+    try{
+      const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
+      const USDTData = await getTokenData(contracts.USDT);
+      const GOVIData = await getTokenData(contracts.GOVI);
+      const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
+      const uniswapLPToken = await getTokenData(platformLPToken);
+      const poolSize = await stakingRewards.methods.totalSupply().call();
+      // console.log("poolSize: ", poolSize);
+      const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDTData, uniswapLPToken, uniswapToken)
+      // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
+      
+      const totalStaked = !!account ? await stakingRewards.methods.balanceOf(account).call() : 0;
+      // console.log("totalStaked: ", toDisplayAmount(totalStaked, token.decimals));
+      
+      const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, USDTData, uniswapLPToken, uniswapToken)
+      // console.log(tokenName, protocol+" accountStakedUSD: ", accountStakedUSD);
+      const mySharePercentage = toBN(totalStaked).isZero() ? "0" : BigNumber(totalStaked).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
+      
+      getDailyRewardLM(mySharePercentage, cb);
+      
+      const data = {
+        stakedTokenAmount: totalStaked,
+        stakedAmount: commaFormatted(customFixed(toDisplayAmount(totalStaked, token.decimals), decimalsCountDisplay)),
+        poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay)),
+        lastStakedAmount: {
+          class: mySharePercentage < 0 ? 'low' : 'high',
+          value: `(${customFixed(mySharePercentage, 2)}%)`
+        },
+        stakedAmountUSD: toBN(accountStakedUSD).isZero() ? "0" : `${commaFormatted(customFixed(toDisplayAmount(accountStakedUSD, USDTData.decimals), 2))}`
+      };
+      
+      const tvl = {
+        stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay)),
+        stakedAmountUSD: toBN(poolSize).isZero() ? "0" : `$${commaFormatted(customFixed(tvlUSD, 2))}`
+      }
+      // console.log(tokenName+" data: ", data);
+      // console.log(tokenName+" tvl: ", tvl);
+      cb(() => setStakedData((prev)=> ({
+        ...prev,
+        ...data,
+        tvl
+      })));
+    }catch(error) {
+      console.log("getStakedAmountAndPoolShareLM: ", error)
+      console.log(tokenName+" protocol: ", protocol)
     }
-    // console.log(tokenName+" data: ", data);
-    // console.log(tokenName+" tvl: ", tvl);
-    cb(() => setStakedData((prev)=> ({
-      ...prev,
-      ...data,
-      tvl
-    })));
 
   };
   const getAPYLM = async (cb) => {
-    const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
-    const USDTData = await getTokenData(contracts.USDT);
-    const GOVIData = await getTokenData(contracts.GOVI);
-    const uniswapLPToken = await getTokenData(platformLPToken);
-    const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
-    const apy = await web3Api.getUniswapAPY(stakingRewards, USDTData, GOVIData, uniswapLPToken, uniswapToken)
-    // console.log(tokenName, protocol+" apy: ", apy);
-    cb(() => setStakedData((prev)=> ({
-      ...prev,
-      apy: apy[0] ? `${customFixed(apy[0], 2)}%` : "N/A"
-    })));
+    try{
+      const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
+      const USDTData = await getTokenData(contracts.USDT);
+      const GOVIData = await getTokenData(contracts.GOVI);
+      const uniswapLPToken = await getTokenData(platformLPToken);
+      const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
+      const apy = await web3Api.getUniswapAPY(stakingRewards, USDTData, GOVIData, uniswapLPToken, uniswapToken)
+      // console.log(tokenName, protocol+" apy: ", apy);
+      cb(() => setStakedData((prev)=> ({
+        ...prev,
+        apy: apy.map((value)=>value ? `${customFixed(value, 2)}%` : "N/A")
+      })));
+    }catch(error) {
+      console.log("geyAPYLM: ", error)
+      console.log(tokenName+" protocol: ", protocol)
+    }
   };
 
   const getClaimableRewardsLM = async (cb) => {
-    const rewards = await contracts[tokenRel.stakingRewards].methods.earned(account).call();
+
+    const rewards = !!account ? await contracts[tokenRel.stakingRewards].methods.earned(account).call() : 0;
     // console.log(tokenName, protocol+" rewards: ", rewards );
     const claim = [{
       amount: commaFormatted(customFixed(toDisplayAmount(rewards, tokenRel.tokenDecimals[0]), decimalsCountDisplay)),
@@ -281,6 +306,49 @@ const useStakedData = (chainName, protocol, tokenName) => {
     })));
   };
       
+  const getTokenBalance = async (cb) => {
+    if(!account) return 0
+    try {
+      let balance = 0;
+      const getUSDBalanceByProtocol = async() => {
+        let tokenData;
+        const USDTData = await getTokenData(contracts.USDT);
+        switch (protocol) {
+          case "platform": {
+            tokenData = await getTokenData(contracts[tokenName === "govi" ? "GOVI" : tokenRel.platform]);
+            const tokenData2 = await getTokenData(contracts[tokenName === "govi" ? "GOVI" : tokenRel.token]);
+            balance = await tokenData.contract.methods.balanceOf(account).call();
+            const amountToConvert = async () => tokenName === "govi" ? toBN(balance) : await fromLPTokens(tokenData.contract, toBN(balance));
+            const usdBalance = await convert(await amountToConvert(), tokenData2, USDTData);
+            return "$"+commaFormatted(customFixed(toDisplayAmount(usdBalance, USDTData.decimals), 2))
+          }
+          default: {
+            tokenData = await getTokenData(contracts[tokenRel.token]);
+            balance = await tokenData.contract.methods.balanceOf(account).call();
+            const GOVIData = await getTokenData(contracts.GOVI);
+            const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;            
+            const usdBalance = await web3Api.uniswapLPTokenToUSD(balance, USDTData, tokenData, uniswapToken)
+            return "$"+commaFormatted(customFixed(toDisplayAmount(usdBalance), 2))
+          }
+        }
+      }
+
+
+      const usdBalance = await getUSDBalanceByProtocol();
+      
+      cb(()=> setStakedData((prev)=>({
+        ...prev,
+        balance: {
+          tokenBalance: balance,
+          usdBalance,
+          formatted: commaFormatted(customFixed(toDisplayAmount(balance, token.decimals), 2))
+        }
+      })))
+    } catch (error) {
+      console.log(protocol + " " +tokenName+" error:" ,error);
+    }
+  }
+
   useEffect(()=>{
     let canceled = false;
     
@@ -291,6 +359,7 @@ const useStakedData = (chainName, protocol, tokenName) => {
     }
 
     const fetchData = async (cb) => {
+      getTokenBalance(cb)
       if(protocol !== "platform") return fetchLiquidityMiningData(cb);
       getStakedAmountAndPoolShare(cb);
       getClaimableRewards(cb);
