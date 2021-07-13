@@ -2,7 +2,6 @@ import ConnectWallet from 'components/ConnectWallet/ConnectWallet';
 import { platformViewContext } from 'components/Context';
 import EmptyData from 'components/EmptyData/EmptyData';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import Spinner from 'components/Spinner/Spinner';
 import platformConfig from 'config/platformConfig';
 import stakingConfig, { stakingViews } from 'config/stakingConfig';
 import React, { createContext, useContext, useEffect, useState } from 'react'

@@ -87,7 +87,7 @@ const useHistoryEvents = () => {
                 });
             }
         }
-    }, [fromWei, getBlock, contractState])
+    }, [fromWei, getBlock])
 
     const fetchPastEvents = useCallback(async function(view, activeToken) {
         if(!activeToken) return;
@@ -113,7 +113,7 @@ const useHistoryEvents = () => {
 
         events = events.sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
         dispatch(setData(view, events));
-    }, [account, contractState, contracts, dispatch, getEventsFast, mapper, selectedNetwork, wallet]) 
+    }, [account, contracts, dispatch, getEventsFast, mapper, selectedNetwork, wallet]) 
 
     
     const subscribe = useCallback(async function(view, type, eventType, activeToken) {
