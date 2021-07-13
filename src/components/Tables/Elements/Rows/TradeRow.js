@@ -15,13 +15,14 @@ const TradeRow = ({token, isHeader}) => {
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const availableBalancePayload = useMemo(() => ({account, type: "sell"}), [account]);
-    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload);
+
+    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorMessage: "-"});
 
     const positionPnlPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
-    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload);
+    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorMessage: "-"});
 
     const estimatedLiquidationPayload = useMemo(() => ({account}), [ account]);
-    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, estimatedLiquidationPayload);
+    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, estimatedLiquidationPayload, {errorMessage: "-"});
     
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
 
@@ -43,7 +44,7 @@ const TradeRow = ({token, isHeader}) => {
                 <RowItem content={<Value 
                     text={positionValue} 
                     subText={`${token.key.toUpperCase()}`} 
-                    format={customFixedTokenValue(positionValue?.toString(), token.decimals, token.decimals)}
+                    format={customFixedTokenValue(positionValue?.toString(), token.fixedDecimals, token.decimals)}
                 /> } />
             </>}
             
@@ -53,7 +54,7 @@ const TradeRow = ({token, isHeader}) => {
                 content={<Pnl 
                     value={positionPnlData} 
                     token={`${token.key.toUpperCase()}`} 
-                    format={customFixedTokenValue(positionPnlData?.amount, token.decimals, token.decimals)}
+                    format={customFixedTokenValue(positionPnlData?.amount, token.fixedDecimals, token.decimals)}
                 /> } 
             />
 
@@ -75,7 +76,7 @@ const TradeRow = ({token, isHeader}) => {
             />
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }
         </>
-    ), [isTablet, token.key, token.decimals, positionValue, header, positionPnlData, isMobile, sellController, estimateLiquidation]);
+    ), [isTablet, token.key, token.fixedDecimals, token.decimals, positionValue, header, positionPnlData, estimateLiquidation, isMobile, sellController]);
 
     if(isHeader) {
         return <>

@@ -147,7 +147,6 @@ async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, perio
 
 async function getPositionsPNL(contracts, token, {currentPositionBalance, account, library, eventsUtils}) {
   try {
-    console.log("call");
     let events = [];
     if(config.isMainnet) {
       events = await TheGraph.account_positions(account, contracts[token.rel.platform]._address, 0);

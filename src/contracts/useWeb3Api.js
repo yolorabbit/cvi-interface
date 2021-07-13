@@ -23,22 +23,22 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
             if(web3Api[type]) {
                 if(selectedCurrency) {
                     const token = getActiveToken(tokens, selectedCurrency);
-                    if(!token) return setData("N/A");
+                    if(!token) return setData(options?.errorMessage ?? "N/A");
                     const data = await web3Api[type](contracts, token, {library, eventsUtils, ...body});
-                    setData(data);
+                    setData(data === 'N/A' ? options?.errorMessage ?? 'N/A' : data);
                     return data;
                 } else {
                     const data = await web3Api[type](contracts, tokens, {library, eventsUtils, ...body});
-                    setData(data);
+                    setData(data === 'N/A' ? options?.errorMessage ?? 'N/A' : data);
                     return data;
                 }
             } else {
-                setData("N/A");
-                return "N/A";
+                setData(options?.errorMessage ?? "N/A");
+                return options?.errorMessage ?? "N/A";
             }
         } catch(error) {
-            setData("N/A");
-            return "N/A";
+            setData(options?.errorMessage ?? "N/A");
+            return options?.errorMessage ?? "N/A";
         }
     }
 
@@ -47,8 +47,8 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
             const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
             return await fetchWeb3ApiData(contracts, tokens);
         } catch(error) {
-            setData("N/A");
-            return "N/A";
+            setData(options?.errorMessage ?? "N/A");
+            return options?.errorMessage ?? "N/A";
         }
     }
 
