@@ -19,6 +19,9 @@ const TradeRow = ({token, isHeader}) => {
 
     const positionPnlPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload);
+
+    const estimatedLiquidationPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
+    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, estimatedLiquidationPayload);
     
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
 
@@ -68,11 +71,11 @@ const TradeRow = ({token, isHeader}) => {
             <RowItem 
                 header={header["Estimated Liquidation"].label} 
                 tooltip={header["Estimated Liquidation"].tooltip}
-                content={<Value text="22.06.2021" />} 
+                content={<Value text={estimateLiquidation} />} 
             />
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }
         </>
-    ), [isTablet, token.key, token.decimals, positionValue, header, positionPnlData, isMobile, sellController]);
+    ), [isTablet, token.key, token.decimals, positionValue, header, positionPnlData, isMobile, sellController, estimateLiquidation]);
 
     if(isHeader) {
         return <>

@@ -5,6 +5,8 @@ import * as TheGraph from 'graph/queries';
 import { contractState } from "components/Hooks/useHistoryEvents";
 import config from "config/config";
 import { bottomBlockByNetwork, DEFAULT_STEPS } from "components/Hooks/useEvents";
+import moment from "moment";
+import { getLatestBlockTimestamp } from './../web3Api';
 
 export const MAX_CVI_VALUE = 20000;
 
@@ -152,16 +154,13 @@ async function getPositionsPNL(contracts, token, {currentPositionBalance, accoun
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: Object.keys(contractState.positions)[idx] }))).flat();
     } else {
       const chainName = await getChainName();
-      console.log(chainName);
       let options = {};
       const latestBlockNumber = await (await library.eth.getBlock("latest")).number;
       const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName];
-      console.log(stepSize);
       options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS }
       const filters = { OpenPosition: [{ account }], ClosePosition: [{ account }], LiquidatePosition: [{ positionAddress: account }] };
       const eventsData = [{ contract: contracts[token.rel.platform], events: filters }];
       events = await eventsUtils.getEventsFast(eventsData, options);
-      console.log(events);
     }
 
     events.sort((a, b) => toBN(a.blockNumber).cmp(toBN(b.blockNumber)));
@@ -188,7 +187,7 @@ async function getPositionsPNL(contracts, token, {currentPositionBalance, accoun
           break;
       }
     });
-    console.log(currentPositionBalance);
+
     let totalSum = openSum.sub(closeSum);
     let pnl = toBN(currentPositionBalance).sub(totalSum);
     let pnlPercent = 0;
@@ -207,12 +206,56 @@ async function getPositionsPNL(contracts, token, {currentPositionBalance, accoun
 }
 
 
+async function getEstimatedLiquidationV2 (pos, platform, feesCalc, liquidationContract, index) {
+  let decimals = await platform.methods.PRECISION_DECIMALS().call();
+  let minThreshold = 50; //await liquidationContract.methods.liquidationMinThreshold().call()
+  let maxPercentage = await liquidationContract.methods.LIQUIDATION_MAX_FEE_PERCENTAGE().call();
+  let liquidationThreshold = toBN(pos.positionUnitsAmount).mul(toBN(minThreshold)).div(toBN(maxPercentage));
+  let fee = toBN(await feesCalc.methods.calculateSingleUnitFundingFee([{ period: 86400, cviValue: index }]).call());
+  let feePerDay = fee.mul(toBN(pos.positionUnitsAmount)).div(toBN(decimals));
+  let liquidation = toBN(pos.currentPositionBalance).sub(liquidationThreshold).mul(toBN(100)).div(feePerDay);
+  return parseFloat(liquidation.toString()) / 100;
+}
+
+async function getEstimatedLiquidationV1(platform, feeCalc, index, tokenAmount, account) {
+  let {positionUnitsAmount, currentPositionBalance} = await platform.methods.calculatePositionBalance(account).call();
+  currentPositionBalance = toBN(currentPositionBalance)
+  if(tokenAmount) {
+    currentPositionBalance = currentPositionBalance.add(fromTokenAmountToUnits(toBN(tokenAmount), index));
+  }
+  let decimals = await platform.methods.PRECISION_DECIMALS().call();
+  let fee = toBN(await feeCalc.methods.calculateSingleUnitFundingFee([{ period: 86400, cviValue: index }]).call());
+  let feePerDay = fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
+  let liquidation = toBN(currentPositionBalance).mul(toBN(100)).div(feePerDay);
+  return parseFloat(liquidation.toString()) / 100;
+}
+
+async function getEstimatedLiquidation(contracts, token, { currentPositionBalance, tokenAmount, account, library }) {
+  try {
+    const { getCVILatestRoundData } = contracts[token.rel.cviOracle].methods;
+    const { cviValue } = await getCVILatestRoundData().call();
+    let _estimatedLiquidation;
+    if(token.type === "eth" || token.type === "v1") {
+      _estimatedLiquidation = await getEstimatedLiquidationV1(contracts[token.rel.platform], contracts[token.rel.feesCalc], cviValue, tokenAmount ?? undefined, account);
+    } else if(token.type === 'v2') {
+      _estimatedLiquidation = await getEstimatedLiquidationV2(currentPositionBalance, contracts[token.rel.platform], contracts[token.rel.feesCalc], contracts[token.rel.liquidation], cviValue);
+    }
+
+    const latestBlockTimestamp = await getLatestBlockTimestamp(library.eth.getBlock);
+    return  moment.utc(latestBlockTimestamp * 1000).add(_estimatedLiquidation, 'days').format('DD/MM/YYYY');
+  } catch(error) {
+    console.log(error);
+    return "N/A";
+  }
+}
+
 const positionApi = {
   getOpenPositionFee,
   getCurrentFundingFee,
   getFundingFeePerTimePeriod,
   getClosePositionFee,
-  getPositionsPNL
+  getPositionsPNL,
+  getEstimatedLiquidation
 }
 
 export default positionApi;
