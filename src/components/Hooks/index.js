@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { viewportContext } from "../Context";
 import platformConfig from '../../config/platformConfig';
+import stakingConfig, { stakingViews } from "config/stakingConfig";
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);
@@ -29,8 +30,9 @@ export const useIsLaptop = () => {
   return width <= 1365
 }
 
-export const useActiveToken = (selectedCurrency) => {
+export const useActiveToken = (selectedCurrency, view, protocol) => {
   const { selectedNetwork } = useSelector(({app}) => app);
+  if(view === "staking") return stakingConfig.tokens[selectedNetwork][protocol][selectedCurrency?.toLowerCase()]
   return platformConfig.tokens[selectedNetwork][selectedCurrency?.toLowerCase()];
 }
 

@@ -17,9 +17,11 @@ const InputAmount = ({
     availableText = "Your available balance:", 
     setInsufficientBalance, 
     error,
-    availableBalance
+    availableBalance,
+    view,
+    protocol
 }) => {
-    const activeToken = useActiveToken(symbol); 
+    const activeToken = useActiveToken(symbol, view, protocol); 
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const availableBalanceAmount = useMemo(() => customFixedTokenValue(availableBalance, activeToken.decimals, activeToken.decimals), [activeToken, availableBalance]);
     const insufficientBalance = useMemo(() => tokenAmount.gt(toBN(availableBalance)), [tokenAmount, availableBalance]);
