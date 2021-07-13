@@ -1,5 +1,8 @@
 .platform-tables-component {
   .table-component tbody tr td {
     width: auto;
+    &:not(:first-child):not(:last-child) {
+      min-width: 100%;
+    }
   }
 }
