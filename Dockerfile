@@ -1,4 +1,4 @@
-FROM node:14.20.0
+FROM node:16.2.0
 
 ENV INSTALL_PATH /app
 RUN mkdir -p $INSTALL_PATH
