@@ -169,7 +169,7 @@ const web3Api = {
             }
         }
     },
-    getAvailableBalance: async (contracts, token, {account, type, withStakeAmount}) => {
+    getAvailableBalance: async (contracts, token, {account, type, withStakeAmount, library}) => {
         try {
             if(type === "sell") {
                 let positionValue = await contracts[token.rel.platform].methods.calculatePositionBalance(account).call();
@@ -187,7 +187,9 @@ const web3Api = {
                 let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
                 let totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());
                 let tokenAmount = totalSupply !== 0 ? lpBalance.mul(totalBalance).div(totalSupply) : toBN(0);
-                if(withStakeAmount) return tokenAmount?.toString();
+                let sharePercent = totalSupply !== 0 ? (library.utils.fromWei(lpBalance, "ether") / library.utils.fromWei(totalSupply, "ether")) * 100 : 0;
+                
+                if(withStakeAmount) return {myShare: tokenAmount?.toString(), poolShare: sharePercent};
 
                 const lpTokens = await fromLPTokens(contracts[token.rel.platform], stakedAmount)
                 const _tokenBalance = toBN(lpTokens).cmp(tokenAmount) > 0 ? "0" : toBN(tokenAmount).sub(lpTokens).toString();

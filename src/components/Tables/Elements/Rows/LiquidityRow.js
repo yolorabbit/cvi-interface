@@ -9,6 +9,7 @@ import ActionController from "components/Actions/ActionController";
 import { useActiveWeb3React } from '../../../Hooks/wallet';
 import { useWeb3Api } from '../../../../contracts/useWeb3Api';
 import { customFixedTokenValue } from "utils";
+import { customFixed } from '../../../../utils';
 
 const LiquidityRow = ({token, isHeader}) => {
     const { key: tokenName } = token;
@@ -18,9 +19,9 @@ const LiquidityRow = ({token, isHeader}) => {
     const [amount, setAmount] = useState("");
     const header = useMemo(() => platformConfig.headers[activeViews["view-liquidity"]][platformConfig.tabs["view-liquidity"].liquidity], []);
     const availableBalancePayload = useMemo(() => ({account, type: "withdraw", withStakeAmount: true}), [account]);
-    const [liquidityBalance] = useWeb3Api("getAvailableBalance", tokenName, availableBalancePayload, {errorValue: "0"});
+    const [liquidityShareData] = useWeb3Api("getAvailableBalance", tokenName, availableBalancePayload, {errorValue: "0"});
 
-    console.log(liquidityBalance?.toString());
+    console.log(liquidityShareData?.toString());
     const withdrawController = useMemo(() => {
         return <ActionController 
             amountLabel="Select amount to withdraw"
@@ -37,9 +38,9 @@ const LiquidityRow = ({token, isHeader}) => {
             {!isTablet && <> 
                 <RowItem content={<Coin token={tokenName} />} />
                 <RowItem content={<Value 
-                    text={liquidityBalance} 
-                    subText={`${tokenName.toUpperCase()} (0.03%)`} 
-                    format={customFixedTokenValue(liquidityBalance?.toString(), token.fixedDecimals, token.decimals)}
+                    text={liquidityShareData} 
+                    subText={`${tokenName.toUpperCase()} (${customFixed(liquidityShareData?.poolShare, 2) ?? '0'}%)`} 
+                    format={customFixedTokenValue(liquidityShareData?.myShare, token.fixedDecimals, token.decimals)}
                 /> } />
             </>}
 
@@ -56,12 +57,17 @@ const LiquidityRow = ({token, isHeader}) => {
 
             {(!isTablet || isMobile) && <RowItem content={withdrawController} />}
         </>
-    ), [isTablet, tokenName, liquidityBalance, token.fixedDecimals, token.decimals, header, isMobile, withdrawController]);
+    ), [isTablet, tokenName, liquidityShareData, token.fixedDecimals, token.decimals, header, isMobile, withdrawController]);
 
     if(isHeader) {
         return <>
-            <RowItem content={<Coin token={token} />} />
-            <RowItem content={<Value text="450,508.45637366" subText={`${tokenName.toUpperCase()} (0.03%)`} /> } />
+            <RowItem content={<Coin token={tokenName} />} />
+            <RowItem content={<Value 
+                text={liquidityShareData} 
+                subText={`${tokenName.toUpperCase()} (${customFixed(liquidityShareData?.poolShare, 2) ?? '0'}%)`} 
+                format={customFixedTokenValue(liquidityShareData?.myShare, token.fixedDecimals, token.decimals)}
+            /> } />
+
             {!isMobile && <RowItem type="action" content={withdrawController} /> }
         </>
     }
