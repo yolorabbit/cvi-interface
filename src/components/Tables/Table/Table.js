@@ -7,7 +7,7 @@ import './Table.scss';
 import { uniqueId } from 'lodash';
 import { useDataController } from '../DataController/DataController';
 import { useContext } from 'react';
-import { viewportContext } from 'components/Context';
+import { platformViewContext } from 'components/Context';
 
 const Table = () => {
     const { 
@@ -22,7 +22,7 @@ const Table = () => {
         subHeaders
     } = useDataController();
 
-    const { activeView } = useContext(viewportContext);
+    const { activeView } = useContext(platformViewContext);
 
     return useMemo(() => {
         return (
