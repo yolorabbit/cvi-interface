@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from 'utils';
-import { useEvents } from './useEvents';
+import { bottomBlockByNetwork, useEvents } from './useEvents';
 import { useActiveWeb3React } from './wallet';
 import * as TheGraph from 'graph/queries';
 import { contractsContext } from 'contracts/ContractContext';
@@ -24,9 +24,9 @@ const useHistoryEvents = () => {
 
     const opt = useMemo(() => ({
         filter: { account },
-        fromBlock: 0,
+        fromBlock: bottomBlockByNetwork[selectedNetwork],
         toBlock: 'latest',
-    }), [account]);
+    }), [account, selectedNetwork]);
 
     const contractState = useMemo(() => (config.isMainnet ? {
         positions: {
@@ -102,7 +102,7 @@ const useHistoryEvents = () => {
                     [Object.keys(contractState[view])[0]]: [{ account }], 
                     [Object.keys(contractState[view])[1]]: [{ account }] 
                 } 
-            }], {});
+            }], {bottomBlock: bottomBlockByNetwork[selectedNetwork]});
         }
        
         if(events.length) {
@@ -111,7 +111,7 @@ const useHistoryEvents = () => {
 
         events = events.sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
         dispatch(setData(view, events));
-    }, [account, contractState, contracts, dispatch, getEventsFast, mapper, wallet]) 
+    }, [account, contractState, contracts, dispatch, getEventsFast, mapper, selectedNetwork, wallet]) 
 
     
     const subscribe = useCallback(async function(view, type, eventType, activeToken) {
