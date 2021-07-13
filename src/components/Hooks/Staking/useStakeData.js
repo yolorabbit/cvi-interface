@@ -307,7 +307,15 @@ const useStakedData = (chainName, protocol, tokenName) => {
   };
       
   const getTokenBalance = async (cb) => {
-    if(!account) return 0
+    if(!account) return cb(()=> setStakedData((prev)=>({
+      ...prev,
+      balance: {
+        tokenBalance: 0,
+        usdBalance: "$0",
+        formatted: 0
+      }
+    })))
+
     try {
       let balance = 0;
       const getUSDBalanceByProtocol = async() => {
