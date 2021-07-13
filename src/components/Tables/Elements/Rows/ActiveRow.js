@@ -1,7 +1,6 @@
-import { platformViewContext } from "components/Context"
 import platformConfig, { activeViews } from "config/platformConfig"
 import { stakingViews } from "config/stakingConfig"
-import { useContext, useMemo } from "react"
+import { useMemo } from "react"
 import HistoryRow from "./HistoryRow"
 import LiquidityRow from "./LiquidityRow"
 import StakeAssetsRow from "./StakeAssetsRow"

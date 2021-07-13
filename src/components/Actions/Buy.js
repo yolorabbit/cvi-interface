@@ -14,7 +14,6 @@ import { addAlert } from 'store/actions';
 import config from './../../config/config';
 import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
-import { toTokenAmount } from 'contracts/utils';
 
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
