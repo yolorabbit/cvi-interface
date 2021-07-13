@@ -8,15 +8,11 @@ import stakingConfig, { stakingProtocols, stakingViews } from "config/stakingCon
 import StakingClaim from "components/Actions/StakingClaim";
 import { Pairs } from "../Values";
 import useStakedData from "components/Hooks/Staking";
-import { useWeb3React } from "@web3-react/core";
-import { supportedNetworksConfigByEnv } from 'connectors';
 import { useSelector } from "react-redux";
 
 const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
     const isTablet = useIsTablet();
-    const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
-    const [leftToken, rightToken] = token?.split('-');
     const unstakeController = useMemo(() => {
         return <ActionController 
             amountLabel="Select amount to unstake*"
@@ -28,22 +24,13 @@ const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
         />  //eslint-disable-next-line
     }, [token, amount]);
 
-    if(isHeader) {
-        return <>
-            <RowItem content={
-                stakingProtocols[protocol] === stakingProtocols.platform ? 
-                <Coin token={token} /> : 
-                <> 
-                    <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} hideNames />
-                    {protocol !== "platform" && <RowItem content={<Value text="10,000" subText={`${token?.toUpperCase()} (0.01233%)`} bottomText={`$468 (${protocol})`} /> } /> }
-                </>} 
-            />
-            {protocol === "platform" && <RowItem content={<Value text="10,000" subText={`${token?.toUpperCase()} (0.01233%)`} bottomText={`$468 (${protocol})`} /> } /> }
-            {!isMobile && <RowItem type="action" content={unstakeController} /> }
-        </>
-    }
-
-    const RowDataComponent = () => <RowData token={token} protocol={protocol} unstakeController={unstakeController} amount={amount}/>
+    const RowDataComponent = () => 
+    <RowData 
+        isHeader={isHeader} 
+        token={token} 
+        protocol={protocol} 
+        unstakeController={unstakeController} 
+        amount={amount}/>
 
     return isTablet ? <RowDataComponent /> : <tr>
         <RowDataComponent />
@@ -52,16 +39,31 @@ const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
 
 export default StakedAssetsRow;
 
-const RowData = ({token, protocol, unstakeController}) => {
-    const { selectedNetwork } = useSelector(({app}) => app);
+const RowData = ({isHeader, token, protocol, unstakeController}) => {
+    const chainName = useSelector(({app})=>app.selectedNetwork);
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
-    const [stakedData] = useStakedData(selectedNetwork, protocol, token);
+    const [stakedData] = useStakedData(chainName, protocol, token);
     
     return useMemo(() => {
-
+        // console.log('Staked asster row: ', chainName, protocol, token);
+        const StakedValue = <Value text={stakedData.stakedAmount} subText={`${token?.toUpperCase()} ${stakedData.lastStakedAmount.value}`} bottomText={`$${stakedData.stakedAmountUSD}`} />
+        if(isHeader) {
+            return <>
+                <RowItem content={
+                    stakingProtocols[protocol] === stakingProtocols.platform ? 
+                    <Coin token={token} /> : 
+                    <> 
+                        <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} hideNames />
+                        {protocol !== "platform" && <RowItem content={StakedValue} /> }
+                    </>} 
+                />
+                {protocol === "platform" && <RowItem content={StakedValue} /> }
+                {!isMobile && <RowItem type="action" content={unstakeController} /> }
+            </>
+        }
         return (
         <> 
             {!isTablet && <> 
@@ -70,7 +72,7 @@ const RowData = ({token, protocol, unstakeController}) => {
                     <Coin token={token} showName /> : 
                     <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
                 />
-                <RowItem content={<Value text={stakedData.stakedAmount} subText={`${token?.toUpperCase()} ${stakedData.lastStakedAmount.value}`} bottomText={`$${stakedData.stakedAmountUSD}`} /> } />
+                <RowItem content={StakedValue} />
             </>}
 
             <RowItem 
