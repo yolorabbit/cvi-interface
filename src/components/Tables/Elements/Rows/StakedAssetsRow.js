@@ -9,28 +9,17 @@ import StakingClaim from "components/Actions/StakingClaim";
 import { Pairs } from "../Values";
 import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
+import { toBN } from "utils";
 
 const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
     const isTablet = useIsTablet();
-    const [amount, setAmount] = useState("");
-    const unstakeController = useMemo(() => {
-        return <ActionController 
-            amountLabel="Select amount to unstake*"
-            isModal 
-            token={token}
-            amount={amount}
-            setAmount={setAmount}
-            type={stakingConfig.actionsConfig.unstake.key}
-        />  //eslint-disable-next-line
-    }, [token, amount]);
 
     const RowDataComponent = () => 
     <RowData 
         isHeader={isHeader} 
         token={token} 
         protocol={protocol} 
-        unstakeController={unstakeController} 
-        amount={amount}/>
+    />
 
     return isTablet ? <RowDataComponent /> : <tr>
         <RowDataComponent />
@@ -39,16 +28,34 @@ const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
 
 export default StakedAssetsRow;
 
-const RowData = ({isHeader, token, protocol, unstakeController}) => {
+const RowData = ({isHeader, token, protocol}) => {
     const chainName = useSelector(({app})=>app.selectedNetwork);
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
     const [stakedData] = useStakedData(chainName, protocol, token);
-    
+    const [amount, setAmount] = useState("");
+
     return useMemo(() => {
-        // console.log('Staked asster row: ', chainName, protocol, token);
+        const stakedTokenAmount = stakedData.stakedTokenAmount ?? 0
+        const UnstakeController =
+        <ActionController 
+            amountLabel="Select amount to unstake*"
+            isModal 
+            token={token}
+            amount={amount}
+            setAmount={setAmount}
+            type={stakingConfig.actionsConfig.unstake.key}
+            view={"staking"}
+            protocol={protocol}
+            disabled={!toBN(stakedTokenAmount).gt(toBN(0))}
+            balances={{
+                tokenAmount: stakedData.stakedTokenAmount,
+                available: stakedData.stakedAmount
+            }}
+        />
+
         const StakedValue = <Value text={stakedData.stakedAmount} subText={`${token?.toUpperCase()} ${stakedData.lastStakedAmount.value}`} bottomText={`$${stakedData.stakedAmountUSD}`} />
         if(isHeader) {
             return <>
@@ -61,7 +68,7 @@ const RowData = ({isHeader, token, protocol, unstakeController}) => {
                     </>} 
                 />
                 {protocol === "platform" && <RowItem content={StakedValue} /> }
-                {!isMobile && <RowItem type="action" content={unstakeController} /> }
+                {!isMobile && <RowItem type="action" content={UnstakeController} /> }
             </>
         }
         return (
@@ -99,8 +106,8 @@ const RowData = ({isHeader, token, protocol, unstakeController}) => {
                 content={<StakingClaim claim={stakedData.claim}/> } 
             />
 
-            {(!isTablet || isMobile) && <RowItem content={unstakeController} />}
+            {(!isTablet || isMobile) && <RowItem content={UnstakeController} />}
         </>
         //eslint-disable-next-line
-    )}, [stakedData, isTablet, isMobile]);
+    )}, [stakedData, isTablet, isMobile, amount]);
 }

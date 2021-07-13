@@ -10,23 +10,10 @@ import Apy from "../Values/Apy";
 import { useActiveWeb3React } from '../../../Hooks/wallet';
 import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
+import { toBN } from "utils";
 
 const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => {
-    const { account } = useActiveWeb3React();
     const isTablet = useIsTablet();
-    const [amount, setAmount] = useState("");
-    
-    const stakeController = useMemo(() => {
-        return <ActionController 
-            disabled={!account}
-            amountLabel="Select amount to stake"
-            isModal 
-            token={token}
-            amount={amount}
-            setAmount={setAmount}
-            type={stakingConfig.actionsConfig.stake.key}
-        />
-    }, [token, amount, account]);
 
     const RowDataComponent = () => 
     <RowData 
@@ -34,9 +21,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
         label={label} 
         token={token} 
         protocol={protocol} 
-        stakeController={stakeController} 
-        amount={amount} />
-
+    />
 
     return useMemo(()=> {
         return isTablet ? <RowDataComponent /> : <tr><RowDataComponent /></tr>
@@ -47,16 +32,35 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
 export default StakeAssetsRow;
 
 
-const RowData = ({isHeader, label, token, protocol, stakeController}) => {
+const RowData = ({isHeader, label, token, protocol}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const chainName = useSelector(({app}) => app.selectedNetwork);
     const header = useMemo(() => stakingConfig.headers[stakingViews["available-to-stake"]], []);
     const [leftToken, rightToken] = token?.split('-');
     const [stakedData] = useStakedData(chainName, protocol, token);
+    const { account } = useActiveWeb3React();
+    const [amount, setAmount] = useState("");
     
     return useMemo(() => {
-        // console.log(stakedData);
+        const tokenBalance = stakedData.balance.tokenBalance ?? 0
+        const StakeController = 
+        <ActionController 
+            amountLabel="Select amount to stake"
+            isModal 
+            token={token}
+            amount={amount}
+            setAmount={setAmount}
+            type={stakingConfig.actionsConfig.stake.key}
+            view={"staking"}
+            protocol={protocol}
+            disabled={!toBN(tokenBalance).gt(toBN(0))}
+            balances={{
+                tokenAmount: stakedData.balance.tokenBalance,
+                available: stakedData.balance.tokenBalance
+            }}
+        />
+
         if(isHeader) {
             return <>
                 <RowItem content={
@@ -64,7 +68,7 @@ const RowData = ({isHeader, label, token, protocol, stakeController}) => {
                     <Coin token={token} showName /> : 
                     <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
                 />
-                {!isMobile && <RowItem type="action" content={stakeController} /> }
+                {!isMobile && <RowItem type="action" content={StakeController} /> }
             </>
         }
         return (
@@ -94,8 +98,8 @@ const RowData = ({isHeader, label, token, protocol, stakeController}) => {
                 content={<Apy apyList={stakedData.apy} />} 
             />
 
-            {(!isTablet || isMobile) && <RowItem content={stakeController} />}
+            {(!isTablet || isMobile) && <RowItem content={StakeController} />}
         </>
         //eslint-disable-next-line
-    )}, [stakedData, isTablet, isMobile]);
+    )}, [stakedData, isTablet, isMobile, account, amount]);
 }

@@ -20,14 +20,15 @@ export const useActionController = () => {
   return context;
 }
 
-const ActionController = ({type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, isModal}) => {
+const ActionController = ({type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, isModal, view="platform", protocol, balances}) => {
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
   const { account } = useActiveWeb3React();
   const availableBalancePayload = useMemo(() => ({account, type}), [account, type]);
+
   const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", token, availableBalancePayload);
-  
+
   const updateAvailableBalance = () => {
     getAvailableBalance();
   }
@@ -64,7 +65,9 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             amount={amount} 
             setAmount={setAmount} 
             setInsufficientBalance={setInsufficientBalance}
-            availableBalance={availableBalance}
+            availableBalance={balances?.tokenAmount ?? availableBalance}
+            view={view}
+            protocol={protocol}
           />
 
           {renderActionComponent()}
@@ -76,14 +79,15 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             amount={amount} 
             setAmount={setAmount} 
             setInsufficientBalance={setInsufficientBalance}
-            availableBalance={availableBalance}
+            availableBalance={balances?.tokenAmount ?? availableBalance}
+            protocol={protocol}
           /> 
         }
 
         {renderActionComponent(isModal)}
     </div>
     //eslint-disable-next-line
-  }, [type, activeView, amount, isOpen, isModal, token, amountLabel, insufficientBalance, availableBalance])
+  }, [disabled, balances, type, activeView, amount, isOpen, isModal, token, amountLabel, insufficientBalance, availableBalance])
 };
 
 export default ActionController;
