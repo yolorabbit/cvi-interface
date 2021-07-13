@@ -88,6 +88,7 @@ const platformConfig = {
         decimals: 6,
         fixedDecimals: 2,
         soon: true,
+        type: "v2",
         leverage: ["X1", "X3", "X4"],
       },
     }

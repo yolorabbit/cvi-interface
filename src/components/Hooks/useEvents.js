@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
-    [chainNames.Matic]: 16800000  
+    [chainNames.Matic]: 16570000 
 }
 
 export const DEFAULT_STEPS = 30;
@@ -144,7 +144,7 @@ export const useEvents = () => {
             const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName];
             const options = {eventsCount: 1, stepSize, days: 30 };
             const eventsData = [{ contract: platform, events: { OpenPosition: [{ account }] } }];
-            const events = await getEvents(eventsData, options, getBlock);
+            const events = await getEventsFast(eventsData, options, getBlock);
             return events[events.length - 1];
         } catch(error) {
             console.log(error);

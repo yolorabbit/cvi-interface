@@ -169,7 +169,7 @@ const web3Api = {
             }
         }
     },
-    getAvailableBalance: async (contracts, token, {account, type, library}) => {
+    getAvailableBalance: async (contracts, token, {account, type }) => {
         try {
             if(type === "sell") {
                 let positionValue = await contracts[token.rel.platform].methods.calculatePositionBalance(account).call();
