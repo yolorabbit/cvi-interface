@@ -85,9 +85,14 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}
   }
 }
 
+async function getPoolSize(contracts, token) {
+  return await contracts[token.rel.platform].methods.totalBalance().call();
+}
+
 const liquidityApi = {
   toLPTokens,
-  getLiquidityPNL
+  getLiquidityPNL,
+  getPoolSize
 }
 
 export default liquidityApi;

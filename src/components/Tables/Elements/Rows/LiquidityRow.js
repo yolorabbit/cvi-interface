@@ -21,9 +21,9 @@ const LiquidityRow = ({token, isHeader}) => {
     const availableBalancePayload = useMemo(() => ({account, type: "withdraw", withStakeAmount: true}), [account]);
     const [liquidityShareData] = useWeb3Api("getAvailableBalance", tokenName, availableBalancePayload, {errorValue: "0"});
 
-
     const liquidityPnlPayload = useMemo(() => ({account}), [account]);
     const [liquidityPnl] = useWeb3Api("getLiquidityPNL", tokenName, liquidityPnlPayload, {errorValue: "0"});
+    const [poolSize] = useWeb3Api("getPoolSize", tokenName);
 
     const withdrawController = useMemo(() => {
         return <ActionController 
@@ -60,12 +60,16 @@ const LiquidityRow = ({token, isHeader}) => {
             
             <RowItem 
                 header={header["Pool size"].label} 
-                content={<Value text="768.20820509" subText={tokenName.toUpperCase()} /> } 
+                content={<Value 
+                    text={poolSize} 
+                    subText={tokenName.toUpperCase()} 
+                    format={customFixedTokenValue(poolSize, token.fixedDecimals, token.decimals)}
+                />} 
             />
 
             {(!isTablet || isMobile) && <RowItem content={withdrawController} />}
         </>
-    ), [isTablet, tokenName, liquidityShareData, token.fixedDecimals, token.decimals, header, liquidityPnl, isMobile, withdrawController]);
+    ), [isTablet, tokenName, liquidityShareData, token.fixedDecimals, token.decimals, header, liquidityPnl, poolSize, isMobile, withdrawController]);
 
     if(isHeader) {
         return <>
