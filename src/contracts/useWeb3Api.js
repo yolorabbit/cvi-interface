@@ -18,10 +18,6 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const ref = useRef(null);
     const eventsUtils = useEvents();
 
-    useEffect(() => {
-        setData(null);
-    }, [selectedCurrency]);
-
     const fetchWeb3ApiData = async (contracts, tokens) => {
         try {
             if(web3Api[type]) {
@@ -48,7 +44,6 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
 
     const getData = async () => {
         try {
-            setData(null);
             const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
             return await fetchWeb3ApiData(contracts, tokens);
         } catch(error) {
@@ -61,13 +56,16 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
         if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
         if(body?.hasOwnProperty('account') && !body.account) return setData("0");
         if(options?.validAmount && body?.hasOwnProperty("tokenAmount") && (body?.tokenAmount?.isZero() || !body?.tokenAmount)) return setData("0");
-        
+
+        setData(null);
         ref.current = setTimeout(() => {
             getData();
-        }, 500);
+        }, 750);
 
         return () => {
-            if(ref.current) return clearTimeout(ref.current);
+            if(ref.current) {
+                return clearTimeout(ref.current);
+            }
         }
         //eslint-disable-next-line
     }, [selectedNetwork, contracts, library, selectedCurrency, body]);
