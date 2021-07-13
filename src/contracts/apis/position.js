@@ -206,7 +206,8 @@ async function getPositionsPNL(contracts, token, {currentPositionBalance, accoun
 }
 
 
-async function getEstimatedLiquidationV2 (pos, platform, feesCalc, liquidationContract, index) {
+async function getEstimatedLiquidationV2 (platform, feesCalc, liquidationContract, index, account) {
+  const pos = await getPositionValue(platform, account)
   let decimals = await platform.methods.PRECISION_DECIMALS().call();
   let minThreshold = 50; //await liquidationContract.methods.liquidationMinThreshold().call()
   let maxPercentage = await liquidationContract.methods.LIQUIDATION_MAX_FEE_PERCENTAGE().call();
@@ -230,7 +231,7 @@ async function getEstimatedLiquidationV1(platform, feeCalc, index, tokenAmount, 
   return parseFloat(liquidation.toString()) / 100;
 }
 
-async function getEstimatedLiquidation(contracts, token, { currentPositionBalance, tokenAmount, account, library }) {
+async function getEstimatedLiquidation(contracts, token, { tokenAmount, account, library }) {
   try {
     const { getCVILatestRoundData } = contracts[token.rel.cviOracle].methods;
     const { cviValue } = await getCVILatestRoundData().call();
@@ -238,7 +239,7 @@ async function getEstimatedLiquidation(contracts, token, { currentPositionBalanc
     if(token.type === "eth" || token.type === "v1") {
       _estimatedLiquidation = await getEstimatedLiquidationV1(contracts[token.rel.platform], contracts[token.rel.feesCalc], cviValue, tokenAmount ?? undefined, account);
     } else if(token.type === 'v2') {
-      _estimatedLiquidation = await getEstimatedLiquidationV2(currentPositionBalance, contracts[token.rel.platform], contracts[token.rel.feesCalc], contracts[token.rel.liquidation], cviValue);
+      _estimatedLiquidation = await getEstimatedLiquidationV2(contracts[token.rel.platform], contracts[token.rel.feesCalc], contracts[token.rel.liquidation], cviValue, account);
     }
 
     const latestBlockTimestamp = await getLatestBlockTimestamp(library.eth.getBlock);

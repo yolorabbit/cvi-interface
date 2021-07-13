@@ -20,7 +20,7 @@ const TradeRow = ({token, isHeader}) => {
     const positionPnlPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload);
 
-    const estimatedLiquidationPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
+    const estimatedLiquidationPayload = useMemo(() => ({account}), [ account]);
     const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, estimatedLiquidationPayload);
     
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
