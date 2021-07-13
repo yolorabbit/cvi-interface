@@ -169,7 +169,7 @@ const web3Api = {
             }
         }
     },
-    getAvailableBalance: async (contracts, token, {account, type }) => {
+    getAvailableBalance: async (contracts, token, {account, type, withStakeAmount}) => {
         try {
             if(type === "sell") {
                 let positionValue = await contracts[token.rel.platform].methods.calculatePositionBalance(account).call();
@@ -187,6 +187,8 @@ const web3Api = {
                 let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
                 let totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());
                 let tokenAmount = totalSupply !== 0 ? lpBalance.mul(totalBalance).div(totalSupply) : toBN(0);
+                if(withStakeAmount) return tokenAmount?.toString();
+
                 const lpTokens = await fromLPTokens(contracts[token.rel.platform], stakedAmount)
                 const _tokenBalance = toBN(lpTokens).cmp(tokenAmount) > 0 ? "0" : toBN(tokenAmount).sub(lpTokens).toString();
 

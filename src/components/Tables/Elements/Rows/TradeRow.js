@@ -15,13 +15,13 @@ const TradeRow = ({token, isHeader}) => {
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const availableBalancePayload = useMemo(() => ({account, type: "sell"}), [account]);
-    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorMessage: "0"});
+    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorValue: "0"});
 
     const positionPnlPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
-    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorMessage: "0"});
+    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0"});
 
     const estimatedLiquidationPayload = useMemo(() => ({account}), [ account]);
-    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, estimatedLiquidationPayload, {errorMessage: "-"});
+    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, estimatedLiquidationPayload, {errorValue: "-"});
     
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
 
@@ -85,7 +85,7 @@ const TradeRow = ({token, isHeader}) => {
                 subText={`${token.key.toUpperCase()}`} 
                 format={customFixedTokenValue(positionValue?.toString(), token.fixedDecimals, token.decimals)}
             />}/>
-            
+
              {!isMobile && <RowItem type="action" content={sellController} /> }
         </>
     }

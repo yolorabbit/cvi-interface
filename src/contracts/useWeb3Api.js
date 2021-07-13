@@ -1,7 +1,7 @@
 import { useEvents } from "components/Hooks/useEvents";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import platformConfig from "config/platformConfig";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { contractsContext } from "./ContractContext";
 import web3Api from "./web3Api";
@@ -17,28 +17,29 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const [data, setData] = useState();
     const ref = useRef(null);
     const eventsUtils = useEvents();
+    const errorValue = useMemo(() => options?.errorValue ?? 'N/A', [options]);
 
     const fetchWeb3ApiData = async (contracts, tokens) => {
         try {
             if(web3Api[type]) {
                 if(selectedCurrency) {
                     const token = getActiveToken(tokens, selectedCurrency);
-                    if(!token) return setData(options?.errorMessage ?? "N/A");
+                    if(!token) return setData(errorValue);
                     const data = await web3Api[type](contracts, token, {library, eventsUtils, ...body});
-                    setData(data === 'N/A' ? options?.errorMessage ?? 'N/A' : data);
+                    setData(data === 'N/A' ? options?.errorValue ?? 'N/A' : data);
                     return data;
                 } else {
                     const data = await web3Api[type](contracts, tokens, {library, eventsUtils, ...body});
-                    setData(data === 'N/A' ? options?.errorMessage ?? 'N/A' : data);
+                    setData(data === 'N/A' ? options?.errorValue ?? 'N/A' : data);
                     return data;
                 }
             } else {
-                setData(options?.errorMessage ?? "N/A");
-                return options?.errorMessage ?? "N/A";
+                setData(errorValue);
+                return errorValue;
             }
         } catch(error) {
-            setData(options?.errorMessage ?? "N/A");
-            return options?.errorMessage ?? "N/A";
+            setData(errorValue);
+            return errorValue;
         }
     }
 
@@ -47,8 +48,8 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
             const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
             return await fetchWeb3ApiData(contracts, tokens);
         } catch(error) {
-            setData(options?.errorMessage ?? "N/A");
-            return options?.errorMessage ?? "N/A";
+            setData(errorValue);
+            return errorValue;
         }
     }
 

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Expand from 'components/Expand';
 import { uniqueId } from 'lodash';
 import Paginator from 'components/Paginator';
@@ -6,7 +6,6 @@ import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
 import './ExpandList.scss';
 import { useDataController } from '../DataController/DataController';
-import { platformViewContext } from 'components/Context';
 
 const ExpandList = () => {
     const { 
@@ -19,8 +18,6 @@ const ExpandList = () => {
         activeTab,
         subHeaders
     } = useDataController();
-
-    const { activeView } = useContext(platformViewContext);
 
     return useMemo(() => {
         return (
