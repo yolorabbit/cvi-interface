@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import { commaFormatted, customFixed, customFixedTokenValue } from 'utils';
+import { commaFormatted, customFixed, customFixedTokenValue, toBN, toBNAmount } from 'utils';
 import Button from 'components/Elements/Button';
 import Input from 'components/Elements/Input';
 import config from 'config/config';
@@ -20,8 +20,9 @@ const InputAmount = ({
     availableBalance
 }) => {
     const activeToken = useActiveToken(symbol); 
+    const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const availableBalanceAmount = useMemo(() => customFixedTokenValue(availableBalance, activeToken.decimals, activeToken.decimals), [activeToken, availableBalance]);
-    const insufficientBalance = useMemo(() => amount > availableBalanceAmount, [amount, availableBalanceAmount]);
+    const insufficientBalance = useMemo(() => tokenAmount.gt(toBN(availableBalance)), [tokenAmount, availableBalance]);
 
     useEffect(() => {
         setInsufficientBalance(insufficientBalance);
