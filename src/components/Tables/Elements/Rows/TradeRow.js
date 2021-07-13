@@ -53,7 +53,7 @@ const TradeRow = ({token, isHeader}) => {
                 content={<Pnl 
                     value={positionPnlData} 
                     token={`${token.key.toUpperCase()}`} 
-                    format={customFixedTokenValue(positionPnlData?.amount, token.fixedDecimals, token.decimals)}
+                    format={customFixedTokenValue(!Number(positionPnlData?.amount) ? "0" :  positionPnlData?.amount, token.fixedDecimals, token.decimals)}
                 /> } 
             />
 

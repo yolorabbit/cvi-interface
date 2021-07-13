@@ -53,7 +53,7 @@ const LiquidityRow = ({token, isHeader}) => {
                 content={<Pnl 
                     value={liquidityPnl} 
                     token={`${tokenName.toUpperCase()}`} 
-                    format={customFixedTokenValue(liquidityPnl?.amount, token.fixedDecimals, token.decimals)}
+                    format={customFixedTokenValue(!Number(liquidityPnl?.amount) ? "0" : liquidityPnl?.amount, token.fixedDecimals, token.decimals)}
                     precents={liquidityPnl?.percent} 
                 /> } 
             />
