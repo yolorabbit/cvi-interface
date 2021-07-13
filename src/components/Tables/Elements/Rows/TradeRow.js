@@ -15,11 +15,10 @@ const TradeRow = ({token, isHeader}) => {
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const availableBalancePayload = useMemo(() => ({account, type: "sell"}), [account]);
-
-    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorMessage: "-"});
+    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorMessage: "0"});
 
     const positionPnlPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
-    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorMessage: "-"});
+    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorMessage: "0"});
 
     const estimatedLiquidationPayload = useMemo(() => ({account}), [ account]);
     const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, estimatedLiquidationPayload, {errorMessage: "-"});
@@ -80,8 +79,13 @@ const TradeRow = ({token, isHeader}) => {
 
     if(isHeader) {
         return <>
-             <RowItem content={<Coin token={token.key} />} />
-             <RowItem content={<Value text="880,503.45637366" subText={`${token.key.toUpperCase()}`} /> } />
+            <RowItem content={<Coin token={token.key} />} />
+            <RowItem content={<Value 
+                text={positionValue} 
+                subText={`${token.key.toUpperCase()}`} 
+                format={customFixedTokenValue(positionValue?.toString(), token.fixedDecimals, token.decimals)}
+            />}/>
+            
              {!isMobile && <RowItem type="action" content={sellController} /> }
         </>
     }

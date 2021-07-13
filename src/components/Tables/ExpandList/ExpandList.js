@@ -48,7 +48,7 @@ const ExpandList = () => {
             </div>
         )
         //eslint-disable-next-line
-    }, [currentPage, activeTab, activeView])
+    }, [currentData, currentPage, showPaginator, setCurrentPage, totalRecords, pageSize, activeTab, subHeaders])
     
     
 }
