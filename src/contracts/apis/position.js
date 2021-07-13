@@ -1,13 +1,17 @@
-import { getBalance, getCviValue } from "contracts/utils";
+import { getBalance, getChainName, getCviValue } from "contracts/utils";
 import { getTokenData } from "contracts/web3Api";
-import { gas, maxUint256, toBN } from "utils";
+import { gas, maxUint256, toBN, toDisplayAmount } from "utils";
+import * as TheGraph from 'graph/queries';
+import { contractState } from "components/Hooks/useHistoryEvents";
+import config from "config/config";
+import { bottomBlockByNetwork, DEFAULT_STEPS } from "components/Hooks/useEvents";
 
 export const MAX_CVI_VALUE = 20000;
 
 export const getPositionValue = async (platform, account) => {
   try {
     return await platform.methods.calculatePositionBalance(account).call();
-  } catch(error) {
+  } catch (error) {
     return "N/A";
   }
 }
@@ -30,84 +34,84 @@ export async function approve(contract, from, to, amount = maxUint256) {
 }
 
 async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount, cviValue, leverage, type) {
-    let tokenContract = tokenData ? tokenData.contract : undefined;
-    let balance = toBN(await getBalance(platform._address, tokenContract ? tokenContract._address : undefined));
-    // if (type == "eth") balance = balance.sub(openTokenAmount);
-    // console.log(`balance: ${balance}`);
-    if (!balance.gt(toBN(0))) {
-      return toBN(0);
-    }
-  
-    let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());
-    let openFeePrecent;
-    if (type === "eth" || type === "v2"){
-      const fees = await feesCalc.methods.openPositionFees().call();
-      openFeePrecent = fees.openPositionFeePercentResult;
-    } else {
-      openFeePrecent = await feesCalc.methods.openPositionFeePercent().call();
-    }
-    // console.log(`openFeePrecent: ${openFeePrecent}`);
-    let openPositionFee = openTokenAmount.mul(toBN(leverage)).mul(toBN(openFeePrecent)).div(maxFeePercent);
-    // console.log(`openPositionFee: ${openPositionFee}`);
-    let maxPositionUnitsAmount = openTokenAmount.sub(openPositionFee).mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue));
-    // console.log(`maxPositionUnitsAmount: ${maxPositionUnitsAmount}`);
-    let minPositionUnitsAmount = maxPositionUnitsAmount.mul(toBN(90)).div(toBN(100));
-    // console.log(`minPositionUnitsAmount: ${minPositionUnitsAmount}`);
-  
-    let totalPositionUnitsAmount = toBN(await platform.methods.totalPositionUnitsAmount().call());
-    // console.log(`totalPositionUnitsAmount: ${totalPositionUnitsAmount}`);
-  
-    let precisionDecimals = toBN(await platform.methods.PRECISION_DECIMALS().call());
-    let collateralRatio = totalPositionUnitsAmount
-      .add(minPositionUnitsAmount)
-      .mul(precisionDecimals)
-      .div(balance.add(openTokenAmount).sub(openPositionFee));
-    return collateralRatio;
+  let tokenContract = tokenData ? tokenData.contract : undefined;
+  let balance = toBN(await getBalance(platform._address, tokenContract ? tokenContract._address : undefined));
+  // if (type == "eth") balance = balance.sub(openTokenAmount);
+  // console.log(`balance: ${balance}`);
+  if (!balance.gt(toBN(0))) {
+    return toBN(0);
+  }
+
+  let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());
+  let openFeePrecent;
+  if (type === "eth" || type === "v2") {
+    const fees = await feesCalc.methods.openPositionFees().call();
+    openFeePrecent = fees.openPositionFeePercentResult;
+  } else {
+    openFeePrecent = await feesCalc.methods.openPositionFeePercent().call();
+  }
+  // console.log(`openFeePrecent: ${openFeePrecent}`);
+  let openPositionFee = openTokenAmount.mul(toBN(leverage)).mul(toBN(openFeePrecent)).div(maxFeePercent);
+  // console.log(`openPositionFee: ${openPositionFee}`);
+  let maxPositionUnitsAmount = openTokenAmount.sub(openPositionFee).mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue));
+  // console.log(`maxPositionUnitsAmount: ${maxPositionUnitsAmount}`);
+  let minPositionUnitsAmount = maxPositionUnitsAmount.mul(toBN(90)).div(toBN(100));
+  // console.log(`minPositionUnitsAmount: ${minPositionUnitsAmount}`);
+
+  let totalPositionUnitsAmount = toBN(await platform.methods.totalPositionUnitsAmount().call());
+  // console.log(`totalPositionUnitsAmount: ${totalPositionUnitsAmount}`);
+
+  let precisionDecimals = toBN(await platform.methods.PRECISION_DECIMALS().call());
+  let collateralRatio = totalPositionUnitsAmount
+    .add(minPositionUnitsAmount)
+    .mul(precisionDecimals)
+    .div(balance.add(openTokenAmount).sub(openPositionFee));
+  return collateralRatio;
 }
 
 async function getBuyingPremiumFee(platform, tokenData, feesCalc, feesModel, tokenAmount, cviValue, leverage = 1, type) {
-    let collateralRatio = await getCollateralRatio(platform, feesCalc, tokenData, tokenAmount, cviValue, leverage, type);
-    // console.log(`collateralRatio: ${collateralRatio} (${fromBN(collateralRatio, 10) * 100}%)`);
-    const turbulence = await feesModel.methods.calculateLatestTurbulenceIndicatorPercent().call();
-    // console.log(`turbulence: ${turbulence}`);
-    // const turbulencePercent = await feesCalc.methods.turbulenceIndicatorPercent().call();
-    // console.log(`turbulencePercent: ${turbulencePercent}`);
-    let buyingPremiumFee;
-    let combinedPremiumFeePercentage = 0;
-    // console.log(type);
-    if (type === "v1") {
-      buyingPremiumFee = await feesCalc.methods.calculateBuyingPremiumFeeWithTurbulence(tokenAmount, collateralRatio, turbulence).call();
-    } else {
-      ({ buyingPremiumFee, combinedPremiumFeePercentage } = await feesCalc.methods
-        .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, turbulence)
-        .call());
-    }
-    return { fee: toBN(buyingPremiumFee), percent: combinedPremiumFeePercentage, turbulence};
+  let collateralRatio = await getCollateralRatio(platform, feesCalc, tokenData, tokenAmount, cviValue, leverage, type);
+  // console.log(`collateralRatio: ${collateralRatio} (${fromBN(collateralRatio, 10) * 100}%)`);
+  const turbulence = await feesModel.methods.calculateLatestTurbulenceIndicatorPercent().call();
+  // console.log(`turbulence: ${turbulence}`);
+  // const turbulencePercent = await feesCalc.methods.turbulenceIndicatorPercent().call();
+  // console.log(`turbulencePercent: ${turbulencePercent}`);
+  let buyingPremiumFee;
+  let combinedPremiumFeePercentage = 0;
+  // console.log(type);
+  if (type === "v1") {
+    buyingPremiumFee = await feesCalc.methods.calculateBuyingPremiumFeeWithTurbulence(tokenAmount, collateralRatio, turbulence).call();
+  } else {
+    ({ buyingPremiumFee, combinedPremiumFeePercentage } = await feesCalc.methods
+      .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, turbulence)
+      .call());
+  }
+  return { fee: toBN(buyingPremiumFee), percent: combinedPremiumFeePercentage, turbulence };
 }
 
 async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {
-    let openFeePrecent = toBN(await feesCalc.methods.openPositionFeePercent().call());
-    let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());
-    return maxFeePercent !== 0 ? tokenAmount.mul(openFeePrecent).div(maxFeePercent) : 0;
+  let openFeePrecent = toBN(await feesCalc.methods.openPositionFeePercent().call());
+  let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());
+  return maxFeePercent !== 0 ? tokenAmount.mul(openFeePrecent).div(maxFeePercent) : 0;
 }
 
-export async function getOpenPositionFee(contracts, token, {leverage = 1, tokenAmount}) {
-    try {
-        const tokenData = await getTokenData(contracts[token.rel.contractKey]);
-        const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
-        let openFeeAmount = await getOpenPositionFeePercent(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenAmount);
-        const { fee, percent, turbulence } = await getBuyingPremiumFee(contracts[token.rel.platform], tokenData, contracts[token.rel.feesCalc], contracts[token.rel.feesModel], tokenAmount, cviValue, leverage, token.type);
-        return { openFee: openFeeAmount.add(fee).mul(toBN(leverage)), buyingPremiumFeePercent: percent, turbulence }
-    } catch(error) {
-        console.log(error);
-        return "N/A";
-    }   
+export async function getOpenPositionFee(contracts, token, { leverage = 1, tokenAmount }) {
+  try {
+    const tokenData = await getTokenData(contracts[token.rel.contractKey]);
+    const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
+    let openFeeAmount = await getOpenPositionFeePercent(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenAmount);
+    const { fee, percent, turbulence } = await getBuyingPremiumFee(contracts[token.rel.platform], tokenData, contracts[token.rel.feesCalc], contracts[token.rel.feesModel], tokenAmount, cviValue, leverage, token.type);
+    return { openFee: openFeeAmount.add(fee).mul(toBN(leverage)), buyingPremiumFeePercent: percent, turbulence }
+  } catch (error) {
+    console.log(error);
+    return "N/A";
+  }
 }
 
-export async function getClosePositionFee(contracts, token, {tokenAmount, account}) {
+export async function getClosePositionFee(contracts, token, { tokenAmount, account }) {
   let pos = await contracts[token.rel.platform].methods.positions(account).call();
   if (toBN(pos.positionUnitsAmount).isZero()) {
-      return toBN(0);
+    return toBN(0);
   }
   let posTimestamp = pos.creationTimestamp;
   let closeFeePrecent = toBN(await contracts[token.rel.feesCalc].methods.calculateClosePositionFeePercent(posTimestamp).call());
@@ -124,14 +128,14 @@ async function getCurrentFundingFeeV2(platform, account) {
   return await platform.methods.calculatePositionPendingFees(account, pos.positionUnitsAmount).call();
 }
 
-async function getCurrentFundingFee(contracts, token, {account}) {
+async function getCurrentFundingFee(contracts, token, { account }) {
   if (token.type === "v1") {
     return await getCurrentFundingFeeV1(contracts[token.rel.platform], account);
   }
   return await getCurrentFundingFeeV2(contracts[token.rel.platform], account);
 }
 
-async function getFundingFeePerTimePeriod(contracts, token, {tokenAmount, period = 86400}) {
+async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, period = 86400 }) {
   const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
   let positionUnitsAmount = fromTokenAmountToUnits(tokenAmount, toBN(cviValue));
   let decimals = await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call();
@@ -139,12 +143,76 @@ async function getFundingFeePerTimePeriod(contracts, token, {tokenAmount, period
   return fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
 }
 
+async function getPositionsPNL(contracts, token, {currentPositionBalance, account, library, eventsUtils}) {
+  try {
+    console.log("call");
+    let events = [];
+    if(config.isMainnet) {
+      events = await TheGraph.account_positions(account, contracts[token.rel.platform]._address, 0);
+      events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: Object.keys(contractState.positions)[idx] }))).flat();
+    } else {
+      const chainName = await getChainName();
+      console.log(chainName);
+      let options = {};
+      const latestBlockNumber = await (await library.eth.getBlock("latest")).number;
+      const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName];
+      console.log(stepSize);
+      options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS }
+      const filters = { OpenPosition: [{ account }], ClosePosition: [{ account }], LiquidatePosition: [{ positionAddress: account }] };
+      const eventsData = [{ contract: contracts[token.rel.platform], events: filters }];
+      events = await eventsUtils.getEventsFast(eventsData, options);
+      console.log(events);
+    }
+
+    events.sort((a, b) => toBN(a.blockNumber).cmp(toBN(b.blockNumber)));
+
+    let openSum = toBN(0);
+    let closeSum = toBN(0);
+    events.forEach((event) => {
+      switch (event.event) {
+        case "openPositions":
+          openSum = openSum.add(toBN(event.tokenAmount.toString()));
+          break;
+        case "closePositions":
+          closeSum = closeSum.add(toBN(event.tokenAmount.toString()));
+          if (toBN(event.positionUnitsAmount).isZero()) {
+            openSum = toBN(0);
+            closeSum = toBN(0);
+          }
+          break;
+        case "liquidatePositions": // reset all sums.
+          openSum = toBN(0);
+          closeSum = toBN(0);
+          break;
+        default:
+          break;
+      }
+    });
+    console.log(currentPositionBalance);
+    let totalSum = openSum.sub(closeSum);
+    let pnl = toBN(currentPositionBalance).sub(totalSum);
+    let pnlPercent = 0;
+    try {
+      pnlPercent = !openSum.isZero() ? toDisplayAmount(toBN(pnl.toString(), 4).div(openSum), 2) : 0;
+    } catch (error) {
+      console.log(error);
+    }
+    
+    return { amount: pnl.toString(), percent: pnlPercent };
+  } catch(error) {
+    console.log(error);
+    return "N/A";
+  }
+ 
+}
+
 
 const positionApi = {
-    getOpenPositionFee,
-    getCurrentFundingFee,
-    getFundingFeePerTimePeriod,
-    getClosePositionFee
+  getOpenPositionFee,
+  getCurrentFundingFee,
+  getFundingFeePerTimePeriod,
+  getClosePositionFee,
+  getPositionsPNL
 }
 
 export default positionApi;

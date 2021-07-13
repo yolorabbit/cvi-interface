@@ -17,6 +17,9 @@ const TradeRow = ({token, isHeader}) => {
     const availableBalancePayload = useMemo(() => ({account, type: "sell"}), [account]);
     const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload);
 
+    const positionPnlPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
+    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload);
+    
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
 
     const sellController = useMemo(() => {
@@ -44,7 +47,11 @@ const TradeRow = ({token, isHeader}) => {
             <RowItem 
                 header={header["P&L"].label}
                 tooltip={header["P&L"].tooltip}
-                content={<Pnl value="112,000.30024285" token={`${token.key.toUpperCase()}`} precents={5.6} /> } 
+                content={<Pnl 
+                    value={positionPnlData} 
+                    token={`${token.key.toUpperCase()}`} 
+                    format={customFixedTokenValue(positionPnlData?.amount, token.decimals, token.decimals)}
+                /> } 
             />
 
             <RowItem 
@@ -65,7 +72,7 @@ const TradeRow = ({token, isHeader}) => {
             />
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }
         </>
-    ), [isTablet, token.key, token.decimals, positionValue, header, isMobile, sellController]);
+    ), [isTablet, token.key, token.decimals, positionValue, header, positionPnlData, isMobile, sellController]);
 
     if(isHeader) {
         return <>

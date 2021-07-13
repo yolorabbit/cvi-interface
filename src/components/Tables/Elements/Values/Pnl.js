@@ -1,15 +1,19 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { DataState } from './DataState';
 
-const Pnl = ({value, token, precents}) => {
-    const isPositive = precents >= 0;
-
-    return (
-        <div className={`pnl-component ${isPositive ? 'high' : 'low'}`}>
-            <b>{value} </b>
-            <span className="pnl-component__token">{token} </span>
-            <span className="pnl-component__precents">{`(${!isPositive ? '-' : ''}${precents}%)`} <img src={require(`images/icons/${isPositive ? 'up-arrow' : 'down-arrow'}.svg`).default} alt="arrow" /></span>
-        </div>
-    )
+const Pnl = ({value, token, format}) => {
+    return useMemo(() => {
+        const isPositive = value?.percent >= 0;
+        return (
+            <div className={`pnl-component ${isPositive ? 'high' : 'low'}`}>
+                <DataState value={value}>
+                    <b>{format ?? value?.amount} </b>
+                    <span className="pnl-component__token">{token} </span>
+                    <span className="pnl-component__precents">{`(${!isPositive ? '-' : ''}${value?.percent}%)`} <img src={require(`images/icons/${isPositive ? 'up-arrow' : 'down-arrow'}.svg`).default} alt="arrow" /></span>
+                </DataState>
+            </div>
+        )
+    }, [token, value, format]);
 }
 
 export default Pnl;

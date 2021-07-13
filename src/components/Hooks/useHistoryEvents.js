@@ -10,6 +10,26 @@ import { contractsContext } from 'contracts/ContractContext';
 import { setData } from 'store/actions/wallet';
 import config from 'config/config';
 
+export const contractState = config.isMainnet ? {
+    positions: {
+        closePositions: 'Sell',
+        openPositions: 'Buy',
+    },
+    liquidities: {
+        deposits: 'Deposit',
+        withdraws: 'Withdraw'
+    }
+} : {
+    positions: {
+        OpenPosition: 'Buy',
+        ClosePosition: 'Sell'
+    },
+    liquidities: {
+        Withdraw: 'Withdraw',
+        Deposit: 'Deposit'
+    }
+}
+
 const useHistoryEvents = () => {
     const { selectedNetwork } = useSelector(({app}) => app); 
     const wallet = useSelector(({wallet}) => wallet);
@@ -28,25 +48,7 @@ const useHistoryEvents = () => {
         toBlock: 'latest',
     }), [account, selectedNetwork]);
 
-    const contractState = useMemo(() => (config.isMainnet ? {
-        positions: {
-            closePositions: 'Sell',
-            openPositions: 'Buy',
-        },
-        liquidities: {
-            deposits: 'Deposit',
-            withdraws: 'Withdraw'
-        }
-    } : {
-        positions: {
-            OpenPosition: 'Buy',
-            ClosePosition: 'Sell'
-        },
-        liquidities: {
-            Withdraw: 'Withdraw',
-            Deposit: 'Deposit'
-        }
-    }), []);
+
 
     const mapper = useMemo(() => {
         return {
