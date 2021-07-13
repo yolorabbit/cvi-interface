@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { platformViewContext } from '../../../Context';
 import { useIsTablet } from 'components/Hooks';
 import Container from '../../../Layout/Container';
@@ -10,67 +10,18 @@ import './PlatformTables.scss';
 import DataController from 'components/Tables/DataController';
 import { useSelector } from 'react-redux';
 
-const historyData = [{
-    date: "07/11/2020",
-    type: "Liquidation",
-    index: "77",
-    amount: `1 ETH`,
-    fees: `-`,
-    netAmount: `-`
-},{
-    date: "07/11/2020",
-    type: "Liquidation",
-    index: "77",
-    amount: `1 ETH`,
-    fees: `1`,
-    netAmount: `76`
-},{
-    date: "07/11/2020",
-    type: "Liquidation",
-    index: "77",
-    amount: `1 ETH`,
-    fees: `-`,
-    netAmount: `-`
-},{
-    date: "07/11/2020",
-    type: "Liquidation",
-    index: "77",
-    amount: `1 ETH`,
-    fees: `-`,
-    netAmount: `-`
-},{
-    date: "07/11/2020",
-    type: "Liquidation",
-    index: "77",
-    amount: `5 ETH`,
-    fees: `-`,
-    netAmount: `-`
-},{
-    date: "07/11/2020",
-    type: "Liquidation",
-    index: "77",
-    amount: `2 ETH`,
-    fees: `-`,
-    netAmount: `-`
-}];
-
 const PlatformTables = () => {
-    const isTablet = useIsTablet();
     const { activeView } = useContext(platformViewContext);
     const [activeTab, setActiveTab] = useState();
-    const { selectedNetwork } = useSelector(({app}) => app);
 
     const renderView = () => {
         if(!activeTab) return null;
-        const data = activeTab === activeViews.history ? historyData : Object.values(platformConfig.tokens[selectedNetwork]);
-        return <DataController 
-            authGuard
-            activeTab={activeTab} 
-            data={data}
-        >
-            {isTablet ? <ExpandList /> : <Table />}
-        </DataController>
-   
+        switch(activeTab) {
+            case activeViews.history:
+                return <HistoryTable activeTab={activeTab} />
+            default:
+                return <DefaultTable activeTab={activeTab} />
+        }
     }
 
     return (
@@ -85,6 +36,43 @@ const PlatformTables = () => {
             </TabsForm>
         </Container>
     )
+}
+
+const DefaultTable = ({activeTab}) => {
+    const { selectedNetwork } = useSelector(({app}) => app);
+    const isTablet = useIsTablet();
+    
+    return useMemo(() => {
+        return <DataController 
+            authGuard
+            activeTab={activeTab} 
+            data={Object.values(platformConfig.tokens[selectedNetwork]).filter(token => !token.soon)}
+        >
+            {isTablet ? <ExpandList /> : <Table />}
+        </DataController>
+    }, [activeTab, selectedNetwork, isTablet])
+}
+
+const HistoryTable = ({activeTab}) => {
+    const isTablet = useIsTablet();
+    const { activeView } = useContext(platformViewContext);
+    const wallet = useSelector(({wallet}) => wallet);
+
+    const historyData = wallet?.[activeView === activeViews["view-liquidity"] ? 'liquidities' : 'positions']?.map(item => {
+        delete item.transactionHash;
+        delete item.timestamp;
+        return item;
+    });
+
+    return useMemo(() => {
+        return <DataController 
+            authGuard
+            activeTab={activeTab} 
+            data={historyData}
+        >
+            {isTablet ? <ExpandList /> : <Table />}
+        </DataController>
+    }, [activeTab, historyData, isTablet])
 }
 
 export default PlatformTables;

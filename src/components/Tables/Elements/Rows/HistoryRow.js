@@ -1,45 +1,37 @@
-import { useIsMobile, useIsTablet } from "components/Hooks";
+import { useIsTablet } from "components/Hooks";
 import { useContext, useMemo } from "react";
 import RowItem from './RowItem';
 import { platformViewContext } from "components/Context";
-import platformConfig, { activeViews } from "config/platformConfig";
+import platformConfig from "config/platformConfig";
 import { Value } from "../Values";
+import { useDataController } from "components/Tables/DataController/DataController";
 
-const HistoryRow = ({token, isHeader}) => {
+const HistoryRow = ({isHeader}) => {
+    const { currentData, currentPage } = useDataController();
     const isTablet = useIsTablet();
-    const isMobile = useIsMobile();
     const { activeView } = useContext(platformViewContext); 
     const headers = useMemo(() => Object.values(platformConfig.headers?.[activeView]?.History), [activeView]);
-  
-    const historyData = activeView === activeViews["view-liquidity"] ? {
-        date: "07/11/2020",
-        type: "Liquidation",
-        amount: `1 ETH`,
-    } : {
-        date: "07/11/2020",
-        type: "Liquidation",
-        index: "77",
-        amount: `1 ETH`,
-        leverage: "X1",
-        fees: `0.9 ETH`,
-        netAmount: `0.1 ETH`
-    }
+    
+    console.log(currentData);
 
-    const RowData = useMemo(() => (
-        <> 
-            {Object.values(historyData)?.map((value, index) => <RowItem 
-                key={index}
-                header={headers[index]} 
-                content={<Value subText={value} />} 
-            />)}
-        </>
-        //eslint-disable-next-line
-    ), [token, isTablet, isMobile, historyData, activeView]);
+    const RowData = useMemo(() => {
+        if(!currentData[currentPage]?.length || !activeView || !headers) return null;
+        return (
+            <> 
+                {currentData[currentPage]?.map((value, index) => <RowItem 
+                    key={index}
+                    header={headers[index]} 
+                    content={<Value subText={value} />} 
+                />)}
+            </>
+            //eslint-disable-next-line
+        )
+    }, [currentData[currentPage], activeView, headers]);
 
     if(isHeader) {
         return <>
-            <RowItem content={<Value text={historyData.date} /> } />
-            <RowItem content={<Value text={historyData.type} /> } />
+            <RowItem content={<Value text={currentData[currentPage].date} /> } />
+            <RowItem content={<Value text={currentData[currentPage].type} /> } />
         </>
     }
 
