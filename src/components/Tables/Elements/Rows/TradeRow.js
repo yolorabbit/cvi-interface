@@ -5,11 +5,17 @@ import RowItem from './RowItem';
 import platformConfig, { activeViews } from "config/platformConfig";
 import ActionController from "components/Actions/ActionController";
 import PlatformClaim from "components/Actions/PlatformClaim";
+import { useWeb3Api } from "contracts/useWeb3Api";
+import { useActiveWeb3React } from "components/Hooks/wallet";
+import { customFixedTokenValue } from "utils";
 
 const TradeRow = ({token, isHeader}) => {
+    const { account } = useActiveWeb3React();
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
+    const availableBalancePayload = useMemo(() => ({account, type: "sell"}), [account]);
+    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload);
 
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
 
@@ -17,7 +23,7 @@ const TradeRow = ({token, isHeader}) => {
         return <ActionController 
             amountLabel="Select amount to sell"
             isModal 
-            token={token}
+            token={token.key}
             amount={amount}
             setAmount={setAmount}
             type={platformConfig.actionsConfig.sell.key}
@@ -27,14 +33,18 @@ const TradeRow = ({token, isHeader}) => {
     const RowData = useMemo(() => (
         <> 
             {!isTablet && <> 
-                <RowItem content={<Coin token={token} />} />
-                <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()}`} /> } />
+                <RowItem content={<Coin token={token.key} />} />
+                <RowItem content={<Value 
+                    text={positionValue} 
+                    subText={`${token.key.toUpperCase()}`} 
+                    format={customFixedTokenValue(positionValue?.toString(), token.decimals, token.decimals)}
+                /> } />
             </>}
             
             <RowItem 
                 header={header["P&L"].label}
                 tooltip={header["P&L"].tooltip}
-                content={<Pnl value="112,000.30024285" token={`${token?.toUpperCase()}`} precents={5.6} /> } 
+                content={<Pnl value="112,000.30024285" token={`${token.key.toUpperCase()}`} precents={5.6} /> } 
             />
 
             <RowItem 
@@ -55,13 +65,12 @@ const TradeRow = ({token, isHeader}) => {
             />
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }
         </>
-        //eslint-disable-next-line
-    ), [token, isTablet, isMobile, amount]);
+    ), [isTablet, token.key, token.decimals, positionValue, header, isMobile, sellController]);
 
     if(isHeader) {
         return <>
-             <RowItem content={<Coin token={token} />} />
-             <RowItem content={<Value text="880,503.45637366" subText={`${token?.toUpperCase()}`} /> } />
+             <RowItem content={<Coin token={token.key} />} />
+             <RowItem content={<Value text="880,503.45637366" subText={`${token.key.toUpperCase()}`} /> } />
              {!isMobile && <RowItem type="action" content={sellController} /> }
         </>
     }
