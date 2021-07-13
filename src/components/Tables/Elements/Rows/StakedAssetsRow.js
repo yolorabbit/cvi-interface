@@ -77,7 +77,7 @@ const RowData = ({isHeader, token, protocol, unstakeController}) => {
 
             <RowItem 
                 header={header.APY.label} 
-                content={<Value text={stakedData.apy} /> } 
+                content={<Value text={stakedData.apy[0]} /> } 
             />
 
             <RowItem 
