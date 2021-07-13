@@ -20,11 +20,14 @@ const TradeRow = ({token, isHeader}) => {
     const positionPnlPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0"});
 
-    const estimatedLiquidationPayload = useMemo(() => ({account}), [ account]);
-    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, estimatedLiquidationPayload, {errorValue: "-"});
+    const accountPayload = useMemo(() => ({account}), [ account]);
+    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, accountPayload, {errorValue: "-"});
+
+    const [claimData] = useWeb3Api("getClaimData", token.key, accountPayload, {errorValue: "0"});
+
     
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
-
+    
     const sellController = useMemo(() => {
         return <ActionController 
             amountLabel="Select amount to sell"
@@ -60,7 +63,7 @@ const TradeRow = ({token, isHeader}) => {
             <RowItem 
                 header={header["Rewards (claimable today)"].label} 
                 tooltip={header["Rewards (claimable today)"].tooltip}
-                content={<PlatformClaim />} 
+                content={<PlatformClaim claimData={claimData} />} 
             />
 
             <RowItem 
@@ -75,7 +78,7 @@ const TradeRow = ({token, isHeader}) => {
             />
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }
         </>
-    ), [isTablet, token.key, token.fixedDecimals, token.decimals, positionValue, header, positionPnlData, estimateLiquidation, isMobile, sellController]);
+    ), [isTablet, token.key, token.fixedDecimals, token.decimals, positionValue, header, positionPnlData, claimData, estimateLiquidation, isMobile, sellController]);
 
     if(isHeader) {
         return <>

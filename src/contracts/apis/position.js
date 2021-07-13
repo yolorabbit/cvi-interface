@@ -259,13 +259,15 @@ async function getEstimatedLiquidation(contracts, token, { tokenAmount, account,
   }
 }
 
+
+
 const positionApi = {
   getOpenPositionFee,
   getCurrentFundingFee,
   getFundingFeePerTimePeriod,
   getClosePositionFee,
   getPositionsPNL,
-  getEstimatedLiquidation
+  getEstimatedLiquidation,
 }
 
 export default positionApi;
