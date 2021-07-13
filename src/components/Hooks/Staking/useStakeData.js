@@ -39,7 +39,7 @@ const RHEGIC2Data = { address: '0xad7ca17e23f13982796d27d1e6406366def6ee5f', sym
 
 const useStakedData = (chainName, protocol, tokenName) => {
   const contracts = useContext(contractsContext);
-  const { account } = useWeb3React();
+  const { account } = useActiveWeb3React();
   const [stakedData, setStakedData] = useState(initialState);
   const eventsUtils = useEvents();
   const token = stakingConfig.tokens[chainName][protocol][tokenName];
@@ -76,9 +76,9 @@ const useStakedData = (chainName, protocol, tokenName) => {
     const getClaimableRewardsByTokenName = async () => {
       switch (tokenName) {
         case 'govi':
-          return await token.rewardsTokens.map(async t => await contracts[tokenRel.stakingRewards].methods.profitOf(account, contracts[t]._address).call());
+          return !!account ? await token.rewardsTokens.map(async t => await contracts[tokenRel.stakingRewards].methods.profitOf(account, contracts[t]._address).call()) : [0];
         default: 
-          return [await contracts[tokenRel.stakingRewards].methods.earned(account).call()]
+          return !!account ? [await contracts[tokenRel.stakingRewards].methods.earned(account).call()] : [0];
       }
     }
     const claimableRewards = await (await Promise.allSettled(await getClaimableRewardsByTokenName()))

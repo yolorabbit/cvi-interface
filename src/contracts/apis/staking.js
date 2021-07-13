@@ -4,7 +4,7 @@ import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount } from "util
 
 const stakingApi = {
     getStakedAmountAndPoolShare: async (stakingRewards, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
-        const stakedTokenAmount = await stakingRewards.methods.balanceOf(account).call();
+        const stakedTokenAmount = account ? await stakingRewards.methods.balanceOf(account).call() : 0;
         const poolSize = await stakingRewards.methods.totalSupply().call();
         const mySharePercentage = toBN(poolSize).isZero() ? toBN("0") : BigNumber(stakedTokenAmount).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
         const lastStakedAmount = {
@@ -20,7 +20,7 @@ const stakingApi = {
         }
     },
     getStakedAmountAndPoolShareGOVI: async (staking, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
-        const stakedTokenAmount = await staking.methods.stakes(account).call();
+        const stakedTokenAmount = account ? await staking.methods.stakes(account).call() : 0;
         const poolSize = await staking.methods.totalStaked().call();
         const mySharePercentage =  BigNumber(stakedTokenAmount).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
 
@@ -140,6 +140,10 @@ const stakingApi = {
         }
     },
     getDailyReward: async (stakingRewards, account, tokenDecimals, decimalsCountDisplay = 8) => {
+        if(!account) return {
+            amount: 0, 
+            symbol: "GOVI"
+        }
         let rate = await stakingRewards.methods.rewardRate().call();
         let total = toBN(await stakingRewards.methods.totalSupply().call());
         if(toBN(total).isZero()) return total;
@@ -162,6 +166,10 @@ const stakingApi = {
         return dailyReward
     },
     getDailyRewardPerToken: async function (staking, account, events, now, symbol, tokenDecimals, decimalsCountDisplay = 8) {
+        if(!account) return {
+            amount: 0,
+            symbol
+        }
         const selectedNetwork = await getChainName();
         const sum = events.reduce((p, e) => p.add(toBN(selectedNetwork === "Matic" ? e.tokenAmount : e.returnValues[2] )), toBN(0));
         const creationTimestamp = await staking.methods.creationTimestamp().call();

@@ -1,10 +1,10 @@
 import { useContext, useMemo } from "react";
 import * as TheGraph from 'graph/queries';
 import { chainNames } from "connectors";
-import { useWeb3React } from "@web3-react/core";
 import { contractsContext } from "contracts/ContractContext";
 import config from "config/config";
 import { useSelector } from "react-redux";
+import { useActiveWeb3React } from "./wallet";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
@@ -26,7 +26,7 @@ const EventOptionsDefaults = {
 export const useEvents = () => {
     const contracts = useContext(contractsContext);
     const { selectedNetwork: chainName } = useSelector(({app}) => app);
-    const {library} = useWeb3React();
+    const {library} = useActiveWeb3React();
     const { getBlock } = library?.eth ?? {};
 
     const getEventsFast = async (eventsData, opt) => {
