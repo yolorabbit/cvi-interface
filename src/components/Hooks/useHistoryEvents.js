@@ -90,9 +90,9 @@ const useHistoryEvents = () => {
     }, [fromWei, getBlock])
 
     const fetchPastEvents = useCallback(async function(view, activeToken) {
-        if(!activeToken) return;
-       
+        if(!activeToken || !account || !selectedNetwork || !contracts || !wallet) return;
         if(wallet[view] !== null) return;
+
         let events = [];
         if(config.isMainnet) {
             events = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0)
@@ -113,7 +113,8 @@ const useHistoryEvents = () => {
 
         events = events.sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
         dispatch(setData(view, events));
-    }, [account, contracts, dispatch, getEventsFast, mapper, selectedNetwork, wallet]) 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [account, contracts, mapper, selectedNetwork, wallet]) 
 
     
     const subscribe = useCallback(async function(view, type, eventType, activeToken) {

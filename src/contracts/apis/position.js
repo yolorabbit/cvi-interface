@@ -1,5 +1,5 @@
 import { getBalance, getChainName, getCviValue } from "contracts/utils";
-import { getTokenData } from "contracts/web3Api";
+import web3Api, { getTokenData } from "contracts/web3Api";
 import { gas, maxUint256, toBN, toDisplayAmount } from "utils";
 import * as TheGraph from 'graph/queries';
 import { contractState } from "components/Hooks/useHistoryEvents";
@@ -145,8 +145,9 @@ async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, perio
   return fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
 }
 
-async function getPositionsPNL(contracts, token, {currentPositionBalance, account, library, eventsUtils}) {
+async function getPositionsPNL(contracts, token, {account, library, eventsUtils}) {
   try {
+    const currentPositionBalance = await web3Api.getAvailableBalance(contracts, token, {account, type: "sell"}, {errorValue: "0", updateOn: "positions"});
     let events = [];
     if(config.isMainnet) {
       events = await TheGraph.account_positions(account, contracts[token.rel.platform]._address, 0);

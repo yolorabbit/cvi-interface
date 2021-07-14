@@ -60,7 +60,6 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     
     useEffect(() => {
         if(options?.updateOn === "positions") {
-            if(!positions?.length > 0) return;
             eventsUpdateRef.current = setTimeout(() => {
                 getData();
             }, 1000);
