@@ -187,6 +187,8 @@ const platformConfig = {
     sell: 'buyersLockupPeriod',
     withdraw: 'lpsLockupPeriod'
   },
+  sellFeeWarningDuration: (60 * 60) * 24,
+  sellFeeWarningText: "Sell fee will be considerably higher than usual until 24 hours pass from your last purchase",
 }
 
 export default platformConfig;

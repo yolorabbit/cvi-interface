@@ -57,6 +57,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
         }
     }, [collateralRatioData, purchaseFee]);
 
+    console.log(isHighCollateralRatio);
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
  
