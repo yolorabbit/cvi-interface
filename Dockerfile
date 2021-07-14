@@ -41,6 +41,6 @@ RUN npm run build
 
 RUN if [ "$NODE_ENV" = "production" ]; then rm -r build/static/*/*.map ; fi
 
-# RUN npm install -g serve
+RUN npm install -g serve
 
-CMD ["node","server.js"]
+CMD ["serve","-s","build","-l","3000"]
