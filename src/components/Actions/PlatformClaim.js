@@ -17,7 +17,7 @@ const PlatformClaim = ({token}) => {
     const contracts = useContext(contractsContext);
     const { library, account } = useActiveWeb3React();
     const accountPayload = useMemo(() => ({account}), [account]);
-    const [claimData, updateClaimData] = useWeb3Api("getClaimData", token.key, accountPayload, {errorValue: "0", updateOn: "positions"});
+    const [claimData, updateClaimData] = useWeb3Api("getClaimData", token.key, accountPayload, {updateOn: "positions"});
     const { getLatestBlockTimestamp } = useEvents();
     const [processing, setProcessing] = useState(false);
     const { lastEndOfDay, lastEndDate, isClaimAvailable } = claimData?.[0] || {};
@@ -93,7 +93,7 @@ const PlatformClaim = ({token}) => {
     return (
         <div className={`claim-component ${claimData === null ? 'claim-is-loading' : ''} ${!isClaimAvailable ? 'is-not-available' : ''}`}>
             <DataState value={claimData}>
-                {claimData?.map((claim, index) => <React.Fragment key={index}> 
+                {claimData !== "N/A" && claimData?.map((claim, index) => <React.Fragment key={index}> 
                     <b>{claim.amount}</b>
                     <span>&nbsp;{claim.symbol} ({claim.totalAmount} {claim.symbol}) </span>
                 </React.Fragment>)}
