@@ -15,7 +15,7 @@ const config = {
       "CVIOracle": "CVIOracle"
     }, 
   },
-  isMainnet: process.env.NODE_ENV === "production",
+  isMainnet: process.env.REACT_APP_ENVIRONMENT === "production",
   routes: {
     platform: {
       label: "Platform",
