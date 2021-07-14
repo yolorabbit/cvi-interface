@@ -18,12 +18,12 @@ async function getClaimablePositionUnits(platform, rewards, account) {
 
 export async function getClaimableReward(contracts, token, { account }) {
   const PositionRewardsHelper = await getPositionRewardsContract(token);
-  const { positionUnitsAmount, creationTimestamp } = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.rewards], account);
+  const { positionUnitsAmount, creationTimestamp } = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account);
   const units = toBN(toFixed(positionUnitsAmount.toString()));
   return units.gt(toBN(0)) ? 
       (PositionRewardsHelper ? 
           await PositionRewardsHelper.methods.calculatePositionReward(units.toString(), creationTimestamp).call() 
-          : await contracts[token.rel.rewards].methods.calculatePositionReward(units.toString(), creationTimestamp).call()) 
+          : await contracts[token.rel.positionRewards].methods.calculatePositionReward(units.toString(), creationTimestamp).call()) 
           : 0;
 }
 
@@ -43,10 +43,10 @@ async function calculatePositionReward(contracts, token, {account, tokenAmount, 
 
   try {
     let pos = await contracts[token.rel.platform].methods.positions(account).call();
-    let unclaimed = await contracts[token.rel.rewards].methods.unclaimedPositionUnits(account).call();
+    let unclaimed = await contracts[token.rel.positionRewards].methods.unclaimedPositionUnits(account).call();
     let min = BN.min(toBN(unclaimed), toBN(pos.positionUnitsAmount));
     try {
-      currentReward = await contracts[token.rel.rewards].methods.calculatePositionReward(min, openTime).call();
+      currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, openTime).call();
     } catch(error) {
       console.log(error);
     }
@@ -55,7 +55,7 @@ async function calculatePositionReward(contracts, token, {account, tokenAmount, 
     if(PositionRewardsHelper) {
       reward = await PositionRewardsHelper.methods.calculatePositionReward(positionUnits, openTime).call();
     } else {
-      reward = await contracts[token.rel.rewards].methods.calculatePositionReward(positionUnits, openTime).call();
+      reward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, openTime).call();
     }
   } catch (error) {
     console.log(error);
@@ -96,7 +96,7 @@ async function getClaimableRewardsExpand(contracts, token, { account, library, e
 
 async function getClaimableRewardsSum(contracts, token, { account, library, eventsUtils }) {
   let rewardsSum = toBN(0);
-  let claimableRewards = await getClaimableRewardsExpand(contracts[token.rel.rewards], token, { account, library, eventsUtils });
+  let claimableRewards = await getClaimableRewardsExpand(contracts, token, { account, library, eventsUtils });
   for (const day in claimableRewards) {
     rewardsSum = rewardsSum.add(claimableRewards[day]);
   }
@@ -107,7 +107,7 @@ const getClaimableRewards = async (contracts, token, { account, library, eventsU
   if(token.type === 'eth') return [0, toBN(0), token.decimals];
   try {
       if(token.type === "v2") return [0, toBN(0), token.decimals];
-      const res = await getClaimableRewardsSum(contracts[token.rel.platform], token, { account, library, eventsUtils });
+      const res = await getClaimableRewardsSum(contracts, token, { account, library, eventsUtils });
       return [commaFormatted(customFixed(toDisplayAmount(res, token.goviDecimals), 8)), res, token.goviDecimals];
   } catch (error) {
       console.log(error);
@@ -127,7 +127,7 @@ async function canClaim (contracts, token, { account, eventsUtils }) {
     
       const timestamp = await eventsUtils.getNow();
       // console.log(`timestamp ${timestamp}`);
-      const maxClaimPeriod = await contracts[token.rel.rewards].methods.maxClaimPeriod().call();
+      const maxClaimPeriod = await contracts[token.rel.positionRewards].methods.maxClaimPeriod().call();
       // console.log(`maxClaimPeriod ${maxClaimPeriod}`);
       // console.log(`pos.creationTimestamp ${pos.creationTimestamp}`);
       if (timestamp > parseInt(pos.creationTimestamp) + parseInt(maxClaimPeriod)) return { result: false, reason: "Claim too late" };
@@ -138,9 +138,9 @@ async function canClaim (contracts, token, { account, eventsUtils }) {
       const positionDay = Math.floor(pos.creationTimestamp / DAY);
       if (today <= positionDay) return { result: false, reason: "Claim too early" };
       const rewardAmount = await getClaimableReward(contracts, token, { account });
-      const lastClaimedDay = await contracts[token.rel.rewards].methods.lastClaimedDay().call();
-      const maxDailyReward = await getMaxDailyReward(contracts[token.rel.rewards]);
-      let todayClaimedRewards = today <= lastClaimedDay ? await contracts[token.rel.rewards].methods.todayClaimedRewards().call() : 0;
+      const lastClaimedDay = await contracts[token.rel.positionRewards].methods.lastClaimedDay().call();
+      const maxDailyReward = await getMaxDailyReward(contracts[token.rel.positionRewards]);
+      let todayClaimedRewards = today <= lastClaimedDay ? await contracts[token.rel.positionRewards].methods.todayClaimedRewards().call() : 0;
       todayClaimedRewards = toBN(todayClaimedRewards).add(toBN(rewardAmount));
       if (todayClaimedRewards.gt(toBN(maxDailyReward))) return { result: false, reason: "Not enough daily reward left for today" };
       return { result: true };
@@ -165,8 +165,8 @@ const getClaimData = async (contracts, token, { account, library, eventsUtils}) 
       const _canClaim = await canClaim(contracts, token, { account, eventsUtils });
       let claimableRewards = await getClaimableReward(contracts, token, { account });;
 
-      const maxDailyReward = await getMaxDailyReward(contracts[token.rel.rewards]);
-      const todayClaimedReward = await getTodayClaimedReward(contracts[token.rel.rewards], eventsUtils);
+      const maxDailyReward = await getMaxDailyReward(contracts[token.rel.positionRewards]);
+      const todayClaimedReward = await getTodayClaimedReward(contracts[token.rel.positionRewards], eventsUtils);
       const reducedClaimableToday = toBN(maxDailyReward).sub(toBN(todayClaimedReward));
       const totalGoviToClaim = claimableReward[1].add(toBN(claimableRewards));
       const isClaimableAmount = reducedClaimableToday.cmp(toBN(claimableRewards)) === 1 ? claimableRewards : reducedClaimableToday;

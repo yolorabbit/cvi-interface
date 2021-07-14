@@ -41,9 +41,10 @@ const platformConfig = {
           feesCalc: "FeesCalculatorV2",
           feesModel: "FeesModelV2",
           cviOracle: "CVIOracle",
-          rewards: "PositionRewards",
+          positionRewards: "PositionRewards",
           stakingRewards: "USDTLPStakingRewards",
-          liquidation: "Liquidation"
+          liquidation: "Liquidation",
+          rewards: "Rewards",
         },
       },
       eth: {
@@ -58,7 +59,7 @@ const platformConfig = {
           feesCalc: "FeesCalculatorV3",
           feesModel: "FeesModelV2",
           cviOracle: "CVIOracle",
-          rewards: "PositionRewardsV2",
+          positionRewards: "PositionRewardsV2",
           stakingRewards: "ETHLPStakingRewards",
           liquidation: "Liquidation"
         },
@@ -80,7 +81,7 @@ const platformConfig = {
           platform: "USDTPlatform",
           feesCalc: "FeesCalculatorV4",
           feesModel: "USDTPlatform",
-          rewards: "PositionRewardsV3",
+          positionRewards: "PositionRewardsV3",
           cviOracle: "CVIOracleV3",
           stakingRewards: "USDTLPStakingRewards",
           liquidation: "LiquidationV2"
