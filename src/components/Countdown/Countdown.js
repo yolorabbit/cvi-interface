@@ -9,8 +9,9 @@ import './Countdown.scss';
 export const useIsLockedTime = () => {
     const { library, account } = useActiveWeb3React();
     const { token, type } = useActionController();
+    const isLockedOptionsPayload = useMemo(() => ({updateOn: type === "withdraw" ? 'liquidities' : 'positions'}), [type]);
     const isLockedPayload = useMemo(() => ({type, library, account}), [type, library, account]);
-    const [lockedData] = useWeb3Api("isLocked", token, isLockedPayload);
+    const [lockedData] = useWeb3Api("isLocked", token, isLockedPayload, isLockedOptionsPayload);
     const [_lockedTime, _setLockedTime] = useState(null);
     const _lockedDurationTimer = useRef();
     const isActiveInDOM = useInDOM();

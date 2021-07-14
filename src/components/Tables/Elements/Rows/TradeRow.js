@@ -15,17 +15,16 @@ const TradeRow = ({token, isHeader}) => {
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const availableBalancePayload = useMemo(() => ({account, type: "sell"}), [account]);
-    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorValue: "0"});
+    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorValue: "0", updateOn: "positions"});
 
     const positionPnlPayload = useMemo(() => ({currentPositionBalance: positionValue, account}), [positionValue, account]);
-    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0"});
+    const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0", updateOn: "positions"});
 
     const accountPayload = useMemo(() => ({account}), [ account]);
-    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, accountPayload, {errorValue: "-"});
+    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, accountPayload, {errorValue: "-", updateOn: "positions"});
 
-    const [claimData] = useWeb3Api("getClaimData", token.key, accountPayload, {errorValue: "0"});
+    const [claimData] = useWeb3Api("getClaimData", token.key, accountPayload, {errorValue: "0", updateOn: "positions"});
 
-    
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
     
     const sellController = useMemo(() => {

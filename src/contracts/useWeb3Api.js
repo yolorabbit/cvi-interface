@@ -1,7 +1,7 @@
 import { useEvents } from "components/Hooks/useEvents";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import platformConfig from "config/platformConfig";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { contractsContext } from "./ContractContext";
 import web3Api from "./web3Api";
@@ -11,15 +11,18 @@ const getActiveToken = (tokens, token) => {
 }
 
 export const useWeb3Api = (type, selectedCurrency, body, options) => {
+    const eventsUpdateRef = useRef(null);
+    const ref = useRef(null);
+    const { positions, liquidities } = useSelector(({wallet}) => wallet);
     const { library } = useActiveWeb3React();
     const { selectedNetwork } = useSelector(({app}) => app);
     const contracts = useContext(contractsContext);
     const [data, setData] = useState();
-    const ref = useRef(null);
     const eventsUtils = useEvents();
     const errorValue = useMemo(() => options?.errorValue ?? 'N/A', [options]);
 
-    const fetchWeb3ApiData = async (contracts, tokens) => {
+    const fetchWeb3ApiData = useCallback(async (contracts, tokens) => {
+
         try {
             if(web3Api[type]) {
                 if(selectedCurrency) {
@@ -38,25 +41,54 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
                 return errorValue;
             }
         } catch(error) {
+            console.log(error);
             setData(errorValue);
             return errorValue;
         }
-    }
+    }, [body, errorValue, eventsUtils, library, options?.errorValue, selectedCurrency, type])
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         try {
+            if(data !== null) setData(null);
             const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
             return await fetchWeb3ApiData(contracts, tokens);
         } catch(error) {
             setData(errorValue);
             return errorValue;
         }
-    }
+    }, [contracts, data, errorValue, fetchWeb3ApiData, selectedNetwork])
+    
+    useEffect(() => {
+        if(options?.updateOn === "positions") {
+            if(!positions?.length > 0) return;
+            eventsUpdateRef.current = setTimeout(() => {
+                getData();
+            }, 1000);
+        }
+        return () => {
+            if(eventsUpdateRef.current) clearTimeout(eventsUpdateRef.current);
+        }
+        //eslint-disable-next-line
+    }, [positions?.length]);
+
+    useEffect(() => {
+        if(options?.updateOn === "liquidities") {
+            if(!liquidities?.length > 0) return;
+            eventsUpdateRef.current = setTimeout(() => {
+                getData();
+            }, 1000);
+        }
+        return () => {
+            if(eventsUpdateRef.current) clearTimeout(eventsUpdateRef.current);
+        }
+        //eslint-disable-next-line
+    }, [liquidities?.length]);
 
     useEffect(() => {
         if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
         if(body?.hasOwnProperty('account') && !body.account) return setData("0");
         if(options?.validAmount && body?.hasOwnProperty("tokenAmount") && (body?.tokenAmount?.isZero() || !body?.tokenAmount)) return setData("0");
+        if(options?.updateOn === "positions") return setData(null);
 
         setData(null);
         ref.current = setTimeout(() => {
@@ -71,5 +103,7 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
         //eslint-disable-next-line
     }, [selectedNetwork, contracts, library, selectedCurrency, body]);
 
-    return [data, getData];
+    return useMemo(() => {
+        return [data, getData]
+    }, [data, getData]) ;
 }
