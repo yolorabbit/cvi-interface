@@ -130,8 +130,8 @@ export const chainNameToChainId = (_chainName) => {
     return parseHex(network.chainId);
  }
 
- export const customFixedTokenValue = (value, toFixed, decimals) => {
-     return customFixed(toDisplayAmount(value, decimals), toFixed)
+ export const customFixedTokenValue = (value, _toFixed, decimals) => {
+     return toFixed(customFixed(toDisplayAmount(value, decimals), _toFixed))
  }
 
 export const maxUint256 = toBN(2).pow(toBN(256)).sub(toBN(1));
