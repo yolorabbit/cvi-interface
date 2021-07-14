@@ -119,6 +119,22 @@ const config = {
         mobileLeft: -40,
       }
     },
+    purchaseFee: {
+      title: "Purchase fee",
+      tooltip: {
+        content: "A purchase fee is a fee that you pay every time you buy a CVI position. The fee amount will increase if the collateral ratio is above 80% or in case of rapid changes in CVI value (turbulence).",
+        left: "0",
+        mobileLeft: -40,
+      }
+    },
+    fundingFee: {
+      title: "Current funding fee",
+      tooltip: {
+        content: "A funding fee is an amount you pay every day until you sell your CVI position or until the position is liquidated. A funding fee is not constant and may change based on the CVI index value.",
+        left: "0",
+        mobileLeft: -40,
+      }
+    }
   },
   faq: {
     left: {

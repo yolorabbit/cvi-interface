@@ -182,10 +182,10 @@
             }
 
             & .dot {
-                width: 100%;
-                height: 100%;
-                max-width: 0.417vw;
-                max-height: 0.417vw;
+                max-width: 0.45vw;
+                max-height: 0.45vw;
+                width: 0.45vw;
+                height: 0.45vw;
                 margin-right: 0.208vw;
                 background-color: #2bdec1;
                 border-radius: 100%;
@@ -193,6 +193,8 @@
                 @media (max-width: 1365px){   
                     max-width: 0.586vw;
                     max-height: 0.586vw;
+                    width: 0.586vw;
+                    height: 0.586vw;
                     margin-right: 0.293vw;
                 }
     
@@ -226,11 +228,11 @@
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    max-width: 3.021vw;
+                    max-width: 2.6vw;
                     line-height: 1;
 
                     @media (max-width: 1365px){   
-                        max-width: 4.249vw;
+                        max-width: 3.7vw;
                     }
         
                     @media (max-width: 1024px){ 

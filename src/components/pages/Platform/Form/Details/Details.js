@@ -74,7 +74,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Amount title="Buy" amount={amount} selectedCurrency={selectedCurrency} />
     
                 <Stat 
-                    title="Purchase fee" 
+                    name="purchaseFee"
                     value={purchaseFee === "N/A" || purchaseFee === "0" ? purchaseFee : purchaseFee?.openFee?.toString()} 
                     _suffix={selectedCurrency}
                     className="low" 
@@ -96,7 +96,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 />
     
                 <Stat 
-                    title="Current funding fee" 
+                    name="fundingFee"
                     value={currentFundingFee === "N/A" ? "N/A" : currentFundingFee?.toString()} 
                     format={customFixedTokenValue(currentFundingFee?.toString(), activeToken.fixedDecimals, activeToken.decimals)}
                     _suffix={selectedCurrency}

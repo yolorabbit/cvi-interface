@@ -35,7 +35,7 @@ const Navbar = () => {
                 <Logo />
 
                 {!isTablet && links.map(({label, path}) => <div key={path} className="navbar-component__list-item">
-                    <Link className={path === activePath ? 'active' : ''} to={path}>{label}</Link>
+                    <Link className={path === activePath ? 'active' : ''} to={path} onClick={() => window.scrollTo(0, 0)}>{label}</Link>
                 </div>)}    
 
                 {isTablet ? <Hamburger activePath={activePath} links={links} /> : <div className="navbar-component__container--connect">
@@ -59,6 +59,11 @@ const Navbar = () => {
 const Hamburger = ({links, activePath}) => {
     const [isOpen, setIsOpen] = useState(false);
 
+    const onClick = () => {
+        setIsOpen(false);
+        window.scrollTo(0, 0);
+    }
+
     return (
         <> 
             {isOpen && <div className="mobile-menu">
@@ -66,7 +71,7 @@ const Hamburger = ({links, activePath}) => {
                         <Link 
                             className={path === activePath ? 'active' : ''} 
                             to={path}
-                            onClick={() => setIsOpen(false)}
+                            onClick={onClick}
                         >{label}</Link>
                 </div>)}
 

@@ -61,7 +61,7 @@ const SeeMore = () => {
         return <div className="platform-form-component__bottom">
             {activeView === activeViews.trade ? <p>
                 <b>Pay Attention: </b> 
-                GOVI tokens will become claimable starting the day after your last open position action (UTC time) and for a period not exceeding 30 days. If you already have claimable GOVI tokens, opening a position now will disable the ability to claim them until the end of the day (UTC time).
+                GOVI tokens will become claimable starting the day after your last open position action (UTC time) and for a period not exceeding 30 days.
                 Please also note that you won't be able to sell your position within the next 6 hours.
             </p> : <p><b>Pay Attention: </b>you won't be able to withdraw your liquidity within the next 72 hours.</p>}
         </div>
