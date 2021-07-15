@@ -9,6 +9,7 @@ import Table from 'components/Tables/Table';
 import './PlatformTables.scss';
 import DataController from 'components/Tables/DataController';
 import { useSelector } from 'react-redux';
+import useAssets from 'components/Hooks/useAssets';
 
 const PlatformTables = () => {
     const { activeView } = useContext(platformViewContext);
@@ -39,18 +40,18 @@ const PlatformTables = () => {
 }
 
 const DefaultTable = ({activeTab}) => {
-    const { selectedNetwork } = useSelector(({app}) => app);
     const isTablet = useIsTablet();
-    
+    const filterAssets = useAssets(activeTab);
+
     return useMemo(() => {
         return <DataController 
             authGuard
             activeTab={activeTab} 
-            data={Object.values(platformConfig.tokens[selectedNetwork]).filter(token => !token.soon)}
+            data={filterAssets}
         >
             {isTablet ? <ExpandList /> : <Table />}
         </DataController>
-    }, [activeTab, selectedNetwork, isTablet])
+    }, [activeTab, isTablet, filterAssets, activeTab])
 }
 
 const HistoryTable = ({activeTab}) => {

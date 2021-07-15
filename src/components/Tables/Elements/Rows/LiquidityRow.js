@@ -18,8 +18,8 @@ const LiquidityRow = ({token, isHeader}) => {
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const header = useMemo(() => platformConfig.headers[activeViews["view-liquidity"]][platformConfig.tabs["view-liquidity"].liquidity], []);
-    const availableBalancePayload = useMemo(() => ({account, type: "withdraw", withStakeAmount: true}), [account]);
-    const [liquidityShareData] = useWeb3Api("getAvailableBalance", tokenName, availableBalancePayload, {errorValue: "0", updateOn: "liquidities"});
+    //const availableBalancePayload = useMemo(() => ({account, type: "withdraw", withStakeAmount: true}), [account]);
+    const liquidityShareData = token.data; //useWeb3Api("getAvailableBalance", tokenName, availableBalancePayload, {errorValue: "0", updateOn: "liquidities"});
 
     const liquidityPnlPayload = useMemo(() => ({account}), [account]);
     const [liquidityPnl] = useWeb3Api("getLiquidityPNL", tokenName, liquidityPnlPayload, {errorValue: "0", updateOn: "liquidities"});

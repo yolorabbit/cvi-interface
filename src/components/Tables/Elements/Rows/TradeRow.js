@@ -15,7 +15,7 @@ const TradeRow = ({token, isHeader}) => {
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const availableBalancePayload = useMemo(() => ({account, type: "sell"}), [account]);
-    const [positionValue] = useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorValue: "0", updateOn: "positions"});
+    const positionValue = token.data.positionValue //useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorValue: "0", updateOn: "positions"});
 
     const positionPnlPayload = useMemo(() => ({account}), [account]);
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0", updateOn: "positions"});

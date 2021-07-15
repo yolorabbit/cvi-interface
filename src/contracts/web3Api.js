@@ -199,11 +199,10 @@ const web3Api = {
 
             const tokenData = await getTokenData(contracts[token.rel.contractKey]);
             const balance = await getBalance(account, token.key !== "eth" && tokenData.address);
-
             return balance;
         } catch(error) {
             console.log(error);
-            return toBN("0");
+            return type !== "withdraw" ? "0" : {myShare: "0", poolShare: "0"}
         }
     },
     isLocked: async function(contracts, token, { type, customDuration, account, library, eventsUtils }) {
