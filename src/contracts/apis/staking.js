@@ -65,7 +65,7 @@ const stakingApi = {
                     class: mySharePercentage < 0 ? 'low' : 'high',
                     value: `(${customFixed(mySharePercentage, 2)}%)`
                 },
-                stakedAmountUSD: toBN(accountStakedUSD).isZero() ? "0" : `${commaFormatted(customFixed(toDisplayAmount(accountStakedUSD, USDTData.decimals), 2))}`
+                stakedAmountUSD: toBN(accountStakedUSD).isZero() ? "0" : `${commaFormatted(customFixed(toDisplayAmount(accountStakedUSD), 2))}`
             };
             
             const tvl = {
