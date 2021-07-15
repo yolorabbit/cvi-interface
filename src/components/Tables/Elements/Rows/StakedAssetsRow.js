@@ -10,6 +10,7 @@ import { Pairs } from "../Values";
 import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
 import { toBN } from "utils";
+import Rewards from './../Values/Rewards';
 
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();
@@ -90,16 +91,15 @@ const RowData = ({isHeader, token, protocol, data}) => {
 
             <RowItem 
                 header={header.TVL.label} 
-                content={<Value text={`${stakedData.tvl.stakedAmountUSD}`} bottomText={`${stakedData.tvl.stakedAmountLP} ${header.TVL[token]}`} /> } 
+                content={<Value 
+                    text={stakedData.tvl.stakedAmountUSD} 
+                    bottomText={`${stakedData.tvl.stakedAmountLP} ${header.TVL[token]}`} 
+                /> } 
             />
-            {
-                // TODO: 
-                // Estimated reward should displaying with loop on stakedData.dailyReward
-                // TMP: stakedData.dailyReward[0]
-            }
+    
             <RowItem 
-                header={header["Estimated rewards per day"].label} 
-                content={<Value text={`${stakedData.dailyReward[0].amount} ${stakedData.dailyReward[0].symbol}`} /> } 
+                 header={header["Estimated rewards per day"].label} 
+                 content={<Rewards rewards={stakedData.dailyReward} />}
             />
 
             <RowItem 

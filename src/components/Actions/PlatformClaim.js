@@ -2,6 +2,7 @@ import Button from 'components/Elements/Button';
 import { useEvents } from 'components/Hooks/useEvents';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { DataState } from 'components/Tables/Elements/Values/DataState';
+import Rewards from 'components/Tables/Elements/Values/Rewards';
 import config from 'config/config';
 import { contractsContext } from 'contracts/ContractContext';
 import { useWeb3Api } from 'contracts/useWeb3Api';
@@ -92,20 +93,16 @@ const PlatformClaim = ({token}) => {
 
     return (
         <div className={`claim-component ${claimData === null ? 'claim-is-loading' : ''} ${!isClaimAvailable ? 'is-not-available' : ''}`}>
-            <DataState value={claimData}>
-                {claimData !== "N/A" && claimData?.map((claim, index) => <React.Fragment key={index}> 
-                    <b>{claim.amount}</b>
-                    <span>&nbsp;{claim.symbol} ({claim.totalAmount} {claim.symbol}) </span>
-                </React.Fragment>)}
-            </DataState>
-
-            <Button 
-                className="claim-button" 
-                buttonText="Claim" 
-                onClick={onSubmit} 
-                processing={processing} 
-                disabled={processing || !isClaimAvailable}
-            /> 
+            <div className="claim-component__container">
+                <Rewards rewards={claimData === null ? [] : claimData} />
+                <Button 
+                    className="claim-button" 
+                    buttonText="Claim" 
+                    onClick={onSubmit} 
+                    processing={processing} 
+                    disabled={processing || !isClaimAvailable}
+                /> 
+            </div>
         </div>
     )
 }

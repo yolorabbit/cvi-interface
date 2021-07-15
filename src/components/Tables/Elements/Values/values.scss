@@ -34,6 +34,48 @@
     }
 }
 
+.rewards-component {
+    padding: 0.833vw 0;
+
+    @media (max-width: 1365px) { 
+        padding: 1.172vw 0;
+    }
+
+    @media (max-width: 1024px) { 
+        padding: 0;
+    }
+
+    @media (max-width: 767px) { 
+        padding: 0;
+    }
+
+    & .value-component {
+        font-weight: bold;
+        padding: 0.147vw 0;
+        white-space: nowrap;
+        
+        @media (max-width: 1365px) { 
+            padding: 0.293vw 0;
+        }
+
+        @media (max-width: 1024px) { 
+            padding-top: 1.043vw;
+        }
+
+        @media (max-width: 767px) { 
+            padding-top: 2.222vw; 
+        }
+
+        &:first-child {
+            padding-top: 0;
+        }
+
+        &:last-child {
+            padding-bottom: 0;
+        }
+    }
+}
+
 .pnl-component {
   &.high {
       & .pnl-component__precents { 
