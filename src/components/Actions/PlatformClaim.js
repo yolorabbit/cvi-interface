@@ -1,6 +1,8 @@
 import Button from 'components/Elements/Button';
 import { useEvents } from 'components/Hooks/useEvents';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
+import Spinner from 'components/Spinner/Spinner';
+import { Value } from 'components/Tables/Elements/Values';
 import { DataState } from 'components/Tables/Elements/Values/DataState';
 import Rewards from 'components/Tables/Elements/Values/Rewards';
 import config from 'config/config';
@@ -92,9 +94,9 @@ const PlatformClaim = ({token}) => {
 
 
     return (
-        <div className={`claim-component ${claimData === null ? 'claim-is-loading' : ''} ${!isClaimAvailable ? 'is-not-available' : ''}`}>
+        <div className={`claim-component ${!isClaimAvailable ? 'is-not-available' : ''}`}>
             <div className="claim-component__container">
-                <Rewards rewards={claimData === null ? [] : claimData} />
+                <Rewards rewards={claimData} />
                 <Button 
                     className="claim-button" 
                     buttonText="Claim" 

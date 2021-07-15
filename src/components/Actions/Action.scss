@@ -65,22 +65,9 @@ button {
     }
 
     &.claim-is-loading {
-        max-width: 10vw;
         display: flex !important;
         align-items: center;
         justify-content: space-between;
-
-        @media (max-width: 1365px) { 
-            max-width: 14.066vw;
-        }
-
-        @media (max-width: 1024px) { 
-            max-width: 25.033vw;
-        }
-
-        @media (max-width: 767px) { 
-            max-width: 53.333vw;
-        }
     }
 
     & b,  & span {
