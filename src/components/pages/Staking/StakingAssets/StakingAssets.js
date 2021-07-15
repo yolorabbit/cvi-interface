@@ -14,7 +14,7 @@ import './StakingAssets.scss';
 const StakingAssets = ({type}) => {
     const isTablet = useIsTablet();
     const { selectedNetwork } = useSelector(({app}) => app);
-    const [filteredAssets, setFilteredAssets] = useState([]);
+    const [filteredAssets, setFilteredAssets] = useState(null);
     const contracts = useContext(contractsContext);
     const { account } = useActiveWeb3React();
 
