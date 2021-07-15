@@ -11,14 +11,15 @@ import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
 import { toBN } from "utils";
 
-const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
+const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();
 
     const RowDataComponent = () => 
     <RowData 
         isHeader={isHeader} 
         token={token} 
-        protocol={protocol} 
+        protocol={protocol}
+        data={data}
     />
 
     return isTablet ? <RowDataComponent /> : <tr>
@@ -28,7 +29,7 @@ const StakedAssetsRow = ({rowData: { key: token, protocol}, isHeader}) => {
 
 export default StakedAssetsRow;
 
-const RowData = ({isHeader, token, protocol}) => {
+const RowData = ({isHeader, token, protocol, data}) => {
     const chainName = useSelector(({app})=>app.selectedNetwork);
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
@@ -51,12 +52,12 @@ const RowData = ({isHeader, token, protocol}) => {
             protocol={protocol}
             disabled={!toBN(stakedTokenAmount).gt(toBN(0))}
             balances={{
-                tokenAmount: stakedData.stakedTokenAmount,
-                available: stakedData.stakedAmount
+                tokenAmount: data.staked.stakedTokenAmount,
+                available: data.staked.stakedAmount
             }}
         />
 
-        const StakedValue = <Value text={stakedData.stakedAmount} subText={`${token?.toUpperCase()} ${stakedData.lastStakedAmount.value}`} bottomText={`$${stakedData.stakedAmountUSD}`} />
+        const StakedValue = <Value text={data.staked.stakedAmount} subText={`${token?.toUpperCase()} ${data.staked.lastStakedAmount.value}`} bottomText={`$${data.staked.stakedAmountUSD}`} />
         if(isHeader) {
             return <>
                 <RowItem content={
@@ -103,7 +104,7 @@ const RowData = ({isHeader, token, protocol}) => {
 
             <RowItem 
                 header={header["Claimable rewards"].label} 
-                content={<StakingClaim claim={stakedData.claim}/> } 
+                content={<StakingClaim claim={data.claim}/> } 
             />
 
             {(!isTablet || isMobile) && <RowItem content={UnstakeController} />}
