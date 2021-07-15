@@ -8,6 +8,7 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Spinner from 'components/Spinner/Spinner';
 import { DataState } from 'components/Tables/Elements/Values/DataState';
 import platformConfig from 'config/platformConfig';
+import HighSellFee from './HighSellFee';
 
 const SellInfo = () => {
     const _higherFeeDurationTimer = useRef();
@@ -43,12 +44,7 @@ const SellInfo = () => {
                     <span>{commaFormatted(amount) || "0"} {activeToken?.key?.toUpperCase()}</span>
                 </div>
 
-                <div className={`sell-info-component__row`}>
-                    <span>Sell fee</span>
-                    <DataState value={sellFee}>
-                        <span>{commaFormatted(sellFeeAmount)} {activeToken?.key?.toUpperCase()}</span>
-                    </DataState>
-                </div>
+                <HighSellFee sellFee={sellFee} sellFeeAmount={sellFeeAmount} />
 
                 <div className="sell-info-component__row">
                     <b>You receive</b>
