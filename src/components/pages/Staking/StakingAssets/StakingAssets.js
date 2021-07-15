@@ -5,11 +5,13 @@ import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import stakingConfig, { stakingViews } from 'config/stakingConfig';
 import React, { useMemo } from 'react'
+import { useSelector } from 'react-redux';
 import './StakingAssets.scss';
 
 const StakingAssets = ({type}) => {
     const isTablet = useIsTablet();
     const filteredAssets = useAssets(type);
+    const { selectedNetwork } = useSelector(({app}) => app);
 
     return useMemo(() => {
         return (
@@ -19,13 +21,13 @@ const StakingAssets = ({type}) => {
                     data={filteredAssets} 
                     showPaginator={type === stakingViews.staked} 
                     authGuard={type === stakingViews.staked}
-                    subHeaders={stakingConfig.tableSubHeaders[type]}
+                    subHeaders={stakingConfig.tableSubHeaders?.[type]?.[selectedNetwork]}
                 >
                     {isTablet ? <ExpandList /> : <Table />}
                 </DataController>
             </div>
         ) //eslint-disable-next-line
-    }, [isTablet, filteredAssets]);
+    }, [isTablet, filteredAssets, selectedNetwork]);
 }
 
 export default StakingAssets;

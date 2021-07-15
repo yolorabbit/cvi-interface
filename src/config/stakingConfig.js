@@ -218,8 +218,14 @@ const stakingConfig = {
   },
   tableSubHeaders: {
     [stakingViews["available-to-stake"]]: {
-      0: "Platform tokens", // 0 - index to add the sub header
-      3: "Liquidity mining"
+      [chainNames.Ethereum]: {
+        0: "Platform tokens", // 0 - index to add the sub header
+        3: "Liquidity mining"
+      },
+      [chainNames.Matic]: {
+        0: "Platform tokens", // 0 - index to add the sub header
+        2: "Liquidity mining"
+      }
     }
   },
   actionsConfig: {
