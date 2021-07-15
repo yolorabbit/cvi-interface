@@ -40,17 +40,18 @@ const CviIndexGraph = ({id, maxWidth = 700, maxHeight = 370}) => {
         setChart(ChartOptions({
             chartInitialize, 
             activeRange: activeRange, 
-            series: (!series?.length || activeRange === "all") ? mappedSeriesData(series) : series, onClick: (id) => {
-            setActiveRange(id);
-        }}));
+            series: (!series?.length || activeRange === "all") ? mappedSeriesData(series) : series, 
+            onClick: (id) => {
+                setActiveRange(id);
+            }
+        }));
         //eslint-disable-next-line
     },[series, activeRange]);
 
     useEffect(() => {
-        if(ref.current && ref.current?.children[0]?.style && ref.current?.children[1]?.style) {
+        if(ref.current && ref.current?.children[0]?.style) {
             ref.current.style.overflow = "";
             ref.current.children[0].style.overflow = "";
-            ref.current.children[1].style.overflow = "";
         }
         //eslint-disable-next-line
     }, [chart]);

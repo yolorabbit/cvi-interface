@@ -1,32 +1,21 @@
 import { useActionController } from 'components/Actions/ActionController';
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 import './SellInfo.scss';
 import { commaFormatted, customFixedTokenValue, toBN, toBNAmount } from 'utils';
 import { useActiveToken } from 'components/Hooks';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import Spinner from 'components/Spinner/Spinner';
 import { DataState } from 'components/Tables/Elements/Values/DataState';
-import platformConfig from 'config/platformConfig';
 import HighSellFee from './HighSellFee';
 
 const SellInfo = () => {
-    const _higherFeeDurationTimer = useRef();
-    const { account, library} = useActiveWeb3React();
-    const { token, amount, type } = useActionController();
+    const { account } = useActiveWeb3React();
+    const { token, amount } = useActionController();
     const activeToken = useActiveToken(token);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const sellFeePayload = useMemo(() => ({ tokenAmount, account } ), [tokenAmount, account]);
     const [sellFee] = useWeb3Api("getClosePositionFee", token, sellFeePayload, { validAmount: true});
 
-    const isLockedPayload = useMemo(() => ({type, library, account, customDuration: platformConfig.sellFeeWarningDuration}), [type, library, account]);
-    const [lockedData] = useWeb3Api("isLocked", token, isLockedPayload);
-
-    console.log(lockedData);
-
-    const highSellFee = useMemo(() => {
-        
-    }, []);
     
     return useMemo(() => {
         const sellFeeAmount = sellFee !== null && sellFee !== "N/A" && customFixedTokenValue(sellFee?.toString(), activeToken.decimals, activeToken.decimals);
