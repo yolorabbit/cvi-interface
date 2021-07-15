@@ -1,14 +1,15 @@
 import Highcharts from "highcharts/highstock";
-require('highcharts/modules/map')(Highcharts);
+import Exporting from 'highcharts/modules/map';
+Exporting(Highcharts);
 
 export const markedEventsData = {
     // 100: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin purus mauris, cursus eleifend pharetra et, tempor vitae dolor. Proin facilisis tellus ut odio pharetra ullamcorper. "
 }
 
-const ChartOptions = ({ chartInitialize, series, height, maxWidth, activeRange, onClick }) => new Highcharts.stockChart(chartInitialize.id, {
+const ChartOptions = ({ chartInitialize, series, height, maxWidth, activeRange, onClick }) => Highcharts.stockChart(chartInitialize.id, {
     credits: { enabled: false },
     mapNavigation: {
-        enableMouseWheelZoom: true
+        enableMouseWheelZoom: true,
     },
     chart: {
         backgroundColor: 'transparent',
