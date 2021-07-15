@@ -2,9 +2,22 @@ import Button from 'components/Elements/Button';
 import Title from 'components/Elements/Title';
 import Modal from 'components/Modal';
 import React from 'react'
+import { useActionController } from '../ActionController';
 import './SellAllModal.scss';
 
 const SellAllModal = ({setSellAllModal, isProcessing, onSubmit}) => {
+    const { setIsOpen } = useActionController();
+
+    const _onSubmit = () => {
+        onSubmit();
+        setSellAllModal(false);
+    }
+
+    const closeModals = () => {
+        setSellAllModal(false);
+        setIsOpen(false);
+    }
+    
     return (
         <Modal clickOutsideDisabled className="error-modal sell-all-modal" handleCloseModal={setSellAllModal}>
             <img src={require('images/icons/notifications/notice.svg').default} alt="notice red icon" />
@@ -16,11 +29,11 @@ const SellAllModal = ({setSellAllModal, isProcessing, onSubmit}) => {
             </h2>
 
             <div className="sell-all-modal--actions">
-                <Button className="error-modal__close button" buttonText="Cancel" onClick={() => setSellAllModal(false)} />
+                <Button className="error-modal__close button" buttonText="Cancel" onClick={closeModals} />
                 <Button 
                     className="error-modal__close button" 
                     buttonText="Proceed" 
-                    onClick={onSubmit} 
+                    onClick={_onSubmit} 
                     processing={isProcessing}
                 />
             </div>

@@ -1,12 +1,12 @@
 import { useActionController } from 'components/Actions/ActionController';
 import React, { useMemo } from 'react'
-import './SellInfo.scss';
 import { commaFormatted, customFixedTokenValue, toBN, toBNAmount } from 'utils';
 import { useActiveToken } from 'components/Hooks';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { DataState } from 'components/Tables/Elements/Values/DataState';
 import HighSellFee from './HighSellFee';
+import './SellInfo.scss';
 
 const SellInfo = () => {
     const { account } = useActiveWeb3React();
