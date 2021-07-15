@@ -2,18 +2,20 @@ import React, { useMemo } from 'react'
 import { DataState } from './DataState';
 import { commaFormatted } from 'utils';
 
-const Value = ({text, subText, bottomText, format}) => {
+const Value = ({text, subText, bottomText, format, showData = true}) => {
     return useMemo(() => {
         return (
             <div className="value-component">
-                <DataState value={text === null ? null : text ?? subText}>
-                    <b>{commaFormatted(format) ?? text} </b>
-                    <span>{subText}</span>
-                    {bottomText && <div>{bottomText}</div>}
-                </DataState>
+                {!showData ? <span>-</span> :
+                    <DataState value={text === null ? null : text ?? subText}>
+                        <b>{commaFormatted(format) ?? text}</b>
+                        <span>&nbsp;{subText}</span>
+                        {bottomText && <div>{bottomText}</div>}
+                    </DataState>
+                }
             </div>
         )
-    }, [text, subText, bottomText, format]);
+    }, [text, subText, bottomText, format, showData]);
 }
 
 export default Value;

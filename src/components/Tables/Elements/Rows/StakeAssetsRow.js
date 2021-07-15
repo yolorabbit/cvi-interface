@@ -71,6 +71,7 @@ const RowData = ({isHeader, label, token, protocol}) => {
                 {!isMobile && <RowItem type="action" content={StakeController} /> }
             </>
         }
+
         return (
         <> 
             {!isTablet && <> 
@@ -83,14 +84,21 @@ const RowData = ({isHeader, label, token, protocol}) => {
 
             <RowItem 
                 header={header["Your wallet balance"].label}
-                content={<Value text={stakedData.balance.formatted} 
-                subText={label ?? `${token?.toUpperCase()}`} 
-                bottomText={`${stakedData.balance.usdBalance}`} /> } 
-            />
+                content={<Value 
+                    text={stakedData.balance.formatted} 
+                    subText={label ?? `${token?.toUpperCase()}`} 
+                    bottomText={`${stakedData.balance.usdBalance}`} 
+                    showData={account}
+                /> 
+            } />
 
             <RowItem 
                 header={header.TVL.label} 
-                content={<Value text={`${stakedData.tvl.stakedAmountUSD}`} bottomText={`${stakedData.tvl.stakedAmountLP} ${label ?? token?.toUpperCase()}`} /> } 
+                content={<Value 
+                    text={stakedData.tvl.stakedAmountUSD} 
+                    bottomText={`${stakedData.tvl.stakedAmountLP} 
+                    ${label ?? token?.toUpperCase()}`} 
+                /> } 
             />
 
             <RowItem 
