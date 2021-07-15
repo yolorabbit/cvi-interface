@@ -64,6 +64,7 @@ const stakingConfig = {
       [stakingProtocols.uniswap]: {
         "coti-eth-lp": {
           key: "coti-eth-lp",
+          label: "COTI-ETH LP",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
           fixedDecimals: 8,
@@ -76,6 +77,7 @@ const stakingConfig = {
         },
         "govi-eth-lp": {
           key: "govi-eth-lp",
+          label: "GOVI-ETH LP",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
           fixedDecimals: 8,
@@ -103,6 +105,7 @@ const stakingConfig = {
       [stakingProtocols.sushiswap]: {
         "coti-eth-lp": {
           key: "coti-eth-lp",
+          label: "COTI-ETH SLP",
           protocol: stakingProtocols.sushiswap,
           decimals: 18,
           fixedDecimals: 8,
@@ -115,6 +118,7 @@ const stakingConfig = {
         },
         "govi-eth-lp": {
           key: "govi-eth-lp",
+          label: "GOVI-ETH SLP",
           protocol: stakingProtocols.sushiswap,
           rewardsTokens: ["GOVI"],
           decimals: 18,

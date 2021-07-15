@@ -104,7 +104,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
 
             <RowItem 
                 header={header["Claimable rewards"].label} 
-                content={<StakingClaim claim={data.claim}/> } 
+                content={<StakingClaim protocol={protocol} tokenName={token} claim={data.claim} /> } 
             />
 
             {(!isTablet || isMobile) && <RowItem content={UnstakeController} />}
