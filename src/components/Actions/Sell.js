@@ -112,7 +112,7 @@ const Sell = () => {
         <div className="sell-component">
             <div className="sell-component__container">
                 {(isOpen && !isModal) && <SellInfo />}
-                <CountdownComponent lockedTime={lockedTime} />
+                {!isOpen && !isModal && <CountdownComponent lockedTime={lockedTime} /> }
                 <Button 
                     className="sell-component__container--button" 
                     buttonText="Sell" 
