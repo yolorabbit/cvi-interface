@@ -51,7 +51,7 @@ const DefaultTable = ({activeTab}) => {
         >
             {isTablet ? <ExpandList /> : <Table />}
         </DataController>
-    }, [activeTab, isTablet, filterAssets, activeTab])
+    }, [activeTab, isTablet, filterAssets])
 }
 
 const HistoryTable = ({activeTab}) => {
