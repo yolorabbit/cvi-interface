@@ -3,6 +3,7 @@ import { contractsContext } from "contracts/ContractContext";
 import stakingConfig from 'config/stakingConfig';
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
+import { convert, fromLPTokens, getPrice } from "contracts/utils";
 import { DAY, useEvents } from "../useEvents";
 import BigNumber from "bignumber.js";
 import { useActiveWeb3React } from "../wallet";
