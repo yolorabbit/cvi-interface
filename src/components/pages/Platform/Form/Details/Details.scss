@@ -110,6 +110,9 @@
             border-bottom: 0.052vw solid #2f3250;
             height: 1.458vw;
 
+            &.low {
+                color: #f96a9a;
+            }
             
             @media (max-width: 1365px){
                 margin-bottom: 1.136vw;

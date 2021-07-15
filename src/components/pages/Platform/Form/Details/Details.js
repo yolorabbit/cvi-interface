@@ -49,15 +49,15 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload, { validAmount: true });
 
     const [isHighCollateralRatio, setIsHighCollateralRatio] = useState();
-    
+       
     useEffect(() => {
         if(purchaseFee === "N/A" || collateralRatioData === "N/A") return;
-        if(collateralRatioData?.currentRatioValue && purchaseFee?.turbulence) {
-            setIsHighCollateralRatio(toBN(purchaseFee?.turbulence).cmp(toBN(100)) > -1 || collateralRatioData.collateralRatio.cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0);
+        const turbulence = purchaseFee?.turbulence ?? "0";
+        if(collateralRatioData?.currentRatioValue && turbulence) {
+            setIsHighCollateralRatio(toBN(turbulence).cmp(toBN(100)) > -1 || collateralRatioData.collateralRatio.cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0);
         }
     }, [collateralRatioData, purchaseFee]);
 
-    console.log(isHighCollateralRatio);
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
  
@@ -78,7 +78,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     name="purchaseFee"
                     value={purchaseFee === "N/A" || purchaseFee === "0" ? purchaseFee : purchaseFee?.openFee?.toString()} 
                     _suffix={selectedCurrency}
-                    className="low" 
+                    className={isHighCollateralRatio ? 'low' : ''}
                     format={toDisplayAmount(purchaseFee === "0" ? "0" : purchaseFee?.openFee?.toString(), activeToken.decimals)}
                 />
     
