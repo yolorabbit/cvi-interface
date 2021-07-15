@@ -20,10 +20,6 @@ const TradeRow = ({token, isHeader}) => {
     const positionPnlPayload = useMemo(() => ({account}), [account]);
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0", updateOn: "positions"});
     
-    const accountPayload = useMemo(() => ({account}), [ account]);
-    const [estimateLiquidation] = useWeb3Api("getEstimatedLiquidation", token.key, accountPayload, {errorValue: "-", updateOn: "positions"});
-
-
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
     
     const sellController = useMemo(() => {
@@ -49,13 +45,18 @@ const TradeRow = ({token, isHeader}) => {
             </>}
             
             <RowItem 
+                header={header.Leverage.label} 
+                content={<Value text="X1" />} 
+            />
+
+            <RowItem 
                 header={header["P&L"].label}
                 tooltip={header["P&L"].tooltip}
                 content={<Pnl 
                     value={positionPnlData} 
                     token={`${token.key.toUpperCase()}`} 
                     format={customFixedTokenValue(!Number(positionPnlData?.amount) ? "0" :  positionPnlData?.amount, token.fixedDecimals, token.decimals)}
-                /> } 
+                    /> } 
             />
 
             <RowItem 
@@ -63,20 +64,10 @@ const TradeRow = ({token, isHeader}) => {
                 tooltip={header["Rewards (claimable today)"].tooltip}
                 content={<PlatformClaim token={token} />} 
             />
-
-            <RowItem 
-                header={header.Leverage.label} 
-                content={<Value text="X1" />} 
-            />
-
-            <RowItem 
-                header={header["Estimated Liquidation"].label} 
-                tooltip={header["Estimated Liquidation"].tooltip}
-                content={<Value text={estimateLiquidation} />} 
-            />
+        
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }
         </>
-    ), [isTablet, token, positionValue, header, positionPnlData, estimateLiquidation, isMobile, sellController]);
+    ), [isTablet, token, positionValue, header, positionPnlData, isMobile, sellController]);
 
     if(isHeader) {
         return <>

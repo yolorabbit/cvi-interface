@@ -104,6 +104,9 @@ const platformConfig = {
         "Value": {
           label: "Value"
         },
+        "Leverage": {
+          label: "Leverage"
+        },
         "P&L": {
           label: "P&L",
           tooltip: {
@@ -115,16 +118,6 @@ const platformConfig = {
           label: "Rewards (claimable today)",
           tooltip: {
             content: "Please note that GOVI tokens will become claimable starting the day after your last open position action (UTC time). If the available claimable amount is lower than your reward amount at the time of your claim, you can try again a day later and for a period of 30 days from the time of the last position purchase.",
-            left: -30,
-          }
-        },
-        "Leverage": {
-          label: "Leverage"
-        },
-        "Estimated Liquidation": {
-          label: "Estimated Liquidation",
-          tooltip: {
-            content: "Estimated number of days until your position is liquidated. The calculation is based on the current funding fee amount and will change if the funding fee changes.",
             left: -30,
           }
         },
