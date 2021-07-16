@@ -45,6 +45,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
   const contracts = useContext(contractsContext);
   const { account } = useActiveWeb3React();
   const [stakedData, setStakedData] = useState(initialState);
+  const [reload, reloadData] = useState(false);
   const eventsUtils = useEvents();
   const token = stakingConfig.tokens[chainName][protocol][tokenName];
   const tokenRel = token.rel;
@@ -279,25 +280,29 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
     }
   }
 
+  const fetchLiquidityMiningData = async (cb) => {
+    getAPYLM(cb)
+    getDailyRewardLM(cb);
+    getTVLLM(cb);
+  }
+
+  const fetchData = async (cb) => {
+    getTokenBalance(cb)
+    if(protocol !== "platform") return fetchLiquidityMiningData(cb);
+    getAPY(cb);
+    getStakedTVL(cb);
+    getDailyReward(cb);
+  }
+
+  const reFetch = () => {
+    setStakedData(initialState)
+    reloadData(!reload);
+  }
+  
   useEffect(()=>{
-    let canceled = false;
-    
-    const fetchLiquidityMiningData = async (cb) => {
-      getAPYLM(cb)
-      getDailyRewardLM(cb);
-      getTVLLM(cb);
-    }
-
-    const fetchData = async (cb) => {
-      getTokenBalance(cb)
-      if(protocol !== "platform") return fetchLiquidityMiningData(cb);
-      getAPY(cb);
-      getStakedTVL(cb);
-      getDailyReward(cb);
-    }
-
     if(!contracts || !tokenRel) return
 
+    let canceled = false;
     fetchData((cb)=>{
       if(canceled) return
       cb()
@@ -307,12 +312,12 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
       canceled = true;
     }
     // eslint-disable-next-line
-  }, [contracts]);
+  }, [contracts, reload]);
     
   return useMemo(() => {
     if(!tokenRel) return [stakedData];
 
-    return [stakedData]
+    return [stakedData, reFetch]
       //eslint-disable-next-line
   }, [stakedData]);
 }
