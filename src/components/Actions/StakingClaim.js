@@ -10,7 +10,7 @@ import { toBN, gas } from 'utils';
 import Rewards from './../Tables/Elements/Values/Rewards';
 
 
-const StakingClaim = ({tokenName, protocol, claim}) => {
+const StakingClaim = ({tokenName, protocol, claim, submitted}) => {
     const disabled = claim.some(rewards => toBN(rewards).gt(toBN(0)));
     const dispatch = useDispatch();
     const { account } = useActiveWeb3React()
@@ -19,6 +19,7 @@ const StakingClaim = ({tokenName, protocol, claim}) => {
     const token = stakingConfig.tokens[selectedNetwork][protocol][tokenName];
 
     const onClick = async () => {
+        return submitted();
         try {
             dispatch(addAlert({
                 id: 'claim',
@@ -41,7 +42,7 @@ const StakingClaim = ({tokenName, protocol, claim}) => {
             }));
             console.log(error);
         } finally {
-            // submitted()
+            submitted()
         }
     }
     
