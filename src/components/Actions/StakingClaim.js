@@ -17,9 +17,8 @@ const StakingClaim = ({tokenName, protocol, claim, submitted}) => {
     const contracts = useContext(contractsContext);
     const { selectedNetwork } = useSelector(({app}) => app); 
     const token = stakingConfig.tokens[selectedNetwork][protocol][tokenName];
-
+    
     const onClick = async () => {
-        return submitted();
         try {
             dispatch(addAlert({
                 id: 'claim',
@@ -42,7 +41,7 @@ const StakingClaim = ({tokenName, protocol, claim, submitted}) => {
             }));
             console.log(error);
         } finally {
-            submitted()
+            submitted();
         }
     }
     

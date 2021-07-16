@@ -21,7 +21,7 @@ const ActiveRow = ({activeTab, isHeader, rowData}) => {
                 return <LiquidityRow token={rowData} isHeader={isHeader} />
     
             case stakingViews.staked:
-                    return <StakedAssetsRow rowData={rowData} isHeader={isHeader} />
+                return <StakedAssetsRow rowData={rowData} isHeader={isHeader} />
     
             case stakingViews["available-to-stake"]:
                 return <StakeAssetsRow rowData={rowData} isHeader={isHeader} />

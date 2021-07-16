@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import platformConfig from "config/platformConfig";
 import web3Api from "contracts/web3Api";
 
-const useAssets = (type) => {
+const useAssets = (type, update) => {
     const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const [filteredAssets, setFilteredAssets] = useState(null);
@@ -92,7 +92,6 @@ const useAssets = (type) => {
 
     useEffect(() => {
         if(!!filteredAssets?.length) {
-            console.log('asd');
             setFilteredAssets(null)
         }
         let canceled = false
@@ -106,7 +105,7 @@ const useAssets = (type) => {
             canceled = true;
         }
     //eslint-disable-next-line
-    },[contracts, account, type]);
+    },[contracts, account, type, update]);
 
     useEffect(() => {
         if(type === "Open trades") {

@@ -13,7 +13,7 @@ export const useDataController = () => {
     return context;
 }
 
-const DataController = ({children, data = [], subHeaders = {}, activeTab, authGuard, pageSize = 5, showPaginator}) => {
+const DataController = ({children, data = [], subHeaders = {}, activeTab, authGuard, pageSize = 5, showPaginator, cb}) => {
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
     const { account } = useActiveWeb3React();
@@ -47,7 +47,8 @@ const DataController = ({children, data = [], subHeaders = {}, activeTab, authGu
             totalRecords: data.length,
             pageSize,
             activeTab,
-            subHeaders
+            subHeaders,
+            cb
         }}>
             {children}
         </dataControllerContext.Provider>

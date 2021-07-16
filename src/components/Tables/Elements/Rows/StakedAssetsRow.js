@@ -11,6 +11,8 @@ import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
 import { toBN } from "utils";
 import Rewards from './../Values/Rewards';
+import { useDataController } from "components/Tables/DataController/DataController";
+import { delay } from "lodash";
 
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();
@@ -34,12 +36,13 @@ const RowData = ({isHeader, token, protocol, data}) => {
     const chainName = useSelector(({app})=>app.selectedNetwork);
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
+    const {cb} = useDataController();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
     const [stakedData, reloadData] = useStakedData(chainName, protocol, token);
     const [amount, setAmount] = useState("");
     return useMemo(() => {
-        const stakedTokenAmount = stakedData.stakedTokenAmount ?? 0
+        const stakedTokenAmount = data.staked.stakedTokenAmount ?? 0
         const UnstakeController =
         <ActionController 
             amountLabel="Select amount to unstake*"
@@ -55,6 +58,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
                 tokenAmount: data.staked.stakedTokenAmount,
                 available: data.staked.stakedAmount
             }}
+            cb={cb}
         />
 
         const StakedValue = <Value text={data.staked.stakedAmount} subText={`${token?.toUpperCase()} ${data.staked.lastStakedAmount.value}`} bottomText={`$${data.staked.stakedAmountUSD}`} />
