@@ -6,8 +6,11 @@ import { stakingViews } from 'config/stakingConfig';
 import React from 'react'
 import StakingAssets from './StakingAssets';
 import './Staking.scss';
+import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
+import asset from 'components/Hooks/subscribe/staking.json';
 
 const Staking = () => {
+    useSubscribe(asset);
     return (
         <Layout className="staking-component">
             <Column>

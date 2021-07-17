@@ -13,7 +13,7 @@ import config from './config/config';
 import NotificationList from 'components/NotificationList';
 import Web3ReactManager from 'components/Web3ReactManager';
 import './App.scss';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { ContractsContext } from 'contracts/ContractContext';
 import { useSelector } from 'react-redux';
 
@@ -30,7 +30,8 @@ const App = () => {
     }
   }, [appRef]);
 
-
+  const StakingMemo = useMemo(()=>Staking,[]);
+  
   return (
     <div className="app-component" ref={appRef}>
       <NotificationList />
@@ -39,7 +40,7 @@ const App = () => {
           <Router>
             <Navbar />
             <Switch>
-              <Route path={config.routes.staking.path} component={Staking} />
+              <Route path={config.routes.staking.path} component={StakingMemo} />
               <Route path={config.routes['help-center'].path} component={HelpCenter} />
               <Route path={config.routes.platform.path} component={Platform} />
               <Redirect to="/platform" />

@@ -1,0 +1,65 @@
+[
+    {
+        "name": "USDTLPStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "COTIETHStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "GOVIETHStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "ETHLPStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "COTIETHSLPStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "GOVIETHSLPStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "RHEGIC2ETHStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    }
+]
