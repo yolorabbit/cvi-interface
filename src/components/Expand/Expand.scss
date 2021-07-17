@@ -1,5 +1,20 @@
+.expand-list-component.staked {
+   & .pairs-component__group img {
+      margin-right: 0;
+   }
+}
+
 .expand-component {
    width: 100%;
+
+   & .expand-component__header {
+      & .row-item-component { 
+         &:first-child {
+            display: flex;
+            flex-wrap: wrap;
+         }
+      }
+   }
 
    & .row-item-component {
       & .row-item-component {
@@ -21,6 +36,7 @@
       .expand-component__header {
          background-color: #182f5d;
          & .row-item-component {
+
             &.action {
                display: block;
             }

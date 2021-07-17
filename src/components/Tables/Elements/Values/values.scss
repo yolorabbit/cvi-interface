@@ -32,6 +32,24 @@
             font-size: 3.889vw;    
         }
     }
+
+    &__protocol {
+        text-transform: capitalize;
+        font-weight: normal;
+    }
+}
+
+.staked-amount-component {
+    white-space: nowrap;
+    display: flex;
+
+    & .pairs-component {
+        .pairs-component__group {
+            & img {
+                margin-right: 0;
+            }
+        }
+    }
 }
 
 .rewards-component {
@@ -233,6 +251,10 @@
 
     @media (max-width: 1024px) {
         flex-wrap: wrap;
+    }
+
+    @media (max-width: 767px) {
+        width: 100%;
     }
 
     &__coins {

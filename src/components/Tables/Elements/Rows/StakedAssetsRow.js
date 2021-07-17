@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { toBN } from "utils";
 import Rewards from './../Values/Rewards';
 import { useDataController } from "components/Tables/DataController/DataController";
+import StakedAmount from "../Values/StakedAmount";
 
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();
@@ -60,7 +61,8 @@ const RowData = ({isHeader, token, protocol, data}) => {
             cb={cb}
         />
 
-        const StakedValue = <Value text={data.staked.stakedAmount} subText={`${token?.toUpperCase()} ${data.staked.lastStakedAmount.value}`} bottomText={`$${data.staked.stakedAmountUSD}`} />
+        const StakedValue = <Value text={data.staked.stakedAmount} subText={`${token?.toUpperCase()} ${data.staked.lastStakedAmount.value}`} bottomText={`$${data.staked.stakedAmountUSD}`} protocol={protocol} />
+        
         if(isHeader) {
             return <>
                 <RowItem content={
@@ -77,14 +79,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
         }
         return (
         <> 
-            {!isTablet && <> 
-                <RowItem content={
-                    stakingProtocols[protocol] === stakingProtocols.platform ? 
-                    <Coin token={token} showName /> : 
-                    <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
-                />
-                <RowItem content={StakedValue} />
-            </>}
+            {!isTablet && <RowItem content={<StakedAmount token={token} protocol={protocol} StakedValue={StakedValue} />} />}
 
             <RowItem 
                 header={header.APY.label} 

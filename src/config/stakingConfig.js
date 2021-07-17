@@ -180,7 +180,6 @@ const stakingConfig = {
   },
   headers: {
     [stakingViews.staked]: {
-      icon: "",
       "Staked amount (pool share)": {
         label: "Staked amount (pool share)"
       },
