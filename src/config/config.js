@@ -6,7 +6,7 @@ const config = {
       "PositionRewards": "PositionRewardsV3",
       "Staking": "StakingV2",
       "FeesCalculatorV3": "FeesCalculatorV4",
-      "CVIOracle": "CVIOracleV3"
+      "CVIOracle": "CVIOracle"
     }, 
     [chainNames.Ethereum]: { 
       "PositionRewards": "PositionRewards",

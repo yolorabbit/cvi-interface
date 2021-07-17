@@ -82,7 +82,7 @@ const platformConfig = {
           feesCalc: "FeesCalculatorV4",
           feesModel: "USDTPlatform",
           positionRewards: "PositionRewardsV3",
-          cviOracle: "CVIOracleV3",
+          cviOracle: "CVIOracle",
           stakingRewards: "USDTLPStakingRewards",
           liquidation: "LiquidationV2"
         },
@@ -91,9 +91,18 @@ const platformConfig = {
         key: "usdc",
         decimals: 6,
         fixedDecimals: 2,
-        soon: true,
         type: "v2",
         leverage: ["X1", "X3", "X4"],
+        rel: {
+          contractKey: "USDC",
+          platform: "USDCPlatform",
+          feesCalc: "FeesCalculatorV4",
+          feesModel: "USDCPlatform",
+          positionRewards: "USDCPositionRewards",
+          cviOracle: "CVIOracle",
+          stakingRewards: "USDCLPStakingRewards",
+          liquidation: "LiquidationV2"
+        }
       },
     }
   },

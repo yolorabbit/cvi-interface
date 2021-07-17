@@ -113,14 +113,16 @@ const web3Api = {
             return "N/A"
         }
     },
-    getTotalGoviRewards: async (contracts) => { // @TODO: use promise all
+    getTotalGoviRewards: async (contracts) => { // @TODO: use promise all setteled
         try {
             const chainName = await getChainName();
             const PositionRewards = contracts[config.contractsMapped?.[chainName]?.["PositionRewards"]];
             const PositionRewardsV2 = contracts[config.contractsMapped?.[chainName]?.["PositionRewardsV2"] ?? "PositionRewardsV2"];
+            const USDCPositionRewards = contracts[config.contractsMapped?.[chainName]?.["USDCPositionRewards"] ?? "USDCPositionRewards"];
 
             let usdtMaxPositionRewards = toBN("0"), 
             ethMaxPositionRewards = toBN("0"),
+            usdcMaxPositionRewards = toBN("0"),
             errorCounter = 0;
 
             try {
@@ -135,7 +137,13 @@ const web3Api = {
                 errorCounter++;
             }
 
-            return errorCounter < 2 ? toBN(usdtMaxPositionRewards).add(toBN(ethMaxPositionRewards)).toString() : "N/A";
+            try {
+                usdcMaxPositionRewards = await USDCPositionRewards.methods.maxDailyReward().call();
+            } catch (error) {
+                errorCounter++;
+            }
+
+            return errorCounter < 2 ? toBN(usdcMaxPositionRewards).add(toBN(usdtMaxPositionRewards)).add(toBN(ethMaxPositionRewards)).toString() : "N/A";
         } catch(error) {
             console.log(error);
             return "N/A";
