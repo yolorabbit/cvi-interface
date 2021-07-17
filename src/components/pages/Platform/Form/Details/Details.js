@@ -65,7 +65,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
             <> 
                 <Stat 
                     name="collateralRatio" 
-                    value={collateralRatioData?.collateralRatio} 
+                    value={collateralRatioData === "N/A" ? "N/A" : collateralRatioData?.collateralRatio} 
                     format={`${customFixedTokenValue(collateralRatioData?.collateralRatio, 0, 8)}%`}
                     className={`bold ${isHighCollateralRatio ? 'low' : 'high'}`} 
                 />

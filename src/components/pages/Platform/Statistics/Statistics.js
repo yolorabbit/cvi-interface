@@ -31,7 +31,7 @@ const Statistics = () => {
                 <div className="statistics-component__container">
                     <Stat 
                         name="totalValueLocked" 
-                        value={platformBalanceReduced}
+                        value={platformBalance === "N/A" ? "N/A" : platformBalanceReduced}
                         format={customFixed(toDisplayAmount(platformBalanceReduced, 6), 2)}
                     />
     

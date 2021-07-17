@@ -162,11 +162,7 @@ const web3Api = {
             }
         } catch (error) {
             console.log(error);
-            return {
-                collateralRatio: "N/A",
-                currentRatioValue: "N/A",
-                platformBalance: "N/A"
-            }
+            return "N/A";
         }
     },
     getAvailableBalance: async (contracts, token, {account, type, withStakeAmount, library}) => {
