@@ -42,49 +42,49 @@ const allPlatformEventsQuery = gql`
   }
 `;
 
-const allPositionsQuery = gql`
-  {
-    openPositions(orderBy: timestamp, orderDirection: desc) {
-      id
-      platform
-      timestamp
-      account
-      tokenAmount
-      feeAmount
-      positionUnitsAmount
-    }
-    closePositions(orderBy: timestamp, orderDirection: desc) {
-      id
-      platform
-      timestamp
-      account
-      tokenAmount
-      feeAmount
-      positionUnitsAmount
-    }
-  }
-`;
+// const allPositionsQuery = gql`
+//   {
+//     openPositions(orderBy: timestamp, orderDirection: desc) {
+//       id
+//       platform
+//       timestamp
+//       account
+//       tokenAmount
+//       feeAmount
+//       positionUnitsAmount
+//     }
+//     closePositions(orderBy: timestamp, orderDirection: desc) {
+//       id
+//       platform
+//       timestamp
+//       account
+//       tokenAmount
+//       feeAmount
+//       positionUnitsAmount
+//     }
+//   }
+// `;
 
-const allLiquidityQuery = gql`
-  {
-    deposits(orderBy: timestamp, orderDirection: desc) {
-      platform
-      timestamp
-      account
-      tokenAmount
-      feeAmount
-      lpTokensAmount
-    }
-    withdraws(orderBy: timestamp, orderDirection: desc) {
-      platform
-      timestamp
-      account
-      tokenAmount
-      feeAmount
-      lpTokensAmount
-    }
-  }
-`;
+// const allLiquidityQuery = gql`
+//   {
+//     deposits(orderBy: timestamp, orderDirection: desc) {
+//       platform
+//       timestamp
+//       account
+//       tokenAmount
+//       feeAmount
+//       lpTokensAmount
+//     }
+//     withdraws(orderBy: timestamp, orderDirection: desc) {
+//       platform
+//       timestamp
+//       account
+//       tokenAmount
+//       feeAmount
+//       lpTokensAmount
+//     }
+//   }
+// `;
 
 const accountPositionsQuery = gql`
   query getPositions($account: String!, $platformAddress: String!, $fromTimestamp: BigInt! = 0) {

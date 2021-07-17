@@ -12,7 +12,6 @@ import { useSelector } from "react-redux";
 import { toBN } from "utils";
 import Rewards from './../Values/Rewards';
 import { useDataController } from "components/Tables/DataController/DataController";
-import { delay } from "lodash";
 
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();

@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { viewportContext } from "../Context";
 import platformConfig from '../../config/platformConfig';
-import stakingConfig, { stakingViews } from "config/stakingConfig";
+import stakingConfig from "config/stakingConfig";
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);

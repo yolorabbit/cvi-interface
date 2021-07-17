@@ -1,6 +1,6 @@
 import config from "config/config";
 import { contractsContext } from "contracts/ContractContext";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { addAlert } from "store/actions";
 import { maxUint256, toBN, toBNAmount } from "utils";

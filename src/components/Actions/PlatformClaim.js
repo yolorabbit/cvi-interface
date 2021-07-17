@@ -1,9 +1,6 @@
 import Button from 'components/Elements/Button';
 import { useEvents } from 'components/Hooks/useEvents';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import Spinner from 'components/Spinner/Spinner';
-import { Value } from 'components/Tables/Elements/Values';
-import { DataState } from 'components/Tables/Elements/Values/DataState';
 import Rewards from 'components/Tables/Elements/Values/Rewards';
 import config from 'config/config';
 import { contractsContext } from 'contracts/ContractContext';
