@@ -31,6 +31,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
+            contractKey: "USDTPlatform",
             platform: "USDTPlatform",
             stakingRewards: "USDTLPStakingRewards",
             token: "USDT",
@@ -45,6 +46,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
+            contractKey: "ETHPlatform",
             platform: "ETHPlatform",
             stakingRewards: "ETHLPStakingRewards",
             token: "WETH",
@@ -59,6 +61,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["USDT", "WETH"],
           rel: {
+            contractKey: "GOVI",
             stakingRewards: "Staking",
             tokenDecimals: [6, 18]
           }
@@ -75,6 +78,7 @@ const stakingConfig = {
           rel: {
             stakingRewards: "COTIETHStakingRewards",
             tokenDecimals: [18],
+            contractKey: "UNIV2COTIETH",
             token: "UNIV2COTIETH"
           }
         },
@@ -88,6 +92,7 @@ const stakingConfig = {
           rel: {
             stakingRewards: "GOVIETHStakingRewards",
             tokenDecimals: [18],
+            contractKey: "UNIV2GOVIETH",
             token: "UNIV2GOVIETH"
           }
         },
@@ -101,6 +106,7 @@ const stakingConfig = {
           rel: {
             stakingRewards: "RHEGIC2ETHStakingRewards",
             tokenDecimals: [18],
+            contractKey: "UNIV2RHEGIC2ETH",
             token: "UNIV2RHEGIC2ETH"
           }
         },
@@ -116,6 +122,7 @@ const stakingConfig = {
           rel: {
             stakingRewards: "COTIETHSLPStakingRewards",
             tokenDecimals: [18],
+            contractKey: "SLPCOTIETH",
             token: "SLPCOTIETH"
           }
         },
@@ -129,6 +136,7 @@ const stakingConfig = {
           rel: {
             stakingRewards: "GOVIETHSLPStakingRewards",
             tokenDecimals: [18],
+            contractKey: "SLPGOVIETH",
             token: "SLPGOVIETH"
           }
         },
@@ -143,6 +151,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
+            contractKey: "USDTPlatform",
             platform: "USDTPlatform",
             stakingRewards: "USDTLPStakingRewards",
             token: "USDT",
@@ -157,6 +166,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           rel: {
+            contractKey: "USDCPlatform",
             platform: "USDCPlatform",
             stakingRewards: "USDCLPStakingRewards",
             token: "USDC",
@@ -174,6 +184,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["USDT","USDC"],
           rel: {
+            contractKey: "GOVI",
             stakingRewards: "StakingV2",
             tokenDecimals: [6, 6]
           }
@@ -189,6 +200,7 @@ const stakingConfig = {
           rel: {
             stakingRewards: "GOVIETHStakingRewards",
             token: "UNIV2GOVIETH",
+            contractKey: "UNIV2GOVIETH",
             tokenDecimals: [18]
           }
         },
