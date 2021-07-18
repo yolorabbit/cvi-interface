@@ -2,7 +2,7 @@ import { contractsContext } from "contracts/ContractContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useActiveWeb3React } from "./wallet";
 import stakingApi from 'contracts/apis/staking';
-import { toBN } from 'utils';
+import { toBN, toBNAmount } from 'utils';
 import stakingConfig from "config/stakingConfig";
 import { useSelector } from "react-redux";
 import platformConfig from "config/platformConfig";
@@ -52,10 +52,10 @@ const useAssets = (type, update) => {
                     return {...asset, data: {staked, claim} };
                 })
                 filteredAssets = await Promise.all(filteredAssets);
-                return filteredAssets.filter(({data: {staked, claim}}) => {
+                return filteredAssets.filter(({decimals, data: {staked, claim}}) => {
                     const stakedTokenAmount = staked.stakedTokenAmount ?? 0
                     const hasStaked = toBN(stakedTokenAmount).gt(toBN(0));
-                    const canClaim = claim?.some(({tokenAmount}) => tokenAmount && toBN(tokenAmount).gt(toBN(0)));
+                    const canClaim = claim?.some(({amount}) => amount && toBN(toBNAmount(amount, decimals)).gt(toBN(0)));
                     const shouldFiltered = !hasStaked && !canClaim
                     return !shouldFiltered
                 })
