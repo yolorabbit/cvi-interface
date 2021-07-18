@@ -120,6 +120,7 @@ const stakingApi = {
           const maxRateConfig = {
               "USDT-LP": "10615079365079365",
               "USDT-LP-V2": "15839947089947089",
+              "CVI-SHORT": "15839947089947089",
               "ETH-LP-V2": "18750000000000000",
           }
       
