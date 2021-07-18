@@ -39,10 +39,11 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
 
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", selectedCurrency);
 
-    const purchaseFeePayload = useMemo(() => ({ tokenAmount } ), [tokenAmount]);
+    const purchaseFeePayload = useMemo(() => ({ tokenAmount, leverage } ), [tokenAmount, leverage]);
+
     const [purchaseFee] = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload, { validAmount: true });
 
-    const positionRewardsPayload = useMemo(() => ({ tokenAmount, account} ), [tokenAmount, account]);
+    const positionRewardsPayload = useMemo(() => ({ tokenAmount, account, leverage} ), [leverage, tokenAmount, account]);
     const [positionRewards] = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload, { validAmount: true });
 
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount}), [account, tokenAmount]);
