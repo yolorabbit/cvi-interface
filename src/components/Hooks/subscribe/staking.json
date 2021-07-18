@@ -1,5 +1,14 @@
 [
     {
+        "name": "USDCLPStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
         "name": "USDTLPStakingRewards",
         "events": [
             "RewardAdded",

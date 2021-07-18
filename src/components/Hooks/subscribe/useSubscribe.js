@@ -13,6 +13,7 @@ const useSubscribe = (assets) => {
         assets.forEach(({name, events} )=> {
             try {
                 const contract = contracts[name];
+                if(!contract) return;
                 events.forEach(eventName => {
                     const eventJsonInterface = web3.utils._.find(
                         contract._jsonInterface,
@@ -65,8 +66,8 @@ const useSubscribe = (assets) => {
 
     useEffect(() => {
         if(!contracts) return
-        console.log('contracts: ', contracts);
-        subscribeLogEvent()
+        subscribeLogEvent();
+        // eslint-disable-next-line
     }, [contracts]);
 
     return null
