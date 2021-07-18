@@ -224,11 +224,15 @@ const web3Api = {
             if(type === "withdraw") { 
                 openTime = await contracts[token.rel.platform].methods.lastDepositTimestamp(account).call() * 1000;
             }
-            
-            const lock = await contracts[token.rel.platform].methods[platformConfig.lockupPeriod[type]]().call();
+
+            if(type === "unstake") {
+                openTime = Number(await contracts[token.rel.stakingRewards].methods.stakeTimestamps(account).call()) * 1000
+            }
+
+            const lock = await contracts[type === "unstake" ? token.rel.stakingRewards : token.rel.platform].methods[config.lockupPeriod[type]]().call();
             const latestBlockTimestamp = await getLatestBlockTimestamp(library.eth.getBlock) * 1000;
             const lockedTime = moment.utc(openTime).add(lock, 'seconds').valueOf() - latestBlockTimestamp;
-    
+            
             let customDurationTime;
             if(customDuration) {
                 customDurationTime = moment.utc(openTime).add(customDuration, 'seconds').valueOf() - latestBlockTimestamp;

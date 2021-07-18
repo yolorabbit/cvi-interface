@@ -186,10 +186,6 @@ const platformConfig = {
        markedLevel: 80
     }
   },
-  lockupPeriod: {
-    sell: 'buyersLockupPeriod',
-    withdraw: 'lpsLockupPeriod'
-  },
   sellFeeWarningDuration: (60 * 60) * 48,
   sellFeeWarningText: "Sell fee will be considerably higher than usual until 48 hours pass from your last purchase",
 }

@@ -6,24 +6,24 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { getTimeDurationFormatted } from 'utils';
 import './Countdown.scss';
 
-export const useIsLockedTime = () => {
+export const useIsLockedTime = (start = true) => {
     const { library, account } = useActiveWeb3React();
     const { token, type } = useActionController();
     const isLockedOptionsPayload = useMemo(() => ({updateOn: type === "withdraw" ? 'liquidities' : 'positions'}), [type]);
-    const isLockedPayload = useMemo(() => ({type, library, account}), [type, library, account]);
+    const isLockedPayload = useMemo(() => ({type, library, account, stopInitialCall: !start}), [type, library, account, start]);
     const [lockedData] = useWeb3Api("isLocked", token, isLockedPayload, isLockedOptionsPayload);
     const [_lockedTime, _setLockedTime] = useState(null);
     const _lockedDurationTimer = useRef();
     const isActiveInDOM = useInDOM();
 
     useEffect(() => {
-        if(lockedData && lockedData !== "N/A") {
+        if(lockedData && lockedData !== "N/A" && start) {
             _setLockedTime(lockedData[1]);
         }
-    }, [lockedData]);
+    }, [lockedData, start]);
 
     useEffect(() => {
-        if(_lockedTime === null || _lockedTime < 0) return;
+        if(_lockedTime === null || _lockedTime < 0 || !_lockedTime || !start) return;
         _lockedDurationTimer.current = setTimeout(() => {
             if(isActiveInDOM()) { 
                 _setLockedTime(prevTime => {

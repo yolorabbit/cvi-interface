@@ -2,6 +2,7 @@ import { useInDOM } from "components/Hooks";
 import { useEvents } from "components/Hooks/useEvents";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import platformConfig from "config/platformConfig";
+import stakingConfig, { stakingProtocols } from "config/stakingConfig";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { contractsContext } from "./ContractContext";
@@ -52,7 +53,14 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const getData = useCallback(async () => {
         try {
             if(data !== null) setData(null);
-            const tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon);
+            if(body.stopInitialCall) return "N/A";
+            let tokens = [];
+            if(stakingConfig.tokens[selectedNetwork][stakingProtocols.platform][selectedCurrency]) {
+                tokens = Object.values(stakingConfig.tokens[selectedNetwork][stakingProtocols.platform]).filter(({soon}) => !soon)
+            } else {
+                tokens = Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon)
+            }
+
             return await fetchWeb3ApiData(contracts, tokens);
         } catch(error) {
             if(isActiveInDOM()) setData(errorValue);

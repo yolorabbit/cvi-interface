@@ -1,3 +1,4 @@
+import CountdownComponent, { useIsLockedTime } from "components/Countdown/Countdown";
 import Button from "components/Elements/Button";
 import useApproveToken from "components/Hooks/useApproveToken";
 import { useActiveWeb3React } from "components/Hooks/wallet";
@@ -16,7 +17,8 @@ const StakingActions = () => {
     const dispatch = useDispatch();
     const contracts = useContext(contractsContext);
     const { account } = useActiveWeb3React();
-    const approvalValidation = useApproveToken()
+    const approvalValidation = useApproveToken();
+    const lockedTime = useIsLockedTime(type === stakingConfig.actionsConfig.unstake.key && tokenName === "govi");
     const { selectedNetwork } = useSelector(({app})=>app);
     const token = stakingConfig.tokens[selectedNetwork][protocol][tokenName]
     const [processing, setProcessing] = useState(false);
@@ -75,12 +77,13 @@ const StakingActions = () => {
             case stakingConfig.actionsConfig.unstake.key:
                 return <div className="unstake-component">
                 <div className="unstake-component__container">
+                    {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
                     <Button 
                         className="unstake-component__container--button" 
                         buttonText="Unstake" 
                         onClick={onClick}
+                        disabled={(isOpen && !isModal && disabled) || (token.key === 'govi' && (lockedTime > 0 || lockedTime === null))}
                         processing={processing}
-                        disabled={disabled}
                     />
                     {!isModal && isOpen && <span className="pay-attention">
                      * Pay Attention: After unstaking your LP tokens, you won't be able to withdraw your liquidity for up to 72 hours.
@@ -91,6 +94,7 @@ const StakingActions = () => {
             case stakingConfig.actionsConfig.stake.key:
                 return  <div className="stake-component">
                     <div className="stake-component__container">
+                        {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
                         <Button 
                             className="stake-component__container--button"
                             buttonText="Stake" 

@@ -1,6 +1,11 @@
 import { chainNames } from "connectors";
 
 const config = {
+  lockupPeriod: {
+    sell: 'buyersLockupPeriod',
+    withdraw: 'lpsLockupPeriod',
+    unstake: 'stakeLockupTime'
+  },
   contractsMapped: {
     [chainNames.Matic]: { 
       "PositionRewards": "PositionRewardsV3",
