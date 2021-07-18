@@ -53,7 +53,7 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const getData = useCallback(async () => {
         try {
             if(data !== null) setData(null);
-            if(body.stopInitialCall) return "N/A";
+            if(body?.stopInitialCall) return "N/A";
             let tokens = [];
             if(stakingConfig.tokens[selectedNetwork][stakingProtocols.platform][selectedCurrency]) {
                 tokens = Object.values(stakingConfig.tokens[selectedNetwork][stakingProtocols.platform]).filter(({soon}) => !soon)
@@ -68,7 +68,7 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [contracts, data, errorValue, fetchWeb3ApiData, selectedNetwork])
-    
+
     useEffect(() => {
         if(options?.updateOn === "positions") {
             eventsUpdateRef.current = setTimeout(() => {
