@@ -8,7 +8,7 @@ import { useActiveWeb3React } from "./wallet";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
-    [chainNames.Matic]: 16570000 
+    [chainNames.Matic]: 16870000 
 }
 
 export const DEFAULT_STEPS = 30;
