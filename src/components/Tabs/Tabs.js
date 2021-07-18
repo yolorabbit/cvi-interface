@@ -2,8 +2,9 @@ import React, { useMemo, useState } from 'react'
 import Button from '../Elements/Button';
 import './Tabs.scss';
 import platformConfig from 'config/platformConfig';
+import { uniqueId } from 'lodash';
 
-const Tabs = ({type, isDropdown, tabs, activeTab, setActiveTab}) => {
+const Tabs = ({type = "default", suffix = "", isDropdown, tabs, activeTab, setActiveTab}) => {
     const [isOpen, setIsOpen] = useState();
 
     const formattedTabs = useMemo(
@@ -29,7 +30,7 @@ const Tabs = ({type, isDropdown, tabs, activeTab, setActiveTab}) => {
 
                 {isOpen && <div className="tabs-component__dropdown--options">
                     {tabs?.filter(tab => tab !== activeTab)?.map((tab, index) => <Button 
-                        key={tab} 
+                        key={uniqueId(tab)} 
                         className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
                         buttonText={formattedTabs[tab] ?? tab} 
                         onClick={() => onTabChange(tab)} 
@@ -37,8 +38,9 @@ const Tabs = ({type, isDropdown, tabs, activeTab, setActiveTab}) => {
                 </div>}
             </div> : <> 
                 {tabs.map((tab, index) => <Button
-                     key={tab} className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
-                     buttonText={formattedTabs[tab] ?? type === "leverage" ? `x${tab}` : tab} 
+                     key={uniqueId(tab)} 
+                     className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
+                     buttonText={`${suffix}${formattedTabs[tab] ?? tab}`} 
                      onClick={() => onTabChange(tabs[index])}/>
                 )}
             </>}
