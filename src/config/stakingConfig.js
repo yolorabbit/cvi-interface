@@ -144,6 +144,19 @@ const stakingConfig = {
             stakingRewards: "USDTLPStakingRewards",
             token: "USDT",
             tokenDecimals: [18]
+          },
+        },
+        "cvi-usdc-lp": {
+          key: "cvi-usdc-lp",
+          protocol: stakingProtocols.platform,
+          decimals: 18,
+          fixedDecimals: 8,
+          rewardsTokens: ["GOVI"],
+          rel: {
+            platform: "USDCPlatform",
+            stakingRewards: "USDCLPStakingRewards",
+            token: "USDC",
+            tokenDecimals: [18]
           }
         },
         // "cvi-eth-lp": {
