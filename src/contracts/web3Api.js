@@ -152,13 +152,14 @@ const web3Api = {
     getCollateralRatio: async (contracts, token, {library}) => {
         try {
             let platformBalance;
-
             if(token.key === "eth") {
                 platformBalance = toBN(await library.eth.getBalance(contracts[token.rel.platform].options.address));
+            } else if(token.key === "usdc") {
+                platformBalance = toBN(await contracts[token.rel.platform].methods.totalLeveragedTokensAmount().call());
             } else {
                 platformBalance = toBN(await contracts[token.rel.contractKey].methods.balanceOf(contracts[token.rel.platform].options.address).call());
             }
-    
+
             let totalPositionUnitsAmount = toBN(await contracts[token.rel.platform].methods.totalPositionUnitsAmount().call());
             let decimals = toBN(await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call());
             let collateralRatio = platformBalance.toString() !== "0" ? totalPositionUnitsAmount.mul(decimals).div(platformBalance) : 0;

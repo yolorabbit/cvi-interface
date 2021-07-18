@@ -57,7 +57,7 @@ const platformConfig = {
           contractKey: "WETH",
           platform: "ETHPlatform",
           feesCalc: "FeesCalculatorV3",
-          feesModel: "FeesModelV2",
+          feesModel: "ETHPlatform",
           cviOracle: "CVIOracle",
           positionRewards: "PositionRewardsV2",
           stakingRewards: "ETHLPStakingRewards",
@@ -92,7 +92,7 @@ const platformConfig = {
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
-        type: "v2",
+        type: "usdc",
         leverage: ["X1", "X3", "X4"],
         rel: {
           contractKey: "USDC",
