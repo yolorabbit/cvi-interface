@@ -22,7 +22,7 @@ const useAssets = (type, update) => {
             let liquidityMiningProtocolsValues = Object.values(liquidityMiningProtocols);
             let liquidityMiningTokens = liquidityMiningProtocolsValues.map(protocol => Object.values(protocol));
             let stakingAssetsData = liquidityMiningTokens.reduce((prev, next) => prev.concat(next));
-            return stakingAssetsData
+            return stakingAssetsData.filter(token => !token.soon)
         }
         
         const platformAsset = () => Object.values(platformConfig.tokens[selectedNetwork]).filter(token => !token.soon)
