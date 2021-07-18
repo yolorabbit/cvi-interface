@@ -20,7 +20,7 @@ const config = {
       "CVIOracle": "CVIOracle"
     }, 
   },
-  isMainnet: process.env.REACT_APP_ENVIRONMENT === "production",
+  isMainnet: process.env.REACT_APP_ENVIRONMENT === "mainnet",
   routes: {
     platform: {
       label: "Platform",
