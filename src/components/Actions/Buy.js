@@ -85,9 +85,10 @@ const Buy = () => {
 
     const buy = useCallback(async () => {
         const _leverage = !leverage ? "1" : leverage;
+        console.log(leverage);
         if (activeToken.type === "eth") {
             return await contracts[activeToken.rel.platform].methods.openPositionETH(MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, value: tokenAmount, ...gas });
-        } else if (activeToken.type === "v2") {
+        } else if (activeToken.type === "v2" || activeToken.type === "usdc") {
             return await contracts[activeToken.rel.platform].methods.openPosition(tokenAmount, MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, ...gas });
         } else {
             return await contracts[activeToken.rel.platform].methods.openPosition(tokenAmount, MAX_CVI_VALUE).send({ from: account, ...gas });

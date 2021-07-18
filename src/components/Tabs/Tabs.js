@@ -36,7 +36,11 @@ const Tabs = ({type, isDropdown, tabs, activeTab, setActiveTab}) => {
                     />)}
                 </div>}
             </div> : <> 
-                {tabs.map((tab, index) => <Button key={tab} className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} buttonText={formattedTabs[tab] ?? tab} onClick={() => onTabChange(tabs[index])}/>)}
+                {tabs.map((tab, index) => <Button
+                     key={tab} className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
+                     buttonText={formattedTabs[tab] ?? type === "leverage" ? `x${tab}` : tab} 
+                     onClick={() => onTabChange(tabs[index])}/>
+                )}
             </>}
         </div>
     )

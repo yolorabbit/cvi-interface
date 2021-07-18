@@ -93,7 +93,7 @@ const platformConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         type: "usdc",
-        leverage: ["X1", "X3", "X4"],
+        leverage: ["1", "2"],
         rel: {
           contractKey: "USDC",
           platform: "USDCPlatform",

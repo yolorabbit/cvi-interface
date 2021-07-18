@@ -54,7 +54,7 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
 
   let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());
   let openFeePrecent;
-  if (type === "eth" || type === "v2") {
+  if (type === "eth" || type === "v2" || type === "usdc") {
     const fees = await feesCalc.methods.openPositionFees().call();
     openFeePrecent = fees.openPositionFeePercentResult;
   } else {

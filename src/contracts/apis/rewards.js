@@ -106,7 +106,7 @@ async function getClaimableRewardsSum(contracts, token, { account, library, even
 const getClaimableRewards = async (contracts, token, { account, library, eventsUtils }) => { // old position rewards
   if(token.type === 'eth') return [0, toBN(0), token.decimals];
   try {
-      if(token.type === "v2") return [0, toBN(0), token.decimals];
+      if(token.type === "v2" || token.type === "usdc") return [0, toBN(0), token.decimals];
       const res = await getClaimableRewardsSum(contracts, token, { account, library, eventsUtils });
       return [commaFormatted(customFixed(toDisplayAmount(res, token.lpTokensDecimals), 8)), res, token.lpTokensDecimals];
   } catch (error) {

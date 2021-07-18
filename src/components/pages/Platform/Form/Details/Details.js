@@ -70,7 +70,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     className={`bold ${isHighCollateralRatio ? 'low' : 'high'}`} 
                 />
         
-                {leverage && <Stat className="bold" title="Leverage" value={leverage} /> }
+                {leverage && <Stat className="bold" title="Leverage" value={leverage} prefix="x" /> }
     
                 <Amount title="Buy" amount={amount} selectedCurrency={selectedCurrency} />
     
