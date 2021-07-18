@@ -105,6 +105,7 @@ const useHistoryEvents = () => {
                     [Object.keys(contractState[view])[1]]: [{ account }] 
                 } 
             }], {bottomBlock: bottomBlockByNetwork[selectedNetwork]});
+            events = events.map(event => ({...event, event:contractState[view][event.event]}))
         }
        
         if(events.length) {
@@ -132,7 +133,7 @@ const useHistoryEvents = () => {
                     blockNumber: data.blockNumber,
                     transactionHash: data.transactionHash
                 },
-            }, eventType, activeToken);
+            }, type, activeToken);
 
             dispatch(setData(view, d, true));
         })
