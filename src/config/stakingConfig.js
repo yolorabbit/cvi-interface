@@ -25,6 +25,7 @@ const stakingConfig = {
       [stakingProtocols.platform]: {
         "cvi-usdt-lp": {
           key: "cvi-usdt-lp",
+          label: "CVI-USDT LP",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
@@ -39,6 +40,7 @@ const stakingConfig = {
         "cvi-eth-lp": {
           key: "cvi-eth-lp",
           protocol: stakingProtocols.platform,
+          label: "CVI-ETH LP",
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
@@ -51,6 +53,7 @@ const stakingConfig = {
         },
         "govi": {
           key: "govi",
+          label: "GOVI",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
@@ -148,6 +151,7 @@ const stakingConfig = {
         },
         "cvi-usdc-lp": {
           key: "cvi-usdc-lp",
+          label: "CVI-USDC LP",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
@@ -202,6 +206,7 @@ const stakingConfig = {
       "TVL": {
         label: "TVL",
         "cvi-usdt-lp": "CVI-USDT LP",
+        "cvi-usdc-lp": "CVI-USDC LP",
         "cvi-eth-lp": "CVI-ETH LP",
         "coti-eth-lp": "COTI-ETH LP",
         "govi-eth-lp": "GOVI-ETH LP",
