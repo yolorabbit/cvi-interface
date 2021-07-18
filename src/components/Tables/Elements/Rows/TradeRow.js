@@ -1,5 +1,5 @@
 import { useIsMobile, useIsTablet } from "components/Hooks";
-import { useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
 import platformConfig, { activeViews } from "config/platformConfig";
@@ -8,19 +8,28 @@ import PlatformClaim from "components/Actions/PlatformClaim";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { customFixedTokenValue } from "utils";
+import { useSelector } from "react-redux";
+import { platformViewContext } from "components/Context";
 
 const TradeRow = ({token, isHeader}) => {
     const { account } = useActiveWeb3React();
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
-    const positionValue = token.data.positionValue //useWeb3Api("getAvailableBalance", token.key, availableBalancePayload, {errorValue: "0", updateOn: "positions"});
-
+    const positionValue = token.data.positionValue;
     const positionPnlPayload = useMemo(() => ({account}), [account]);
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0", updateOn: "positions"});
+    const { activeView } = useContext(platformViewContext);
+    const wallet = useSelector(({wallet}) => wallet);
     
+    const historyData = useMemo(() => {
+        return wallet?.[activeView === activeViews["view-liquidity"] ? 'liquidities' : 'positions'];
+    }, [activeView, wallet]);
+
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
-    
+    const posArrayByToken = historyData?.length ? historyData.filter(({type, amount})=> type.toLowerCase() === "buy" && amount.toLowerCase().includes(token.key)) : [];
+    const leverage = posArrayByToken.length ? posArrayByToken[0].leverage : "N/A";
+
     const sellController = useMemo(() => {
         return <ActionController 
             amountLabel="Select amount to sell"
@@ -45,7 +54,7 @@ const TradeRow = ({token, isHeader}) => {
             
             <RowItem 
                 header={header.Leverage.label} 
-                content={<Value text="X1" />} 
+                content={<Value text={leverage} />} 
             />
 
             <RowItem 
@@ -66,7 +75,7 @@ const TradeRow = ({token, isHeader}) => {
         
             {(!isTablet || isMobile) && <RowItem content={sellController} /> }
         </>
-    ), [isTablet, token, positionValue, header, positionPnlData, isMobile, sellController]);
+    ), [isTablet, token, positionValue, header, positionPnlData, isMobile, sellController, leverage]);
 
     if(isHeader) {
         return <>

@@ -54,7 +54,7 @@ const useHistoryEvents = () => {
         return {
             positions: async function(event, type, activeToken) {
                 let block = await getBlock(event.blockNumber);
-                const { tokenAmount, feeAmount, cviValue } = config.isMainnet ? event : event.returnValues;
+                const { tokenAmount, feeAmount, cviValue, leverage } = config.isMainnet ? event : event.returnValues;
                 const actionDate = block.timestamp * 1000
                 const amount = activeToken.key === 'eth' ? fromWei(tokenAmount) : toDisplayAmount(tokenAmount, activeToken.decimals);
                 const fees = activeToken.key === 'eth' ? fromWei(feeAmount) : toDisplayAmount(feeAmount, activeToken.decimals);
@@ -66,7 +66,7 @@ const useHistoryEvents = () => {
                     timestamp: actionDate,
                     type: contractState.positions[type],
                     index: cviValue / 100,
-                    leverage: 1,
+                    leverage: `X${leverage ?? '1'}`,
                     amount: `${commaFormatted(customFixed(amount, activeToken.decimals))} ${activeToken.key.toUpperCase()}`,
                     fees: `${commaFormatted(customFixed(fees, activeToken.decimals))} ${activeToken.key.toUpperCase()}`,
                     netAmount: `${commaFormatted(customFixed(netAmount, activeToken.decimals))} ${activeToken.key.toUpperCase()}`
