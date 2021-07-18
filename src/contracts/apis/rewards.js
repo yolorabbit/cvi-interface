@@ -108,11 +108,11 @@ const getClaimableRewards = async (contracts, token, { account, library, eventsU
   try {
       if(token.type === "v2") return [0, toBN(0), token.decimals];
       const res = await getClaimableRewardsSum(contracts, token, { account, library, eventsUtils });
-      return [commaFormatted(customFixed(toDisplayAmount(res, token.goviDecimals), 8)), res, token.goviDecimals];
+      return [commaFormatted(customFixed(toDisplayAmount(res, token.lpTokensDecimals), 8)), res, token.lpTokensDecimals];
   } catch (error) {
       console.log(error);
       // no rewrads;
-      return [0, toBN(0), token.goviDecimals]
+      return [0, toBN(0), token.lpTokensDecimals]
   }
 }
 
@@ -173,10 +173,10 @@ const getClaimData = async (contracts, token, { account, library, eventsUtils}) 
       const claimAmountIsAvailable = reducedClaimableToday.cmp(toBN(totalGoviToClaim)) !== -1;
 
       return [{
-          claimableRewards: customFixed(toDisplayAmount(isClaimableAmount.toString(), token.goviDecimals), 8),
+          claimableRewards: customFixed(toDisplayAmount(isClaimableAmount.toString(), token.lpTokensDecimals), 8),
           oldAmount: claimableReward[0] ?? "0",
-          totalAmount: commaFormatted(customFixed(toDisplayAmount(reducedClaimableToday, token.goviDecimals))),
-          amount: customFixed(toDisplayAmount(totalGoviToClaim.toString(), token.goviDecimals), 8),
+          totalAmount: commaFormatted(customFixed(toDisplayAmount(reducedClaimableToday, token.lpTokensDecimals))),
+          amount: customFixed(toDisplayAmount(totalGoviToClaim.toString(), token.lpTokensDecimals), 8),
           symbol: "GOVI",
           lastEndDate: lastEndDate, 
           isClaimAvailable: _canClaim?.result || claimableReward[0].toString() !== "0",

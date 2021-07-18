@@ -93,7 +93,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     title="Open position reward" 
                     value={positionRewards === "N/A" ? "N/A" : positionRewards?.toString()}
                     _suffix="GOVI"
-                    format={customFixedTokenValue(positionRewards?.toString(), 8, activeToken.goviDecimals)}
+                    format={customFixedTokenValue(positionRewards?.toString(), 8, activeToken.lpTokensDecimals)}
                 />
     
                 <Stat 
@@ -134,7 +134,7 @@ const LiquidityView = ({amount, selectedCurrency}) => {
                 className="bold" 
                 title="You will receive" 
                 value={lpTokenAmount} 
-                format={customFixedTokenValue(lpTokenAmount, 6, activeToken.goviDecimals)}
+                format={customFixedTokenValue(lpTokenAmount, 6, activeToken.lpTokensDecimals)}
                 _suffix={`CVI-${selectedCurrency} LP`}
             />
 

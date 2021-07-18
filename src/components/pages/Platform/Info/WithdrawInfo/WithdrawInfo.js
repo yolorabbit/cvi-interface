@@ -18,7 +18,7 @@ const WithdrawInfo = () => {
             {lpTokenAmount === "N/A" ? <span>N/A</span> : <span>
                 You will send {commaFormatted(amount) || 0} CVI-{token?.toUpperCase()} 
                 &nbsp;LP and receive  {
-                    lpTokenAmount === null ? <>&nbsp;<Spinner className="statistics-spinner withdraw-info" /></> : commaFormatted(customFixedTokenValue(lpTokenAmount?.toString(), 2, activeToken.goviDecimals))
+                    lpTokenAmount === null ? <>&nbsp;<Spinner className="statistics-spinner withdraw-info" /></> : commaFormatted(customFixedTokenValue(lpTokenAmount?.toString(), 2, activeToken.lpTokensDecimals))
                 }</span>}
           
         </div>

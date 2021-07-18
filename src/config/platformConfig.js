@@ -33,7 +33,7 @@ const platformConfig = {
         key: "usdt",
         decimals: 6,
         fixedDecimals: 6,
-        goviDecimals: 18,
+        lpTokensDecimals: 18,
         type: "v1",
         rel: {
           contractKey: "USDT",
@@ -51,7 +51,7 @@ const platformConfig = {
         key: "eth",
         decimals: 18,
         fixedDecimals: 8,
-        goviDecimals: 18,
+        lpTokensDecimals: 18,
         type: "eth",
         rel: {
           contractKey: "WETH",
@@ -74,7 +74,7 @@ const platformConfig = {
         key: "usdt",
         decimals: 6,
         fixedDecimals: 6,
-        goviDecimals: 18,
+        lpTokensDecimals: 18,
         type: "v2",
         rel: {
           contractKey: "USDT",
@@ -91,6 +91,7 @@ const platformConfig = {
         key: "usdc",
         decimals: 6,
         fixedDecimals: 2,
+        lpTokensDecimals: 18,
         type: "v2",
         leverage: ["X1", "X3", "X4"],
         rel: {
