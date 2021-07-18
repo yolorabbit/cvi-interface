@@ -64,7 +64,7 @@ const useHistoryEvents = () => {
                     transactionHash: event.transactionHash,
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
-                    type: contractState.positions[type],
+                    type,
                     index: cviValue / 100,
                     leverage: `X${leverage ?? '1'}`,
                     amount: `${commaFormatted(customFixed(amount, activeToken.decimals))} ${activeToken.key.toUpperCase()}`,
@@ -82,7 +82,7 @@ const useHistoryEvents = () => {
                     transactionHash: event.transactionHash,
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
-                    type: contractState.liquidities[type],
+                    type,
                     amount: `${commaFormatted(customFixed(amount, activeToken.decimals))} ${activeToken.key.toUpperCase()}`,
                 });
             }
@@ -96,7 +96,7 @@ const useHistoryEvents = () => {
         let events = [];
         if(config.isMainnet) {
             events = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0)
-            events = Object.values(events).map((_events, idx) => _events.map((event)=> ({...event, timestamp: Number(event.timestamp), event: contractState[view][Object.keys(events)[idx]] }))).flat();
+            events = Object.values(events).map((_events, idx) => _events.map((event)=> ({...event, transactionHash: event.id, timestamp: Number(event.timestamp), event: contractState[view][Object.keys(events)[idx]] }))).flat();
         } else {
             events = await getEventsFast([{
                 contract: contracts[activeToken.rel.platform], 
