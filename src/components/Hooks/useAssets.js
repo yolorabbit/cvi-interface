@@ -85,7 +85,7 @@ const useAssets = (type, update) => {
     }
 
     const dataFiltering = async (cb) => {
-        if(!contracts || !account) return [];
+        if((!contracts || !account) && type !== "available-to-stake") return [];
         let filteredAssets = await filter();
         cb(() => setFilteredAssets(filteredAssets));
     }
