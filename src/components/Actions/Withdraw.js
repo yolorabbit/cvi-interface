@@ -109,7 +109,7 @@ const Withdraw = () => {
             <div className="withdraw-component">
                 <div className="withdraw-component__container">
                     {(isOpen && !isModal) && <WithdrawInfo />}
-                    {(!isOpen && !isModal) && <CountdownComponent lockedTime={lockedTime} /> }
+                    {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
                     <Button 
                         className="withdraw-component__container--button"
                         buttonText="Withdraw" 
