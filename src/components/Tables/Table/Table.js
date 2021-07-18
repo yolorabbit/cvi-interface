@@ -47,7 +47,7 @@ const Table = () => {
                 <tbody>
                     {currentData.map((rowData, index) => {
                         return [
-                            subHeaders?.[index] && <SubHeader key={uniqueId()} title={subHeaders[index]} />,
+                            subHeaders?.[index] && <SubHeader key={subHeaders[index]} title={subHeaders[index]} />,
                             <ActiveRow key={index} activeTab={activeTab} rowData={rowData} />
                         ]
                     })}
