@@ -4,7 +4,6 @@ import React, { useMemo } from 'react';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
 import './Table.scss';
-import { uniqueId } from 'lodash';
 import { useDataController } from '../DataController/DataController';
 
 const Table = () => {
