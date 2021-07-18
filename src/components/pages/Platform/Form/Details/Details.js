@@ -146,7 +146,7 @@ const LiquidityView = ({amount, selectedCurrency}) => {
 
 const Amount = ({title, amount, selectedCurrency}) => {
     return (
-        <div className="platform-form-details-component__container--amount">
+        <div className={`platform-form-details-component__container--amount ${amount?.length > 14 ? 'large-amount' : ''}`}>
             <span>{title} amount</span>
             <b>{commaFormatted(amount || 0)} {selectedCurrency}</b>
         </div>
