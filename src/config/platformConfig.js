@@ -97,7 +97,7 @@ const platformConfig = {
         rel: {
           contractKey: "USDC",
           platform: "USDCPlatform",
-          feesCalc: "FeesCalculatorV4",
+          feesCalc: "USDCFeesCalculator",
           feesModel: "USDCPlatform",
           positionRewards: "USDCPositionRewards",
           cviOracle: "CVIOracle",
