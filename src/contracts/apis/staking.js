@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 import { aprToAPY, convert, fromLPTokens, getChainName, getWeb3Contract, getBalance } from "contracts/utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
-import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount } from "utils";
+import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount, toFixed } from "utils";
 
 const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 };
 const RHEGIC2Data = { address: '0xad7ca17e23f13982796d27d1e6406366def6ee5f', symbol: 'RHEGIC2', decimals: 18 };
@@ -258,7 +258,7 @@ const stakingApi = {
         const dailyRewards = toBN(total).isZero() ? toBN(0) : reward.mul(toBN(balance)).div(toBN(total));
 
         const dailyReward = {
-            amount: commaFormatted(customFixed(toDisplayAmount(dailyRewards, tokenDecimals), decimalsCountDisplay)),
+            amount: commaFormatted(customFixed(toFixed(toDisplayAmount(dailyRewards, tokenDecimals)), decimalsCountDisplay)),
             symbol,
         }
         return dailyReward
@@ -341,7 +341,7 @@ const stakingApi = {
             const claim = await (await Promise.allSettled(await getClaimableRewardsByTokenName()))
             .filter(({status}) => status === "fulfilled")
             .map(({value}, idx) => ({
-                amount: commaFormatted(customFixed(toDisplayAmount(value, rel.tokenDecimals[idx]), fixedDecimals)),
+                amount: commaFormatted(customFixed(toFixed(toDisplayAmount(value, rel.tokenDecimals[idx])), fixedDecimals)),
                 symbol: rewardsTokens[idx]
             }));
             
@@ -351,7 +351,7 @@ const stakingApi = {
         const rewards = await contracts[rel.stakingRewards].methods.earned(account).call();
         // console.log(tokenName, protocol+" rewards: ", rewards );
         const claim = [{
-          amount: commaFormatted(customFixed(toDisplayAmount(rewards, rel.tokenDecimals[0]), fixedDecimals)),
+          amount: commaFormatted(customFixed(toFixed(toDisplayAmount(rewards, rel.tokenDecimals[0])), fixedDecimals)),
           symbol: rewardsTokens[0]
         }]
 
