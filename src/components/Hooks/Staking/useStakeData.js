@@ -89,11 +89,11 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
             const tokensData = await (await Promise.all(
               await token.rewardsTokens.map(async t => {
                 const tokenData = await getTokenData(contracts[t]);
-                tokenData.events = await eventsUtils.getTransferEvents(stakingRewards, contracts[t], periodInDays);
+                tokenData.events = await eventsUtils.getTransferEvents(stakingRewards, contracts[t], 30);
                 return tokenData;
                 })
               ));
-              return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData, periodInDays);
+              return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData, 30, periodInDays);
             } catch (error) {
               console.log(error)
               return []

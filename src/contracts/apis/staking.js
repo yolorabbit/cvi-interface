@@ -148,7 +148,7 @@ const stakingApi = {
             return 0;
         }
     },
-    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, days) {
+    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, days, period) {
 
         try {
             async function getTotalProfits(token, events) {
@@ -207,8 +207,7 @@ const stakingApi = {
                 return toDisplayAmount(USDYearlyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals);
             }
             const apr = await getAPR();
-            // console.log(apr.toString());
-            return aprToAPY(apr, days);
+            return aprToAPY(apr, period);
         } catch (error) {
             console.log(error);
             return 0;
