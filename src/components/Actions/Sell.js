@@ -14,6 +14,10 @@ import { getPositionValue, MAX_CVI_VALUE } from 'contracts/apis/position';
 import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
 import web3Api from 'contracts/web3Api';
 import SellAllModal from './SellAllModal.js';
+import { useWeb3Api } from 'contracts/useWeb3Api';
+import ErrorModal from 'components/Modals/ErrorModal';
+
+const feesChangedWarning = "This transaction will not succeed due to the change in the sell fee. Please review your trade details and resubmit your sell request";
 
 const Sell = () => {
     const dispatch = useDispatch(); 
@@ -26,10 +30,14 @@ const Sell = () => {
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lockedTime = useIsLockedTime();
     const [sellAllModal, setSellAllModal] = useState(false);
+    const sellFeePayload = useMemo(() => ({ tokenAmount, account } ), [tokenAmount, account]);
+    const [sellFee, updateSellFee] = useWeb3Api("getClosePositionFee", token, sellFeePayload, { validAmount: true});
+    const [modalIsOpen, setModalIsOpen] = useState();
 
     const sell = async () => {
         try {
             let positionValue;
+            
             try {
                 positionValue = await getPositionValue(contracts[activeToken.rel.platform], account);
             } catch(error) {
@@ -73,6 +81,9 @@ const Sell = () => {
         setProcessing(true);
         
         try {
+            let sellFeeUpdated = await updateSellFee();
+            if(!sellFee.eq(sellFeeUpdated)) return setModalIsOpen(true);
+
             if(!sellAllModal) {
                 const claimRewardData = toBN(await web3Api.getClaimableReward(contracts, activeToken, { account }));
                 if(claimRewardData?.gt(toBN("0"))) return setSellAllModal(true);
@@ -109,16 +120,18 @@ const Sell = () => {
 
     return <> 
         {sellAllModal && <SellAllModal isProcessing={isProcessing} onSubmit={() => onClick()} setSellAllModal={setSellAllModal} />}
+        {modalIsOpen && <ErrorModal error={feesChangedWarning} setModalIsOpen={() => setModalIsOpen(false)} isWarning /> }
+
         <div className="sell-component">
             <div className="sell-component__container">
-                {(isOpen && !isModal) && <SellInfo />}
+                {(isOpen && !isModal) && <SellInfo sellFee={sellFee} />}
                 {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
                 <Button 
                     className="sell-component__container--button" 
                     buttonText="Sell" 
                     onClick={onClick}
-                    processing={isProcessing}
-                    processingText="Processing"
+                    processing={isProcessing || sellFee === null}
+                    processingText={amount > 0 && sellFee === null && "Calculating"}
                     disabled={(isOpen && (disabled || tokenAmount?.isZero())) || lockedTime > 0 || lockedTime === null}
                 />
             </div>

@@ -8,14 +8,10 @@ import { DataState } from 'components/Tables/Elements/Values/DataState';
 import HighSellFee from './HighSellFee';
 import './SellInfo.scss';
 
-const SellInfo = () => {
-    const { account } = useActiveWeb3React();
+const SellInfo = ({sellFee = null}) => {
     const { token, amount } = useActionController();
     const activeToken = useActiveToken(token);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
-    const sellFeePayload = useMemo(() => ({ tokenAmount, account } ), [tokenAmount, account]);
-    const [sellFee] = useWeb3Api("getClosePositionFee", token, sellFeePayload, { validAmount: true});
-
     
     return useMemo(() => {
         const sellFeeAmount = sellFee !== null && sellFee !== "N/A" && customFixedTokenValue(sellFee?.toString(), activeToken.decimals, activeToken.decimals);
