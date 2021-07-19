@@ -8,7 +8,7 @@ import { useActiveWeb3React } from "./wallet";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
-    [chainNames.Matic]: 16870000 
+    [chainNames.Matic]: 15129735
 }
 
 export const DEFAULT_STEPS = 30;
@@ -18,8 +18,7 @@ export const DAY = 86400;
 const EventOptionsDefaults = {
     eventsCount: Number.MAX_SAFE_INTEGER,
     blocks: Number.MAX_SAFE_INTEGER,
-    stepSize: Number.MAX_SAFE_INTEGER,
-    steps: 1,
+    stepSize: 2000,
     bottomBlock: 0
 };
 
