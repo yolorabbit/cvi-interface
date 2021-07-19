@@ -32,7 +32,7 @@ const Form = () => {
                     <CurrencySelect selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />
                     {activeView === 'trade' 
                         && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage 
-                        && <SelectLeverage leverage={leverage} tokenLeverageList={tokenLeverageList} setLeverage={setLeverage} /> }
+                        && <SelectLeverage selectedCurrency={selectedCurrency} leverage={leverage} tokenLeverageList={tokenLeverageList} setLeverage={setLeverage} /> }
                   
                     <ActionController 
                         disabled={!amount}

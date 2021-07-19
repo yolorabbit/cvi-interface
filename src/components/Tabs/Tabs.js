@@ -4,9 +4,9 @@ import './Tabs.scss';
 import platformConfig from 'config/platformConfig';
 import { uniqueId } from 'lodash';
 
-const Tabs = ({type = "default", suffix = "", isDropdown, tabs, activeTab, setActiveTab}) => {
+const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, activeTab, setActiveTab}) => {
     const [isOpen, setIsOpen] = useState();
-
+    console.log("enableOnly: ", enableOnly);
     const formattedTabs = useMemo(
         () => Object.values(platformConfig.tabs).reduce((a, b) => ({...a, ...b})), 
     []);
