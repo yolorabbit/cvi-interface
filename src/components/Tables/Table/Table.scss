@@ -42,6 +42,20 @@
         }
     }
 
+    &.history {
+        & table {
+            table-layout: fixed;
+        }
+    }
+
+    &.staked {
+        & .claim-component__container {
+            @media (max-width: 1365px) {
+                min-width: 16.85vw;
+            }
+        }
+    }
+
     &.history, &.available-to-stake, &.staked {
         & thead {
             & tr {
