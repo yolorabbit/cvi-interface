@@ -9,6 +9,7 @@ const RHEGIC2Data = { address: '0xad7ca17e23f13982796d27d1e6406366def6ee5f', sym
 const stakingApi = {
     getStakedAmountAndPoolShareByToken: async (contracts, asset, account) => {
         const {protocol, key: tokenName, fixedDecimals, rel, ...token} = asset
+        console.log(asset);
         if(protocol === "platform") {
             let tokenData;
             const getDataByTokenName = async () => {
@@ -31,12 +32,12 @@ const stakingApi = {
 
             return {
                 ...data,
-                stakedAmountUSD: commaFormatted(customFixed(toDisplayAmount(stakedAmountUSD.toString(), USDTData.decimals), fixedDecimals))
+                stakedAmountUSD: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmountUSD.toString(), USDTData.decimals)), fixedDecimals))
             }
         } 
         return web3Api.getPoolSizeLiquidityMining(contracts, asset, account)
     },
-    getPoolSizeLiquidityMining: async (contracts, asset, account) => {
+    getPoolSizeLiquidityMining: async (contracts, asset, account, percentageDecimals=4) => {
         try {
 
             const {key: tokenName, fixedDecimals, rel, ...token} = asset
@@ -51,28 +52,27 @@ const stakingApi = {
             // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
             
             const totalStaked = !!account ? await stakingRewards.methods.balanceOf(account).call() : 0;
-            // console.log("totalStaked: ", toDisplayAmount(totalStaked, token.decimals));
+            // console.log("totalStaked: ", customFixed(toFixed(toDisplayAmount(totalStaked, token.decimals))));
             
             const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, USDTData, uniswapLPToken, uniswapToken)
             // console.log(tokenName, protocol+" accountStakedUSD: ", accountStakedUSD);
-            const mySharePercentage = toBN(totalStaked).isZero() ? "0" : BigNumber(totalStaked).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
+            const mySharePercentage = toBN(totalStaked).mul(toBN("1", token.decimals)).div(toBN(poolSize)).mul(toBN("100"));
             
             const data = {
                 stakedTokenAmount: totalStaked,
-                stakedAmount: commaFormatted(customFixed(toDisplayAmount(totalStaked, token.decimals), fixedDecimals)),
+                stakedAmount: commaFormatted(customFixed(toFixed(toDisplayAmount(totalStaked, token.decimals)), fixedDecimals)),
                 poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toDisplayAmount(poolSize, token.decimals), fixedDecimals)),
                 lastStakedAmount: {
                     class: mySharePercentage < 0 ? 'low' : 'high',
-                    value: `(${customFixed(mySharePercentage, 2)}%)`
+                    value: `(${customFixed(toFixed(toDisplayAmount(mySharePercentage?.toString(), token.decimals)), percentageDecimals)}%)`
                 },
-                stakedAmountUSD: toBN(accountStakedUSD).isZero() ? "0" : `${commaFormatted(customFixed(toDisplayAmount(accountStakedUSD), 2))}`
+                stakedAmountUSD: toBN(accountStakedUSD).isZero() ? "0" : `${commaFormatted(customFixed(toFixed(toDisplayAmount(accountStakedUSD)), 2))}`
             };
             
             const tvl = {
-                stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(poolSize, token.decimals), fixedDecimals)),
+                stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, token.decimals)), fixedDecimals)),
                 stakedAmountUSD: toBN(poolSize).isZero() ? "0" : `$${commaFormatted(customFixed(tvlUSD, 2))}`
             }
-            
             return {...data, tvl}
         } catch (error) {
             console.log('error: ', error);
@@ -81,33 +81,38 @@ const stakingApi = {
     getStakedAmountAndPoolShare: async (stakingRewards, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
         const stakedTokenAmount = account ? await stakingRewards.methods.balanceOf(account).call() : 0;
         const poolSize = await stakingRewards.methods.totalSupply().call();
-        const mySharePercentage = toBN(poolSize).isZero() ? toBN("0") : BigNumber(stakedTokenAmount).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
+        const mySharePercentage = toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
+
+        console.log(mySharePercentage?.toString());
+        console.log(poolSize?.toString());
+        console.log(stakedTokenAmount?.toString());
+
         const lastStakedAmount = {
           class: mySharePercentage < 0 ? 'low' : 'high',
-          value: `(${customFixed(mySharePercentage, percentageDecimals)}%)`
+          value: `(${customFixed(toFixed(toDisplayAmount(mySharePercentage?.toString(), tokenDecimals)), percentageDecimals)}%)`
         }
         
         return {
             stakedTokenAmount,
-            stakedAmount: commaFormatted(customFixed(toDisplayAmount(stakedTokenAmount, tokenDecimals), decimalsCountDisplay)),
-            poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toDisplayAmount(poolSize, tokenDecimals), decimalsCountDisplay)),
+            stakedAmount: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedTokenAmount, tokenDecimals)), decimalsCountDisplay)),
+            poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, tokenDecimals)), decimalsCountDisplay)),
             lastStakedAmount: {...lastStakedAmount}
         }
     },
     getStakedAmountAndPoolShareGOVI: async (staking, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
         const stakedTokenAmount = account ? await staking.methods.stakes(account).call() : 0;
         const poolSize = await staking.methods.totalStaked().call();
-        const mySharePercentage =  BigNumber(stakedTokenAmount).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
+        const mySharePercentage = toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
 
         const lastStakedAmount = {
           class: mySharePercentage < 0 ? 'low' : 'high',
-          value: `(${customFixed(mySharePercentage, percentageDecimals)}%)`
+          value: `(${customFixed(toFixed(toDisplayAmount(mySharePercentage?.toString(), tokenDecimals)), percentageDecimals)}%)`
         }
         
         return {
             stakedTokenAmount,
-            stakedAmount: commaFormatted(customFixed(toDisplayAmount(stakedTokenAmount, tokenDecimals), decimalsCountDisplay)),
-            poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toDisplayAmount(poolSize, tokenDecimals), decimalsCountDisplay)),
+            stakedAmount: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedTokenAmount, tokenDecimals)), decimalsCountDisplay)),
+            poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, tokenDecimals)), decimalsCountDisplay)),
             lastStakedAmount: {...lastStakedAmount}
         }
     },
@@ -235,7 +240,7 @@ const stakingApi = {
             .div(toBN(10).pow(toBN(tokenDecimals)));
         
         const dailyReward = {
-            amount: commaFormatted(customFixed(toDisplayAmount(dailyRewards, tokenDecimals), decimalsCountDisplay)),
+            amount: commaFormatted(customFixed(toFixed(toDisplayAmount(dailyRewards, tokenDecimals)), decimalsCountDisplay)),
             symbol: "GOVI",
         }
         return dailyReward

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { contractsContext } from "contracts/ContractContext";
 import stakingConfig from 'config/stakingConfig';
-import { commaFormatted, customFixed, toBN, toDisplayAmount } from "utils";
+import { commaFormatted, customFixed, toBN, toDisplayAmount, toFixed } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { convert, fromLPTokens, getPrice } from "contracts/utils";
 import { DAY, useEvents } from "../useEvents";
@@ -124,10 +124,10 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
         const USDTData = await getTokenData(contracts.USDT);
         const goviPrice = await getPrice(GOVIData, USDTData);
         const stakedAmount = await contracts[tokenRel.stakingRewards].methods.totalStaked().call();
-        const goviValueStaked = customFixed(toDisplayAmount(stakedAmount, GOVIData.decimals) * goviPrice, USDTData.decimals);
+        const goviValueStaked = customFixed(toFixed(toDisplayAmount(stakedAmount, GOVIData.decimals)) * goviPrice, USDTData.decimals);
         const tvl = {
-          stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(stakedAmount, token.decimals), decimalsCountDisplay)),
-          stakedAmountUSD: `${String(goviValueStaked) !== "0"  ? `$${commaFormatted(customFixed(goviValueStaked, 2))}` : "$0"}`
+          stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
+          stakedAmountUSD: `${String(goviValueStaked) !== "0"  ? `$${commaFormatted(toFixed(customFixed(goviValueStaked, 2)))}` : "$0"}`
         }
         cb(() => setStakedData((prev)=> ({
           ...prev,
@@ -176,7 +176,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
       const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDTData, uniswapLPToken, uniswapToken)
       // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
       const tvl = {
-        stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay)),
+        stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay))),
         stakedAmountUSD: toBN(poolSize).isZero() ? "0" : `$${commaFormatted(customFixed(tvlUSD, 2))}`
       }
       // console.log(tokenName+" data: ", data);
@@ -251,7 +251,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
             balance = await tokenData.contract.methods.balanceOf(account).call();
             const amountToConvert = async () => tokenName === "govi" ? toBN(balance) : await fromLPTokens(tokenData.contract, toBN(balance));
             const usdBalance = await convert(await amountToConvert(), tokenData2, USDTData);
-            return "$"+commaFormatted(customFixed(toDisplayAmount(usdBalance, USDTData.decimals), 2))
+            return "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance, USDTData.decimals)), 2))
           }
           default: {
             tokenData = await getTokenData(contracts[tokenRel.token]);
@@ -259,7 +259,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
             const GOVIData = await getTokenData(contracts.GOVI);
             const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;            
             const usdBalance = await web3Api.uniswapLPTokenToUSD(balance, USDTData, tokenData, uniswapToken)
-            return "$"+commaFormatted(customFixed(toDisplayAmount(usdBalance), 2))
+            return "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance)), 2))
           }
         }
       }
@@ -272,7 +272,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
         balance: {
           tokenBalance: balance,
           usdBalance,
-          formatted: commaFormatted(customFixed(toDisplayAmount(balance, token.decimals), 2))
+          formatted: commaFormatted(customFixed(toFixed(toDisplayAmount(balance, token.decimals)), 2))
         }
       })))
     } catch (error) {
