@@ -1,11 +1,11 @@
 import { contractsContext } from "contracts/ContractContext";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useActiveWeb3React } from "../wallet";
 
 
 const useSubscribe = (assets) => {
 
-    const {library: web3} = useActiveWeb3React();
+    const {library: web3, account} = useActiveWeb3React();
     const [subscribedEvents,  setSubscribedEvents] = useState({});
     const contracts = useContext(contractsContext);
 
@@ -65,12 +65,12 @@ const useSubscribe = (assets) => {
     },[subscribedEvents])
 
     useEffect(() => {
-        if(!contracts) return
+        if(!contracts || !account) return
         subscribeLogEvent();
         // eslint-disable-next-line
-    }, [contracts]);
+    }, [account]);
 
-    return null
+    return useMemo(()=> null,[])
 }
 
 export default useSubscribe;
