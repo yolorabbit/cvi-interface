@@ -51,7 +51,7 @@ export const customFixed = (num, fixed) => {
             }
         }
     }
-    return Number(fixed_num)
+    return fixed_num
 }
 
 
