@@ -10,3 +10,6 @@ export const SET_CVI_INFO = "SET_CVI_INFO";
 
 // WALLET 
 export const SET_DATA = 'SET_DATA';
+
+//EVENTS
+export const ADD_EVENT = 'ADD_EVENT';

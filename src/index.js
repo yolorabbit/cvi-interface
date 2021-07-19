@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import { ViewportProvider } from 'components/Context';
 import createSagaMiddleware from "redux-saga";
-import { appReducer } from './store/reducers';
+import { appReducer, eventsReducer} from './store/reducers';
 import { watchApp } from "./store/sagas";
 import { createWeb3ReactRoot, Web3ReactProvider } from '@web3-react/core';
 import Web3 from 'web3';
@@ -23,7 +23,7 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : null || compose;
 
-const rootReducer = combineReducers({ app: appReducer, wallet: walletReducer });
+const rootReducer = combineReducers({ app: appReducer, wallet: walletReducer, events: eventsReducer });
 
 const sagaMiddleware = createSagaMiddleware();
 
