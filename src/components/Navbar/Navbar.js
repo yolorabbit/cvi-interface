@@ -6,6 +6,7 @@ import Button from '../Elements/Button';
 import SelectNetwork from 'components/SelectNetwork';
 import ConnectWallet from 'components/ConnectWallet';
 import './Navbar.scss';
+import { track } from 'shared/analytics';
 
 const Navbar = () => {
     const [pageYOffset, setPageYOffset] = useState(0);
@@ -14,6 +15,11 @@ const Navbar = () => {
     const [activePath, setActivePath] = useState();
     const links = Object.values(config.routes);
     
+    const onClickLink = (path) => {
+        window.scrollTo(0, 0);
+        track(path);
+    }
+
     useEffect(() => {
         setActivePath(location?.pathname);
     }, [location?.pathname]);
@@ -35,7 +41,7 @@ const Navbar = () => {
                 <Logo />
 
                 {!isTablet && links.map(({label, path}) => <div key={path} className="navbar-component__list-item">
-                    <Link className={path === activePath ? 'active' : ''} to={path} onClick={() => window.scrollTo(0, 0)}>{label}</Link>
+                    <Link className={path === activePath ? 'active' : ''} to={path} onClick={() => onClickLink(path)}>{label}</Link>
                 </div>)}    
 
                 {isTablet ? <Hamburger activePath={activePath} links={links} /> : <div className="navbar-component__container--connect">
@@ -97,7 +103,12 @@ const Hamburger = ({links, activePath}) => {
 
 export const Logo = () => {
     return useMemo(() => {
-        return <Link className="logo-component" to="/">
+        const onClickLogo = () => {
+            window.scrollTo(0, 0);
+            track('CVI Logo');
+        }
+    
+        return <Link className="logo-component" to="/" onClick={onClickLogo}>
             <img src={require('../../images/logo.svg').default} alt="logo" />
             <div>Crypto Volatility Index</div>
         </Link>

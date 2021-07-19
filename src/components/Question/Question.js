@@ -3,14 +3,14 @@ import './Question.scss';
 import Button from '../Elements/Button';
 import { isObject, uniqueId } from 'lodash';
 import { Link } from 'react-router-dom';
-// import { track } from 'shared/analytics';
+import { track } from 'shared/analytics';
 
 const Question = ({title, content, id}) => {
     const [showContent, toggleContent] = useState(false);
 
     const onQuestionClick = () => {
         if(!showContent) {
-            // track(title);
+            track(title);
         }
         toggleContent(!showContent);
     }

@@ -16,6 +16,7 @@ import './App.scss';
 import { useEffect, useMemo, useRef } from 'react';
 import { ContractsContext } from 'contracts/ContractContext';
 import { useSelector } from 'react-redux';
+import ReactGA from 'react-ga';
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -29,6 +30,19 @@ const App = () => {
       }, 1000)
     }
   }, [appRef]);
+
+  useEffect(() => {
+    const initializeGA = () => {
+      if(config.isMainnet) {
+        ReactGA.initialize('UA-108807921-18'); // mainnet
+      } else {
+        ReactGA.initialize('UA-108807921-17');  // testnet
+      }
+    }
+
+    initializeGA();
+  }, []);
+
 
   const StakingMemo = useMemo(()=>Staking,[]);
   

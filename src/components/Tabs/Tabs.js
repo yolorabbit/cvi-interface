@@ -3,6 +3,7 @@ import Button from '../Elements/Button';
 import './Tabs.scss';
 import platformConfig from 'config/platformConfig';
 import { uniqueId } from 'lodash';
+import { track } from 'shared/analytics';
 
 const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, activeTab, setActiveTab}) => {
     const [isOpen, setIsOpen] = useState();
@@ -13,6 +14,7 @@ const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, acti
 
     const onTabChange = (tab) => {
         setActiveTab(tab);
+        track(`${tab} tab`);
     }
 
     const onClickDropdown = () => {
