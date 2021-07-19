@@ -21,7 +21,7 @@ const TradeRow = ({token, isHeader}) => {
     const positionPnlPayload = useMemo(() => ({account}), [account]);
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0", updateOn: "positions"});
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
-    const leverage = pos?.leverage ? `X${pos.leverage}` :  "N/A";
+    const leverage = pos?.leverage ? `x${pos.leverage}` :  "N/A";
 
     const sellController = useMemo(() => {
         return <ActionController 
@@ -47,7 +47,7 @@ const TradeRow = ({token, isHeader}) => {
             
             <RowItem 
                 header={header.Leverage.label} 
-                content={<Value text={leverage} />} 
+                content={<Value text={leverage === "N/A" ? 'x1' : leverage} />} 
             />
 
             <RowItem 
