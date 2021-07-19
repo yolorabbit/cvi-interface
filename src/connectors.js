@@ -45,7 +45,7 @@ export const supportedNetworksConfig = {
                 symbol: 'ETH',
                 decimals: 18
             },
-            rpcUrls: ['http://54.92.189.167:9546'],
+            rpcUrls: ['https://staging-ethereum.cvi.finance'],
             blockExplorerUrls: null
         },
         // matic testnet mumbai
@@ -68,7 +68,7 @@ export const supportedNetworksConfig = {
                 symbol: 'MATIC',
                 decimals: 18
             },
-            rpcUrls: ['http://54.92.189.167:9547'], // https://matic-testnet-archive-rpc.bwarelabs.com
+            rpcUrls: ['https://staging-polygon.cvi.finance'], // https://matic-testnet-archive-rpc.bwarelabs.com
             blockExplorerUrls: ['https://matic.network']
         },
     }
