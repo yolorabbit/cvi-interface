@@ -39,8 +39,10 @@ const RowData = ({isHeader, token, protocol, data}) => {
     const {cb} = useDataController();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
+    const tokenNameFormatted = leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token;
     const [stakedData, reloadData] = useStakedData(chainName, protocol, token);
     const [amount, setAmount] = useState("");
+
     return useMemo(() => {
         const stakedTokenAmount = data.staked.stakedTokenAmount ?? 0
         const UnstakeController =
@@ -61,7 +63,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
             cb={cb}
         />
 
-        const StakedValue = <Value text={data.staked.stakedAmount} subText={`${token?.toUpperCase()} ${data.staked.lastStakedAmount.value}`} bottomText={`$${data.staked.stakedAmountUSD}`} protocol={protocol} />
+        const StakedValue = <Value text={data.staked.stakedAmount} subText={`${tokenNameFormatted?.toUpperCase()} ${data.staked.lastStakedAmount.value}`} bottomText={`$${data.staked.stakedAmountUSD}`} protocol={protocol} />
         
         if(isHeader) {
             return <>

@@ -38,6 +38,7 @@ const RowData = ({isHeader, label, token, protocol}) => {
     const chainName = useSelector(({app}) => app.selectedNetwork);
     const header = useMemo(() => stakingConfig.headers[stakingViews["available-to-stake"]], []);
     const [leftToken, rightToken] = token?.split('-');
+    const tokenNameFormatted = leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token;
     const [stakedData, reloadData] = useStakedData(chainName, protocol, token);
     const { account } = useActiveWeb3React();
     const [amount, setAmount] = useState("");
@@ -87,7 +88,7 @@ const RowData = ({isHeader, label, token, protocol}) => {
                 header={header["Your wallet balance"].label}
                 content={<Value 
                     text={stakedData.balance.formatted} 
-                    subText={label ?? `${token?.toUpperCase()}`} 
+                    subText={label ?? `${tokenNameFormatted?.toUpperCase()}`} 
                     bottomText={`${stakedData.balance.usdBalance}`} 
                     showData={account}
                 /> 
@@ -98,7 +99,7 @@ const RowData = ({isHeader, label, token, protocol}) => {
                 content={<Value 
                     text={stakedData.tvl.stakedAmountUSD} 
                     bottomText={`${stakedData.tvl.stakedAmountLP} 
-                    ${label ?? token?.toUpperCase()}`} 
+                    ${label ?? tokenNameFormatted?.toUpperCase()}`} 
                 /> } 
             />
 
