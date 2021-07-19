@@ -18,11 +18,11 @@ import { ContractsContext } from 'contracts/ContractContext';
 import { useSelector } from 'react-redux';
 
 const App = () => {
-  // fix a bug in Web3ReactProvider - render a text element ",". 
   const { selectedNetwork } = useSelector(({app}) => app);
   const appRef = useRef(null);
-
+  
   useEffect(() => {
+    // fix a bug in Web3ReactProvider - render a text element ",". 
     if (appRef.current?.nextSibling?.textContent === ",") {
       setTimeout(() => {
         appRef.current?.nextSibling.remove();
