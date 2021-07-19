@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Button from '../Elements/Button';
 import './Tabs.scss';
 import platformConfig from 'config/platformConfig';
@@ -7,12 +7,20 @@ import { track } from 'shared/analytics';
 
 const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, activeTab, setActiveTab}) => {
     const [isOpen, setIsOpen] = useState();
-    console.log("enableOnly: ", enableOnly);
+    
     const formattedTabs = useMemo(
         () => Object.values(platformConfig.tabs).reduce((a, b) => ({...a, ...b})), 
     []);
 
+    useEffect(() => {
+        if(tabs.includes(enableOnly)) {
+            setActiveTab(enableOnly);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [enableOnly, tabs]);
+
     const onTabChange = (tab) => {
+        if(enableOnly === tab) return;
         setActiveTab(tab);
         track(`${tab} tab`);
     }
@@ -21,7 +29,7 @@ const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, acti
         if(!isDropdown) return;
         setIsOpen(!isOpen);
     }
-
+   
     return (
         <div className={`tabs-component ${type ?? ''}`} onClick={() => onClickDropdown()}>
             {isDropdown ? <div className={`tabs-component__dropdown ${isOpen ? 'is-open' : ''}`}> 
@@ -43,6 +51,7 @@ const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, acti
                      key={uniqueId(tab)} 
                      className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
                      buttonText={`${suffix}${formattedTabs[tab] ?? tab}`} 
+                     disabled={enableOnly && enableOnly !== "0" && enableOnly !== tab}
                      onClick={() => onTabChange(tabs[index])}/>
                 )}
             </>}
