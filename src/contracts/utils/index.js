@@ -192,6 +192,7 @@ export async function fromLPTokens(platform, lpTokenAmount) {
 
 export const getPositionRewardsContract = async (token) => { 
   try {
+    if(token.type === "v2" || token.type === "usdc") return;
     const chainName = await getChainName();
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
     if(!contractsJSON) return;
