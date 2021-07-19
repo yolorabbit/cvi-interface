@@ -20,8 +20,8 @@ const PlatformClaim = ({token}) => {
     const [claimData, updateClaimData] = useWeb3Api("getClaimData", token.key, accountPayload, {updateOn: "positions"});
     const { getLatestBlockTimestamp } = useEvents();
     const [processing, setProcessing] = useState(false);
-    const { lastEndOfDay, lastEndDate, isClaimAvailable } = claimData?.[0] || {};
-
+    const { lastEndOfDay, lastEndDate, isClaimAvailable, claimableRewards } = claimData?.[0] || {};
+    
     const getDiff = async () => {
         try {
             if(lastEndDate === undefined || lastEndOfDay === undefined) return 0;
@@ -91,7 +91,7 @@ const PlatformClaim = ({token}) => {
 
 
     return (
-        <div className={`claim-component ${!isClaimAvailable ? 'is-not-available' : ''}`}>
+        <div className={`claim-component ${(!isClaimAvailable || claimableRewards === "0") ? 'is-not-available' : ''}`}>
             <div className="claim-component__container">
                 <Rewards rewards={claimData} />
                 <Button 
@@ -99,7 +99,7 @@ const PlatformClaim = ({token}) => {
                     buttonText="Claim" 
                     onClick={onSubmit} 
                     processing={processing} 
-                    disabled={processing || !isClaimAvailable}
+                    disabled={processing || !isClaimAvailable || claimableRewards === "0"}
                 /> 
             </div>
         </div>
