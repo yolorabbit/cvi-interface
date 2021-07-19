@@ -62,8 +62,12 @@ const useAssets = (type, update) => {
             }
             case "Open trades": {
                 filteredAssets = filteredAssets.map(async asset => {
-                    const positionValue = await web3Api.getAvailableBalance(contracts, asset, {library, account, type: "sell", errorValue: "0" } );
-                    return {...asset, data: { positionValue } };
+
+                    const pos = await contracts[asset.rel.platform].methods.positions(account).call();
+                    const positionValue = toBN(pos.positionUnitsAmount).gt(toBN(0)) ?
+                        await web3Api.getAvailableBalance(contracts, asset, {library, account, type: "sell", errorValue: "0" } ) 
+                        : "0";
+                    return {...asset, data: { positionValue, pos } };
                 })
                 filteredAssets = await Promise.all(filteredAssets);
                 filteredAssets = filteredAssets.filter(({data: {positionValue}}) => toBN(positionValue).gt(toBN(0)));

@@ -17,18 +17,11 @@ const TradeRow = ({token, isHeader}) => {
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const positionValue = token.data.positionValue;
+    const pos = token.data.pos;
     const positionPnlPayload = useMemo(() => ({account}), [account]);
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0", updateOn: "positions"});
-    const { activeView } = useContext(platformViewContext);
-    const wallet = useSelector(({wallet}) => wallet);
-    
-    const historyData = useMemo(() => {
-        return wallet?.[activeView === activeViews["view-liquidity"] ? 'liquidities' : 'positions'];
-    }, [activeView, wallet]);
-
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
-    const posArrayByToken = historyData?.length ? historyData.filter(({type, amount})=> type.toLowerCase() === "buy" && amount.toLowerCase().includes(token.key)) : [];
-    const leverage = posArrayByToken.length ? posArrayByToken[0].leverage : "N/A";
+    const leverage = pos?.leverage ? `X${pos.leverage}` :  "N/A";
 
     const sellController = useMemo(() => {
         return <ActionController 

@@ -199,7 +199,7 @@ export const getPositionRewardsContract = async (token) => {
     const HELPER_ADDRESS = "0xd5A222B80788E36F707adDc74c3Cb5de7e43F1B0";
     const HELPER_V2_ADDRESS = "0x1C746415D73D4cBc995E5eB80dDD07E698a32C8c";
     const [address, abi] = token.key === "eth" ? [HELPER_V2_ADDRESS, contractsJSON["PositionRewardsV2"].abi] : [HELPER_ADDRESS, contractsJSON["PositionRewards"].abi];
-    return new Contract(abi, address)
+    return new Contract(abi, address);
   } catch(error) {
     console.log(error);
   }
