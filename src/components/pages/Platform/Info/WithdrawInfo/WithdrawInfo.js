@@ -16,10 +16,9 @@ const WithdrawInfo = () => {
     return (
         <div className="withdraw-info-component">
             {lpTokenAmount === "N/A" ? <span>N/A</span> : <span>
-                You will send {commaFormatted(amount) || 0} CVI-{token?.toUpperCase()} 
-                &nbsp;LP and receive  {
-                    lpTokenAmount === null ? <>&nbsp;<Spinner className="statistics-spinner withdraw-info" /></> : commaFormatted(customFixedTokenValue(lpTokenAmount?.toString(), 2, activeToken.lpTokensDecimals))
-                }</span>}
+                You will send {lpTokenAmount === null ? <>&nbsp;<Spinner className="statistics-spinner withdraw-info" />&nbsp;&nbsp;</> : <>{commaFormatted(customFixedTokenValue(lpTokenAmount?.toString(), 2, activeToken.lpTokensDecimals))} CVI-{activeToken.key.toUpperCase()}</>}
+                &nbsp;LP and receive  {commaFormatted(amount) || 0} {activeToken.key.toUpperCase()}
+                </span>}
           
         </div>
     )
