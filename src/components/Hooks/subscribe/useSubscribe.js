@@ -3,8 +3,9 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { useActiveWeb3React } from "../wallet";
 
 
-const useSubscribe = (assets) => {
-
+const useSubscribe = () => {
+    const { selectedNetwork } = useSelector(({app}) => app);
+    const assets = require(`./${selectedNetwork.toLowerCase()}.json`);
     const {library: web3, account} = useActiveWeb3React();
     const [subscribedEvents,  setSubscribedEvents] = useState({});
     const contracts = useContext(contractsContext);

@@ -1,0 +1,109 @@
+[
+    {
+        "name": "GOVI",
+        "events": [
+            "Approval",
+            "Transfer"
+        ]
+    },
+    {
+        "name": "USDC",
+        "events": [
+            "Approval",
+            "Transfer"
+        ]
+    },
+    {
+        "name": "USDT",
+        "events": [
+            "Approval",
+            "Transfer"
+        ]
+    },
+    {
+        "name": "WETH",
+        "events": [
+            "Approval",
+            "Deposit",
+            "Transfer",
+            "Withdrawal"
+        ]
+    },
+    {
+        "name": "WMATIC",
+        "events": [
+            "Approval",
+            "Transfer",
+            "Deposit",
+            "Withdrawal"
+        ]
+    },
+    {
+        "name": "UNIV2GOVIETH",
+        "events": [
+            "Approval",
+            "Transfer"
+        ]
+    },
+    {
+        "name": "USDTPlatform",
+        "events": [
+            "Approval",
+            "ClosePosition",
+            "Deposit",
+            "OpenPosition",
+            "Transfer",
+            "Withdraw"
+        ]
+    },
+    {
+        "name": "PositionRewardsV3",
+        "events": [
+            "Claimed"
+        ]
+    },
+    {
+        "name": "GOVIETHStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "USDTLPStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "USDCPlatform",
+        "events": [
+            "Approval",
+            "ClosePosition",
+            "Deposit",
+            "OpenPosition",
+            "Transfer",
+            "Withdraw"
+        ]
+    },
+    {
+        "name": "USDCPositionRewards",
+        "events": [
+            "Claimed"
+        ]
+    },
+    {
+        "name": "USDCLPStakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    }
+]
