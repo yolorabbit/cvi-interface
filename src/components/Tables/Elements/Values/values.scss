@@ -203,9 +203,11 @@
     & .value-component {
         margin-left: 1.25vw;
         display: flex;
+        min-width: 5.99vw;
         
         @media (max-width: 1365px){   
             margin-left: 1.758vw;   
+            min-width: 8.425vw;
         }
 
         @media (max-width: 1024px){ 
