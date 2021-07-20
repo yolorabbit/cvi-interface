@@ -110,7 +110,22 @@ const useAssets = (type) => {
             canceled = true;
         }
     //eslint-disable-next-line
-    },[contracts, account, events, type]);
+    },[contracts, account, type]);
+
+    useEffect(() => {
+
+        let canceled = false
+
+        dataFiltering((cb)=>{
+            if(canceled) return
+            cb()
+        });
+
+        return () => {
+            canceled = true;
+        }
+    //eslint-disable-next-line
+    },[events]);
 
     useEffect(() => {
         let canceled = false
