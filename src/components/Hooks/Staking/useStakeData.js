@@ -149,7 +149,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
       const tokenData = await getTokenData(contracts[tokenRel.token]);
       const totalBalanceWithAddendumUSDT = await convert(stakedAmountToken, tokenData, USDTData);
       const tvl = {
-        stakedAmountLP: commaFormatted(customFixed(toDisplayAmount(stakedAmount, token.decimals), decimalsCountDisplay)),
+        stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals), decimalsCountDisplay))),
         stakedAmountUSD: toBN(stakedAmount).isZero() ? "0" : `$${commaFormatted(customFixed(toDisplayAmount(totalBalanceWithAddendumUSDT, USDTData.decimals), 2))}`
       };
 
