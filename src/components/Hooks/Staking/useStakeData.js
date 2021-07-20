@@ -7,6 +7,7 @@ import { convert, fromLPTokens, getPrice } from "contracts/utils";
 import { DAY, useEvents } from "../useEvents";
 import BigNumber from "bignumber.js";
 import { useActiveWeb3React } from "../wallet";
+import { useSelector } from "react-redux";
 
 const initialState = {
   stakedTokenAmount: null,
@@ -50,7 +51,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
   const token = stakingConfig.tokens[chainName][protocol][tokenName];
   const tokenRel = token.rel;
   const decimalsCountDisplay = 8;
-
+  const events = useSelector(({events})=> events);
   
   const getDailyReward = async (cb) => {
     const getDailyRewardsByTokenName = async () => {
@@ -299,6 +300,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
     reloadData(!reload);
   }
   
+  useEffect(()=>{},[]);
   useEffect(()=>{
     if(!contracts || !tokenRel) return
 
@@ -312,7 +314,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
       canceled = true;
     }
     // eslint-disable-next-line
-  }, [contracts, reload]);
+  }, [contracts, reload, events]);
     
   return useMemo(() => {
     if(!tokenRel) return [stakedData];
