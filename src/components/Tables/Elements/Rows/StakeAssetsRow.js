@@ -39,7 +39,7 @@ const RowData = ({isHeader, label, token, protocol}) => {
     const header = useMemo(() => stakingConfig.headers[stakingViews["available-to-stake"]], []);
     const [leftToken, rightToken] = token?.split('-');
     const tokenNameFormatted = leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token;
-    const [stakedData, reloadData] = useStakedData(chainName, protocol, token);
+    const [stakedData] = useStakedData(chainName, protocol, token);
     const { account } = useActiveWeb3React();
     const [amount, setAmount] = useState("");
     
@@ -60,7 +60,6 @@ const RowData = ({isHeader, label, token, protocol}) => {
                 tokenAmount: stakedData.balance.tokenBalance,
                 available: stakedData.balance.tokenBalance
             }}
-            cb={()=>reloadData()}
         />
 
         if(isHeader) {

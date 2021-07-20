@@ -46,7 +46,6 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
   const contracts = useContext(contractsContext);
   const { account } = useActiveWeb3React();
   const [stakedData, setStakedData] = useState(initialState);
-  const [reload, reloadData] = useState(false);
   const eventsUtils = useEvents();
   const token = stakingConfig.tokens[chainName][protocol][tokenName];
   const tokenRel = token.rel;
@@ -295,12 +294,6 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
     getDailyReward(cb);
   }
 
-  const reFetch = () => {
-    setStakedData(initialState)
-    reloadData(!reload);
-  }
-  
-  useEffect(()=>{},[]);
   useEffect(()=>{
     if(!contracts || !tokenRel) return
 
@@ -314,12 +307,12 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
       canceled = true;
     }
     // eslint-disable-next-line
-  }, [contracts, reload, events]);
+  }, [contracts, events]);
     
   return useMemo(() => {
     if(!tokenRel) return [stakedData];
 
-    return [stakedData, reFetch]
+    return [stakedData]
       //eslint-disable-next-line
   }, [stakedData]);
 }

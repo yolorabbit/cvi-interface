@@ -40,8 +40,6 @@ const StakingClaim = ({tokenName, protocol, claim, submitted}) => {
                 message: "Transaction failed!"
             }));
             console.log(error);
-        } finally {
-            submitted();
         }
     }
     

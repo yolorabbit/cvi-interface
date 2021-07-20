@@ -36,11 +36,10 @@ const RowData = ({isHeader, token, protocol, data}) => {
     const chainName = useSelector(({app})=>app.selectedNetwork);
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
-    const {cb} = useDataController();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
     const tokenNameFormatted = leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token;
-    const [stakedData, reloadData] = useStakedData(chainName, protocol, token);
+    const [stakedData] = useStakedData(chainName, protocol, token);
     const [amount, setAmount] = useState("");
 
     return useMemo(() => {
@@ -60,7 +59,6 @@ const RowData = ({isHeader, token, protocol, data}) => {
                 tokenAmount: data.staked.stakedTokenAmount,
                 available: data.staked.stakedAmount
             }}
-            cb={cb}
         />
 
         const StakedValue = <Value text={data.staked.stakedAmount} subText={`${tokenNameFormatted?.toUpperCase()} ${data.staked.lastStakedAmount.value}`} bottomText={`$${data.staked.stakedAmountUSD}`} protocol={protocol} />
@@ -103,7 +101,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
 
             <RowItem 
                 header={header["Claimable rewards"].label} 
-                content={<StakingClaim protocol={protocol} tokenName={token} claim={data.claim} submitted={()=>reloadData()}/> } 
+                content={<StakingClaim protocol={protocol} tokenName={token} claim={data.claim} /> } 
             />
 
             {(!isTablet || isMobile) && <RowItem content={UnstakeController} />}

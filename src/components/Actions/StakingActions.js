@@ -13,7 +13,7 @@ import { gas, toBN, toBNAmount } from "utils";
 import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
-    const {disabled, type, token: tokenName, isModal, isOpen, setIsOpen, amount, setAmount, protocol, cb } = useActionController();
+    const {disabled, type, token: tokenName, isModal, isOpen, setIsOpen, amount, setAmount, protocol } = useActionController();
     const dispatch = useDispatch();
     const contracts = useContext(contractsContext);
     const { account } = useActiveWeb3React();
@@ -37,19 +37,18 @@ const StakingActions = () => {
                 alertType: config.alerts.types.NOTICE,
                 message: "Please confirm the transaction in your wallet"
             }));
-            let response;
+
             switch (type) {
                 case "stake":
-                    response = await contracts[token.rel.stakingRewards].methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
+                    await contracts[token.rel.stakingRewards].methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
                     break;
                 case "unstake":
                     const action = token.key === 'govi' ? "unstake" : "withdraw";
-                    response = await contracts[token.rel.stakingRewards].methods[action](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
+                    await contracts[token.rel.stakingRewards].methods[action](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
                     break;    
                 default:
                     break;
             }
-            console.log("response: ", response);
             dispatch(addAlert({
                 id: type,
                 eventName: `${upperFirst(type)} ${token.label?.toUpperCase()} - success`,
@@ -69,7 +68,6 @@ const StakingActions = () => {
             setAmount("0");
             setIsOpen(false);
             setProcessing(false);
-            cb();
         }
     }
 
