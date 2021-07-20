@@ -1,7 +1,7 @@
 import { commaFormatted, customFixed, fromTokenAmountToUnits, toBN, toDisplayAmount, toFixed } from '../../utils';
 import { getOpenPositionFee } from './position';
 import Web3 from 'web3';
-import { getNow, getPositionRewardsContract } from 'contracts/utils';
+import { getPositionRewardsContract } from 'contracts/utils';
 import moment from 'moment';
 import { DAY } from '../../components/Hooks/useEvents';
 

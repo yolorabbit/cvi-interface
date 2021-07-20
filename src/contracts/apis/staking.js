@@ -1,4 +1,3 @@
-import BigNumber from "bignumber.js";
 import { aprToAPY, convert, fromLPTokens, getChainName, getWeb3Contract, getBalance } from "contracts/utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount, toFixed } from "utils";
@@ -9,7 +8,7 @@ const RHEGIC2Data = { address: '0xad7ca17e23f13982796d27d1e6406366def6ee5f', sym
 const stakingApi = {
     getStakedAmountAndPoolShareByToken: async (contracts, asset, account) => {
         const {protocol, key: tokenName, fixedDecimals, rel, ...token} = asset
-        console.log(asset);
+        
         if(protocol === "platform") {
             let tokenData;
             const getDataByTokenName = async () => {

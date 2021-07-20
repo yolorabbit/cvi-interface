@@ -1,6 +1,7 @@
 import Button from 'components/Elements/Button';
 import { useEvents } from 'components/Hooks/useEvents';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
+import Spinner from 'components/Spinner/Spinner';
 import Rewards from 'components/Tables/Elements/Values/Rewards';
 import config from 'config/config';
 import { contractsContext } from 'contracts/ContractContext';
@@ -89,11 +90,10 @@ const PlatformClaim = ({token}) => {
         //eslint-disable-next-line
     }, [library?.eth?.getBlock]);
 
-
     return (
-        <div className={`claim-component ${(!isClaimAvailable || claimableRewards === "0") ? 'is-not-available' : ''}`}>
-            <div className="claim-component__container">
-                <Rewards rewards={claimData} />
+        <div className={`claim-component-platform ${(!isClaimAvailable || claimableRewards === "0") ? 'is-not-available' : ''}`}>
+            {claimData === null ? <Spinner className="statistics-spinner claim-spinner" /> : <div className="claim-component-platform__container">
+                <Rewards rewards={claimData} type="platform" />
                 <Button 
                     className="claim-button" 
                     buttonText="Claim" 
@@ -101,7 +101,7 @@ const PlatformClaim = ({token}) => {
                     processing={processing} 
                     disabled={processing || !isClaimAvailable || claimableRewards === "0"}
                 /> 
-            </div>
+            </div>}
         </div>
     )
 }

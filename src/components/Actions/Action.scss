@@ -6,7 +6,7 @@ button {
     }
 }
 
-.claim-component {
+.claim-component, .claim-component-platform {
     padding: 0.417vw 0;
     min-width: 11.771vw;
 
@@ -56,6 +56,18 @@ button {
     }
 
     &.is-not-available {
+        
+        & .rewards-component {
+            &.platform {
+                & .value-component {
+                    & b {
+                        & span {
+                            opacity: 0.8;
+                        }
+                    }
+                }
+            }
+        }
         & button {
             cursor: initial;
         }
@@ -140,6 +152,131 @@ button {
         }
     }
 }
+
+.claim-component-platform {
+    &__container {
+        display: flex;
+        background-color: transparent;
+        border: 0;
+        padding-left: 0;
+        position: relative;
+
+        @media (max-width: 1024px) {
+            padding: 0;
+        }
+
+        & .claim-button {
+           
+            @media (max-width: 1024px) { 
+                font-size: 14px;
+            }
+
+            @media (max-width: 767px) { 
+                font-size: 3.889vw;
+                position: absolute;
+                bottom: -4.444vw;
+                right: 0;
+            }
+        }
+
+        & .rewards-component {
+            width: 100%;
+        }
+
+        & .value-component {
+            display: flex;
+            align-items: center;
+            position: relative;
+
+            @media (max-width: 767px) { 
+                flex-wrap: wrap;
+            }
+
+            & > span { 
+                margin-left: auto;
+
+                @media (max-width: 1024px) { 
+                    font-size: 14px;
+                }
+
+                @media (max-width: 767px) { 
+                    font-size: 3.889vw;
+                    margin: 0;
+                    position: relative;
+                    right: 1.111vw;
+                    margin-top: 2.222vw;
+                }
+            }
+
+            & b {
+                margin-right: 0.833vw;
+                width: 12.5vw;
+                height: 1.667vw;
+                border-radius: 0.208vw;
+                background-color: #053029;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+              
+                @media (max-width: 1365px) {
+                    margin-right: 1.172vw;
+                    width: 17.582vw;
+                    height: 2.344vw;
+                    border-radius: 0.293vw;
+                }
+
+                @media (max-width: 1024px) {
+                    height: 4.172vw;
+                    width: 100%;
+                    margin-right: 6.258vw;
+                   
+                }
+
+                @media (max-width: 767px) {
+                    height: 8.889vw;
+                    margin-right: 0;
+                }
+                
+                & span {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+                    width: 100%;
+                    background-color: #00a389;
+                    flex: 1;
+                    height: 100%;
+                    position: absolute;
+                    left: 0;
+                    border-radius: 0.208vw;
+                    padding-left: 0.833vw;
+                    font-size: 0.729vw;
+
+                    @media (max-width: 1365px) {
+                        border-radius: 0.293vw;
+                        padding-left: 1.172vw;
+                        font-size: 1.026vw;
+                    }
+
+                    @media (max-width: 1024px) {
+                        margin-left: auto;
+                        border-radius: 0.522vw;
+                        padding-left: 2.086vw;
+                        font-size: 1.825vw;
+                    }
+
+                    @media (max-width: 767px) { 
+                        border-radius: 1.112vw;
+                        padding-left: 4.444vw;
+                        font-size: 3.888vw;
+                    }
+
+                }
+            }
+        }
+    }
+}
+
 
 .modal {
     &__container {
