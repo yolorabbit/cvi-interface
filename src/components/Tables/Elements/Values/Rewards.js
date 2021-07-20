@@ -11,7 +11,7 @@ const Rewards = ({rewards = [], type}) => {
             if(maxAmount) {
                 return `${amount}/${maxAmount} ${symbol === "WETH" ? "ETH" : symbol}`;
             }
-            return `${amount}${symbol === "WETH" ? "ETH" : symbol}`;
+            return `${amount} ${symbol === "WETH" ? "ETH" : symbol}`;
         }
         const progressBarPercents = (amount, maxAmount) => amount > maxAmount ? 100 : (amount / maxAmount) * 100;
 
