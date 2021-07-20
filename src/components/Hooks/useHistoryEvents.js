@@ -147,12 +147,12 @@ const useHistoryEvents = () => {
         historyRef.current = setTimeout(() => {
             Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon).forEach(token => {
                 fetchPastEvents("positions", token);   
-                // subscribe("positions", "Buy", 'OpenPosition', token);
-                // subscribe("positions", "Sell", 'ClosePosition', token);
+                subscribe("positions", "Buy", 'OpenPosition', token);
+                subscribe("positions", "Sell", 'ClosePosition', token);
 
                 fetchPastEvents("liquidities", token);
-                // subscribe("liquidities", "Deposit", 'Deposit', token);
-                // subscribe("liquidities", "Withdraw", 'Withdraw', token);
+                subscribe("liquidities", "Deposit", 'Deposit', token);
+                subscribe("liquidities", "Withdraw", 'Withdraw', token);
             });
         }, 1000);
         
