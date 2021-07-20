@@ -17,7 +17,12 @@ const Rewards = ({rewards = [], type}) => {
 
         return (
             <div className={`rewards-component ${type ?? ''}`}>
-                {rewards !== "N/A" && rewards.map(({amount, maxAmount = 100, symbol, totalAmount}) => <Value key={symbol} progressBarPercents={progressBarPercents(amount, maxAmount)} text={rewardValue(amount, maxAmount, symbol)} subText={claimableToday(symbol, totalAmount)} />)}
+                {rewards !== "N/A" && rewards.map(({amount, maxClaimableRewards, symbol, totalAmount}) => <Value 
+                    key={symbol} 
+                    progressBarPercents={progressBarPercents(amount, maxClaimableRewards)} 
+                    text={rewardValue(amount, maxClaimableRewards, symbol)} 
+                    subText={claimableToday(symbol, totalAmount)} 
+                />)}
             </div>
         )
     }, [rewards, type]);

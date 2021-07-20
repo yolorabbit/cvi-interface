@@ -1,7 +1,7 @@
 import { commaFormatted, customFixed, fromTokenAmountToUnits, toBN, toDisplayAmount, toFixed } from '../../utils';
 import { getOpenPositionFee } from './position';
 import Web3 from 'web3';
-import { getPositionRewardsContract } from 'contracts/utils';
+import { getPositionRewardsContract, getNow } from 'contracts/utils';
 import moment from 'moment';
 import { DAY } from '../../components/Hooks/useEvents';
 
@@ -20,16 +20,25 @@ export async function getClaimableReward(contracts, token, { account }) {
   const PositionRewardsHelper = await getPositionRewardsContract(token);
   const { positionUnitsAmount, creationTimestamp } = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account);
   const units = toBN(toFixed(positionUnitsAmount.toString()));
-  return units.gt(toBN(0)) ? 
-      (PositionRewardsHelper ? 
-          await PositionRewardsHelper.methods.calculatePositionReward(units.toString(), creationTimestamp).call() 
-          : await contracts[token.rel.positionRewards].methods.calculatePositionReward(units.toString(), creationTimestamp).call()) 
-          : 0;
+
+  const currentClaimableRewards = units.gt(toBN(0)) ? 
+  (PositionRewardsHelper ? 
+      await PositionRewardsHelper.methods.calculatePositionReward(units.toString(), creationTimestamp).call() 
+      : await contracts[token.rel.positionRewards].methods.calculatePositionReward(units.toString(), creationTimestamp).call()) 
+      : 0;
+
+  const maxClaimableRewards = units.gt(toBN(0)) ? 
+  (PositionRewardsHelper ? 
+      await PositionRewardsHelper.methods.calculatePositionReward(units.toString(), 0).call() 
+      : await contracts[token.rel.positionRewards].methods.calculatePositionReward(units.toString(), 0).call()) 
+      : 0;
+
+  return [currentClaimableRewards, maxClaimableRewards]
+
 }
 
 
 async function calculatePositionReward(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0}) {
-  
   const PositionRewardsHelper = await getPositionRewardsContract(token);
   if(!PositionRewardsHelper){
     openTime = await getNow();
@@ -39,29 +48,35 @@ async function calculatePositionReward(contracts, token, {account, tokenAmount, 
   const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
   let positionUnits = fromTokenAmountToUnits(tokenAmount.sub(toBN(fees.openFee)), cviValue);
   let currentReward = 0;
-  let reward = 0;
+  let maxCurrentReward = 0;
+  let rewardHelper = 0;
+  let maxHelperReward = 0;
 
   try {
     let pos = await contracts[token.rel.platform].methods.positions(account).call();
     let unclaimed = await contracts[token.rel.positionRewards].methods.unclaimedPositionUnits(account).call();
     let min = BN.min(toBN(unclaimed), toBN(pos.positionUnitsAmount));
+   
     try {
       currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, openTime).call();
+      maxCurrentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, 0).call();
     } catch(error) {
       console.log(error);
     }
     positionUnits = positionUnits.add(min);
    
     if(PositionRewardsHelper) {
-      reward = await PositionRewardsHelper.methods.calculatePositionReward(positionUnits, openTime).call();
+      rewardHelper = await PositionRewardsHelper.methods.calculatePositionReward(positionUnits, openTime).call();
+      maxHelperReward = await PositionRewardsHelper.methods.calculatePositionReward(positionUnits, 0).call();
     } else {
-      reward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, openTime).call();
+      rewardHelper = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, openTime).call();
+      maxHelperReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, 0).call();
     }
   } catch (error) {
     console.log(error);
   }
 
-  return toBN(reward).sub(toBN(currentReward));
+  return [toBN(rewardHelper).sub(toBN(currentReward)), toBN(maxHelperReward).sub(toBN(maxCurrentReward))];
 }
 
 async function getOpenPositionDays(events, getBlock) {
@@ -137,7 +152,7 @@ async function canClaim (contracts, token, { account, eventsUtils }) {
       // if (timestamp <= parseInt(pos.creationTimestamp) + parseInt(minClaimPeriod)) return { result: false, reason: "Claim too early" };
       const positionDay = Math.floor(pos.creationTimestamp / DAY);
       if (today <= positionDay) return { result: false, reason: "Claim too early" };
-      const rewardAmount = await getClaimableReward(contracts, token, { account });
+      const [rewardAmount] = await getClaimableReward(contracts, token, { account });
       const lastClaimedDay = await contracts[token.rel.positionRewards].methods.lastClaimedDay().call();
       const maxDailyReward = await getMaxDailyReward(contracts[token.rel.positionRewards]);
       let todayClaimedRewards = today <= lastClaimedDay ? await contracts[token.rel.positionRewards].methods.todayClaimedRewards().call() : 0;
@@ -163,7 +178,7 @@ const getClaimData = async (contracts, token, { account, library, eventsUtils}) 
       const lastEndOfDay = moment.utc(creationTimestamp * 1000).endOf('day').add('2', 'seconds');
 
       const _canClaim = await canClaim(contracts, token, { account, eventsUtils });
-      let claimableRewards = await getClaimableReward(contracts, token, { account });;
+      let [claimableRewards, maxClaimableRewards] = await getClaimableReward(contracts, token, { account });;
 
       const maxDailyReward = await getMaxDailyReward(contracts[token.rel.positionRewards]);
       const todayClaimedReward = await getTodayClaimedReward(contracts[token.rel.positionRewards], eventsUtils);
@@ -174,6 +189,7 @@ const getClaimData = async (contracts, token, { account, library, eventsUtils}) 
 
       return [{
           claimableRewards: customFixed(toDisplayAmount(isClaimableAmount.toString(), token.lpTokensDecimals), 8),
+          maxClaimableRewards: customFixed(toDisplayAmount(maxClaimableRewards.toString(), token.lpTokensDecimals), 8),
           oldAmount: claimableReward[0] ?? "0",
           totalAmount: commaFormatted(customFixed(toDisplayAmount(reducedClaimableToday, token.lpTokensDecimals))),
           amount: customFixed(toDisplayAmount(totalGoviToClaim.toString(), token.lpTokensDecimals), 8),
