@@ -17,7 +17,7 @@
     
     &__container {
         padding: 1.094vw 2.5vw;
-        padding: 1.094vw 2.5vw;
+        padding-top: 1.875vw;
         min-height: 17.2vw;
         display: flex;
         flex-direction: column;
@@ -25,14 +25,17 @@
 
         @media (max-width: 1365px){
             padding: 2.637vw 3.516vw;  
+            padding-top: 2.637vw;
         }
 
         @media (max-width: 1024px){ 
             padding: 4.694vw 6.258vw;
+            padding-top: 4.694vw;
         }
 
         @media (max-width: 767px){
             padding: 7.778vw 4.444vw;
+            padding-top: 10vw;
         }
 
         &--amount {
