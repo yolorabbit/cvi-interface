@@ -1,5 +1,5 @@
 import { useIsMobile, useIsTablet } from "components/Hooks";
-import { useContext, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
 import platformConfig, { activeViews } from "config/platformConfig";
@@ -8,10 +8,8 @@ import PlatformClaim from "components/Actions/PlatformClaim";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { customFixedTokenValue } from "utils";
-import { useSelector } from "react-redux";
-import { platformViewContext } from "components/Context";
 
-const TradeRow = ({token, isHeader}) => {
+const TradeRow = ({token, isHeader, className}) => {
     const { account } = useActiveWeb3React();
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
@@ -84,7 +82,7 @@ const TradeRow = ({token, isHeader}) => {
     }
 
 
-    return isTablet ? RowData : <tr>
+    return isTablet ? RowData : <tr className={className ?? ''}>
         {RowData}
     </tr>
 }

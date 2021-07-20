@@ -11,7 +11,7 @@ import { useWeb3Api } from '../../../../contracts/useWeb3Api';
 import { customFixedTokenValue } from "utils";
 import { customFixed } from '../../../../utils';
 
-const LiquidityRow = ({token, isHeader}) => {
+const LiquidityRow = ({token, isHeader, className}) => {
     const { key: tokenName } = token;
     const { account } = useActiveWeb3React();
     const isTablet = useIsTablet();
@@ -85,7 +85,7 @@ const LiquidityRow = ({token, isHeader}) => {
         </>
     }
 
-    return isTablet ? RowData : <tr>
+    return isTablet ? RowData : <tr className={className ?? ''}>
         {RowData}
     </tr>
 }

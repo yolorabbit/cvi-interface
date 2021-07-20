@@ -15,10 +15,10 @@ const ActiveRow = ({activeTab, isHeader, rowData}) => {
             }
     
             case platformConfig.tabs.trade.positions:
-                return <TradeRow token={rowData} isHeader={isHeader} />
+                return <TradeRow className="trade-row" token={rowData} isHeader={isHeader} />
             
             case platformConfig.tabs['view-liquidity'].liquidity:
-                return <LiquidityRow token={rowData} isHeader={isHeader} />
+                return <LiquidityRow className="liquidity-row" token={rowData} isHeader={isHeader} />
     
             case stakingViews.staked:
                 return <StakedAssetsRow rowData={rowData} isHeader={isHeader} />

@@ -1,4 +1,21 @@
 .platform-tables-component {
+  & tr {
+    &.trade-row, &.liquidity-row  {
+      &:first-child {
+        & td {
+          &:first-child {
+            width: 3.646vw;
+
+            @media (max-width: 1365px) {
+              width: 5.128vw;
+            }
+          }
+        }
+      }
+    }
+    
+  }
+
   .table-component tbody tr td {
     width: auto;
     &:not(:first-child):not(:last-child) {
