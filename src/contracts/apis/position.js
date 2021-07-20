@@ -124,7 +124,7 @@ export async function getOpenPositionFee(contracts, token, { leverage = 1, token
     const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
     let openFeeAmount = await getOpenPositionFeePercent(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenAmount);
     const { fee, percent, turbulence } = await getBuyingPremiumFee(contracts, token, {tokenAmount, cviValue, leverage, tokenData, library});
-    return { openFee: openFeeAmount.add(fee).mul(toBN(leverage)), buyingPremiumFeePercent: percent, turbulence }
+    return { openFee: openFeeAmount.mul(toBN(leverage)).add(fee), buyingPremiumFeePercent: percent, turbulence }
   } catch (error) {
     console.log(error);
     return "N/A";
