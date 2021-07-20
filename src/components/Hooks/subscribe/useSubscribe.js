@@ -1,15 +1,18 @@
 import { contractsContext } from "contracts/ContractContext";
 import { useContext, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addEvent } from "store/actions/events";
 import { useActiveWeb3React } from "../wallet";
-
 
 const useSubscribe = () => {
     const { selectedNetwork } = useSelector(({app}) => app);
     const assets = require(`./${selectedNetwork.toLowerCase()}.json`);
     const {library: web3, account} = useActiveWeb3React();
     const [subscribedEvents,  setSubscribedEvents] = useState({});
+    const [called,  setCalled] = useState(null);
     const contracts = useContext(contractsContext);
-
+    const dispatch = useDispatch();
+    
     const subscribeLogEvent = () => {
         assets.forEach(({name, events} )=> {
             try {
@@ -25,12 +28,14 @@ const useSubscribe = () => {
                         topics: [eventJsonInterface.signature]
                     }, (error, result) => {
                         if (!error) {
+                            console.log('...result: ', result);
                             const eventObj = web3.eth.abi.decodeLog(
                                 eventJsonInterface.inputs,
                                 result.data,
-                                result.topics.slice(1)
+                                result.topics.slice(1),
                             )
-                            console.log(`New ${eventName} of ${name}!`, eventObj)
+                            console.log(`New ${eventName} of ${name}!`, eventObj);
+                            dispatch(addEvent(name, eventName, eventObj))
                         }
                     })
                     setSubscribedEvents(prev => ({
@@ -47,7 +52,6 @@ const useSubscribe = () => {
                 console.log(name);
             }
         });
-    
     }
     
     useEffect(() =>{
@@ -66,12 +70,13 @@ const useSubscribe = () => {
     },[subscribedEvents])
 
     useEffect(() => {
-        if(!contracts || !account) return
+        if(called || !contracts || !account) return
+        setCalled(true);
         subscribeLogEvent();
         // eslint-disable-next-line
-    }, [account]);
+    }, [contracts, account]);
 
-    return useMemo(()=> null,[])
+    return useMemo( ()=> { return null }, []);
 }
 
 export default useSubscribe;

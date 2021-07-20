@@ -17,11 +17,12 @@ import { useEffect, useMemo, useRef } from 'react';
 import { ContractsContext } from 'contracts/ContractContext';
 import { useSelector } from 'react-redux';
 import ReactGA from 'react-ga';
+import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
   const appRef = useRef(null);
-  
+
   useEffect(() => {
     // fix a bug in Web3ReactProvider - render a text element ",". 
     if (appRef.current?.nextSibling?.textContent === ",") {
@@ -42,25 +43,13 @@ const App = () => {
 
     initializeGA();
   }, []);
-
-
-  const StakingMemo = useMemo(()=>Staking,[]);
   
   return (
     <div className="app-component" ref={appRef}>
       <NotificationList />
       <Web3ReactManager key={selectedNetwork}>
         <ContractsContext>
-          <Router>
-            <Navbar />
-            <Switch>
-              <Route path={config.routes.staking.path} component={StakingMemo} />
-              <Route path={config.routes['help-center'].path} component={HelpCenter} />
-              <Route path={config.routes.platform.path} component={Platform} />
-              <Redirect to="/platform" />
-            </Switch>
-            <Footer />
-          </Router>
+          <Routes />
         </ContractsContext>
       </Web3ReactManager>
     </div>
@@ -68,3 +57,21 @@ const App = () => {
 }
 
 export default App;
+
+
+const Routes = () => {
+  useSubscribe();
+  const StakingMemo = useMemo(()=>Staking,[]);
+  return (
+    <Router>
+      <Navbar />
+      <Switch>
+        <Route path={config.routes.staking.path} component={StakingMemo} />
+        <Route path={config.routes['help-center'].path} component={HelpCenter} />
+        <Route path={config.routes.platform.path} component={Platform} />
+        <Redirect to="/platform" />
+      </Switch>
+      <Footer />
+    </Router>
+  )
+}
