@@ -138,12 +138,10 @@ export const useEvents = () => {
                 let _lastOpenEvent = await TheGraph.lastOpen(account, platform._address);
                 return !!_lastOpenEvent.openPositions?.length ? _lastOpenEvent.openPositions[0] : null;
             }
-            const latestBlockNumber = await (await getBlock("latest")).number;
             
-            const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName];
-            const options = {eventsCount: 1, stepSize, days: 30 };
+            const options = {eventsCount: 1, days: 30 };
             const eventsData = [{ contract: platform, events: { OpenPosition: [{ account }] } }];
-            const events = await getEventsFast(eventsData, options, getBlock);
+            const events = await getEventsFast(eventsData, options);
             return events[events.length - 1];
         } catch(error) {
             console.log(error);
