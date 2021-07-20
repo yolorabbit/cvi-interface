@@ -8,11 +8,12 @@ import { useSelector } from "react-redux";
 import platformConfig from "config/platformConfig";
 import web3Api from "contracts/web3Api";
 
-const useAssets = (type, update) => {
+const useAssets = (type) => {
     const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const [filteredAssets, setFilteredAssets] = useState(null);
     const { selectedNetwork } = useSelector(({app}) => app);
+    const events = useSelector(({events}) => events);
     const eventsUpdateRef = useRef(null);
     const { positions, liquidities } = useSelector(({wallet}) => wallet);
 
@@ -109,11 +110,11 @@ const useAssets = (type, update) => {
             canceled = true;
         }
     //eslint-disable-next-line
-    },[contracts, account, type, update]);
+    },[contracts, account, events, type]);
 
     useEffect(() => {
+        let canceled = false
         if(type === "Open trades") {
-            let canceled = false
             eventsUpdateRef.current = setTimeout(() => {
                     dataFiltering((cb)=>{
                     if(canceled) return
@@ -122,15 +123,16 @@ const useAssets = (type, update) => {
             }, 1000);
         }
         return () => {
+            canceled = true;
             if(eventsUpdateRef.current) clearTimeout(eventsUpdateRef.current);
         }
         //eslint-disable-next-line
     }, [positions?.length]);
 
     useEffect(() => {
+        let canceled = false
         if(type === "Liquidity") {
             if(!liquidities?.length > 0) return;
-            let canceled = false
             eventsUpdateRef.current = setTimeout(() => {
                 dataFiltering((cb)=>{
                     if(canceled) return
@@ -139,6 +141,7 @@ const useAssets = (type, update) => {
             }, 1000);
         }
         return () => {
+            canceled = true;
             if(eventsUpdateRef.current) clearTimeout(eventsUpdateRef.current);
         }
         //eslint-disable-next-line
