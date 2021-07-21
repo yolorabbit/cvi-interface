@@ -85,8 +85,8 @@ const Sell = () => {
             if(!sellFee.eq(sellFeeUpdated)) return setModalIsOpen(true);
 
             if(!sellAllModal) {
-                const claimRewardData = toBN(await web3Api.getClaimableReward(contracts, activeToken, { account }));
-                if(claimRewardData?.gt(toBN("0"))) return setSellAllModal(true);
+                const [claimRewardData] = await web3Api.getClaimableReward(contracts, activeToken, { account });
+                if(toBN(claimRewardData)?.gt(toBN("0"))) return setSellAllModal(true);
             }
 
             dispatch(addAlert({
@@ -99,14 +99,18 @@ const Sell = () => {
 
             if(isActiveInDOM()) {
                 if(sellAllModal) setSellAllModal(false);
+                setIsOpen(false);
                 setAmount("");
                 updateAvailableBalance();
             }
 
         } catch (error) {
             console.log(error);
-            if(isActiveInDOM()) setAmount("");
-
+            if(isActiveInDOM()) {
+                setAmount("");
+                setIsOpen(false);
+            }
+            
             dispatch(addAlert({
                 id: 'closePositionFailed',
                 eventName: "Sell position - failed",
@@ -116,7 +120,6 @@ const Sell = () => {
         } finally {
             if(isActiveInDOM()) {
                 setProcessing(false);
-                setIsOpen(false);
             }
         }
     }
