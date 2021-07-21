@@ -82,10 +82,6 @@ const stakingApi = {
         const poolSize = await stakingRewards.methods.totalSupply().call();
         const mySharePercentage = toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
 
-        console.log(mySharePercentage?.toString());
-        console.log(poolSize?.toString());
-        console.log(stakedTokenAmount?.toString());
-
         const lastStakedAmount = {
           class: mySharePercentage < 0 ? 'low' : 'high',
           value: `(${customFixed(toFixed(toDisplayAmount(mySharePercentage?.toString(), tokenDecimals)), percentageDecimals)}%)`
