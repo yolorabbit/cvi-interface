@@ -1,5 +1,5 @@
 import { platformViewContext } from "components/Context";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo} from "react";
 import { commaFormatted, customFixed, customFixedTokenValue, toBN, toBNAmount, toDisplayAmount } from "utils";
 import Stat from "components/Stat";
 import { useSelector } from "react-redux";
@@ -49,19 +49,12 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount}), [account, tokenAmount]);
     const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload, { validAmount: true });
 
-    const [isHighCollateralRatio, setIsHighCollateralRatio] = useState();
-       
-    useEffect(() => {
-        if(purchaseFee === "N/A" || collateralRatioData === "N/A") return;
-        const turbulence = purchaseFee?.turbulence ?? "0";
-        if(collateralRatioData?.currentRatioValue && turbulence) {
-            setIsHighCollateralRatio(toBN(turbulence).cmp(toBN(100)) > -1 || collateralRatioData.collateralRatio.cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0);
-        }
-    }, [collateralRatioData, purchaseFee]);
-
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
- 
+        const turbulence = purchaseFee === "N/A" ? "0" : purchaseFee?.turbulence ?? "0";
+        const haveTurbulence = toBN(turbulence).cmp(toBN(100)) > -1;
+        const isHighCollateralRatio = (collateralRatioData !== "N/A" && collateralRatioData) ? collateralRatioData.collateralRatio.cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0 : false;
+     
         return  (
             <> 
                 <Stat 
@@ -79,7 +72,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     name="purchaseFee"
                     value={purchaseFee === "N/A" || purchaseFee === "0" ? purchaseFee : purchaseFee?.openFee?.toString()} 
                     _suffix={selectedCurrency}
-                    className={isHighCollateralRatio ? 'low' : ''}
+                    className={haveTurbulence || isHighCollateralRatio ? 'low' : ''}
                     format={toDisplayAmount(purchaseFee === "0" ? "0" : purchaseFee?.openFee?.toString(), activeToken.decimals)}
                 />
     
@@ -107,7 +100,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat title="CVI Index" value={cviInfo?.price} />
             </>
         )
-    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee, isHighCollateralRatio]) 
+    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
    
 }
 
