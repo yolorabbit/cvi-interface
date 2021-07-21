@@ -20,7 +20,7 @@ const Rewards = ({rewards = [], type}) => {
                 {rewards !== "N/A" && rewards.map(({amount, maxClaimableRewards, symbol, totalAmount}) => <Value 
                     key={symbol} 
                     progressBarPercents={progressBarPercents(amount, maxClaimableRewards)} 
-                    text={rewardValue(amount, maxClaimableRewards, symbol)} 
+                    text={amount === null ? null : rewardValue(amount, maxClaimableRewards, symbol)} 
                     subText={claimableToday(symbol, totalAmount)} 
                 />)}
             </div>
