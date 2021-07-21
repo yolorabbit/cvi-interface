@@ -46,7 +46,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     const positionRewardsPayload = useMemo(() => ({ tokenAmount, account, leverage} ), [leverage, tokenAmount, account]);
     const [positionRewards] = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload, { validAmount: true });
 
-    const currentFundingFeePayload = useMemo(() => ({account, tokenAmount}), [account, tokenAmount]);
+    const currentFundingFeePayload = useMemo(() => ({account, tokenAmount, leverage, purchaseFee}), [account, leverage, tokenAmount, purchaseFee]);
     const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload, { validAmount: true });
 
     return useMemo(() => {

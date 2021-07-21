@@ -159,11 +159,12 @@ async function getCurrentFundingFee(contracts, token, { account }) {
   return await getCurrentFundingFeeV2(contracts[token.rel.platform], account);
 }
 
-async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, period = 86400 }) {
+async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, purchaseFee, leverage = 1, period = 86400 }) {
+  if(purchaseFee === null) return null;
   const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
-  let positionUnitsAmount = fromTokenAmountToUnits(tokenAmount, toBN(cviValue));
   let decimals = await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call();
   let fee = toBN(await contracts[token.rel.feesCalc].methods.calculateSingleUnitFundingFee([{ period, cviValue }]).call());
+  let positionUnitsAmount = fromTokenAmountToUnits(toBN(tokenAmount.sub(purchaseFee.openFee)).mul(toBN(leverage)), toBN(cviValue));
   return fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
 }
 
