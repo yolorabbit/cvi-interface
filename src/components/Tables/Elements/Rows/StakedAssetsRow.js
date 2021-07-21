@@ -11,7 +11,6 @@ import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
 import { toBN } from "utils";
 import Rewards from './../Values/Rewards';
-import { useDataController } from "components/Tables/DataController/DataController";
 import StakedAmount from "../Values/StakedAmount";
 
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
