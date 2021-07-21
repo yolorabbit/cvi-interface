@@ -18,8 +18,8 @@ export const DAY = 86400;
 const EventOptionsDefaults = {
     eventsCount: Number.MAX_SAFE_INTEGER,
     blocks: Number.MAX_SAFE_INTEGER,
-    stepSize: 100,
-    bottomBlock: 0
+    stepSize: 10000,
+    bottomBlock: 0,
 };
 
 export const useEvents = () => {
