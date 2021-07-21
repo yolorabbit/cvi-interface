@@ -208,7 +208,8 @@ const stakingApi = {
                 return toDisplayAmount(USDYearlyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals);
             }
             const apr = await getAPR();
-            return aprToAPY(apr, period);
+            const apy = aprToAPY(apr);
+            return apy / (365/period)
         } catch (error) {
             console.log(error);
             return 0;
