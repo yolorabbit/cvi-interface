@@ -98,13 +98,16 @@ const useHistoryEvents = () => {
             events = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0)
             events = Object.values(events).map((_events, idx) => _events.map((event)=> ({...event, transactionHash: event.id, timestamp: Number(event.timestamp), event: contractState[view][Object.keys(events)[idx]] }))).flat();
         } else {
+            let events2 = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0);
+            const theGraphLatest = Object.values(events2).flat().sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
+            const stagingBottomBlock = theGraphLatest.length ? theGraphLatest[theGraphLatest.length - 1].blockNumber : bottomBlockByNetwork[selectedNetwork];
             events = await getEventsFast([{
                 contract: contracts[activeToken.rel.platform], 
                 events: { 
                     [Object.keys(contractState[view])[0]]: [{ account }], 
                     [Object.keys(contractState[view])[1]]: [{ account }] 
                 } 
-            }], {bottomBlock: bottomBlockByNetwork[selectedNetwork]});
+            }], {bottomBlock: stagingBottomBlock });
             events = events.map(event => ({...event, event:contractState[view][event.event]}))
         }
        
