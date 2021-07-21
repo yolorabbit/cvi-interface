@@ -42,10 +42,9 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
   if(type === "usdc") {
     balance = toBN(await platform.methods.totalLeveragedTokensAmount().call());
   } else {
-    balance = toBN(await getBalance(platform._address, tokenContract ? tokenContract._address : undefined));
+    balance = toBN(await getBalance(platform._address, tokenContract && type !== "eth" ? tokenContract._address : undefined));
   }
 
-  // console.log(balance.toString());
   // if (type == "eth") balance = balance.sub(openTokenAmount);
   // console.log(`balance: ${balance}`);
   if (!balance.gt(toBN(0))) {
@@ -77,8 +76,8 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
 
   
   let precisionDecimals = toBN(await platform.methods.PRECISION_DECIMALS().call());
-  let collateralRatio = totalPositionUnitsAmount
-    .add(minPositionUnitsAmount)
+  let collateralRatio = toBN(totalPositionUnitsAmount
+    .add(minPositionUnitsAmount))
     .mul(precisionDecimals)
     .div(balance.add(amountWithoutFee));
 
@@ -100,7 +99,7 @@ async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, le
     buyingPremiumFee = await contracts[token.rel.feesCalc].methods.calculateBuyingPremiumFeeWithTurbulence(tokenAmount, collateralRatio, turbulence).call();
   } else if(token.type === "usdc") {
     const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
-    console.log(lastCollateralRatio);
+    // console.log(`${tokenAmount}`, leverage, collateralRatio?.toString(), lastCollateralRatio.collateralRatio?.toString(), turbulence);
     ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
       .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, turbulence)
       .call());
@@ -109,6 +108,10 @@ async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, le
       .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, turbulence)
       .call());
   }
+
+  // console.log(toBN(buyingPremiumFee).toString());
+  // console.log(toBN(combinedPremiumFeePercentage).toString());
+
   return { fee: toBN(buyingPremiumFee), percent: combinedPremiumFeePercentage, turbulence };
 }
 
