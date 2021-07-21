@@ -99,6 +99,7 @@ const Withdraw = () => {
                 setProcessing(false);
                 setAmount("");
                 updateAvailableBalance();
+                setIsOpen(false);
             }
         }
     }

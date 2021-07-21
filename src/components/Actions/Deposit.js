@@ -14,7 +14,7 @@ import platformConfig from 'config/platformConfig';
 const Deposit = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { disabled, type, token, amount, setAmount, updateAvailableBalance } = useActionController();
+    const { disabled, type, setIsOpen, token, amount, setAmount, updateAvailableBalance } = useActionController();
     const { account } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
@@ -93,6 +93,7 @@ const Deposit = () => {
                 setProcessing(false);
                 setAmount("");
                 updateAvailableBalance();
+                setIsOpen(false);
             }
         }
     }

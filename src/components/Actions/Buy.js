@@ -20,7 +20,7 @@ const feesHighWarningMessage = "This transaction will not succeed due to the cha
 const Buy = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
-    const { disabled, type, token, amount, setAmount, leverage, updateAvailableBalance } = useActionController();
+    const { disabled, type, token, setIsOpen, amount, setAmount, leverage, updateAvailableBalance } = useActionController();
     const { account, library } = useActiveWeb3React();
     const [modalIsOpen, setModalIsOpen] = useState();
     const [errorMessage, setErrorMessage] = useState();
@@ -162,8 +162,10 @@ const Buy = () => {
                 setProcessing(false);
                 setAmount("");
                 updateAvailableBalance();
+                setIsOpen(false);
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [approvalValidation, buy, dispatch, feesValidation, getMaxAvailableToOpen, isActiveInDOM, setAmount, token, updateAvailableBalance])
 
     return useMemo(() => {

@@ -114,7 +114,10 @@ const Sell = () => {
                 message: "Transaction failed!"
             }));
         } finally {
-            if(isActiveInDOM()) setProcessing(false);
+            if(isActiveInDOM()) {
+                setProcessing(false);
+                setIsOpen(false);
+            }
         }
     }
 
