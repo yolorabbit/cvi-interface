@@ -6,18 +6,18 @@ import { contractsContext } from 'contracts/ContractContext';
 import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
-import { toBN, gas } from 'utils';
+import { gas } from 'utils';
 import Rewards from './../Tables/Elements/Values/Rewards';
 
 
-const StakingClaim = ({tokenName, protocol, claim, submitted}) => {
-    const disabled = claim.some(rewards => toBN(rewards).gt(toBN(0)));
+const StakingClaim = ({tokenName, protocol, claim }) => {
+    const isValid = claim.some(({amount}) => amount > 0);
     const dispatch = useDispatch();
     const { account } = useActiveWeb3React()
     const contracts = useContext(contractsContext);
     const { selectedNetwork } = useSelector(({app}) => app); 
     const token = stakingConfig.tokens[selectedNetwork][protocol][tokenName];
-    
+   
     const onClick = async () => {
         try {
             dispatch(addAlert({
@@ -48,7 +48,7 @@ const StakingClaim = ({tokenName, protocol, claim, submitted}) => {
             <div className="claim-component__container">
                 <Rewards rewards={claim} />
                 <div className="claim-component__container--action">
-                    <Button disabled={disabled} className="claim-button" buttonText="Claim" onClick={onClick} /> 
+                    <Button disabled={!isValid} className="claim-button" buttonText="Claim" onClick={onClick} /> 
                 </div>
             </div>
         </div>
