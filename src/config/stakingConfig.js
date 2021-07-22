@@ -185,7 +185,7 @@ const stakingConfig = {
           rewardsTokens: ["USDT","USDC"],
           rel: {
             contractKey: "GOVI",
-            stakingRewards: "StakingV2",
+            stakingRewards: "Staking",
             tokenDecimals: [6, 6]
           }
         }
