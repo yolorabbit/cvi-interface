@@ -39,7 +39,7 @@ const Guides = () => {
 
         <div className="documents-component">
           <Document title="Whitepaper" onClick={onWhitepaperClick} />
-          <Document title="Volatility token" onClick={onPeckShieldAnnouncementClick}  />
+          <Document title="PeckShield Audit" date="May 30th, 2021" onClick={onPeckShieldAnnouncementClick}  />
           <Document title="CERTIK Audit" date="January 6th, 2021" onClick={onUsdtAnnouncementClick}  />
           <Document title="CERTIK Audit" date="March 29th, 2021" onClick={onEthAnnouncementClick}  />
         </div>
