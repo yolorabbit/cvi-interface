@@ -55,14 +55,14 @@ const stakingApi = {
             
             const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, USDTData, uniswapLPToken, uniswapToken)
             // console.log(tokenName, protocol+" accountStakedUSD: ", accountStakedUSD);
-            const mySharePercentage = toBN(totalStaked).mul(toBN("1", token.decimals)).div(toBN(poolSize)).mul(toBN("100"));
+            const mySharePercentage = totalStaked?.toString() === "0" ? toBN("0") : toBN(totalStaked).mul(toBN("1", token.decimals)).div(toBN(poolSize)).mul(toBN("100"));
             
             const data = {
                 stakedTokenAmount: totalStaked,
                 stakedAmount: commaFormatted(customFixed(toFixed(toDisplayAmount(totalStaked, token.decimals)), fixedDecimals)),
                 poolSize: toBN(poolSize).isZero() ? "0" : commaFormatted(customFixed(toDisplayAmount(poolSize, token.decimals), fixedDecimals)),
                 lastStakedAmount: {
-                    class: mySharePercentage < 0 ? 'low' : 'high',
+                    class: mySharePercentage.gt(toBN("0")) ? 'high' : 'low',
                     value: `(${customFixed(toFixed(toDisplayAmount(mySharePercentage?.toString(), token.decimals)), percentageDecimals)}%)`
                 },
                 stakedAmountUSD: toBN(accountStakedUSD).isZero() ? "0" : `${commaFormatted(customFixed(toFixed(toDisplayAmount(accountStakedUSD)), 2))}`
@@ -80,10 +80,10 @@ const stakingApi = {
     getStakedAmountAndPoolShare: async (stakingRewards, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
         const stakedTokenAmount = account ? await stakingRewards.methods.balanceOf(account).call() : 0;
         const poolSize = await stakingRewards.methods.totalSupply().call();
-        const mySharePercentage = toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
+        const mySharePercentage = stakedTokenAmount === "0" ? toBN("0") : toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
 
         const lastStakedAmount = {
-          class: mySharePercentage < 0 ? 'low' : 'high',
+          class: mySharePercentage.gt(toBN("0")) ? 'high' : 'low',
           value: `(${customFixed(toFixed(toDisplayAmount(mySharePercentage?.toString(), tokenDecimals)), percentageDecimals)}%)`
         }
         
@@ -97,10 +97,10 @@ const stakingApi = {
     getStakedAmountAndPoolShareGOVI: async (staking, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
         const stakedTokenAmount = account ? await staking.methods.stakes(account).call() : 0;
         const poolSize = await staking.methods.totalStaked().call();
-        const mySharePercentage = toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
+        const mySharePercentage = stakedTokenAmount?.toString() === "0" ? "0" : toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
 
         const lastStakedAmount = {
-          class: mySharePercentage < 0 ? 'low' : 'high',
+          class: mySharePercentage.gt(toBN("0")) ? 'high' : 'low',
           value: `(${customFixed(toFixed(toDisplayAmount(mySharePercentage?.toString(), tokenDecimals)), percentageDecimals)}%)`
         }
         
