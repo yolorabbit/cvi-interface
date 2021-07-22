@@ -164,6 +164,7 @@ async function getCurrentFundingFee(contracts, token, { account }) {
 
 async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, purchaseFee, leverage = 1, period = 86400 }) {
   if(purchaseFee === null) return null;
+  if(purchaseFee === "N/A") return "N/A";
   const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
   let decimals = await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call();
   let fee = toBN(await contracts[token.rel.feesCalc].methods.calculateSingleUnitFundingFee([{ period, cviValue }]).call());
