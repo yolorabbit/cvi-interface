@@ -61,6 +61,7 @@ const Buy = () => {
     const getMaxAmount = useCallback(async (index) => {
         let totalBalance = toBN(
             token === 'eth' ? await library.eth.getBalance(contracts[activeToken.rel.platform]._address) : 
+            token === "usdc" ? await toBN(await contracts[activeToken.rel.platform].methods.totalLeveragedTokensAmount().call()) :
             await contracts[activeToken.rel.contractKey].methods.balanceOf(contracts[activeToken.rel.platform]._address).call()
         )
         let totalUnits = await contracts[activeToken.rel.platform].methods.totalPositionUnitsAmount().call();
