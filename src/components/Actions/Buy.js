@@ -20,7 +20,7 @@ const feesHighWarningMessage = "This transaction will not succeed due to the cha
 const Buy = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
-    const { disabled, type, token, setIsOpen, amount, setAmount, leverage, updateAvailableBalance } = useActionController();
+    const { disabled, type, token, setIsOpen, amount, setAmount, leverage = 1, updateAvailableBalance } = useActionController();
     const { account, library } = useActiveWeb3React();
     const [modalIsOpen, setModalIsOpen] = useState();
     const [errorMessage, setErrorMessage] = useState();
@@ -65,8 +65,8 @@ const Buy = () => {
             await contracts[activeToken.rel.contractKey].methods.balanceOf(contracts[activeToken.rel.platform]._address).call()
         )
         let totalUnits = await contracts[activeToken.rel.platform].methods.totalPositionUnitsAmount().call();
-        return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index);
-    }, [library?.eth, activeToken, contracts, token]);
+        return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index).div(toBN(leverage));
+    }, [library?.eth, activeToken, contracts, token, leverage]);
 
     const getMaxAvailableToOpen = useCallback(async () => {
         try {
