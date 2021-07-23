@@ -257,7 +257,7 @@ const stakingConfig = {
       },
       [chainNames.Matic]: {
         0: "Platform tokens", // 0 - index to add the sub header
-        2: "Liquidity mining"
+        3: "Liquidity mining"
       }
     }
   },

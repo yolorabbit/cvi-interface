@@ -97,7 +97,7 @@ const stakingApi = {
     getStakedAmountAndPoolShareGOVI: async (staking, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
         const stakedTokenAmount = account ? await staking.methods.stakes(account).call() : 0;
         const poolSize = await staking.methods.totalStaked().call();
-        const mySharePercentage = stakedTokenAmount?.toString() === "0" ? "0" : toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
+        const mySharePercentage = stakedTokenAmount?.toString() === "0" ? toBN("0") : toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
 
         const lastStakedAmount = {
           class: mySharePercentage.gt(toBN("0")) ? 'high' : 'low',
