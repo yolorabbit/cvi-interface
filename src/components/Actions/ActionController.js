@@ -89,7 +89,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         {renderActionComponent(isModal)}
     </div>
     //eslint-disable-next-line
-  }, [protocol, disabled, balances, type, activeView, amount, isOpen, isModal, token, amountLabel, insufficientBalance, availableBalance])
+  }, [protocol, disabled, balances, type, activeView, amount, isOpen, isModal, token, amountLabel, insufficientBalance, availableBalance, leverage])
 };
 
 export default ActionController;
