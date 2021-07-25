@@ -61,17 +61,19 @@ export default App;
 
 const Routes = () => {
   useSubscribe();
-  const StakingMemo = useMemo(()=>Staking,[]);
-  return (
-    <Router>
-      <Navbar />
-      <Switch>
-        <Route path={config.routes.staking.path} component={StakingMemo} />
-        <Route path={config.routes['help-center'].path} component={HelpCenter} />
-        <Route path={config.routes.platform.path} component={Platform} />
-        <Redirect to="/platform" />
-      </Switch>
-      <Footer />
-    </Router>
-  )
+  
+  return useMemo(() => {
+    return (
+      <Router>
+        <Navbar />
+        <Switch>
+          <Route path={config.routes.staking.path} component={Staking} />
+          <Route path={config.routes['help-center'].path} component={HelpCenter} />
+          <Route path={config.routes.platform.path} component={Platform} />
+          <Redirect to="/platform" />
+        </Switch>
+        <Footer />
+      </Router>
+    )
+  }, [])
 }

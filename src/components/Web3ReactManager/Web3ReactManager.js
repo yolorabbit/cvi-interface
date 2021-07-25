@@ -1,4 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
+import { useInDOM } from 'components/Hooks';
 import { useEagerConnect, useInactiveListener } from 'components/Hooks/wallet';
 import config from 'config/config';
 import { network } from 'connectors';
@@ -8,6 +9,7 @@ import { chainNameToChainId } from 'utils';
 
 
 const Web3ReactManager = ({children}) => {
+    const isActiveInDOM = useInDOM();
     const { active } = useWeb3React()
     const { active: networkActive, error: networkError, activate: activateNetwork} = useWeb3React(config.web3ProviderId)
     const { selectedNetwork } = useSelector(({app}) => app);
@@ -16,10 +18,12 @@ const Web3ReactManager = ({children}) => {
 
     // after eagerly trying injected, if the network connect ever isn't active or in an error state, activate itd
     useEffect(() => {
+        if(!isActiveInDOM()) return;
         if (!triedEager && !networkActive && !networkError && !active && selectedNetwork) {
             network.changeChainId(chainNameToChainId(selectedNetwork));
             activateNetwork(network);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [triedEager, networkActive, networkError, activateNetwork, active, selectedNetwork])
 
     // when there's no account connected, react to logins (broadly speaking) on the injected provider, if it exists
@@ -29,12 +33,14 @@ const Web3ReactManager = ({children}) => {
     const [showLoader, setShowLoader] = useState(false)
     useEffect(() => {
         const timeout = setTimeout(() => {
+            if(!isActiveInDOM()) return;
             setShowLoader(true)
         }, 600)
 
         return () => {
             clearTimeout(timeout)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // on page load, do nothing until we've tried to connect to the injected connector

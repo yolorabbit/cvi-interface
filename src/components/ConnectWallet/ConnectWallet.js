@@ -13,9 +13,11 @@ import WalletProviderModal from 'components/Modals/WalletProviderModal';
 import { getCurrentProviderName } from 'utils';
 import Button from 'components/Elements/Button';
 import './ConnectWallet.scss';
-import { useIsDesktop } from 'components/Hooks';
+import { useInDOM, useIsDesktop } from 'components/Hooks';
+import { useMemo } from 'react';
 
 const ConnectWallet = ({type, buttonText = "", hasErrorButtonText}) => {
+    const isActiveInDOM = useInDOM();
     const [walletInfoModalIsOpen, setWalletInfoModalIsOpen] = useState(false);
     const [walletProviderModalIsOpen, setWalletProviderModalIsOpen] = useState(false);
     const { active, account, chainId, library } = useActiveWeb3React();
@@ -29,45 +31,52 @@ const ConnectWallet = ({type, buttonText = "", hasErrorButtonText}) => {
     const isDesktop = useIsDesktop();
 
     const activeNetwork = networksFormatted[supportedNetworksConfig?.[chainId]?.chainId];
-
-    const checkMetamsk = async() => {
-        const provider = await detectEthereumProvider();
-        setMmInstalled(!!provider);
-    }
-
-    useEffect(()=>{
-        checkMetamsk();
-        //eslint-disable-next-line
-    },[]);
     
     useEffect(()=>{
-        setWalletProviderModalIsOpen(false);
+        const checkMetamsk = async() => {
+            const provider = await detectEthereumProvider();
+            if(isActiveInDOM()){
+                setMmInstalled(!!provider);
+            }
+        }
+
+        checkMetamsk();
+        //eslint-disable-next-line
+    }, []);
+    
+    useEffect(()=>{
+        if(isActiveInDOM()){ 
+            setWalletProviderModalIsOpen(false);
+        }
         //eslint-disable-next-line
     },[active]);
     
 
     useEffect(() => {
-        if(isWrongNetwork) {
-            setErrorData(config.walletErrors.network.wrong);
-        }  else setErrorData("");
+        if(isActiveInDOM()){ 
+            if(isWrongNetwork) {
+                setErrorData(config.walletErrors.network.wrong);
+            }  else setErrorData("");
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isWrongNetwork, injectedActive]);
 
-    const onClick = () => {
-        if(errorData?.type === config.walletErrors.network.wrong.type) {
-            setErrorModalIsOpen(true);
-        } else if(active && account) {
-            setWalletInfoModalIsOpen(true);
-        } else {
-            setWalletProviderModalIsOpen(true);
+    return useMemo(() => {
+        const onClick = () => {
+            if(errorData?.type === config.walletErrors.network.wrong.type) {
+                setErrorModalIsOpen(true);
+            } else if(active && account) {
+                setWalletInfoModalIsOpen(true);
+            } else {
+                setWalletProviderModalIsOpen(true);
+            }
         }
-    }
+    
+        const onChangeProvider = () => {
+            if(!errorData && isActiveInDOM()) setWalletProviderModalIsOpen(true);
+        }
 
-    const onChangeProvider = () => {
-        if(!errorData) setWalletProviderModalIsOpen(true);
-    }
-
-    return (
-        <div className={`connect-wallet-button ${errorData ? errorData.class : ''} ${type ?? ''}`}>
+        return <div className={`connect-wallet-button ${errorData ? errorData.class : ''} ${type ?? ''}`}>
             {walletInfoModalIsOpen && <MyWalletModal address={account} setModalIsOpen={setWalletInfoModalIsOpen}/>}
             {walletProviderModalIsOpen && (!account || type === "change") && <WalletProviderModal metaMaskInstalled={mmInstalled} setModalIsOpen={setWalletProviderModalIsOpen}/>}
             {errorModalIsOpen && <ErrorModal 
@@ -95,7 +104,8 @@ const ConnectWallet = ({type, buttonText = "", hasErrorButtonText}) => {
                 </div> : <Button buttonText={errorData ? hasErrorButtonText ?? buttonText : buttonText ?? ""} onClick={onClick}/>}
             </div> }
         </div>
-    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [account, active, activeNetwork?.name, buttonText, errorData, errorModalIsOpen, hasErrorButtonText, isDesktop, library.currentProvider, mmInstalled, networkStatus, selectedNetwork, type, walletInfoModalIsOpen, walletProviderModalIsOpen])
 }
 
 export default ConnectWallet;

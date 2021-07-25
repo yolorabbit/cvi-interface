@@ -1,4 +1,4 @@
-import { useIsTablet } from 'components/Hooks';
+import { useInDOM, useIsTablet } from 'components/Hooks';
 import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import config from '../../config/config';
@@ -9,6 +9,7 @@ import './Navbar.scss';
 import { track } from 'shared/analytics';
 
 const Navbar = () => {
+    const isActiveInDOM = useInDOM();
     const [pageYOffset, setPageYOffset] = useState(0);
     const location = useLocation();
     const isTablet = useIsTablet();
@@ -21,7 +22,8 @@ const Navbar = () => {
     }
 
     useEffect(() => {
-        setActivePath(location?.pathname);
+        if(isActiveInDOM()) setActivePath(location?.pathname);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location?.pathname]);
 
     useEffect(() => {
@@ -46,7 +48,7 @@ const Navbar = () => {
 
                 {isTablet ? <Hamburger activePath={activePath} links={links} /> : <div className="navbar-component__container--connect">
                     <SelectNetwork />
-                    <ConnectWallet type="navbar" buttonText="CONNECT" hasErrorButtonText="Wrong network" />
+                    <NavbarConnectMemoized />
                 </div>}
             </>
         )
@@ -60,6 +62,10 @@ const Navbar = () => {
           </div>
         </div>
     )
+}
+
+const NavbarConnectMemoized = () => {
+    return useMemo(() => <ConnectWallet type="navbar" buttonText="CONNECT" hasErrorButtonText="Wrong network" />, []);
 }
 
 const Hamburger = ({links, activePath}) => {

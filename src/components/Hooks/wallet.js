@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSelectNetwork } from "store/actions";
 import { parseHex } from "utils";
-import { useIsDesktop } from ".";
+import { useInDOM, useIsDesktop } from ".";
 
 export const useActiveWeb3React = () => {
   const context = useWeb3React();
@@ -100,6 +100,7 @@ export function useInactiveListener() {
 }
 
 export const useIsWrongNetwork = () => {
+  const isActiveInDOM = useInDOM();
   const injectedContext = useWeb3React();
   const networkContext = useWeb3React(config.web3ProviderId);
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
@@ -111,7 +112,7 @@ export const useIsWrongNetwork = () => {
       const injectedChainId = parseHex(await injectedContext.connector.getChainId());
       const isWrong = injectedIsAuthorized && injectedChainId !== networkContext.chainId;
 
-      if(isWrongNetwork !== isWrong) {
+      if(isActiveInDOM() && isWrongNetwork !== isWrong) {
         setIsWrongNetwork(isWrong);
       }
     } catch(error) {
