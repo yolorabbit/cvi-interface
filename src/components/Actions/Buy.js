@@ -20,7 +20,7 @@ const feesHighWarningMessage = "This transaction will not succeed due to the cha
 const Buy = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
-    const { disabled, type, token, setIsOpen, amount, setAmount, leverage, updateAvailableBalance } = useActionController();
+    const { disabled, type, token, setIsOpen, amount, setAmount, leverage = 1, updateAvailableBalance } = useActionController();
     const { account, library } = useActiveWeb3React();
     const [modalIsOpen, setModalIsOpen] = useState();
     const [errorMessage, setErrorMessage] = useState();
