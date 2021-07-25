@@ -63,9 +63,10 @@ const Withdraw = () => {
         
         try {
             const [allowToWithdraw, max_amount] = await getMaxAvailableToWithdraw();
+            
             if(!allowToWithdraw) {
                 setErrorMessage(`Part of the liquidity you've provided is used as collateral and can't be currently withdrawn. Please select an amount less than ${commaFormatted(max_amount)} ${token.toUpperCase()} or try again later.`)
-                return setProcessing(false);
+                return;
             }
 
             dispatch(addAlert({
@@ -83,6 +84,8 @@ const Withdraw = () => {
                 message: "Transaction success!"
             }));
 
+            setIsOpen(false);
+
         } catch (error) {
             console.log(error);
             if(error?.message.toLowerCase().search('revert collateral ratio broken') !== -1) {
@@ -94,17 +97,18 @@ const Withdraw = () => {
                     alertType: config.alerts.types.FAILED,
                     message: "Transaction failed!"
                 }));
+
+                setIsOpen(false);
             }
         } finally {
             if(isActiveInDOM()) {
                 setProcessing(false);
                 setAmount("");
                 updateAvailableBalance();
-                setIsOpen(false);
             }
         }
     }
-
+    
     return (
         <> 
             {errorMessage && <ErrorModal error={errorMessage} setModalIsOpen={setErrorMessage}/>}
