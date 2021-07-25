@@ -160,7 +160,7 @@ const web3Api = {
 
             let totalPositionUnitsAmount = toBN(await contracts[token.rel.platform].methods.totalPositionUnitsAmount().call());
             let decimals = toBN(await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call());
-            let collateralRatio = platformBalance.toString() !== "0" ? totalPositionUnitsAmount.mul(decimals).div(platformBalance) : 0;
+            let collateralRatio = platformBalance.toString() !== "0" ? totalPositionUnitsAmount.mul(decimals).div(platformBalance) : toBN("0");
             
             return {
                 collateralRatio,

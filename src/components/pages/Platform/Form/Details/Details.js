@@ -53,7 +53,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
         const turbulence = purchaseFee === "N/A" ? "0" : purchaseFee?.turbulence ?? "0";
         const haveTurbulence = toBN(turbulence).cmp(toBN(100)) > -1;
-        const isHighCollateralRatio = (collateralRatioData !== "N/A" && collateralRatioData) ? toBN(collateralRatioData.collateralRatio).cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0 : false;
+        const isHighCollateralRatio = (collateralRatioData !== "N/A" && collateralRatioData?.collateralRatio) ? toBN(collateralRatioData.collateralRatio).cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0 : false;
         
         return  (
             <> 
