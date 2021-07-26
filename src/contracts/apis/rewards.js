@@ -40,9 +40,10 @@ export async function getClaimableReward(contracts, token, { account }) {
 
 async function calculatePositionReward(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0}) {
   const PositionRewardsHelper = await getPositionRewardsContract(token);
-  if(!PositionRewardsHelper){
+  //TODO: Yovel/Vladi/Yaniv - is this if needed?
+  //if(!PositionRewardsHelper){
     openTime = await getNow();
-  }
+  //}
   let fees = await getOpenPositionFee(contracts, token, {tokenAmount, leverage});
   const { getCVILatestRoundData  } = contracts[token.rel.cviOracle].methods || {};
   const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
