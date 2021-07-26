@@ -6073,7 +6073,7 @@
     ]
   },
   "USDCPositionRewards": {
-    "address": "0x961AC04e0566Ee1C781D504c54405DAd4B010a98",
+    "address": "0x50Ab55dAD894503C2fDdd9B3a4130Dbfb926D472",
     "abi": [
       {
         "inputs": [{ "internalType": "contract IERC20", "name": "_cviToken", "type": "address" }],
