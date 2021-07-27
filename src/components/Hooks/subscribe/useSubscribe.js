@@ -23,23 +23,23 @@ const useSubscribe = () => {
                         contract._jsonInterface,
                         o => o.name === eventName && o.type === 'event',
                     )
-                    if(!['openposition', "closeposition", "deposit", "withdraw"].includes(eventName.toLowerCase())){
-
+                    if(!['openposition', "closeposition", "deposit", "withdraw", "approval"].includes(eventName.toLowerCase())){
                         const subscription = web3.eth.subscribe('logs', {
                             address: contract.options.address,
-                            topics: [eventJsonInterface.signature]
+                            topics: [eventJsonInterface.signature, web3.utils.padLeft(account, 64)]
                         }, (error, result) => {
                             if (!error) {
-                                console.log('...result: ', result);
+                                // console.log('...result: ', result);
                                 const eventObj = web3.eth.abi.decodeLog(
                                     eventJsonInterface.inputs,
                                     result.data,
                                     result.topics.slice(1),
                                     )
-                                    console.log(`New ${eventName} of ${name}!`, eventObj);
+                                    // console.log(`New ${eventName} of ${name}!`, eventObj);
                                     dispatch(addEvent(name, eventName, eventObj))
                                 }
                             })
+
                             setSubscribedEvents(prev => ({
                                 ...prev,
                                 [name]: {
@@ -47,7 +47,7 @@ const useSubscribe = () => {
                                     [eventName]: subscription
                                 }
                             }))
-                            console.log(`subscribed to event '${eventName}' of contract '${name}' `)
+                            console.log(`subscribed to event '${eventName}' of contract '${name}' `) 
                         }
                 });
             } catch (error) {
@@ -55,8 +55,7 @@ const useSubscribe = () => {
                 console.log(name);
             }
         });
-    }
-    
+    } 
     useEffect(() =>{
         return () => {
             const events = Object.values(Object.values(subscribedEvents));
