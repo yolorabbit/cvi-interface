@@ -1,5 +1,5 @@
 import { useIsMobile, useIsTablet } from "components/Hooks";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Coin, Pnl, Value } from "../Values";
 import RowItem from './RowItem';
 import platformConfig, { activeViews } from "config/platformConfig";
@@ -8,6 +8,7 @@ import PlatformClaim from "components/Actions/PlatformClaim";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { customFixedTokenValue } from "utils";
+import { useSelector } from "react-redux";
 
 const TradeRow = ({token, isHeader, className}) => {
     const { account } = useActiveWeb3React();

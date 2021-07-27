@@ -5,7 +5,7 @@ import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { gas, toBN, toBNAmount } from '../../utils/index';
+import { actionConfirmEvent, gas, toBN, toBNAmount } from '../../utils/index';
 import { useDispatch } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
@@ -102,6 +102,7 @@ const Sell = () => {
                 setIsOpen(false);
                 setAmount("");
                 updateAvailableBalance();
+                actionConfirmEvent(dispatch);
             }
 
         } catch (error) {

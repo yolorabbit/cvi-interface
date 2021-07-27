@@ -9,6 +9,8 @@ import * as TheGraph from 'graph/queries';
 import { contractsContext } from 'contracts/ContractContext';
 import { setData } from 'store/actions/wallet';
 import config from 'config/config';
+import { chainNames } from 'connectors';
+import { useIsMount } from '.';
 
 export const contractState = config.isMainnet ? {
     positions: {
@@ -38,17 +40,17 @@ const useHistoryEvents = () => {
     const contracts = useContext(contractsContext);
     const dispatch = useDispatch();
     const { getEventsFast } = useEvents();
+    const actionConfirmedCounter = useSelector(({events}) => events.actionConfirmed);
     let fromWei = library?.utils?.fromWei;
     let getBlock = library?.eth?.getBlock;
     const historyRef = useRef();
+    const isMount = useIsMount();
 
     const opt = useMemo(() => ({
         filter: { account },
         fromBlock: bottomBlockByNetwork[selectedNetwork],
         toBlock: 'latest',
     }), [account, selectedNetwork]);
-
-
 
     const mapper = useMemo(() => {
         return {
@@ -91,7 +93,7 @@ const useHistoryEvents = () => {
 
     const fetchPastEvents = useCallback(async function(view, activeToken) {
         if(!activeToken || !account || !selectedNetwork || !contracts || !wallet) return;
-        if(wallet[view] !== null) return;
+        if(wallet[view] !== null && selectedNetwork !== chainNames.Matic) return;
 
         let events = [];
         if(config.isMainnet) {
@@ -146,23 +148,31 @@ const useHistoryEvents = () => {
     }, [contracts, dispatch, mapper, opt, subs])
 
     useEffect(() => {
+        if(isMount) return;
         if(!selectedNetwork || !contracts || !account || typeof getEventsFast !== 'function') return;
         historyRef.current = setTimeout(() => {
             Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon).forEach(token => {
                 fetchPastEvents("positions", token);   
-                subscribe("positions", "Buy", 'OpenPosition', token);
-                subscribe("positions", "Sell", 'ClosePosition', token);
-
                 fetchPastEvents("liquidities", token);
-                subscribe("liquidities", "Deposit", 'Deposit', token);
-                subscribe("liquidities", "Withdraw", 'Withdraw', token);
+
+                if(selectedNetwork !== chainNames.Matic) {
+                    // subscribe to positions
+                    subscribe("positions", "Buy", 'OpenPosition', token);
+                    subscribe("positions", "Sell", 'ClosePosition', token);
+
+                    // subscribe to liquidities
+                    subscribe("liquidities", "Deposit", 'Deposit', token);
+                    subscribe("liquidities", "Withdraw", 'Withdraw', token);
+                }
+
             });
         }, 1000);
         
         return () => {
             if(historyRef.current) clearTimeout(historyRef.current);
         }
-    }, [selectedNetwork, contracts, account, fetchPastEvents, getEventsFast, subscribe])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedNetwork, contracts, account, actionConfirmedCounter])
 
 
 

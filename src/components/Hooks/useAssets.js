@@ -7,6 +7,7 @@ import stakingConfig from "config/stakingConfig";
 import { useSelector } from "react-redux";
 import platformConfig from "config/platformConfig";
 import web3Api from "contracts/web3Api";
+import { useIsMount } from ".";
 
 const useAssets = (type) => {
     const { account, library } = useActiveWeb3React();
@@ -16,6 +17,8 @@ const useAssets = (type) => {
     const events = useSelector(({events}) => events);
     const eventsUpdateRef = useRef(null);
     const { positions, liquidities } = useSelector(({wallet}) => wallet);
+    const actionConfirmedCounter = useSelector(({events}) => events.actionConfirmed);
+    const isMount = useIsMount();
 
     const getAssets = () => {
         const stakingAssets = () => {
@@ -113,6 +116,7 @@ const useAssets = (type) => {
     },[contracts, account, type]);
 
     useEffect(() => {
+        if(isMount) return;
 
         let canceled = false
 
@@ -125,7 +129,7 @@ const useAssets = (type) => {
             canceled = true;
         }
     //eslint-disable-next-line
-    },[events]);
+    }, [events, actionConfirmedCounter]);
 
     useEffect(() => {
         let canceled = false

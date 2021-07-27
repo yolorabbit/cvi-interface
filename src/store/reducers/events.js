@@ -1,7 +1,7 @@
 import * as actionTypes from '../actions/types';
 
 const initialState = {
-    
+    actionConfirmed: 0
 };
 
 export const eventsReducer = (state = initialState, action) => {
@@ -26,6 +26,14 @@ export const eventsReducer = (state = initialState, action) => {
                 }
             }
         }
+
+        case actionTypes.ACTION_CONFIRMED: {
+            return {
+                ...state,
+                actionConfirmed: state.actionConfirmed +1
+            }
+        }
+
         default:
             return state;
     }

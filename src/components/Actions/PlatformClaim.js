@@ -10,7 +10,7 @@ import moment from 'moment';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { addAlert } from 'store/actions';
-import { gas } from 'utils';
+import { actionConfirmEvent, gas } from 'utils';
 
 const PlatformClaim = ({token}) => {
     const dispatch = useDispatch();
@@ -65,6 +65,8 @@ const PlatformClaim = ({token}) => {
             }));
 
             await updateClaimData();
+
+            actionConfirmEvent(dispatch);
         } catch(error) {
             console.log(error);
             dispatch(addAlert({

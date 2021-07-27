@@ -5,7 +5,7 @@ import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { gas, maxUint256, toBN, toBNAmount } from '../../utils/index';
+import { actionConfirmEvent, gas, maxUint256, toBN, toBNAmount } from '../../utils/index';
 import { useDispatch } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
@@ -79,6 +79,8 @@ const Deposit = () => {
                     alertType: config.alerts.types.CONFIRMED,
                     message: "Transaction success!"
                 }));
+
+                actionConfirmEvent(dispatch);
             }
         } catch (error) {
             console.log(error);

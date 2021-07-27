@@ -103,3 +103,11 @@ export const useCopyToClipboard = text => {
 
   return [copied, copy];
 };
+
+export const useIsMount = () => {
+  const isMountRef = useRef(true);
+  useEffect(() => {
+    isMountRef.current = false;
+  }, []);
+  return isMountRef.current;
+};

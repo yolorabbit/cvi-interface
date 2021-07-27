@@ -5,7 +5,7 @@ import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { commaFormatted, gas, toBN, toBNAmount, toDisplayAmount } from '../../utils/index';
+import { actionConfirmEvent, commaFormatted, gas, toBN, toBNAmount, toDisplayAmount } from '../../utils/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
@@ -83,6 +83,8 @@ const Withdraw = () => {
                 alertType: config.alerts.types.CONFIRMED,
                 message: "Transaction success!"
             }));
+
+            actionConfirmEvent(dispatch);
 
             setIsOpen(false);
 

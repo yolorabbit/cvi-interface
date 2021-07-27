@@ -1,12 +1,12 @@
 import Button from 'components/Elements/Button';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useActiveToken, useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from './../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useWeb3Api } from './../../contracts/useWeb3Api';
-import { commaFormatted, gas, maxUint256, toBN, toBNAmount, toDisplayAmount } from './../../utils/index';
+import { actionConfirmEvent, commaFormatted, gas, maxUint256, toBN, toBNAmount, toDisplayAmount } from './../../utils/index';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { fromUnitsToTokenAmount, MAX_CVI_VALUE } from 'contracts/apis/position';
@@ -14,6 +14,7 @@ import { addAlert } from 'store/actions';
 import config from './../../config/config';
 import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
+import { actionConfirm } from 'store/actions/events';
 
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
@@ -137,6 +138,8 @@ const Buy = () => {
                     alertType: config.alerts.types.CONFIRMED,
                     message: "Transaction success!"
                 }));
+
+                actionConfirmEvent(dispatch);
             }
         } catch (error) {
             console.log(error);

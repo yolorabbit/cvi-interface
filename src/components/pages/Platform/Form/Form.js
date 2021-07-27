@@ -15,7 +15,7 @@ const Form = () => {
     const tokenLeverageList = platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage;
     const [leverage, setLeverage] = useState(tokenLeverageList?.[0]);
     const [amount, setAmount] = useState("");
-    
+
     useEffect(() => {
         if(!platformConfig.tokens[selectedCurrency]?.leverage) setLeverage();
         

@@ -1,8 +1,10 @@
 import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
 import config from "config/config";
-import { ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
+import { chainNames, ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
+import { getChainName } from "contracts/utils";
 import moment from "moment";
+import { actionConfirm } from "store/actions/events";
 
 export const gas = config.isMainnet ? { } : { gas: 5000000, gasPrice: '25000000000' };
 
@@ -135,3 +137,11 @@ export const chainNameToChainId = (_chainName) => {
  }
 
 export const maxUint256 = toBN(2).pow(toBN(256)).sub(toBN(1));
+
+export const actionConfirmEvent = async (dispatch) => {
+    const chainName = await getChainName();
+
+    if(chainName === chainNames.Matic) {
+        dispatch(actionConfirm());
+    }
+}

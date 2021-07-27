@@ -13,3 +13,4 @@ export const SET_DATA = 'SET_DATA';
 
 //EVENTS
 export const ADD_EVENT = 'ADD_EVENT';
+export const ACTION_CONFIRMED = 'ACTION_CONFIRMED';
