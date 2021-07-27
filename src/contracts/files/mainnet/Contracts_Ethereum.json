@@ -17488,7 +17488,7 @@
       }
     ]
   },
-    "ERC20": {
+  "ERC20": {
     "abi": [
       {
         "constant": true,
