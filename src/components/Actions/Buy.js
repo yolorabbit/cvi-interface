@@ -1,5 +1,5 @@
 import Button from 'components/Elements/Button';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useActiveToken, useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
 import { useContext } from 'react';
@@ -14,7 +14,6 @@ import { addAlert } from 'store/actions';
 import config from './../../config/config';
 import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
-import { actionConfirm } from 'store/actions/events';
 
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
