@@ -9,7 +9,7 @@ import { upperFirst } from "lodash";
 import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAlert } from "store/actions";
-import { gas, toBN, toBNAmount } from "utils";
+import { actionConfirmEvent, gas, toBN, toBNAmount } from "utils";
 import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
@@ -55,6 +55,8 @@ const StakingActions = () => {
                 alertType: config.alerts.types.CONFIRMED,
                 message: "Transaction success!"
             }));
+
+            actionConfirmEvent(dispatch);
 
         }catch (error) {
             console.log(error);

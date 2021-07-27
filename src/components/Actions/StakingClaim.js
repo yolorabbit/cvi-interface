@@ -6,7 +6,7 @@ import { contractsContext } from 'contracts/ContractContext';
 import React, { useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
-import { gas } from 'utils';
+import { actionConfirmEvent, gas } from 'utils';
 import Rewards from './../Tables/Elements/Values/Rewards';
 
 
@@ -32,6 +32,8 @@ const StakingClaim = ({tokenName, protocol, claim }) => {
                 alertType: config.alerts.types.CONFIRMED,
                 message: "Transaction success"
             }));
+
+            actionConfirmEvent(dispatch);
         } catch (error) {
             dispatch(addAlert({
                 id: 'claim',
