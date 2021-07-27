@@ -11,6 +11,7 @@ const SelectLeverage = ({selectedCurrency, leverage, tokenLeverageList = [], set
     const {account} = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const [lastPositionLeverage, setLastPositionLeverage] = useState(null);
+    const actionConfirmedCounter = useSelector(({events}) => events.actionConfirmed);
     useEffect(()=>{
         if(!account) return
         
@@ -30,7 +31,7 @@ const SelectLeverage = ({selectedCurrency, leverage, tokenLeverageList = [], set
             canceled = true;
         }
         // eslint-disable-next-line
-    },[selectedNetwork, selectedCurrency, account])
+    },[selectedNetwork, selectedCurrency, account, actionConfirmedCounter])
     return (
         <div className="select-leverage-component">
            <h2>Select Leverage</h2>
