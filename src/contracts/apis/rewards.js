@@ -8,7 +8,8 @@ import { DAY } from '../../components/Hooks/useEvents';
 var BN = Web3.utils.BN;
 
 async function getClaimablePositionUnits(platform, rewards, account) {
-  let { positionUnitsAmount, creationTimestamp } = await platform.methods.positions(account).call();
+  let { positionUnitsAmount, creationTimestamp, leverage } = await platform.methods.positions(account).call();
+  positionUnitsAmount = leverage ? toBN(positionUnitsAmount).div(toBN(leverage)).toString() : positionUnitsAmount;
   const unclaimedPositionUnits = await rewards.methods.unclaimedPositionUnits(account).call();
   // positionUnitsAmount = positionUnitsAmount < unclaimedPositionUnits ? positionUnitsAmount : unclaimedPositionUnits;
   positionUnitsAmount = Math.min(positionUnitsAmount, unclaimedPositionUnits);
