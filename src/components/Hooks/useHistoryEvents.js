@@ -97,7 +97,7 @@ const useHistoryEvents = () => {
 
         let events = [];
         if(config.isMainnet) {
-            events = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0)
+            events = await TheGraph[`account_${view}${activeToken.key === "usdc" ? "USDC" : ""}`](account, contracts[activeToken.rel.platform]._address, 0)
             events = Object.values(events).map((_events, idx) => _events.map((event)=> ({...event, transactionHash: event.id, timestamp: Number(event.timestamp), event: contractState[view][Object.keys(events)[idx]] }))).flat();
         } else {
             let events2 = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0);
@@ -116,7 +116,6 @@ const useHistoryEvents = () => {
         if(events.length) {
             events = await Promise.all(events.map(event => mapper[view](event, event.event, activeToken)));
         }
-
         events = events.sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
         dispatch(setData(view, events));
     // eslint-disable-next-line react-hooks/exhaustive-deps

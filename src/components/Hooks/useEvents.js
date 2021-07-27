@@ -118,8 +118,9 @@ export const useEvents = () => {
   
     async function getTransferEvents(staking, token, days) {
       if(chainName === chainNames.Matic) {
-        const _events = await TheGraph.collectedFees();
-        return _events.collectedFees;
+            const _events = await TheGraph.collectedFees();
+            const _eventsUSDC = await TheGraph.collectedFeesUSDC();
+            return _events.collectedFees.concat(_eventsUSDC.collectedFees);
       } 
       let isETH = false;
       if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
@@ -135,10 +136,10 @@ export const useEvents = () => {
     async function getLastOpenEvent(account, platform) {
         try {
             if(config.isMainnet) {
-                let _lastOpenEvent = await TheGraph.lastOpen(account, platform._address);
+                const platformName = await platform.methods.name().call();
+                let _lastOpenEvent = await TheGraph[`lastOpen${platformName === "CVI-LP" ? "USDC" : ""}`](account, platform._address);
                 return !!_lastOpenEvent.openPositions?.length ? _lastOpenEvent.openPositions[0] : null;
             }
-            
             const options = {eventsCount: 1, days: 30 };
             const eventsData = [{ contract: platform, events: { OpenPosition: [{ account }] } }];
             const events = await getEventsFast(eventsData, options);

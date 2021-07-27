@@ -1,5 +1,6 @@
 import { getGraphEndpoint } from "contracts/utils";
 import { request, gql } from "graphql-request";
+const POLYGON_USDC_GRAPH_ENDPOINT = "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc";
 
 const allPlatformEventsQuery = gql`
   {
@@ -128,6 +129,7 @@ const accountLiquidityQuery = gql`
       orderBy: timestamp
       orderDirection: desc
     ) {
+      id
       platform
       timestamp
       account
@@ -141,6 +143,7 @@ const accountLiquidityQuery = gql`
       orderBy: timestamp
       orderDirection: desc
     ) {
+      id
       platform
       timestamp
       account
@@ -185,16 +188,32 @@ export async function collectedFees() {
   return await request(await getGraphEndpoint(), collectedFeesQuery );
 }
 
+export async function collectedFeesUSDC() {
+  return await request(POLYGON_USDC_GRAPH_ENDPOINT, collectedFeesQuery );
+}
+
 export async function account_liquidities(account, platformAddress, fromTimestamp) {
   return await request(await getGraphEndpoint(), accountLiquidityQuery, { account, platformAddress, fromTimestamp });
+}
+
+export async function account_liquiditiesUSDC(account, platformAddress, fromTimestamp) {
+  return await request(POLYGON_USDC_GRAPH_ENDPOINT, accountLiquidityQuery, { account, platformAddress, fromTimestamp });
 }
 
 export async function account_positions(account, platformAddress, fromTimestamp) {
   return await request(await getGraphEndpoint(), accountPositionsQuery, { account, platformAddress, fromTimestamp });
 }
 
+export async function account_positionsUSDC(account, platformAddress, fromTimestamp) {
+  return await request(POLYGON_USDC_GRAPH_ENDPOINT, accountPositionsQuery, { account, platformAddress, fromTimestamp });
+}
+
 export async function lastOpen(account, platformAddress) {
   return await request(await getGraphEndpoint(), lastOpenQuery, { account, platformAddress });
+}
+
+export async function lastOpenUSDC(account, platformAddress) {
+  return await request(POLYGON_USDC_GRAPH_ENDPOINT, lastOpenQuery, { account, platformAddress });
 }
 
 export async function allPlatformEvents() {

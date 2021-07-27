@@ -20,8 +20,12 @@ export const getTokenData = async (contract) => {
 
 export async function getFeesCollected(USDTData, tokensData) {
     let res = await TheGraph.collectedFees();
-    //console.log(res);
-    //console.log(`res collectedFees size ${res.collectedFees.length}`);
+    const includeUSDC = tokensData.some(token => token.symbol === "USDC");
+    if(includeUSDC) {
+        let usdc_res = await TheGraph.collectedFeesUSDC();
+        res.collectedFees = res.collectedFees.concat(usdc_res.collectedFees);
+    }
+    // console.log(`res collectedFees size ${res.collectedFees.length}`);
     let sum = toBN(0);
     for (const token of tokensData.filter(item => item !== null)) {
       //console.log(`token ${token.symbol}`);
@@ -100,10 +104,13 @@ const web3Api = {
             return "N/A"
         }
     },
-    getFeesCollected: async ({USDT, WETH}) => {
+    getFeesCollected: async (contracts, tokens) => {
         try {
-            const USDTData = await getTokenData(USDT);
-            const tokensData = [USDTData, await getTokenData(WETH)];
+            const USDTData = await getTokenData(contracts.USDT);
+            const tokensData = [];
+            for(let token of tokens) {
+                tokensData.push(await getTokenData(contracts[token.rel.contractKey]));
+            }
             const totalFeesCollected = await getFeesCollected(USDTData, tokensData);
             return customFixed(totalFeesCollected, 2);
         } catch(error) {
