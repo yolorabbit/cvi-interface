@@ -22,9 +22,10 @@ const StakingActions = () => {
     const { selectedNetwork } = useSelector(({app})=>app);
     const token = stakingConfig.tokens[selectedNetwork][protocol][tokenName]
     const [processing, setProcessing] = useState(false);
-    const unstakeModalButtonDisabled = (isOpen && !isModal && disabled);
+    const unstakeModalButtonDisabled = ((isOpen && !isModal && (disabled || !(Number(amount ?? "0") > 0))));
     const unstakeTableButtonDisabled = (token.key === 'govi' && (lockedTime > 0 || lockedTime === null));
-    
+    const stakeModalDisabled = (isOpen && !isModal) && !(Number(amount ?? "0") > 0);
+
     const onClick = async () => {
         if(isModal && !isOpen) return setIsOpen(true);
         setProcessing(true);
@@ -100,7 +101,7 @@ const StakingActions = () => {
                             className="stake-component__container--button"
                             buttonText="Stake" 
                             onClick={onClick}
-                            disabled={disabled}
+                            disabled={disabled || stakeModalDisabled}
                             processing={processing}
                         />
                     </div>
