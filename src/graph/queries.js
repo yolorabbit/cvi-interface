@@ -95,6 +95,7 @@ const accountPositionsQuery = gql`
       orderDirection: desc
     ) {
       id
+      leverage
       platform
       cviValue
       blockNumber
@@ -110,6 +111,7 @@ const accountPositionsQuery = gql`
       orderDirection: desc
     ) {
       id
+      leverage
       platform
       cviValue
       blockNumber
