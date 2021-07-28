@@ -173,12 +173,13 @@ async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, purch
   return fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
 }
 
-async function getPositionsPNL(contracts, token, {account, eventsUtils, days = 30}) {
+async function getPositionsPNL(contracts, token, {account, library, eventsUtils, days = 30}) {
   try {
     const currentPositionBalance = await web3Api.getAvailableBalance(contracts, token, {account, type: "sell"}, {errorValue: "0", updateOn: "positions"});
     let events = [];
+
     if(config.isMainnet) {
-      events = await TheGraph.account_positions(account, contracts[token.rel.platform]._address, Math.floor(new Date().getTime() / 1000 - days * DAY));
+      events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, Math.floor(new Date().getTime() / 1000 - days * DAY));
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: Object.keys(contractState.positions)[idx] }))).flat();
     } else {
       const chainName = await getChainName();
@@ -214,17 +215,19 @@ async function getPositionsPNL(contracts, token, {account, eventsUtils, days = 3
           break;
         }
 
-        case Object.keys(contractState.positions)[0]:
+        case "OpenPosition": {
           openSum = openSum.add(toBN(event.tokenAmount.toString()));
           break;
-          
-        case Object.keys(contractState.positions)[1]:
+        }
+
+        case "ClosePosition": {
           closeSum = closeSum.add(toBN(event.tokenAmount.toString()));
           if (toBN(event.positionUnitsAmount).isZero()) {
             openSum = toBN(0);
             closeSum = toBN(0);
           }
           break;
+        }
 
         case "liquidatePositions": // reset all sums.
             openSum = toBN(0);

@@ -3,7 +3,7 @@ import config from "config/config";
 import { getChainName } from "contracts/utils";
 import * as TheGraph from 'graph/queries';
 import { toBN, toDisplayAmount } from "utils";
-import { bottomBlockByNetwork, DEFAULT_STEPS } from '../../components/Hooks/useEvents';
+import { bottomBlockByNetwork, DAY, DEFAULT_STEPS } from '../../components/Hooks/useEvents';
 
 export async function toLPTokens(contracts, token, { tokenAmount }) {
   let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
@@ -11,11 +11,11 @@ export async function toLPTokens(contracts, token, { tokenAmount }) {
   return totalBalance.isZero() ? toBN(0) : tokenAmount.mul(totalSupply).div(totalBalance);
 }
 
-async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}) {
+async function getLiquidityPNL(contracts, token, {account, library, eventsUtils, days = 30}) {
   try {
     let events = [];
     if(config.isMainnet) {
-      events = await TheGraph.account_liquidities(account, contracts[token.rel.platform]._address, 0);
+      events = await TheGraph[`account_liquidities${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, Math.floor(new Date().getTime() / 1000 - days * DAY));
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({...event, event: Object.keys(contractState.liquidities)[idx]}))).flat();
     } else {
       const chainName = await getChainName();
@@ -38,24 +38,43 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}
       const event = _event.returnValues ?? _event;
 
       switch (eventName) {
-        case Object.values(contractState.liquidities)[1]:
-              depositSum = depositSum.add(toBN(event.tokenAmount.toString()));
+        case 'deposits': {
+          depositSum = depositSum.add(toBN(event.tokenAmount.toString()));
+          lpTokenSum = lpTokenSum.add(toBN(event.lpTokensAmount.toString()));
+          break;
+        }
 
-              lpTokenSum = lpTokenSum.add(toBN(event.lpTokensAmount.toString()));
-              break;
-          case Object.values(contractState.liquidities)[0]:
-              withdrawSum = withdrawSum.add(toBN(event.tokenAmount.toString()));
-
-              lpTokenSum = lpTokenSum.sub(toBN(event.lpTokensAmount.toString()));
-              if (lpTokenSum.isZero()) {
-                depositSum = toBN(0);
-                withdrawSum = toBN(0);
-                lpTokenSum = toBN(0);
-              }
-              break;
-          default:
-              break;
+        case 'withdraws': {
+          withdrawSum = withdrawSum.add(toBN(event.tokenAmount.toString()));
+          lpTokenSum = lpTokenSum.sub(toBN(event.lpTokensAmount.toString()));
+          if (lpTokenSum.isZero()) {
+            depositSum = toBN(0);
+            withdrawSum = toBN(0);
+            lpTokenSum = toBN(0);
           }
+          break;
+        }
+
+        case 'Deposit': {
+          depositSum = depositSum.add(toBN(event.tokenAmount.toString()));
+          lpTokenSum = lpTokenSum.add(toBN(event.lpTokensAmount.toString()));
+          break;
+        }
+
+        case 'Withdraw': {
+          withdrawSum = withdrawSum.add(toBN(event.tokenAmount.toString()));
+          lpTokenSum = lpTokenSum.sub(toBN(event.lpTokensAmount.toString()));
+          if (lpTokenSum.isZero()) {
+            depositSum = toBN(0);
+            withdrawSum = toBN(0);
+            lpTokenSum = toBN(0);
+          }
+          break;
+        }
+
+        default:
+            break;
+        }
       });
       
       let totalSum = depositSum.sub(withdrawSum);
