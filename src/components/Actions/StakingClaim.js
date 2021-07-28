@@ -11,7 +11,7 @@ import Rewards from './../Tables/Elements/Values/Rewards';
 
 
 const StakingClaim = ({tokenName, protocol, claim }) => {
-    const isValid = claim.some(({amount}) => amount > 0);
+    const isValid = claim.some(({amount}) => amount.replace(",","") !== "0");
     const dispatch = useDispatch();
     const { account } = useActiveWeb3React()
     const contracts = useContext(contractsContext);
