@@ -32,7 +32,7 @@ export const supportedNetworksConfig = {
                 symbol: 'MATIC',
                 decimals: 18
             },
-            rpcUrls: ['https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d'],
+            rpcUrls: ['https://matic-mainnet.chainstacklabs.com'],
             blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
         },
     },
