@@ -7,6 +7,7 @@ import platformConfig, { activeViews } from 'config/platformConfig';
 import ActionController from 'components/Actions/ActionController';
 import './Form.scss';
 import { useSelector } from 'react-redux';
+import { contractsContext } from 'contracts/ContractContext';
 
 const Form = () => {
     const { activeView } = useContext(platformViewContext);
@@ -48,24 +49,54 @@ const Form = () => {
                     <Details selectedCurrency={selectedCurrency?.toUpperCase()} amount={amount} leverage={leverage} />
                </div>
             
-                <SeeMore />    
+                <SeeMore selectedCurrency={selectedCurrency?.toUpperCase()}/>    
             </div>
         )
         //eslint-disable-next-line
     }, [activeView, selectedCurrency, selectedNetwork, amount, leverage]) 
 }
 
-const SeeMore = () => {
+const SeeMore = ({selectedCurrency}) => {
     const { activeView } = useContext(platformViewContext);
+    const { selectedNetwork } = useSelector(({app}) => app);
+    const contracts = useContext(contractsContext);
+    const [lockup, setLockup] = useState(48);
+    const platfromName = platformConfig.tokens[selectedNetwork][selectedCurrency.toLowerCase()]?.rel.platform;
+    
+    
+    useEffect(()=>{
+        if(!contracts) return
+        const getLockup = async (cb) => {
+            try{
+                const locktime = await contracts[platfromName].methods.lpsLockupPeriod().call();
+                setLockup(locktime / 60 / 60)
+            } catch (error) {
+                console.log("getLockuptime error: ", error);
+            }
+        }
+
+        let canceled = false;
+
+        getLockup((cb)=>{
+            if(canceled) return
+            cb()
+        });
+
+        return () => {
+            canceled = true;
+        }
+    //eslint-disable-next-line
+    },[selectedCurrency, selectedNetwork, contracts]);
+
     return useMemo(() => {
         return <div className="platform-form-component__bottom">
             {activeView === activeViews.trade ? <p>
                 <b>Pay Attention: </b> 
                 GOVI tokens will become claimable starting the day after your last open position action (UTC time) and for a period not exceeding 30 days.
                 Please also note that you won't be able to sell your position within the next 6 hours.
-            </p> : <p><b>Pay Attention: </b>you won't be able to withdraw your liquidity within the next 72 hours.</p>}
+            </p> : <p><b>Pay Attention: </b>you won't be able to withdraw your liquidity within the next {lockup} hours.</p>}
         </div>
-    }, [activeView]);
+    }, [activeView, lockup]);
 }
 
 export default Form;
