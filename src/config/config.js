@@ -132,6 +132,14 @@ const config = {
         mobileLeft: -40,
       }
     },
+    openPositionReward: {
+      title: "Open position reward",
+      tooltip: {
+        content: "You will be able to claim the maximum reward if you keep your position open for at least 48 hours.",
+        left: "0",
+        mobileLeft: -40,
+      }
+    },
     fundingFee: {
       title: "Current funding fee",
       tooltip: {
