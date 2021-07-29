@@ -6,7 +6,8 @@ import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
 
 // @TODO: use caching
-const getWebProvider = () => new Web3(window.ethereum);
+const getWebProvider = () => new Web3("https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d");
+Contract.setProvider("https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d");
 
 let contracts = {
     [chainNames.Ethereum]: {},

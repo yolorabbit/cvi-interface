@@ -32,7 +32,7 @@ export const supportedNetworksConfig = {
                 symbol: 'MATIC',
                 decimals: 18
             },
-            rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
+            rpcUrls: ['https://rpc-mainnet.matic.network'],
             blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
         },
     },
@@ -129,6 +129,17 @@ const RPC_URLS = {
         31338: supportedNetworksConfig.staging[31338].rpcUrls,
     },
 }
+const RPC_URLS_NETWORK = {
+    "mainnet": {
+        1: supportedNetworksConfig.mainnet[1].rpcUrls,
+        137: "https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d",
+    },
+    "staging": {
+        31337: supportedNetworksConfig.staging[31337].rpcUrls,
+        // 80001: supportedNetworksConfig.staging[80001].rpcUrls,
+        31338: supportedNetworksConfig.staging[31338].rpcUrls,
+    },
+}
 
 const RPC_URLS_BY_ENV = RPC_URLS[process.env.REACT_APP_ENVIRONMENT];
 
@@ -136,7 +147,7 @@ export const injected = new InjectedConnector({ supportedChainIds: Object.keys(s
 
 export const network = new NetworkConnector({
     defaultChainId,
-    urls: RPC_URLS_BY_ENV,
+    urls: RPC_URLS_NETWORK[process.env.REACT_APP_ENVIRONMENT],
 })
 
 const walletconnectorInstance = new WalletConnectConnector({
