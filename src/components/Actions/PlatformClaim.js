@@ -4,18 +4,18 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Spinner from 'components/Spinner/Spinner';
 import Rewards from 'components/Tables/Elements/Values/Rewards';
 import config from 'config/config';
-import { contractsContext } from 'contracts/ContractContext';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import moment from 'moment';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import { actionConfirmEvent, gas } from 'utils';
+import Contract from 'web3-eth-contract';
 
 const PlatformClaim = ({token}) => {
     const dispatch = useDispatch();
     const timerRef = useRef();
-    const contracts = useContext(contractsContext);
+    const { selectedNetwork } = useSelector(({app}) => app);
     const { library, account } = useActiveWeb3React();
     const accountPayload = useMemo(() => ({account}), [account]);
     const [claimData, updateClaimData] = useWeb3Api("getClaimData", token.key, accountPayload, {updateOn: "positions"});
@@ -51,11 +51,19 @@ const PlatformClaim = ({token}) => {
         }
     }
 
+    const getContract = (contractKey) => {
+        const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
+        const { abi, address } = contractsJSON[contractKey];
+        const _contract = new Contract(abi, address);
+        _contract.setProvider(library?.currentProvider);
+        return _contract
+    }
+    
     const onSubmit = async () => {
         try {
             if(!claimData?.length > 0) return;
-           
-            await contracts[token.rel.positionRewards].methods.claimReward().send({ from: account, ...gas })
+            const _contract = getContract(token.rel.positionRewards);
+            await _contract.methods.claimReward().send({ from: account, ...gas })
 
             dispatch(addAlert({
                 id: 'claim',
