@@ -10,13 +10,14 @@ import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAlert } from "store/actions";
 import { actionConfirmEvent, gas, toBN, toBNAmount } from "utils";
+import Contract from "web3-eth-contract";
 import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
     const {disabled, type, token: tokenName, isModal, isOpen, setIsOpen, amount, setAmount, protocol } = useActionController();
     const dispatch = useDispatch();
     const contracts = useContext(contractsContext);
-    const { account } = useActiveWeb3React();
+    const { account, library } = useActiveWeb3React();
     const approvalValidation = useApproveToken();
     const lockedTime = useIsLockedTime(type === stakingConfig.actionsConfig.unstake.key && tokenName === "govi");
     const { selectedNetwork } = useSelector(({app})=>app);
@@ -52,13 +53,23 @@ const StakingActions = () => {
     //eslint-disable-next-line
     },[tokenName, selectedNetwork, contracts]);
 
+    const getContract = (contractKey) => {
+        const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
+        const { abi, address } = contractsJSON[contractKey];
+        const _contract = new Contract(abi, address);
+        _contract.setProvider(library?.currentProvider);
+        return _contract
+    }
+    
     const onClick = async () => {
         if(isModal && !isOpen) return setIsOpen(true);
         setProcessing(true);
         const isApproved = await approvalValidation(token, amount);
         if(!isApproved) return;
-
+        
         try {
+            const _contract = getContract(token.rel.stakingRewards);
+            
             dispatch(addAlert({
                 id: 'notice',
                 alertType: config.alerts.types.NOTICE,
@@ -67,11 +78,11 @@ const StakingActions = () => {
 
             switch (type) {
                 case "stake":
-                    await contracts[token.rel.stakingRewards].methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
+                    await _contract.methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
                     break;
                 case "unstake":
                     const action = token.key === 'govi' ? "unstake" : "withdraw";
-                    await contracts[token.rel.stakingRewards].methods[action](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
+                    await _contract.methods[action](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
                     break;    
                 default:
                     break;
