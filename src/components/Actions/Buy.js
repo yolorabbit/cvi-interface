@@ -14,6 +14,7 @@ import { addAlert } from 'store/actions';
 import config from './../../config/config';
 import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
+import Contract from 'web3-eth-contract';
 
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
@@ -27,18 +28,29 @@ const Buy = () => {
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
     const [isProcessing, setProcessing] = useState();
+    const { selectedNetwork } = useSelector(({app}) => app);
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const purchaseFeePayload = useMemo(() => ({ tokenAmount,leverage } ), [tokenAmount, leverage]);
     const [purchaseFee, getPurchaseFees] = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload, { validAmount: true});
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", token);
+    
+    const getContract = (contractKey) => {
+        const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
+        const { abi, address } = contractsJSON[contractKey];
+        const _contract = new Contract(abi, address);
+        _contract.setProvider(library?.currentProvider);
+        return _contract
+    }
 
     const allowance = useCallback(async (_account) => {
-        return await contracts[activeToken.rel.contractKey].methods.allowance(account, _account).call()
+        const _contract = getContract(activeToken.rel.contractKey);
+        return await _contract.methods.allowance(account, _account).call()
     }, [account, activeToken, contracts]);
 
     const approve = useCallback(async (_address) => {
-        return await contracts[activeToken.rel.contractKey].methods.approve(_address, maxUint256).send({from: account});
+        const _contract = getContract(activeToken.rel.contractKey);
+        return await _contract.methods.approve(_address, maxUint256).send({from: account});
     }, [account, activeToken, contracts]);
     
     const approvalValidation = useCallback(async () => {
@@ -85,13 +97,14 @@ const Buy = () => {
     }, [purchaseFee, getPurchaseFees])
 
     const buy = useCallback(async () => {
+        const _contract = getContract(activeToken.rel.platform);
         const _leverage = !leverage ? "1" : leverage;
         if (activeToken.type === "eth") {
-            return await contracts[activeToken.rel.platform].methods.openPositionETH(MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, value: tokenAmount, ...gas });
+            return await _contract.methods.openPositionETH(MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, value: tokenAmount, ...gas });
         } else if (activeToken.type === "v2" || activeToken.type === "usdc") {
-            return await contracts[activeToken.rel.platform].methods.openPosition(tokenAmount, MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, ...gas });
+            return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, ...gas });
         } else {
-            return await contracts[activeToken.rel.platform].methods.openPosition(tokenAmount, MAX_CVI_VALUE).send({ from: account, ...gas });
+            return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE).send({ from: account, ...gas });
         }
     }, [account, activeToken, tokenAmount, contracts, leverage, purchaseFee])
 
