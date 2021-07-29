@@ -1,16 +1,25 @@
+import { useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import './CviVol.scss';
 
 const CviVol = () => {
-  const isPositive = true;
-  return (
-      <div className="cvi-volatility-component">
-        <div className="cvi-volatility-component__vol">
-            <span className="cvi-volatility-component__vol--title">ETH Volatility (ETHVol)</span> 
-            <span className="cvi-volatility-component__vol--value">38.67</span>
-            <span className={`cvi-info-component__top--info cvi-volatility-component__vol--precent ${isPositive ? 'high' : 'low'}`}>1.3 (-0.89%) <img src={require(`images/icons/${isPositive ? 'up-arrow' : 'down-arrow'}.svg`).default} alt="arrow" /></span>
+   const { ethVolatilityInfo } = useSelector(({ app }) => app.cviInfo);
+
+   return useMemo(() => {
+     if(!ethVolatilityInfo) return null;
+     const isPositive = ethVolatilityInfo.lastTimeChange > 0;
+      return (
+         <div className="cvi-volatility-component">
+            <div className="cvi-volatility-component__vol">
+               <span className="cvi-volatility-component__vol--title">ETH Volatility (ETHVol)</span>
+               <span className="cvi-volatility-component__vol--value">{ethVolatilityInfo.price}</span>
+               <span className={`cvi-info-component__top--info cvi-volatility-component__vol--precent ${isPositive ? 'high' : 'low'}`}>
+                  {ethVolatilityInfo.lastTimeChange} ({isPositive ? '+' : ''}{ethVolatilityInfo.lastTimeChangePrecentage}%) <img src={require(`images/icons/${isPositive ? 'up-arrow' : 'down-arrow'}.svg`).default} alt="arrow" />
+               </span>
+            </div>
          </div>
-      </div>
-   );
+      );
+   }, [ethVolatilityInfo]);
 };
 
 export default CviVol;
