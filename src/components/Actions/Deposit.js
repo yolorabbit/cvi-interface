@@ -6,27 +6,39 @@ import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { actionConfirmEvent, gas, maxUint256, toBN, toBNAmount } from '../../utils/index';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import platformConfig from 'config/platformConfig';
+import Contract from 'web3-eth-contract';
 
 const Deposit = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
     const { disabled, type, setIsOpen, token, amount, setAmount, updateAvailableBalance } = useActionController();
-    const { account } = useActiveWeb3React();
+    const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
     const [isProcessing, setProcessing] = useState();
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
+    const { selectedNetwork } = useSelector(({app}) => app);
+    
+    const getContract = (contractKey) => {
+        const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
+        const { abi, address } = contractsJSON[contractKey];
+        const _contract = new Contract(abi, address);
+        _contract.setProvider(library?.currentProvider);
+        return _contract
+    }
 
     const allowance = async (_account) => {
-        return await contracts[activeToken.rel.contractKey].methods.allowance(account, _account).call();
+        const _contract = getContract(activeToken.rel.contractKey);
+        return await _contract.methods.allowance(account, _account).call();
     }
 
     const approve = async (_address) => {
-        return await contracts[activeToken.rel.contractKey].methods.approve(_address, maxUint256).send({from: account});
+        const _contract = getContract(activeToken.rel.contractKey);
+        return await _contract.methods.approve(_address, maxUint256).send({from: account});
     }
 
     const approvalValidation = async () => {
@@ -48,8 +60,9 @@ const Deposit = () => {
     }
 
     const deposit = async () => {
-        if(activeToken.type === "eth") return await contracts[activeToken.rel.platform].methods.depositETH(toBN('0')).send({ from: account, value: tokenAmount, ...gas });
-        return await contracts[activeToken.rel.platform].methods.deposit(tokenAmount, toBN('0')).send({from: account, ...gas});
+        const _contract = getContract(activeToken.rel.platform);
+        if(activeToken.type === "eth") return await _contract.methods.depositETH(toBN('0')).send({ from: account, value: tokenAmount, ...gas });
+        return await _contract.methods.deposit(tokenAmount, toBN('0')).send({from: account, ...gas});
     }
 
     const onClick = async () => {

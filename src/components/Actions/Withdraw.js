@@ -14,6 +14,7 @@ import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countd
 import web3Api from 'contracts/web3Api';
 import ErrorModal from 'components/Modals/ErrorModal';
 import WithdrawInfo from 'components/pages/Platform/Info/WithdrawInfo';
+import Contract from 'web3-eth-contract';
 
 const Withdraw = () => {
     const dispatch = useDispatch(); 
@@ -28,6 +29,15 @@ const Withdraw = () => {
     const lockedTime = useIsLockedTime();
     const [errorMessage, setErrorMessage] = useState();
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
+    const { selectedNetwork } = useSelector(({app}) => app);
+    
+    const getContract = (contractKey) => {
+        const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
+        const { abi, address } = contractsJSON[contractKey];
+        const _contract = new Contract(abi, address);
+        _contract.setProvider(library?.currentProvider);
+        return _contract
+    }
 
     const getMaxAmount = async (index) => {
         let totalBalance = toBN(
@@ -50,8 +60,9 @@ const Withdraw = () => {
     }
 
     const withdraw = async () => {
+        const _contract = getContract(activeToken.rel.platform);
         const lpTokens = await web3Api.toLPTokens(contracts, activeToken, { tokenAmount });
-        await contracts[activeToken.rel.platform].methods.withdrawLPTokens(toBN(lpTokens)).send({from: account, ...gas});
+        await _contract.methods.withdrawLPTokens(toBN(lpTokens)).send({from: account, ...gas});
     }
 
     const onClick = async () => {
