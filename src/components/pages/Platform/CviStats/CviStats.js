@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
 import CviValue from './CviValue';
 import Stat from 'components/Stat';
-import './CviStats.scss';
 import { useSelector } from 'react-redux';
+import './CviStats.scss';
 
 const CviStats = () => {
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
