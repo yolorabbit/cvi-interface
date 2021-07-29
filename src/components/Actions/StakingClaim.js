@@ -2,8 +2,7 @@ import Button from 'components/Elements/Button';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import config from 'config/config';
 import stakingConfig from 'config/stakingConfig';
-import { contractsContext } from 'contracts/ContractContext';
-import React, { useContext } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import { actionConfirmEvent, gas } from 'utils';
@@ -15,7 +14,6 @@ const StakingClaim = ({tokenName, protocol, claim }) => {
     const isValid = claim.some(({amount}) => amount.replace(",","") !== "0");
     const dispatch = useDispatch();
     const { account, library } = useActiveWeb3React()
-    const contracts = useContext(contractsContext);
     const { selectedNetwork } = useSelector(({app}) => app); 
     const token = stakingConfig.tokens[selectedNetwork][protocol][tokenName];
     

@@ -35,23 +35,25 @@ const Buy = () => {
     const [purchaseFee, getPurchaseFees] = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload, { validAmount: true});
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", token);
     
-    const getContract = (contractKey) => {
+    const getContract = useCallback((contractKey) => {
         const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
         const { abi, address } = contractsJSON[contractKey];
         const _contract = new Contract(abi, address);
         _contract.setProvider(library?.currentProvider);
         return _contract
-    }
+    }, [library?.currentProvider, selectedNetwork])
 
     const allowance = useCallback(async (_account) => {
         const _contract = getContract(activeToken.rel.contractKey);
         return await _contract.methods.allowance(account, _account).call()
-    }, [account, activeToken, contracts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [account, activeToken.rel.contractKey]);
 
     const approve = useCallback(async (_address) => {
         const _contract = getContract(activeToken.rel.contractKey);
         return await _contract.methods.approve(_address, maxUint256).send({from: account});
-    }, [account, activeToken, contracts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [account, activeToken.rel.contractKey]);
     
     const approvalValidation = useCallback(async () => {
         const isETH = token === 'eth';
@@ -106,7 +108,8 @@ const Buy = () => {
         } else {
             return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE).send({ from: account, ...gas });
         }
-    }, [account, activeToken, tokenAmount, contracts, leverage, purchaseFee])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeToken, leverage, purchaseFee, account, tokenAmount])
 
     const onClick = useCallback(async () => {
         const [allowToBuy, totalToOpen] = await getMaxAvailableToOpen();

@@ -1,5 +1,4 @@
 import { useWeb3React } from "@web3-react/core";
-import { useActiveWeb3React } from "components/Hooks/wallet";
 import config from "config/config";
 import { useEffect, useMemo, useState } from "react"
 import { useSelector } from "react-redux";
