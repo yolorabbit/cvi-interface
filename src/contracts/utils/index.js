@@ -1,13 +1,14 @@
-import { network } from 'connectors';
+import { network, RPC_URLS_NETWORK_BY_ENV } from 'connectors';
 import { parseHex, toBN } from '../../utils';
 import { supportedNetworksConfigByEnv, chainNames, graphEndpoints } from '../../connectors';
 import { Pair, Route, Token, TokenAmount, WETH } from '@uniswap/sdk';
 import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
 
-// @TODO: use caching
-const getWebProvider = () => new Web3("https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d");
-Contract.setProvider("https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d");
+const getWebProvider = async () => {
+  const chainId = await getChainId();
+  return new Web3(RPC_URLS_NETWORK_BY_ENV[chainId]);
+};
 
 let contracts = {
     [chainNames.Ethereum]: {},
@@ -30,7 +31,8 @@ const localTimestamp = () => {
 
 export async function getNow(forceSync = true) {
   if (forceSync || !diff) {
-    let timestamp = parseInt((await getBlockCached(getWebProvider().eth.getBlock)).timestamp);
+    const web3Provider = await getWebProvider();
+    let timestamp = parseInt((await getBlockCached(web3Provider.eth.getBlock)).timestamp);
     diff = timestamp - localTimestamp();
     return timestamp;
   }
@@ -45,31 +47,40 @@ async function getBlockCached(getBlock) {
   return cachedBlock;
 }
 
-export function getWeb3Contract(contractName, chainName) {
+export async function getWeb3Contract(contractName, chainName) {
     if (contracts[chainName][contractName] === undefined) {
-        const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
-        if (contractsJSON[contractName]) contracts[chainName][contractName] = new Contract(contractsJSON[contractName].abi, contractsJSON[contractName].address);
+      const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
+      if (contractsJSON[contractName]) {
+          const chainId = await getChainId();
+          contracts[chainName][contractName] = new Contract(contractsJSON[contractName].abi, contractsJSON[contractName].address);
+          contracts[chainName][contractName].setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
+        }
         else return undefined;
     }
     return contracts[chainName][contractName];
 }
 
-export function getUNIV2Contract(address, chainName) {
+export async function getUNIV2Contract(address, chainName) {
+  const chainId = await getChainId();
   const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
-  return new Contract(contractsJSON["UNIV2"].abi, address);
+  const contract = new Contract(contractsJSON["UNIV2"].abi, address);
+  contract.setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
+  return contract;
 }
 
 export async function getERC20Contract(address) {
   try {
     const chainName = await getChainName();
+    const chainId = await getChainId();
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
     if(!contractsJSON) return;
-    return new Contract(contractsJSON["ERC20"].abi, address);
+    const contract = new Contract(contractsJSON["ERC20"].abi, address);
+    contract.setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
+    return contract;
   } catch(error) {
     console.log(error);
   }
 }
-
 
 export const getGraphEndpoint = async () => {
     try {
@@ -143,10 +154,10 @@ export async function getPrice(token1, token2) {
  }
  
  async function fetchPairData(t0, t1, chainName) {
-   const factory = getWeb3Contract("UniswapV2Factory", chainName);
+   const factory = await getWeb3Contract("UniswapV2Factory", chainName);
    const pairAddress = await factory.methods.getPair(t0.address, t1.address).call();
-   const reserves = await getUNIV2Contract(pairAddress, chainName).methods.getReserves().call();
-   const firstToken = await getUNIV2Contract(pairAddress, chainName).methods.token0().call();
+   const reserves = await (await getUNIV2Contract(pairAddress, chainName)).methods.getReserves().call();
+   const firstToken = await (await getUNIV2Contract(pairAddress, chainName)).methods.token0().call();
    // const secondToken = await getUNIV2Contract(pairAddress).methods.token1().call();
    let swapped = firstToken.toLowerCase() === t1.address.toLowerCase();
    let reserve0 = reserves[swapped ? "1" : "0"];
@@ -171,8 +182,13 @@ export async function convert(amount, fromToken, toToken) {
 
 export async function getBalance(address, tokenAddress = undefined) {
   try {
-    if (tokenAddress) return (await getERC20Contract(tokenAddress)).methods.balanceOf(address).call();
-    else return await getWebProvider().eth.getBalance(address);
+    if (tokenAddress) {
+      const _contract = await getERC20Contract(tokenAddress);
+      return await _contract.methods.balanceOf(address).call();
+    }else {
+      const _web3Provider = await getWebProvider();
+      return await _web3Provider.eth.getBalance(address);
+    }
   } catch(error) {
     console.log(error);
   }

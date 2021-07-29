@@ -125,29 +125,28 @@ const RPC_URLS = {
     },
     "staging": {
         31337: supportedNetworksConfig.staging[31337].rpcUrls,
-        // 80001: supportedNetworksConfig.staging[80001].rpcUrls,
         31338: supportedNetworksConfig.staging[31338].rpcUrls,
     },
 }
+const RPC_URLS_BY_ENV = RPC_URLS[process.env.REACT_APP_ENVIRONMENT];
+
 const RPC_URLS_NETWORK = {
     "mainnet": {
-        1: supportedNetworksConfig.mainnet[1].rpcUrls,
+        1: "https://eth-mainnet.alchemyapi.io/v2/KhQWOrbOeWZoTIkwRt4a4aXPPxx5wj5J",
         137: "https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d",
     },
     "staging": {
-        31337: supportedNetworksConfig.staging[31337].rpcUrls,
-        // 80001: supportedNetworksConfig.staging[80001].rpcUrls,
-        31338: supportedNetworksConfig.staging[31338].rpcUrls,
+        31337: "https://staging-ethereum.cvi.finance",
+        31338: "https://staging-polygon.cvi.finance",
     },
 }
-
-const RPC_URLS_BY_ENV = RPC_URLS[process.env.REACT_APP_ENVIRONMENT];
+export const RPC_URLS_NETWORK_BY_ENV = RPC_URLS_NETWORK[process.env.REACT_APP_ENVIRONMENT]
 
 export const injected = new InjectedConnector({ supportedChainIds: Object.keys(supportedNetworksConfig[process.env.REACT_APP_ENVIRONMENT]).map(id => Number(id))});
 
 export const network = new NetworkConnector({
     defaultChainId,
-    urls: RPC_URLS_NETWORK[process.env.REACT_APP_ENVIRONMENT],
+    urls: RPC_URLS_NETWORK_BY_ENV,
 })
 
 const walletconnectorInstance = new WalletConnectConnector({

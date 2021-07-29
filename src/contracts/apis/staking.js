@@ -158,7 +158,8 @@ const stakingApi = {
                     const selectedNetwork = await getChainName();
                     let isETH = false;
                     if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
-                    let initialValue = isETH ? toBN(await getBalance(getWeb3Contract("ETHStakingProxy", selectedNetwork)._address)): toBN(0);
+                    const _getWeb3Contract = await getWeb3Contract("ETHStakingProxy", selectedNetwork);
+                    let initialValue = isETH ? toBN(await getBalance(_getWeb3Contract._address)): toBN(0);
                     // console.log(`initialValue ${initialValue}`);
                     // console.log(events);
                     return events.reduce((p, e) => p.add(toBN(selectedNetwork === "Matic" ? e.tokenAmount : e.returnValues[2])), initialValue);

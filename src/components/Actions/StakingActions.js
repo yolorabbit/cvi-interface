@@ -30,11 +30,13 @@ const StakingActions = () => {
     const platfromName = stakingConfig.tokens[selectedNetwork].platform[tokenName]?.rel.contractKey;
     
     useEffect(()=>{
-        if(!contracts) return
+        if(!contracts || !platfromName || !selectedNetwork || !tokenName) return
         const getLockup = async (cb) => {
             try{
-                const locktime = await contracts[platfromName].methods.lpsLockupPeriod().call();
-                setLockup(locktime / 60 / 60)
+                if(contracts[platfromName].methods.lpsLockupPeriod) {
+                    const locktime = await contracts[platfromName].methods.lpsLockupPeriod().call();
+                    setLockup(locktime / 60 / 60)
+                }
             } catch (error) {
                 console.log("getLockuptime error: ", error);
             }
