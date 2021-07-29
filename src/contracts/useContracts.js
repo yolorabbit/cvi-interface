@@ -14,7 +14,7 @@ export const useContracts = () => {
             const contractsJSON = require(`./files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
             const contractsKeys = Object.keys(contractsJSON);
             let contractsObject = {};
-            Contract.setProvider(library?.currentProvider);
+            Contract.setProvider((selectedNetwork === "Matic" ? process.env.REACT_APP_ENVIRONMENT === "staging" ? "https://staging-polygon.cvi.finance" : "https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d" : "") || library?.currentProvider);
 
             contractsKeys.forEach((key) => {
                 contractsObject[key] = new Contract(contractsJSON[key].abi, contractsJSON[key].address);

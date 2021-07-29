@@ -32,7 +32,7 @@ export const supportedNetworksConfig = {
                 symbol: 'MATIC',
                 decimals: 18
             },
-            rpcUrls: ['https://matic-mainnet.chainstacklabs.com'],
+            rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
             blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
         },
     },
