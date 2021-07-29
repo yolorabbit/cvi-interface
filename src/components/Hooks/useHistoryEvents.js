@@ -11,6 +11,7 @@ import { setData } from 'store/actions/wallet';
 import config from 'config/config';
 import { chainNames } from 'connectors';
 import { useIsMount } from '.';
+import Contract from 'web3-eth-contract';
 
 export const contractState = config.isMainnet ? {
     positions: {
@@ -121,9 +122,17 @@ const useHistoryEvents = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account, contracts, mapper, selectedNetwork, wallet]) 
 
+    const getContract = (contractKey) => {
+        const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
+        const { abi, address } = contractsJSON[contractKey];
+        const _contract = new Contract(abi, address);
+        _contract.setProvider(library?.currentProvider);
+        return _contract
+    }
     
     const subscribe = useCallback(async function(view, type, eventType, activeToken) {
-        const sub = contracts[activeToken.rel.platform].events[eventType](({...opt, fromBlock: 'latest'}))
+        const _contract = getContract(activeToken.rel.platform);
+        const sub = _contract.events[eventType](({...opt, fromBlock: 'latest'}))
         if(!!subs.find((s) => s[`${eventType}-${activeToken.key}`])) return;
         
         sub.on("connected", function(subscriptionId){
