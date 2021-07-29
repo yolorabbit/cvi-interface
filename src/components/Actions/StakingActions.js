@@ -6,7 +6,7 @@ import config from "config/config";
 import stakingConfig from "config/stakingConfig";
 import { contractsContext } from "contracts/ContractContext";
 import { upperFirst } from "lodash";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAlert } from "store/actions";
 import { actionConfirmEvent, gas, toBN, toBNAmount } from "utils";
@@ -25,6 +25,32 @@ const StakingActions = () => {
     const unstakeModalButtonDisabled = ((isOpen && !isModal && (disabled || !(Number(amount ?? "0") > 0))));
     const unstakeTableButtonDisabled = (token.key === 'govi' && (lockedTime > 0 || lockedTime === null));
     const stakeModalDisabled = (isOpen && !isModal) && !(Number(amount ?? "0") > 0);
+    const [lockup, setLockup] = useState(24);
+    const platfromName = stakingConfig.tokens[selectedNetwork].platform[tokenName]?.rel.contractKey;
+    
+    useEffect(()=>{
+        if(!contracts) return
+        const getLockup = async (cb) => {
+            try{
+                const locktime = await contracts[platfromName].methods.lpsLockupPeriod().call();
+                setLockup(locktime / 60 / 60)
+            } catch (error) {
+                console.log("getLockuptime error: ", error);
+            }
+        }
+
+        let canceled = false;
+
+        getLockup((cb)=>{
+            if(canceled) return
+            cb()
+        });
+
+        return () => {
+            canceled = true;
+        }
+    //eslint-disable-next-line
+    },[tokenName, selectedNetwork, contracts]);
 
     const onClick = async () => {
         if(isModal && !isOpen) return setIsOpen(true);
@@ -88,7 +114,7 @@ const StakingActions = () => {
                         processing={processing}
                     />
                     {!isModal && isOpen && <span className="pay-attention">
-                     * Pay Attention: After unstaking your LP tokens, you won't be able to withdraw your liquidity for up to 72 hours.
+                     * Pay Attention: After unstaking your LP tokens, you won't be able to withdraw your liquidity for up to {lockup} hours.
                     </span>}
                 </div>
             </div>
