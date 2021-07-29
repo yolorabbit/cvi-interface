@@ -8,6 +8,7 @@ import ActionController from 'components/Actions/ActionController';
 import './Form.scss';
 import { useSelector } from 'react-redux';
 import { contractsContext } from 'contracts/ContractContext';
+import { useInDOM } from 'components/Hooks';
 
 const Form = () => {
     const { activeView } = useContext(platformViewContext);
@@ -62,14 +63,16 @@ const SeeMore = ({selectedCurrency}) => {
     const contracts = useContext(contractsContext);
     const [lockup, setLockup] = useState(48);
     const platfromName = platformConfig.tokens[selectedNetwork][selectedCurrency.toLowerCase()]?.rel.platform;
-    
+    const isActiveInDom = useInDOM();
     
     useEffect(()=>{
-        if(!contracts) return
+        if(!contracts || !selectedNetwork || !selectedCurrency) return
         const getLockup = async (cb) => {
             try{
                 const locktime = await contracts[platfromName].methods.lpsLockupPeriod().call();
-                setLockup(locktime / 60 / 60)
+                if(isActiveInDom()) {
+                    setLockup(locktime / 60 / 60)
+                }
             } catch (error) {
                 console.log("getLockuptime error: ", error);
             }
