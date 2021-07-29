@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { actionConfirmEvent, gas, toBN, toBNAmount } from '../../utils/index';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import SellInfo from 'components/pages/Platform/Info/SellInfo';
@@ -16,6 +16,7 @@ import web3Api from 'contracts/web3Api';
 import SellAllModal from './SellAllModal.js';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import ErrorModal from 'components/Modals/ErrorModal';
+import Contract from 'web3-eth-contract';
 
 const feesChangedWarning = "This transaction will not succeed due to the change in the sell fee. Please review your trade details and resubmit your sell request";
 
@@ -23,7 +24,7 @@ const Sell = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
     const { isOpen, setIsOpen, isModal, disabled, token, amount, setAmount, updateAvailableBalance } = useActionController();
-    const { account } = useActiveWeb3React();
+    const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
     const [isProcessing, setProcessing] = useState();
@@ -33,7 +34,16 @@ const Sell = () => {
     const sellFeePayload = useMemo(() => ({ tokenAmount, account } ), [tokenAmount, account]);
     const [sellFee, updateSellFee] = useWeb3Api("getClosePositionFee", token, sellFeePayload, { validAmount: true});
     const [modalIsOpen, setModalIsOpen] = useState();
-
+    const { selectedNetwork } = useSelector(({app}) => app);
+    
+    const getContract = (contractKey) => {
+        const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
+        const { abi, address } = contractsJSON[contractKey];
+        const _contract = new Contract(abi, address);
+        _contract.setProvider(library?.currentProvider);
+        return _contract
+    }
+    
     const sell = async () => {
         try {
             let positionValue;
@@ -54,7 +64,8 @@ const Sell = () => {
             };
             
             const _amount = !positionUnitsAmount ? toBN(toBNAmount(amount, activeToken.decimals)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue)) : toBN(positionUnitsAmount);
-            await contracts[activeToken.rel.platform].methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
+            const _contract = getContract(activeToken.rel.platform);
+            await _contract.methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
 
             dispatch(addAlert({
                 id: 'closePositionSuccess',
