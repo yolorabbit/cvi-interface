@@ -7,7 +7,7 @@ import './CviValue.scss';
 
 const CviValue = () => {
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
-    const isPositive = cviInfo?.lastTimeChange >= 0;
+    const isPositive = cviInfo?.lastTimeChange > 0;
     const isMobile = useIsMobile();
 
     return (
