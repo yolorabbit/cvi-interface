@@ -19,19 +19,19 @@ export const getTokenData = async (contract) => {
 }
 
 export async function getFeesCollected(USDTData, tokensData) {
-    let res = await TheGraph.collectedFees();
+    let res = await TheGraph.collectedFeesSum();
     const includeUSDC = tokensData.some(token => token.symbol === "USDC");
     if(includeUSDC) {
-        let usdc_res = await TheGraph.collectedFeesUSDC();
-        res.collectedFees = res.collectedFees.concat(usdc_res.collectedFees);
+        let usdc_res = await TheGraph.collectedFeesSumUSDC();
+        res.collectedFeesAggregations = res.collectedFeesAggregations.concat(usdc_res.collectedFeesAggregations);
     }
     // console.log(`res collectedFees size ${res.collectedFees.length}`);
     let sum = toBN(0);
     for (const token of tokensData.filter(item => item !== null)) {
       //console.log(`token ${token.symbol}`);
-      let filtered = res.collectedFees.filter((e) => e.tokenAddress.toLowerCase() === token.address.toLowerCase());
+      let filtered = res.collectedFeesAggregations.filter((e) => e.id.toLowerCase() === token.address.toLowerCase());
       //console.log(`filtered ${filtered.length}`);
-      let tokenSum = filtered.reduce((p, e) => p.add(toBN(e.tokenAmount)), toBN(0));
+      let tokenSum = filtered.reduce((p, e) => p.add(toBN(e.sum)), toBN(0));
       //console.log(`tokenSum ${tokenSum} ${token.symbol}`);
       let tokenSumUSD = await convert(tokenSum, token, USDTData);
       //console.log(`tokenSumUSD ${tokenSumUSD} ${USDTData.symbol}`);

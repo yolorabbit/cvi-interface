@@ -162,7 +162,7 @@ const stakingApi = {
                     const _getWeb3Contract = await getWeb3Contract("ETHStakingProxy", selectedNetwork);
                     let initialValue = isETH ? toBN(await getBalance(_getWeb3Contract._address)): toBN(0);
                     // console.log(`initialValue ${initialValue}`);
-                    return events.reduce((p, e) => p.add(toBN(selectedNetwork === chainNames.Matic ? e.tokenAmount : e.returnValues[2])), initialValue);
+                    return events.reduce((p, e) => p.add(toBN(e.returnValues ? e.returnValues[2] : e.tokenAmount)), initialValue);
 
                 } catch(error) {
                     console.log(error);
@@ -248,8 +248,7 @@ const stakingApi = {
             amount: 0,
             symbol
         }
-        const selectedNetwork = await getChainName();
-        const sum = events.reduce((p, e) => p.add(toBN(selectedNetwork === "Matic" ? e.tokenAmount : e.returnValues[2] )), toBN(0));
+        const sum = events.reduce((p, e) => p.add(toBN(e.returnValues ? e.returnValues[2] : e.tokenAmount)), toBN(0));
         const creationTimestamp = await staking.methods.creationTimestamp().call();
         const timePassedSinceCreation = now - creationTimestamp;
         const secondsInDay = 86400;

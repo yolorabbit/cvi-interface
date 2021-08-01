@@ -186,13 +186,14 @@ const lastOpenQuery = gql`
   }
 `;
 
-export async function collectedFees() {
-  return await request(await getGraphEndpoint(), collectedFeesQuery );
-}
-
-export async function collectedFeesUSDC() {
-  return await request(POLYGON_USDC_GRAPH_ENDPOINT, collectedFeesQuery );
-}
+const collectedFeesAggregationsQuery = gql`
+  {
+    collectedFeesAggregations(first: 10) {
+      id
+      sum
+    }
+  }
+`;
 
 export async function account_liquidities(account, platformAddress, fromTimestamp) {
   return await request(await getGraphEndpoint(), accountLiquidityQuery, { account, platformAddress, fromTimestamp });
@@ -220,4 +221,20 @@ export async function lastOpenUSDC(account, platformAddress) {
 
 export async function allPlatformEvents() {
   return await request(await getGraphEndpoint(), allPlatformEventsQuery);
+}
+
+export async function collectedFees() {
+  return await request(await getGraphEndpoint(), collectedFeesQuery);
+}
+
+export async function collectedFeesUSDC() {
+  return await request(POLYGON_USDC_GRAPH_ENDPOINT, collectedFeesQuery);
+}
+
+export async function collectedFeesSum() {
+  return await request(await getGraphEndpoint(), collectedFeesAggregationsQuery);
+}
+
+export async function collectedFeesSumUSDC(endpoint) {
+  return await request(POLYGON_USDC_GRAPH_ENDPOINT, collectedFeesAggregationsQuery);
 }
