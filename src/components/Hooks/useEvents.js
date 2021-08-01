@@ -5,6 +5,7 @@ import { contractsContext } from "contracts/ContractContext";
 import config from "config/config";
 import { useSelector } from "react-redux";
 import { useActiveWeb3React } from "./wallet";
+import moment from 'moment';
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
@@ -118,9 +119,9 @@ export const useEvents = () => {
   
     async function getTransferEvents(staking, token, days) {
         if(config.isMainnet) {
-            const _events = await TheGraph.collectedFees();
+            const _events = await TheGraph.collectedFees(Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
             if(chainName === chainNames.Matic) {
-                const _eventsUSDC = await TheGraph.collectedFeesUSDC();
+                const _eventsUSDC = await TheGraph.collectedFeesUSDC(Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
                 return _events.collectedFees.concat(_eventsUSDC.collectedFees);
             }
             return _events.collectedFees;

@@ -158,16 +158,21 @@ const accountLiquidityQuery = gql`
 `;
 
 const collectedFeesQuery = gql`
-    {
-      collectedFees(first: 1000, orderBy: timestamp, orderDirection: desc) {
-        id
-        timestamp
-        token
-        tokenAddress
-        account
-        tokenAmount
-      }
+  query getCollectedFees($fromTimestamp: BigInt! = 0) {
+    collectedFees(
+      where: { timestamp_gt: $fromTimestamp }
+      first: 1000,
+      orderBy: timestamp, 
+      orderDirection: desc
+    ) {
+      id
+      timestamp
+      token
+      tokenAddress
+      account
+      tokenAmount
     }
+  }
 `;
 
 const lastOpenQuery = gql`
@@ -223,12 +228,12 @@ export async function allPlatformEvents() {
   return await request(await getGraphEndpoint(), allPlatformEventsQuery);
 }
 
-export async function collectedFees() {
-  return await request(await getGraphEndpoint(), collectedFeesQuery);
+export async function collectedFees(fromTimestamp = 0) {
+  return await request(await getGraphEndpoint(), collectedFeesQuery, { fromTimestamp });
 }
 
-export async function collectedFeesUSDC() {
-  return await request(POLYGON_USDC_GRAPH_ENDPOINT, collectedFeesQuery);
+export async function collectedFeesUSDC(fromTimestamp = 0) {
+  return await request(POLYGON_USDC_GRAPH_ENDPOINT, collectedFeesQuery, { fromTimestamp });
 }
 
 export async function collectedFeesSum() {

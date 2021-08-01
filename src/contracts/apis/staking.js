@@ -1,7 +1,6 @@
 import { aprToAPY, convert, fromLPTokens, getChainName, getWeb3Contract, getBalance } from "contracts/utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount, toFixed } from "utils";
-import { chainNames } from '../../connectors';
 
 const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 };
 const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 };
