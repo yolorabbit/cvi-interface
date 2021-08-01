@@ -10,6 +10,7 @@
 
     @media (max-width: 1024px) {
         padding-top: 10.43vw;
+        background-color: #0f112d;
     }
 
     @media (max-width: 767px) {
@@ -292,6 +293,7 @@
             & .connect-wallet-button__connected {
                 padding-left: 0;
                 padding-right: 0;
+                border-bottom: 0;
             }
         }
 
