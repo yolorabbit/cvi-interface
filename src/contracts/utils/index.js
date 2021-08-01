@@ -5,9 +5,14 @@ import { Pair, Route, Token, TokenAmount, WETH } from '@uniswap/sdk';
 import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
 
-const getWebProvider = async () => {
+const getRpcUrl = async () => {
   const chainId = await getChainId();
-  return new Web3(RPC_URLS_NETWORK_BY_ENV[chainId]);
+  return (!window?.ethereum && chainId === 1) ? RPC_URLS_NETWORK_BY_ENV[chainId] : window.ethereum;
+}
+
+
+const getWebProvider = async () => {
+  return new Web3(await getRpcUrl());
 };
 
 let contracts = {
@@ -51,9 +56,8 @@ export async function getWeb3Contract(contractName, chainName) {
     if (contracts[chainName][contractName] === undefined) {
       const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
       if (contractsJSON[contractName]) {
-          const chainId = await getChainId();
           contracts[chainName][contractName] = new Contract(contractsJSON[contractName].abi, contractsJSON[contractName].address);
-          contracts[chainName][contractName].setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
+          contracts[chainName][contractName].setProvider(await getRpcUrl());
         }
         else return undefined;
     }
@@ -61,21 +65,19 @@ export async function getWeb3Contract(contractName, chainName) {
 }
 
 export async function getUNIV2Contract(address, chainName) {
-  const chainId = await getChainId();
   const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
   const contract = new Contract(contractsJSON["UNIV2"].abi, address);
-  contract.setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
+  contract.setProvider(await getRpcUrl());
   return contract;
 }
 
 export async function getERC20Contract(address) {
   try {
     const chainName = await getChainName();
-    const chainId = await getChainId();
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
     if(!contractsJSON) return;
     const contract = new Contract(contractsJSON["ERC20"].abi, address);
-    contract.setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
+    contract.setProvider(await getRpcUrl());
     return contract;
   } catch(error) {
     console.log(error);
