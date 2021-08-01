@@ -7,7 +7,7 @@ import Web3 from 'web3';
 
 const getWebProvider = async () => {
   const chainId = await getChainId();
-  return new Web3(chainId !== 1 ? RPC_URLS_NETWORK_BY_ENV[chainId] : window.ethereum);
+  return new Web3(RPC_URLS_NETWORK_BY_ENV[chainId]);
 };
 
 let contracts = {
@@ -53,7 +53,7 @@ export async function getWeb3Contract(contractName, chainName) {
       if (contractsJSON[contractName]) {
           const chainId = await getChainId();
           contracts[chainName][contractName] = new Contract(contractsJSON[contractName].abi, contractsJSON[contractName].address);
-          contracts[chainName][contractName].setProvider(chainId !== 1 ? RPC_URLS_NETWORK_BY_ENV[chainId] : window.ethereum);
+          contracts[chainName][contractName].setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
         }
         else return undefined;
     }
@@ -64,7 +64,7 @@ export async function getUNIV2Contract(address, chainName) {
   const chainId = await getChainId();
   const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
   const contract = new Contract(contractsJSON["UNIV2"].abi, address);
-  contract.setProvider(chainId !== 1 ? RPC_URLS_NETWORK_BY_ENV[chainId] : window.ethereum);
+  contract.setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
   return contract;
 }
 
@@ -75,7 +75,7 @@ export async function getERC20Contract(address) {
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
     if(!contractsJSON) return;
     const contract = new Contract(contractsJSON["ERC20"].abi, address);
-    contract.setProvider(chainId !== 1 ? RPC_URLS_NETWORK_BY_ENV[chainId] : window.ethereum);
+    contract.setProvider(RPC_URLS_NETWORK_BY_ENV[chainId]);
     return contract;
   } catch(error) {
     console.log(error);
