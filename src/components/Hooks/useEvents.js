@@ -117,20 +117,23 @@ export const useEvents = () => {
     }
   
     async function getTransferEvents(staking, token, days) {
-      if(chainName === chainNames.Matic) {
+        if(config.isMainnet) {
             const _events = await TheGraph.collectedFees();
-            const _eventsUSDC = await TheGraph.collectedFeesUSDC();
-            return _events.collectedFees.concat(_eventsUSDC.collectedFees);
-      } 
-      let isETH = false;
-      if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
-      let options = {};
-      const latestBlockNumber = await (await getBlock("latest")).number;
-      const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName]
-      options = { days, stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS };
-      const filter = { [isETH ? "dst" : "to"]: staking._address };
-      const eventsData = [{ contract: token, events: { Transfer: [filter] } }];
-      return await getEvents(eventsData, options, getBlock);
+            if(chainName === chainNames.Matic) {
+                const _eventsUSDC = await TheGraph.collectedFeesUSDC();
+                return _events.collectedFees.concat(_eventsUSDC.collectedFees);
+            }
+            return _events.collectedFees;
+        }
+        let isETH = false;
+        if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
+        let options = {};
+        const latestBlockNumber = await (await getBlock("latest")).number;
+        const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName]
+        options = { days, stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS };
+        const filter = { [isETH ? "dst" : "to"]: staking._address };
+        const eventsData = [{ contract: token, events: { Transfer: [filter] } }];
+        return await getEvents(eventsData, options, getBlock);
     }
 
     async function getLastOpenEvent(account, platform) {

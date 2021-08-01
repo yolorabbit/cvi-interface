@@ -42,7 +42,7 @@ const initialState = {
 const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 };
 const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 };
 
-const useStakedData = (chainName, protocol, tokenName, options) => {
+const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const contracts = useContext(contractsContext);
   const { account } = useActiveWeb3React();
   const [stakedData, setStakedData] = useState(initialState);
@@ -106,8 +106,8 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
       }
     }
 
-
-    const apyByPeriods = [365*DAY, 7*DAY, DAY].map(async period => await getAPYByTokenName(period));
+    const periodsArray = isStaked ? [365*DAY] : [365*DAY, 7*DAY, DAY]
+    const apyByPeriods = periodsArray.map(async period => await getAPYByTokenName(period));
     const apy = await(await Promise.allSettled(apyByPeriods))
     .filter(({status}) =>  status === "fulfilled")
     .map(({value}) => value);
@@ -198,7 +198,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
       const GOVIData = await getTokenData(contracts.GOVI);
       const uniswapLPToken = await getTokenData(platformLPToken);
       const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
-      const apy = await web3Api.getUniswapAPY(stakingRewards, USDTData, GOVIData, uniswapLPToken, uniswapToken)
+      const apy = await web3Api.getUniswapAPY(stakingRewards, USDTData, GOVIData, uniswapLPToken, uniswapToken);
       // console.log(tokenName, protocol+" apy: ", apy);
       cb(() => setStakedData((prev)=> ({
         ...prev,
@@ -282,7 +282,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
 
   const fetchLiquidityMiningData = async (cb) => {
     getAPYLM(cb)
-    getDailyRewardLM(cb);
+    isStaked && getDailyRewardLM(cb);
     getTVLLM(cb);
   }
 
@@ -291,7 +291,7 @@ const useStakedData = (chainName, protocol, tokenName, options) => {
     if(protocol !== "platform") return fetchLiquidityMiningData(cb);
     getAPY(cb);
     getStakedTVL(cb);
-    getDailyReward(cb);
+    isStaked && getDailyReward(cb);
   }
 
   useEffect(()=>{

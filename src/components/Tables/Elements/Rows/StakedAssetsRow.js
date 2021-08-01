@@ -38,7 +38,8 @@ const RowData = ({isHeader, token, protocol, data}) => {
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
     const tokenNameFormatted = leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token;
-    const [stakedData] = useStakedData(chainName, protocol, token);
+    const isStaked = true;
+    const [stakedData] = useStakedData(chainName, protocol, token, isStaked);
     const [amount, setAmount] = useState("");
 
     return useMemo(() => {

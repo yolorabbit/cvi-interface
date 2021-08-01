@@ -303,14 +303,14 @@ const stakingApi = {
         // console.log("amountTokens: " + amountTokens);
         return amountTokens * lpTokenValue;
     },
-    getUniswapAPY: async function(stakingRewards, USDTToken, GOVIData, uniswapLPToken, uniswapToken) {
+    getUniswapAPY: async function(stakingRewards, USDTToken, GOVIData, uniswapLPToken, uniswapToken, isStaked) {
         // console.log("ETHToken: ", ETHToken);
         let rate = await stakingRewards.methods.rewardRate().call();
         // console.log(`reward rate ${rate}`);
         let total = await stakingRewards.methods.totalSupply().call();
         // console.log(`total ${total}`);
         
-        const apyPeriods = [86400*365, 86400*7, 86400];
+        const apyPeriods = isStaked ? [86400*365] : [86400*365, 86400*7, 86400];
         // const apyPeriods = [86400*365];
         const apysPeriods = [];
         
