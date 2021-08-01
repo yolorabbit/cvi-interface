@@ -118,13 +118,10 @@ export const useEvents = () => {
     }
   
     async function getTransferEvents(staking, token, days) {
-        if(config.isMainnet) {
+        if(chainName === chainNames.Matic) {
             const _events = await TheGraph.collectedFees(Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
-            if(chainName === chainNames.Matic) {
-                const _eventsUSDC = await TheGraph.collectedFeesUSDC(Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
-                return _events.collectedFees.concat(_eventsUSDC.collectedFees);
-            }
-            return _events.collectedFees;
+            const _eventsUSDC = await TheGraph.collectedFeesUSDC(Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
+            return _events.collectedFees.concat(_eventsUSDC.collectedFees);
         }
         let isETH = false;
         if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
