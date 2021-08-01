@@ -7,7 +7,7 @@ import Web3 from 'web3';
 
 const getRpcUrl = async () => {
   const chainId = await getChainId();
-  return (!window?.ethereum && chainId === 1) ? RPC_URLS_NETWORK_BY_ENV[chainId] : window.ethereum;
+  return chainId !== 1 ? RPC_URLS_NETWORK_BY_ENV[chainId] : window?.ethereum || RPC_URLS_NETWORK_BY_ENV[chainId];
 }
 
 
