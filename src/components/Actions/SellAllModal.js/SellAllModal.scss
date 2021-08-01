@@ -17,7 +17,7 @@
             }
         }
 
-        & h2, & img {
+        & h2, & .notice {
             text-align: center;
 
             & b {
@@ -26,7 +26,7 @@
             }
         }
 
-        & img {
+        & .notice {
             width: 4.167vw;
             height: 4.167vw;
             @media (max-width: 1365px) {

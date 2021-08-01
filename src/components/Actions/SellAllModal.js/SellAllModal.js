@@ -20,7 +20,7 @@ const SellAllModal = ({setSellAllModal, isProcessing, onSubmit}) => {
     
     return (
         <Modal clickOutsideDisabled className="error-modal sell-all-modal" handleCloseModal={setSellAllModal}>
-            <img src={require('images/icons/notifications/notice.svg').default} alt="notice red icon" />
+            <img className="notice" src={require('images/icons/notifications/notice.svg').default} alt="notice red icon" />
 
             <Title text="Important notice." />
 
