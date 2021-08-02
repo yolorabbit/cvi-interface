@@ -57,7 +57,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       switch (tokenName) {
         case 'govi': {
           return await token.rewardsTokens.map(async (t,idx) => {
-            const events = await eventsUtils.getTransferEvents(contracts[tokenRel.stakingRewards], contracts[t], 30);
+            const events = await eventsUtils.getTransferEvents(contracts[tokenRel.stakingRewards], contracts[t], 30, t);
             const now = await eventsUtils.getNow();
             return await web3Api.getDailyRewardPerToken(contracts[tokenRel.stakingRewards], account, events, now, t.replace("W",""), tokenRel.tokenDecimals[idx]);
           })
@@ -89,7 +89,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
             const tokensData = await (await Promise.all(
               await token.rewardsTokens.map(async t => {
                 const tokenData = await getTokenData(contracts[t]);
-                tokenData.events = await eventsUtils.getTransferEvents(stakingRewards, contracts[t], 30);
+                tokenData.events = await eventsUtils.getTransferEvents(stakingRewards, contracts[t], 30, t);
                 return tokenData;
                 })
               ));
