@@ -75,6 +75,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          poolLink: "https://v2.info.uniswap.org/pair/0xa2b04f8133fc25887a436812eae384e32a8a84f2",
           rel: {
             stakingRewards: "COTIETHStakingRewards",
             tokenDecimals: [18],
@@ -89,6 +90,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          poolLink: "https://v2.info.uniswap.org/pair/0x1ee312a6d5fe7b4b8c25f0a32fca6391209ebebf",
           rel: {
             stakingRewards: "GOVIETHStakingRewards",
             tokenDecimals: [18],
@@ -103,6 +105,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          poolLink: "https://v2.info.uniswap.org/pair/0x51996fc38c8d839abd6c2db9a4c221df1cb487a0",
           rel: {
             stakingRewards: "RHEGIC2ETHStakingRewards",
             tokenDecimals: [18],
@@ -119,6 +122,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          poolLink: "https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0xDDB3422497E61e13543BeA06989C0789117555c5",
           rel: {
             stakingRewards: "COTIETHSLPStakingRewards",
             tokenDecimals: [18],
@@ -133,6 +137,7 @@ const stakingConfig = {
           rewardsTokens: ["GOVI"],
           decimals: 18,
           fixedDecimals: 8,
+          poolLink: "https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0xeEAA40B28A2d1b0B08f6f97bB1DD4B75316c6107",
           rel: {
             stakingRewards: "GOVIETHSLPStakingRewards",
             tokenDecimals: [18],
@@ -197,6 +202,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          poolLink: "https://info.quickswap.exchange/pair/0x1dab41a0e410c25857f0f49b2244cd089ab88de6",
           rel: {
             stakingRewards: "GOVIETHStakingRewards",
             token: "UNIV2GOVIETH",

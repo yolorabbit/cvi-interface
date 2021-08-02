@@ -363,5 +363,26 @@
             }
         }
         
+        & .external-link {
+            align-self: baseline;
+            margin-left: 6px;
+            width: 0.833vw;
+            height: 0.833vw;
+
+            @media (max-width: 1365px){   
+                width: 1.172vw;
+                height: 1.172vw;
+            }
+
+            @media (max-width: 1024px){ 
+                width: 2.086vw;
+                height: 2.086vw;
+            }
+
+            @media (max-width: 767px){
+                width: 4.444vw;
+                height: 4.444vw;
+            }
+        }
     }
 }

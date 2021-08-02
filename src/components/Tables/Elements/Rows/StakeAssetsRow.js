@@ -12,7 +12,7 @@ import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
 import { toBN } from "utils";
 
-const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => {
+const StakeAssetsRow = ({rowData: { key: token, label, protocol, poolLink}, isHeader}) => {
     const isTablet = useIsTablet();
 
     const RowDataComponent = () => 
@@ -21,6 +21,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
         label={label} 
         token={token} 
         protocol={protocol} 
+        poolLink={poolLink}
     />
 
     return useMemo(()=> {
@@ -32,7 +33,7 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol}, isHeader}) => 
 export default StakeAssetsRow;
 
 
-const RowData = ({isHeader, label, token, protocol}) => {
+const RowData = ({isHeader, label, token, protocol, poolLink}) => {
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const chainName = useSelector(({app}) => app.selectedNetwork);
@@ -67,7 +68,7 @@ const RowData = ({isHeader, label, token, protocol}) => {
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
                     <Coin token={token} showName /> : 
-                    <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} />} 
+                    <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} poolLink={poolLink} />} 
                 />
                 {!isMobile && <RowItem type="action" content={StakeController} /> }
             </>
@@ -79,7 +80,7 @@ const RowData = ({isHeader, label, token, protocol}) => {
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
                     <Coin token={token} showName /> : 
-                    <Pairs leftToken={leftToken} rightToken={rightToken} label={label} protocol={protocol} />} 
+                    <Pairs leftToken={leftToken} rightToken={rightToken} label={label} protocol={protocol} poolLink={poolLink} />} 
                 />
             </>}
 
@@ -110,5 +111,5 @@ const RowData = ({isHeader, label, token, protocol}) => {
             {(!isTablet || isMobile) && <RowItem content={StakeController} />}
         </>
         //eslint-disable-next-line
-    )}, [stakedData, isTablet, isMobile, account, amount]);
+    )}, [stakedData, isTablet, isMobile, account, amount, poolLink]);
 }
