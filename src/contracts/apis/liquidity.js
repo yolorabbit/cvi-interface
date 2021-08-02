@@ -28,7 +28,7 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils,
       events = await eventsUtils.getEventsFast(eventsData, options);
     }
 
-    events.sort((a, b) => toBN(a.blockNumber).cmp(toBN(b.blockNumber)));
+    events.sort((a, b) => toBN(a.timestamp ?? a.blockNumber).cmp(toBN(b.timestamp ?? b.blockNumber)));
     
     let depositSum = toBN(0);
     let withdrawSum = toBN(0);

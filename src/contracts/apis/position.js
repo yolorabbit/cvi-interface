@@ -192,7 +192,7 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils,
       events = await eventsUtils.getEventsFast(eventsData, options);
     }
 
-    events = events.sort((a, b) => toBN(a.timestamp).cmp(toBN(b.timestamp)));
+    events = events.sort((a, b) => toBN(a.timestamp ?? a.blockNumber).cmp(toBN(b.timestamp ?? b.blockNumber)));
 
     let openSum = toBN(0);
     let closeSum = toBN(0);
@@ -242,7 +242,6 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils,
           break;
       }
     });
-
 
     let totalSum = openSum.sub(closeSum);
     let pnl = toBN(currentPositionBalance).sub(totalSum);

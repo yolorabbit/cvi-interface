@@ -117,7 +117,7 @@ const useHistoryEvents = () => {
         if(events.length) {
             events = await Promise.all(events.map(event => mapper[view](event, event.event, activeToken)));
         }
-        events = events.sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
+        events = events.sort((a, b) => ((b.timestamp ?? b.blockNumber) < (a.timestamp ?? a.blockNumber)) ? -1 : 1);
         dispatch(setData(view, events));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account, contracts, mapper, selectedNetwork, wallet]) 
