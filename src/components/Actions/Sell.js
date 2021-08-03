@@ -23,7 +23,7 @@ const feesChangedWarning = "This transaction will not succeed due to the change 
 const Sell = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { isOpen, setIsOpen, isModal, disabled, token, amount, setAmount, updateAvailableBalance } = useActionController();
+    const { isOpen, setIsOpen, isModal, disabled, leverage, token, amount, setAmount, updateAvailableBalance, balances } = useActionController();
     const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
@@ -35,7 +35,7 @@ const Sell = () => {
     const [sellFee, updateSellFee] = useWeb3Api("getClosePositionFee", token, sellFeePayload, { validAmount: true});
     const [modalIsOpen, setModalIsOpen] = useState();
     const { selectedNetwork } = useSelector(({app}) => app);
-    
+
     const getContract = (contractKey) => {
         const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
         const { abi, address } = contractsJSON[contractKey];
@@ -46,24 +46,16 @@ const Sell = () => {
     
     const sell = async () => {
         try {
-            let positionValue;
             
-            try {
-                positionValue = await getPositionValue(contracts[activeToken.rel.platform], account);
-            } catch(error) {
-                console.log(error);
-                return;
-            }
-
             const { getCVILatestRoundData } = contracts[activeToken.rel.cviOracle].methods;
             const { cviValue } = await getCVILatestRoundData().call();
             let positionUnitsAmount = false;
-         
-            if(!toBN(positionValue.currentPositionBalance).cmp(tokenAmount)) {
-                positionUnitsAmount = toBN(positionValue.positionUnitsAmount);
+            
+            if(!toBN(balances.tokenAmount).cmp(tokenAmount)) {
+                positionUnitsAmount = toBN(balances.posUnitsAmount);
             };
             
-            const _amount = !positionUnitsAmount ? toBN(toBNAmount(amount, activeToken.decimals)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue)) : toBN(positionUnitsAmount);
+            const _amount = !positionUnitsAmount ? tokenAmount.mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue)) : toBN(positionUnitsAmount);
             const _contract = getContract(activeToken.rel.platform);
             await _contract.methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
 

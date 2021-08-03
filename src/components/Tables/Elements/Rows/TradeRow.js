@@ -29,8 +29,13 @@ const TradeRow = ({token, isHeader, className}) => {
             amount={amount}
             setAmount={setAmount}
             type={platformConfig.actionsConfig.sell.key}
+            leverage={pos?.leverage ?? "1"}
+            balances={{
+                posUnitsAmount: pos.positionUnitsAmount,
+                tokenAmount: positionValue
+            }}
         />
-    }, [token, amount]);
+    }, [token, amount, pos, positionValue]);
 
     const RowData = useMemo(() => (
         <> 

@@ -7,9 +7,9 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 
 const actionControllerContext = createContext({});
-export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance, cb }) => {
+export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance, balances, cb }) => {
   return (
-    <actionControllerContext.Provider value={{disabled, type, token, protocol, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance, cb }}>
+    <actionControllerContext.Provider value={{disabled, type, token, protocol, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance, balances, cb }}>
       <Action />
     </actionControllerContext.Provider>
   )
@@ -44,6 +44,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         setAmount={setAmount} 
         isOpen={isOpen} 
         isModal={isModal} 
+        balances={balances} 
         setIsOpen={setIsOpen}
         updateAvailableBalance={updateAvailableBalance} 
         cb={cb}
