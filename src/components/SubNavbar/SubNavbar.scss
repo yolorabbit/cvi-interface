@@ -32,50 +32,67 @@
             display: flex;
             align-items: center;
             height: 100%;
-            padding: 0 1.667vw;
+            background-color: #0f112d;
+            margin: 0 1.667vw;
+            padding: 0;
+            border-radius: 0.208vw;
+            border: solid 0.052vw #f8ba15;
+            height: 2.5vw;
+            padding: 0 0.156vw;
 
             @media (max-width: 1365px) { 
-                padding: 0 2.344vw;
+                margin: 0 2.344vw;
+                border-radius: 0.293vw;
+                border: solid 0.073vw #f8ba15;
+                height: 3.516vw;
+                padding: 0 0.22vw;
             }
     
             @media (max-width: 1024px) { 
-                padding: 0 3.129vw;
+                margin: 0 3.129vw;
+                border-radius: 0.522vw;
+                border: solid 0.13vw #f8ba15;
+                height: 6.258vw;
+                padding: 0 0.391vw;
             }
             
             @media (max-width: 767px){
                 padding: 0 4.444vw;
                 border-bottom: 0;
                 background-color: #0f112d;
+                border: 0;
+                height: auto;
             }
 
             & .tabs-component__tab {
                 text-transform: capitalize;
-                padding: 0.417vw 1.458vw;
-                border-radius: 0.208vw;
-                border: solid 0.052vw #264fa1;
+                border-radius: 0.108vw;
+                padding: 0;
+                border: 0;
                 font-size: 0.833vw;
                 font-weight: normal;
                 line-height: 1.25vw;
                 height: 2.083vw;
-                margin-right: 0.833vw;
+                margin-right: 0;
                 transition: 0.2s all;
-    
+                min-width: 7.5vw;
+                color: rgba(white, 0.75);
+                
                 @media (max-width: 1365px) {
-                    padding: 0.586vw 2.051vw;
                     border-radius: 0.293vw;
                     font-size: 1.172vw;
                     line-height: 1.758vw;
                     height: 2.93vw;
-                    margin-right: 1.172vw;
+                    margin-right: 0;
+                    min-width: 10.549vw;
                 }
     
                 @media (max-width: 1024px) {
-                    padding: 1.043vw 3.65vw;
                     border-radius: 0.521vw;
                     font-size: 2.086vw;
                     line-height: 3.129vw;
                     height: 5.214vw;
-                    margin-right: 2.086vw;
+                    min-width: 18.774vw;
                 }
                 
                 @media (max-width: 767px){
@@ -89,7 +106,9 @@
                 }
 
                 &.active {
-                    background-color: #007acb;
+                    background-color: #fea716;
+                    font-weight: bold;
+                    color: white;
 
                     @media (max-width: 767px){
                     	background-color: transparent;
