@@ -31,7 +31,7 @@ const TradeRow = ({token, isHeader, className}) => {
             type={platformConfig.actionsConfig.sell.key}
             leverage={pos?.leverage ?? "1"}
             balances={{
-                posUnitsAmount: pos.positionUnitsAmount,
+                posUnitsAmount: pos?.positionUnitsAmount ?? "0",
                 tokenAmount: positionValue
             }}
         />

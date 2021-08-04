@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import SellInfo from 'components/pages/Platform/Info/SellInfo';
-import { getPositionValue, MAX_CVI_VALUE } from 'contracts/apis/position';
+import { MAX_CVI_VALUE } from 'contracts/apis/position';
 import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
 import web3Api from 'contracts/web3Api';
 import SellAllModal from './SellAllModal.js';
