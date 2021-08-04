@@ -190,7 +190,8 @@ const web3Api = {
                 if(withStakeAmount) {
                     const stakedAmount = toBN(await contracts[token.rel.stakingRewards].methods.balanceOf(account).call())
                     let lpBalance = toBN(await contracts[token.rel.platform].methods.balanceOf(account).call());
-    
+                    const maxTokenBalance = await fromLPTokens(contracts[token.rel.platform], lpBalance);
+
                     if(stakedAmount) {
                         lpBalance = lpBalance.add(stakedAmount);
                     }
@@ -200,7 +201,7 @@ const web3Api = {
                     const tokenAmount = totalSupply !== 0 ? lpBalance.mul(totalBalance).div(totalSupply) : toBN(0);
                     let sharePercent = totalSupply !== 0 ? toFixed((library.utils.fromWei(lpBalance, "ether") / library.utils.fromWei(totalSupply, "ether")) * 100) : 0;
                     
-                    return {myShare: tokenAmount?.toString(), poolShare: sharePercent};
+                    return {myShare: tokenAmount?.toString(), poolShare: sharePercent, maxTokenBalance: maxTokenBalance?.toString()};
                 }
 
                 const lpBalance = toBN(await contracts[token.rel.platform].methods.balanceOf(account).call());

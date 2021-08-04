@@ -54,6 +54,8 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
         try {
             if(data !== null) setData(null);
             if(body?.stopInitialCall) return "N/A";
+            if(body?.dontCall) return setData(errorValue);
+
             let tokens = [];
             if(stakingConfig.tokens[selectedNetwork][stakingProtocols.platform][selectedCurrency]) {
                 tokens = Object.values(stakingConfig.tokens[selectedNetwork][stakingProtocols.platform]).filter(({soon}) => !soon)

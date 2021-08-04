@@ -5,6 +5,7 @@ import { platformViewContext } from 'components/Context';
 import Action from './Action';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useWeb3Api } from 'contracts/useWeb3Api';
+import { isEmpty } from 'lodash';
 
 const actionControllerContext = createContext({});
 export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance, balances, cb }) => {
@@ -25,9 +26,8 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
   const { account } = useActiveWeb3React();
-  const availableBalancePayload = useMemo(() => ({account, type}), [account, type]);
-
-  const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", token, availableBalancePayload);
+  const availableBalancePayload = useMemo(() => ({account, type, dontCall: !isEmpty(balances)}), [account, type, balances]);
+  const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", token, availableBalancePayload, { errorValue: "0"});
 
   const updateAvailableBalance = () => {
     getAvailableBalance();

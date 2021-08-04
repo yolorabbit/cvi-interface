@@ -34,8 +34,11 @@ const LiquidityRow = ({token, isHeader, className}) => {
             amount={amount}
             setAmount={setAmount}
             type={platformConfig.actionsConfig.withdraw.key}
+            balances={{
+                tokenAmount: liquidityShareData?.maxTokenBalance ?? "0"
+            }}
         />
-    }, [tokenName, amount]);
+    }, [tokenName, amount, liquidityShareData]);
 
     const RowData = useMemo(() => (
         <> 

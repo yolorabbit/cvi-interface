@@ -5,13 +5,12 @@ import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { actionConfirmEvent, commaFormatted, gas, toBN, toBNAmount, toDisplayAmount } from '../../utils/index';
+import { actionConfirmEvent, commaFormatted, gas, maxUint256, toBN, toBNAmount, toDisplayAmount } from '../../utils/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import { fromUnitsToTokenAmount } from 'contracts/apis/position';
 import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
-import web3Api from 'contracts/web3Api';
 import ErrorModal from 'components/Modals/ErrorModal';
 import WithdrawInfo from 'components/pages/Platform/Info/WithdrawInfo';
 import Contract from 'web3-eth-contract';
@@ -20,7 +19,7 @@ const Withdraw = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
     const { library } = useActiveWeb3React();
-    const { isOpen, setIsOpen, isModal, disabled, token, amount, setAmount, updateAvailableBalance } = useActionController();
+    const { isOpen, setIsOpen, isModal, disabled, token, amount, setAmount, updateAvailableBalance, balances } = useActionController();
     const { account } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
@@ -61,8 +60,13 @@ const Withdraw = () => {
 
     const withdraw = async () => {
         const _contract = getContract(activeToken.rel.platform);
-        const lpTokens = await web3Api.toLPTokens(contracts, activeToken, { tokenAmount });
-        await _contract.methods.withdrawLPTokens(toBN(lpTokens)).send({from: account, ...gas});
+   
+        if(tokenAmount.eq(toBN(balances.tokenAmount))) { 
+            const lpBalance = toBN(await contracts[activeToken.rel.platform].methods.balanceOf(account).call());
+            return await _contract.methods.withdrawLPTokens(lpBalance).send({from: account, ...gas}); // withdraw all - only use for better accurate calculation.
+        }
+
+        await _contract.methods.withdraw(tokenAmount, maxUint256).send({from: account, ...gas}); // withdraw part of the position
     }
 
     const onClick = async () => {
