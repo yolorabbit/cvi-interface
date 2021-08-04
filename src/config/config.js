@@ -106,7 +106,7 @@ const config = {
       prefix: "$",
     },
     feesCollected: {
-      title: "Fees collected for GOVI holders",
+      title: "Accumulated fees earned by GOVI stakers",
       className: "bold green",
       prefix: "$",
     },
