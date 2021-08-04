@@ -1,7 +1,7 @@
 import React from 'react'
 import Coin from './Coin';
 
-const Pairs = ({leftToken, rightToken, label, protocol, showImage, hideNames, poolLink}) => {
+const Pairs = ({leftToken, rightToken, token, label, protocol, showImage, hideNames, poolLink}) => {
   return <div className="pairs-component">
       <div className="pairs-component__coins">
         <Coin token={leftToken}  />

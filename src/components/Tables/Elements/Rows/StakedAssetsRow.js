@@ -69,7 +69,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
                     <Coin token={token} /> : 
                     <> 
-                        <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} hideNames />
+                        <Pairs leftToken={leftToken} rightToken={rightToken} token={token} protocol={protocol} hideNames />
                         {protocol !== "platform" && <RowItem content={StakedValue} /> }
                     </>} 
                 />

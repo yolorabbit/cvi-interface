@@ -362,41 +362,59 @@
                 }
             }
         }
-        
-        & .external-link {
-            position: relative;
-            align-self: baseline;
-            margin-left: 6px;
-            width: 0.833vw;
-            height: 0.833vw;
+    }
+}
 
-            @media (max-width: 1365px){   
-                width: 1.172vw;
-                height: 1.172vw;
-            }
+.external-link {
+    position: relative;
+    align-self: baseline;
+    margin-left: 6px;
+    width: 0.833vw;
+    height: 0.833vw;
 
-            @media (max-width: 1024px){ 
-                width: 2.086vw;
-                height: 2.086vw;
-            }
+    @media (max-width: 1365px){   
+        width: 1.172vw;
+        height: 1.172vw;
+    }
 
-            @media (max-width: 767px){
-                width: 4.444vw;
-                height: 4.444vw;
-            }
+    @media (max-width: 1024px){ 
+        width: 2.086vw;
+        height: 2.086vw;
+    }
 
-            &[title]:hover:after {
-                content: attr(title);
-                position: absolute;
-                left: 0;
-                background: #04050f;
-                white-space: nowrap;
-                color: white;
-                padding: 4px 8px;
-                font-size: 12px;
-                border-radius: 8px;
-                transform: translateY(-200%);
-            }
+    @media (max-width: 767px){
+        width: 4.444vw;
+        height: 4.444vw;
+    }
+
+    &[title]:hover:after {
+        content: attr(title);
+        position: absolute;
+        left: 0;
+        background: #04050f;
+        white-space: nowrap;
+        color: white;
+        transform: translateY(-200%);
+        padding: 0.208vw 0.417vw;
+        font-size: 0.625vw;
+        border-radius: 0.417vw;
+
+        @media (max-width: 1365px){   
+            padding: 0.293vw 0.586vw;
+            font-size: 0.879vw;
+            border-radius: 0.586vw;
+        }
+
+        @media (max-width: 1024px){ 
+            padding: 0.522vw 1.043vw;
+            font-size: 1.565vw;
+            border-radius: 1.043vw;
+        }
+
+        @media (max-width: 767px){
+            padding: 1.111vw 2.222vw;
+            font-size: 3.333vw;
+            border-radius: 2.222vw; 
         }
     }
 }

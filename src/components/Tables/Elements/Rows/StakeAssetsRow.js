@@ -67,8 +67,8 @@ const RowData = ({isHeader, label, token, protocol, poolLink}) => {
             return <>
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
-                    <Coin token={token} showName /> : 
-                    <Pairs leftToken={leftToken} rightToken={rightToken} protocol={protocol} poolLink={poolLink} />} 
+                    <Coin token={token} showName protocol={protocol} /> : 
+                    <Pairs leftToken={leftToken} rightToken={rightToken} token={token} protocol={protocol} poolLink={poolLink} />} 
                 />
                 {!isMobile && <RowItem type="action" content={StakeController} /> }
             </>
@@ -79,8 +79,8 @@ const RowData = ({isHeader, label, token, protocol, poolLink}) => {
             {!isTablet && <> 
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
-                    <Coin token={token} showName /> : 
-                    <Pairs leftToken={leftToken} rightToken={rightToken} label={label} protocol={protocol} poolLink={poolLink} />} 
+                    <Coin token={token} showName protocol={protocol} /> : 
+                    <Pairs leftToken={leftToken} rightToken={rightToken} label={label} token={token} protocol={protocol} poolLink={poolLink} />} 
                 />
             </>}
 

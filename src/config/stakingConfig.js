@@ -26,6 +26,7 @@ const stakingConfig = {
         "cvi-usdt-lp": {
           key: "cvi-usdt-lp",
           label: "CVI-USDT LP",
+          address: "0xe0437BeB5bb7Cf980e90983f6029033d710bd1da",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
@@ -40,8 +41,9 @@ const stakingConfig = {
         },
         "cvi-eth-lp": {
           key: "cvi-eth-lp",
-          protocol: stakingProtocols.platform,
           label: "CVI-ETH LP",
+          address: "0x5005e8Dc0033E78AF80cfc8d10f5163f2FcF0E79",
+          protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
@@ -56,6 +58,7 @@ const stakingConfig = {
         "govi": {
           key: "govi",
           label: "GOVI",
+          address: "0xeeaa40b28a2d1b0b08f6f97bb1dd4b75316c6107",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
@@ -71,6 +74,7 @@ const stakingConfig = {
         "coti-eth-lp": {
           key: "coti-eth-lp",
           label: "COTI-ETH LP",
+          address: "0xa2b04f8133fc25887a436812eae384e32a8a84f2",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
           fixedDecimals: 8,
@@ -86,6 +90,7 @@ const stakingConfig = {
         "govi-eth-lp": {
           key: "govi-eth-lp",
           label: "GOVI-ETH LP",
+          address: "0x1ee312a6d5fe7b4b8c25f0a32fca6391209ebebf",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
           fixedDecimals: 8,
@@ -101,6 +106,7 @@ const stakingConfig = {
         "rhegic2-eth-lp": {
           key: "rhegic2-eth-lp",
           label: "rHEGIC2-ETH LP",
+          address: "0x51996fc38c8d839abd6c2db9a4c221df1cb487a0",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
           fixedDecimals: 8,
@@ -118,6 +124,7 @@ const stakingConfig = {
         "coti-eth-lp": {
           key: "coti-eth-lp",
           label: "COTI-ETH SLP",
+          address: "0x717385e1a702f90b6eb8cd23150702ca7217b626",
           protocol: stakingProtocols.sushiswap,
           decimals: 18,
           fixedDecimals: 8,
@@ -133,6 +140,7 @@ const stakingConfig = {
         "govi-eth-lp": {
           key: "govi-eth-lp",
           label: "GOVI-ETH SLP",
+          address: "0x7e6782e37278994d1e99f1a5d03309b4b249d919",
           protocol: stakingProtocols.sushiswap,
           rewardsTokens: ["GOVI"],
           decimals: 18,
@@ -151,6 +159,8 @@ const stakingConfig = {
       [stakingProtocols.platform]: {
         "cvi-usdt-lp": {
           key: "cvi-usdt-lp",
+          label: "CVI-USDT LP",
+          address: "0x88D01eF3a4D586D5e4ce30357ec57B073D45ff9d",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
@@ -166,6 +176,7 @@ const stakingConfig = {
         "cvi-usdc-lp": {
           key: "cvi-usdc-lp",
           label: "CVI-USDC LP",
+          address: "0x3863D0C9b7552cD0d0dE99fe9f08a32fED6ab72f",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
@@ -178,12 +189,10 @@ const stakingConfig = {
             tokenDecimals: [18]
           }
         },
-        // "cvi-eth-lp": {
-        //   key: "cvi-eth-lp",
-        //   protocol: stakingProtocols.platform
-        // },
         "govi": {
           key: "govi",
+          label: "GOVI",
+          address: "0x43Df9c0a1156c96cEa98737b511ac89D0e2A1F46",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
