@@ -364,6 +364,7 @@
         }
         
         & .external-link {
+            position: relative;
             align-self: baseline;
             margin-left: 6px;
             width: 0.833vw;
@@ -382,6 +383,19 @@
             @media (max-width: 767px){
                 width: 4.444vw;
                 height: 4.444vw;
+            }
+
+            &[title]:hover:after {
+                content: attr(title);
+                position: absolute;
+                left: 0;
+                background: #04050f;
+                white-space: nowrap;
+                color: white;
+                padding: 4px 8px;
+                font-size: 12px;
+                border-radius: 8px;
+                transform: translateY(-200%);
             }
         }
     }
