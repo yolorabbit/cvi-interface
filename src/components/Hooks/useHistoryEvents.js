@@ -153,7 +153,8 @@ const useHistoryEvents = () => {
         .on('error', console.log);
 
         setSubs(prev => prev.concat({ [`${eventType}-${activeToken.key}`]: sub }) );
-    }, [contracts, dispatch, mapper, opt, subs])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mapper, opt, subs])
 
     useEffect(() => {
         if(isMount) return;
