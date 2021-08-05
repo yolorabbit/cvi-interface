@@ -179,7 +179,8 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils,
     let events = [];
 
     if(config.isMainnet) {
-      events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, Math.floor(new Date().getTime() / 1000 - days * DAY));
+      const pos = await contracts[token.rel.platform].methods.positions(account).call();
+      events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) ?? 0 );
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: Object.keys(contractState.positions)[idx] }))).flat();
     } else {
       const chainName = await getChainName();
