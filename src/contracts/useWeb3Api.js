@@ -4,7 +4,7 @@ import { useEvents } from "components/Hooks/useEvents";
 import config from "config/config";
 import platformConfig from "config/platformConfig";
 import stakingConfig, { stakingProtocols } from "config/stakingConfig";
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { contractsContext } from "./ContractContext";
 import web3Api from "./web3Api";
@@ -25,7 +25,7 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const eventsUtils = useEvents();
     const errorValue = useMemo(() => options?.errorValue ?? 'N/A', [options]);
 
-    const fetchWeb3ApiData = useCallback(async (contracts, tokens) => {
+    const fetchWeb3ApiData = async (contracts, tokens) => {
         try {
             if(web3Api[type]) {
                 if(selectedCurrency) {
@@ -48,10 +48,9 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
             if(isActiveInDOM()) setData(errorValue);
             return errorValue;
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [body, errorValue, eventsUtils, library, options?.errorValue, selectedCurrency, type])
+    }
 
-    const getData = useCallback(async () => {
+    const getData = async () => {
         try {
             if(data !== null) setData(null);
             if(body?.stopInitialCall) return "N/A";
@@ -68,8 +67,8 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
             if(isActiveInDOM()) setData(errorValue);
             return errorValue;
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [contracts, data, errorValue, fetchWeb3ApiData, selectedNetwork])
+
+    }
 
     useEffect(() => {
         if(options?.updateOn === "positions") {
@@ -101,7 +100,6 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
         if(!selectedNetwork || !contracts || !library?.currentProvider) return null;
         if(body?.hasOwnProperty('account') && !body.account) return setData("0");
         if(options?.validAmount && body?.hasOwnProperty("tokenAmount") && (body?.tokenAmount?.isZero() || !body?.tokenAmount)) return setData("0");
-        if(options?.updateOn === "positions") return setData(null);
 
         setData(null);
         ref.current = setTimeout(() => {
@@ -118,5 +116,6 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
 
     return useMemo(() => {
         return [data, getData]
-    }, [data, getData]) ;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data]) ;
 }
