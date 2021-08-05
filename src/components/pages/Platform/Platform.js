@@ -29,13 +29,13 @@ const Platform = () => {
                     <Layout>
                         <Row>
                             <Column>
-                                <Row>
+                                <Row flex="unset">
                                     <Container>
                                         <Statistics />
                                     </Container>
                                 </Row>
     
-                                <Row>
+                                <Row flex="1">
                                     <Container>
                                         <Form />
                                     </Container>
