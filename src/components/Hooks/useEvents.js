@@ -103,9 +103,9 @@ export const useEvents = () => {
         const MAX_TIME = 0;
         let cachedBlock;
         let lastBlockFetch = 0;
-        if (!cachedBlock || new Date().getTime() > lastBlockFetch + MAX_TIME) {
+        if (!cachedBlock || moment.utc().valueOf() > lastBlockFetch + MAX_TIME) {
             cachedBlock = await getBlock("latest");
-            lastBlockFetch = new Date().getTime();
+            lastBlockFetch = moment.utc().valueOf();
         }
         return cachedBlock;
     }
@@ -152,7 +152,7 @@ export const useEvents = () => {
     const getLatestBlockTimestamp = async() => (await getBlock("latest")).timestamp
 
     const localTimestamp = () => {
-        return Math.floor(new Date().getTime() / 1000);
+        return Math.floor(moment.utc().valueOf() / 1000);
     };
 
     async function getNow(forceSync = true) {

@@ -4,6 +4,7 @@ import { supportedNetworksConfigByEnv, chainNames, graphEndpoints } from '../../
 import { Pair, Route, Token, TokenAmount, WETH } from '@uniswap/sdk';
 import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
+import moment from 'moment';
 
 const getRpcUrl = async () => {
   const chainId = await getChainId();
@@ -31,7 +32,7 @@ let lastBlockFetch = 0;
 let cachedBlock;
 
 const localTimestamp = () => {
-  return Math.floor(new Date().getTime() / 1000);
+  return Math.floor(moment.utc().valueOf() / 1000);
 };
 
 export async function getNow(forceSync = true) {
@@ -45,9 +46,9 @@ export async function getNow(forceSync = true) {
 }
 
 async function getBlockCached(getBlock) {
-  if (!cachedBlock || new Date().getTime() > lastBlockFetch + MAX_TIME) {
+  if (!cachedBlock || moment.utc().valueOf() > lastBlockFetch + MAX_TIME) {
     cachedBlock = await getBlock("latest");
-    lastBlockFetch = new Date().getTime();
+    lastBlockFetch = moment.utc().valueOf();
   }
   return cachedBlock;
 }
