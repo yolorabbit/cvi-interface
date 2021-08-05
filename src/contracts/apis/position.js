@@ -176,10 +176,9 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils 
   try {
     const currentPositionBalance = await web3Api.getAvailableBalance(contracts, token, {account, type: "sell"}, {errorValue: "0", updateOn: "positions"});
     let events = [];
-
     if(config.isMainnet) {
       const pos = await contracts[token.rel.platform].methods.positions(account).call();
-      events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) ?? 0 );
+      events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) || 0);
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: Object.keys(contractState.positions)[idx] }))).flat();
     } else {
       const chainName = await getChainName();
