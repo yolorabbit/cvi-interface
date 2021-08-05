@@ -14,13 +14,6 @@ const getActiveToken = (tokens, token) => {
     return tokens.find(({key}) => key === token?.toLowerCase());
 }
 
-const dontCallTypes = {
-    "withdraw": true,
-    "sell": true,
-    "stake": true,
-    "unstake": true
-}
-
 export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const isActiveInDOM = useInDOM();
     const eventsUpdateRef = useRef(null);
@@ -63,7 +56,6 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
         try {
             if(data !== null) setData(null);
             if(body?.stopInitialCall) return "N/A";
-            if(body?.type && dontCallTypes?.[body.type]) return setData(errorValue);
         
             let tokens = [];
             if(stakingConfig.tokens[selectedNetwork][stakingProtocols.platform][selectedCurrency]) {

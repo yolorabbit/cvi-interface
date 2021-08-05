@@ -24,13 +24,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
-  const { account } = useActiveWeb3React();
-  const availableBalancePayload = useMemo(() => ({account, type}), [account, type]);
-  const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", token, availableBalancePayload, { errorValue: "0"});
 
-  const updateAvailableBalance = () => {
-    getAvailableBalance();
-  }
 
   const renderActionComponent = (isModal = false) => {
     return <ActionControllerContext 
@@ -45,7 +39,6 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         isModal={isModal} 
         balances={balances} 
         setIsOpen={setIsOpen}
-        updateAvailableBalance={updateAvailableBalance} 
         cb={cb}
       />
   }
@@ -67,7 +60,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             amount={amount} 
             setAmount={setAmount} 
             setInsufficientBalance={setInsufficientBalance}
-            availableBalance={balances?.tokenAmount ?? availableBalance}
+            availableBalance={balances?.tokenAmount}
             view={view}
             protocol={protocol}
           />
@@ -81,15 +74,15 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             amount={amount} 
             setAmount={setAmount} 
             setInsufficientBalance={setInsufficientBalance}
-            availableBalance={balances?.tokenAmount ?? availableBalance}
+            availableBalance={balances?.tokenAmount}
             protocol={protocol}
           /> 
         }
 
         {renderActionComponent(isModal)}
     </div>
-    //eslint-disable-next-line
-  }, [protocol, disabled, balances, type, activeView, amount, isOpen, isModal, token, amountLabel, insufficientBalance, availableBalance, leverage])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol])
 };
 
 export default ActionController;

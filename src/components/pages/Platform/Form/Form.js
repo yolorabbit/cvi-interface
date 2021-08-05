@@ -9,14 +9,24 @@ import './Form.scss';
 import { useSelector } from 'react-redux';
 import { contractsContext } from 'contracts/ContractContext';
 import { useInDOM } from 'components/Hooks';
+import { useWeb3Api } from 'contracts/useWeb3Api';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
 
 const Form = () => {
+    const { account } = useActiveWeb3React();
     const { activeView } = useContext(platformViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
     const [selectedCurrency, setSelectedCurrency] = useState("usdt");
     const tokenLeverageList = platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage;
     const [leverage, setLeverage] = useState(tokenLeverageList?.[0]);
     const [amount, setAmount] = useState("");
+    const type = activeView === "trade" ? platformConfig.actionsConfig.buy.key : platformConfig.actionsConfig.deposit.key
+    const availableBalancePayload = useMemo(() => ({account, type}), [account, type]);
+    const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", selectedCurrency, availableBalancePayload, { errorValue: "0"});
+  
+    const updateAvailableBalance = () => {
+      getAvailableBalance();
+    }
 
     useEffect(() => {
         if(!platformConfig.tokens[selectedCurrency]?.leverage) setLeverage();
@@ -42,7 +52,11 @@ const Form = () => {
                         setAmount={setAmount}
                         token={selectedCurrency}
                         leverage={leverage}
-                        type={activeView === "trade" ? platformConfig.actionsConfig.buy.key : platformConfig.actionsConfig.deposit.key}
+                        type={type}
+                        balances={{
+                            tokenAmount: availableBalance
+                        }}
+                        cb={updateAvailableBalance}
                     />
                </div>
     
@@ -53,8 +67,8 @@ const Form = () => {
                 <SeeMore selectedCurrency={selectedCurrency?.toUpperCase()}/>    
             </div>
         )
-        //eslint-disable-next-line
-    }, [activeView, selectedCurrency, selectedNetwork, amount, leverage]) 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedCurrency, activeView, selectedNetwork, leverage, tokenLeverageList, amount, type, availableBalance]) 
 }
 
 const SeeMore = ({selectedCurrency}) => {
