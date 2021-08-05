@@ -7,6 +7,7 @@ import stakingApi from "./apis/staking";
 import rewardsApi from './apis/rewards';
 import liquidityApi from "./apis/liquidity";
 import moment from "moment";
+import { chainNames } from "connectors";
  
 export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
 
@@ -93,11 +94,12 @@ const web3Api = {
             return "N/A";
         }
     },
-    getGoviPrice: async ({GOVI, USDT}) => {
+    getGoviPrice: async ({GOVI, USDC, USDT}) => {
         try {
+            const chainName = await getChainName();
             const GOVIData = await getTokenData(GOVI);
-            const USDTData = await getTokenData(USDT);
-            const goviPrice = await getPrice(GOVIData, USDTData);
+            const TokenData = await getTokenData(chainName === chainNames.Matic ? USDC : USDT);
+            const goviPrice = await getPrice(GOVIData, TokenData);
             return goviPrice;
         } catch(error) {
             console.log(error);
