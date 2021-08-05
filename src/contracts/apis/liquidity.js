@@ -3,7 +3,7 @@ import config from "config/config";
 import { getChainName } from "contracts/utils";
 import * as TheGraph from 'graph/queries';
 import { toBN, toDisplayAmount } from "utils";
-import { bottomBlockByNetwork, DAY, DEFAULT_STEPS } from '../../components/Hooks/useEvents';
+import { bottomBlockByNetwork, DEFAULT_STEPS } from '../../components/Hooks/useEvents';
 
 export async function toLPTokens(contracts, token, { tokenAmount }) {
   let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
@@ -11,11 +11,11 @@ export async function toLPTokens(contracts, token, { tokenAmount }) {
   return totalBalance.isZero() ? toBN(0) : tokenAmount.mul(totalSupply).div(totalBalance);
 }
 
-async function getLiquidityPNL(contracts, token, {account, library, eventsUtils, days = 30}) {
+async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}) {
   try {
     let events = [];
     if(config.isMainnet) {
-      events = await TheGraph[`account_liquidities${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, Math.floor(new Date().getTime() / 1000 - days * DAY));
+      events = await TheGraph[`account_liquidities${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({...event, event: Object.keys(contractState.liquidities)[idx]}))).flat();
     } else {
       const chainName = await getChainName();
