@@ -173,7 +173,7 @@ async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, purch
   return fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
 }
 
-async function getPositionsPNL(contracts, token, {account, library, eventsUtils, days = 30}) {
+async function getPositionsPNL(contracts, token, {account, library, eventsUtils }) {
   try {
     const currentPositionBalance = await web3Api.getAvailableBalance(contracts, token, {account, type: "sell"}, {errorValue: "0", updateOn: "positions"});
     let events = [];
