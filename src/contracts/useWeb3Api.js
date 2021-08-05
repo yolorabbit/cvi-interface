@@ -1,7 +1,6 @@
 import { useWeb3React } from "@web3-react/core";
 import { useInDOM } from "components/Hooks";
 import { useEvents } from "components/Hooks/useEvents";
-import { useActiveWeb3React } from "components/Hooks/wallet";
 import config from "config/config";
 import platformConfig from "config/platformConfig";
 import stakingConfig, { stakingProtocols } from "config/stakingConfig";

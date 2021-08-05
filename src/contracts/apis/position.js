@@ -7,7 +7,6 @@ import config from "config/config";
 import { bottomBlockByNetwork, DEFAULT_STEPS } from "components/Hooks/useEvents";
 import moment from "moment";
 import { getLatestBlockTimestamp } from './../web3Api';
-import { DAY } from "components/Hooks/useEvents";
 
 export const MAX_CVI_VALUE = 20000;
 

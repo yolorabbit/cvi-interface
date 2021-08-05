@@ -174,7 +174,7 @@ async function getTodayClaimedReward(rewards, eventsUtils) {
 
 const getClaimData = async (contracts, token, { account, library, eventsUtils}) => {
   try {
-      const { creationTimestamp } = await contracts[token.rel.platform].methods.positions(account).call();
+      const { creationTimestamp } = await contracts[token.rel.platform].methods.positions(account).call(); // @TODO: use creation timestamp from trade row
       const claimableReward = await getClaimableRewards(contracts, token, { account, library, eventsUtils });
       const lastEndDate = moment.utc(creationTimestamp * 1000).add("30", "days");
       const lastEndOfDay = moment.utc(creationTimestamp * 1000).endOf('day').add('2', 'seconds');

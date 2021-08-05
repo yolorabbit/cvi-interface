@@ -4,7 +4,6 @@ import { chainNames } from "connectors";
 import { contractsContext } from "contracts/ContractContext";
 import config from "config/config";
 import { useSelector } from "react-redux";
-import { useActiveWeb3React } from "./wallet";
 import moment from 'moment';
 import { useWeb3React } from "@web3-react/core";
 
