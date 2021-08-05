@@ -18,7 +18,7 @@ const PlatformClaim = ({token}) => {
     const timerRef = useRef();
     const { selectedNetwork } = useSelector(({app}) => app);
     const { library } = useWeb3React(config.web3ProviderId);
-    const { account } = useActiveWeb3React();
+    const { account, library: web3 } = useActiveWeb3React();
     const accountPayload = useMemo(() => ({account}), [account]);
     const [claimData, updateClaimData] = useWeb3Api("getClaimData", token.key, accountPayload, {updateOn: "positions"});
     const { getLatestBlockTimestamp } = useEvents();
@@ -57,7 +57,7 @@ const PlatformClaim = ({token}) => {
         const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
         const { abi, address } = contractsJSON[contractKey];
         const _contract = new Contract(abi, address);
-        _contract.setProvider(library?.currentProvider);
+        _contract.setProvider(web3?.currentProvider);
         return _contract
     }
     
