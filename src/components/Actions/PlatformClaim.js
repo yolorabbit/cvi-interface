@@ -1,3 +1,4 @@
+import { useWeb3React } from '@web3-react/core';
 import Button from 'components/Elements/Button';
 import { useEvents } from 'components/Hooks/useEvents';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
@@ -16,7 +17,8 @@ const PlatformClaim = ({token}) => {
     const dispatch = useDispatch();
     const timerRef = useRef();
     const { selectedNetwork } = useSelector(({app}) => app);
-    const { library, account } = useActiveWeb3React();
+    const { library } = useWeb3React(config.web3ProviderId);
+    const { account } = useActiveWeb3React();
     const accountPayload = useMemo(() => ({account}), [account]);
     const [claimData, updateClaimData] = useWeb3Api("getClaimData", token.key, accountPayload, {updateOn: "positions"});
     const { getLatestBlockTimestamp } = useEvents();

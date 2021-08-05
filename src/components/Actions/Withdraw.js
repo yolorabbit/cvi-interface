@@ -14,13 +14,14 @@ import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countd
 import ErrorModal from 'components/Modals/ErrorModal';
 import WithdrawInfo from 'components/pages/Platform/Info/WithdrawInfo';
 import Contract from 'web3-eth-contract';
+import { useWeb3React } from '@web3-react/core';
 
 const Withdraw = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { library } = useActiveWeb3React();
+    const { library } = useWeb3React(config.web3ProviderId);
+    const { library: web3, account } = useActiveWeb3React();
     const { isOpen, setIsOpen, isModal, disabled, token, amount, setAmount, updateAvailableBalance, balances } = useActionController();
-    const { account } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
     const [isProcessing, setProcessing] = useState();
@@ -34,7 +35,7 @@ const Withdraw = () => {
         const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
         const { abi, address } = contractsJSON[contractKey];
         const _contract = new Contract(abi, address);
-        _contract.setProvider(library?.currentProvider);
+        _contract.setProvider(web3?.currentProvider);
         return _contract
     }
 

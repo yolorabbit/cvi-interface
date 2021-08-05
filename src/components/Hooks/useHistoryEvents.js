@@ -12,6 +12,7 @@ import config from 'config/config';
 import { chainNames } from 'connectors';
 import { useIsMount } from '.';
 import Contract from 'web3-eth-contract';
+import { useWeb3React } from '@web3-react/core';
 
 export const contractState = config.isMainnet ? {
     positions: {
@@ -37,7 +38,8 @@ const useHistoryEvents = () => {
     const { selectedNetwork } = useSelector(({app}) => app); 
     const wallet = useSelector(({wallet}) => wallet);
     const [subs, setSubs] = useState([]);
-    const { library, account } = useActiveWeb3React();
+    const { library } = useWeb3React(config.web3ProviderId);
+    const { library: web3, account } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const dispatch = useDispatch();
     const { getEventsFast } = useEvents();
@@ -126,7 +128,7 @@ const useHistoryEvents = () => {
         const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
         const { abi, address } = contractsJSON[contractKey];
         const _contract = new Contract(abi, address);
-        _contract.setProvider(library?.currentProvider);
+        _contract.setProvider(web3?.currentProvider);
         return _contract
     }
     

@@ -8,9 +8,12 @@ import { useSelector } from "react-redux";
 import platformConfig from "config/platformConfig";
 import web3Api from "contracts/web3Api";
 import { useIsMount } from ".";
+import { useWeb3React } from '@web3-react/core';
+import config from "config/config";
 
 const useAssets = (type) => {
-    const { account, library } = useActiveWeb3React();
+    const { library } = useWeb3React(config.web3ProviderId);
+    const { account } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const [filteredAssets, setFilteredAssets] = useState(null);
     const { selectedNetwork } = useSelector(({app}) => app);

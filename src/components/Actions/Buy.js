@@ -15,6 +15,7 @@ import config from './../../config/config';
 import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
 import Contract from 'web3-eth-contract';
+import { useWeb3React } from '@web3-react/core';
 
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
@@ -22,7 +23,8 @@ const Buy = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
     const { disabled, type, token, setIsOpen, amount, setAmount, leverage = 1, updateAvailableBalance } = useActionController();
-    const { account, library } = useActiveWeb3React();
+    const { library } = useWeb3React(config.web3ProviderId);
+    const { account, library: web3 } = useActiveWeb3React();
     const [modalIsOpen, setModalIsOpen] = useState();
     const [errorMessage, setErrorMessage] = useState();
     const contracts = useContext(contractsContext);
@@ -39,9 +41,9 @@ const Buy = () => {
         const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
         const { abi, address } = contractsJSON[contractKey];
         const _contract = new Contract(abi, address);
-        _contract.setProvider(library?.currentProvider);
+        _contract.setProvider(web3?.currentProvider);
         return _contract
-    }, [library?.currentProvider, selectedNetwork])
+    }, [web3?.currentProvider, selectedNetwork])
 
     const allowance = useCallback(async (_account) => {
         const _contract = getContract(activeToken.rel.contractKey);

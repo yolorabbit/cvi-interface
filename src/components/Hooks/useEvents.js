@@ -6,6 +6,7 @@ import config from "config/config";
 import { useSelector } from "react-redux";
 import { useActiveWeb3React } from "./wallet";
 import moment from 'moment';
+import { useWeb3React } from "@web3-react/core";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
@@ -26,7 +27,7 @@ const EventOptionsDefaults = {
 export const useEvents = () => {
     const contracts = useContext(contractsContext);
     const { selectedNetwork: chainName } = useSelector(({app}) => app);
-    const {library} = useActiveWeb3React();
+    const { library } = useWeb3React(config.web3ProviderId);
     const { getBlock } = library?.eth ?? {};
 
     const getEventsFast = async (eventsData, opt) => {
@@ -133,15 +134,14 @@ export const useEvents = () => {
         return await getEvents(eventsData, options, getBlock);
     }
 
-    async function getLastOpenEvent(account, platform) {
+    async function getLastOpenEvent(account, token) {
         try {
             if(config.isMainnet) {
-                const platformName = await platform.methods.name().call();
-                let _lastOpenEvent = await TheGraph[`lastOpen${platformName === "CVI-LP" ? "USDC" : ""}`](account, platform._address);
+                let _lastOpenEvent = await TheGraph[`lastOpen${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
                 return !!_lastOpenEvent.openPositions?.length ? _lastOpenEvent.openPositions[0] : null;
             }
             const options = {eventsCount: 1, days: 30 };
-            const eventsData = [{ contract: platform, events: { OpenPosition: [{ account }] } }];
+            const eventsData = [{ contract: contracts[token.rel.platform], events: { OpenPosition: [{ account }] } }];
             const events = await getEventsFast(eventsData, options);
             return events[events.length - 1];
         } catch(error) {

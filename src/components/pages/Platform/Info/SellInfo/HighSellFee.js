@@ -8,12 +8,15 @@ import { contractsContext } from 'contracts/ContractContext';
 import web3Api from 'contracts/web3Api';
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { commaFormatted } from 'utils';
+import { useWeb3React } from '@web3-react/core';
+import config from 'config/config';
 
 export const HighSellFee = ({sellFee, sellFeeAmount}) => {
     const isActiveInDOM = useInDOM();
     const contracts = useContext(contractsContext);
     const eventsUtils = useEvents();
-    const { account, library} = useActiveWeb3React();
+    const { library } = useWeb3React(config.web3ProviderId);
+    const { account } = useActiveWeb3React();
     const { token, type } = useActionController();
     const activeToken = useActiveToken(token);
     const _higherFeeDurationTimer = useRef();

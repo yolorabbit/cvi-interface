@@ -224,7 +224,7 @@ const web3Api = {
         try {
             let openTime;
             if(type === "sell"){
-                let event = await eventsUtils.getLastOpenEvent(account, contracts[token.rel.platform]);
+                let event = await eventsUtils.getLastOpenEvent(account, token);
                 if(!event) return [0,0];
                 let block = await new Promise((res, rej)=> library.eth.getBlock(event.blockNumber, (err, data) => err ? rej(err) : res(data)));
                 if(!block) return [0,0];

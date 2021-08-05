@@ -1,6 +1,8 @@
+import { useWeb3React } from "@web3-react/core";
 import { useInDOM } from "components/Hooks";
 import { useEvents } from "components/Hooks/useEvents";
 import { useActiveWeb3React } from "components/Hooks/wallet";
+import config from "config/config";
 import platformConfig from "config/platformConfig";
 import stakingConfig, { stakingProtocols } from "config/stakingConfig";
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
@@ -24,7 +26,7 @@ export const useWeb3Api = (type, selectedCurrency, body, options) => {
     const eventsUpdateRef = useRef(null);
     const ref = useRef(null);
     const { positions, liquidities } = useSelector(({wallet}) => wallet);
-    const { library } = useActiveWeb3React();
+    const { library } = useWeb3React(config.web3ProviderId);
     const { selectedNetwork } = useSelector(({app}) => app);
     const contracts = useContext(contractsContext);
     const [data, setData] = useState();
