@@ -20,9 +20,10 @@ const Form = () => {
     const tokenLeverageList = platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage;
     const [leverage, setLeverage] = useState(tokenLeverageList?.[0]);
     const [amount, setAmount] = useState("");
-    const type = activeView === "trade" ? platformConfig.actionsConfig.buy.key : platformConfig.actionsConfig.deposit.key
+    const type = activeView === "trade" ? platformConfig.actionsConfig.buy.key : platformConfig.actionsConfig.deposit.key;
     const availableBalancePayload = useMemo(() => ({account, type}), [account, type]);
-    const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", selectedCurrency, availableBalancePayload, { errorValue: "0"});
+    const availableBalanceOptions = useMemo(() => ({updateOn: activeView === "trade" ? 'positions' : 'liquidities'}), [activeView]);
+    const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", selectedCurrency, availableBalancePayload, availableBalanceOptions);
   
     const updateAvailableBalance = () => {
       getAvailableBalance();

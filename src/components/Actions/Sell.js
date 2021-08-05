@@ -23,7 +23,7 @@ const feesChangedWarning = "This transaction will not succeed due to the change 
 const Sell = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { isOpen, setIsOpen, isModal, disabled, leverage, token, amount, setAmount, updateAvailableBalance, balances } = useActionController();
+    const { isOpen, setIsOpen, isModal, disabled, leverage, token, amount, setAmount, cb: updateAvailableBalance, balances } = useActionController();
     const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
@@ -78,7 +78,6 @@ const Sell = () => {
 
     const onClick = async () => {
         if(!isOpen && !sellAllModal) {
-            updateAvailableBalance();
             return setIsOpen(true);
         }
         setProcessing(true);
@@ -104,7 +103,6 @@ const Sell = () => {
                 if(sellAllModal) setSellAllModal(false);
                 setIsOpen(false);
                 setAmount("");
-                updateAvailableBalance();
                 actionConfirmEvent(dispatch);
             }
 

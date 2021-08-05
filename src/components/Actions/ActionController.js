@@ -3,13 +3,12 @@ import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 import { platformViewContext } from 'components/Context';
 import Action from './Action';
-import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { useWeb3Api } from 'contracts/useWeb3Api';
+
 
 const actionControllerContext = createContext({});
-export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance, balances, cb }) => {
+export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen, balances, cb }) => {
   return (
-    <actionControllerContext.Provider value={{disabled, type, token, protocol, leverage, amount, setAmount, isModal, isOpen, setIsOpen, updateAvailableBalance, balances, cb }}>
+    <actionControllerContext.Provider value={{disabled, type, token, protocol, leverage, amount, setAmount, isModal, isOpen, setIsOpen, balances, cb }}>
       <Action />
     </actionControllerContext.Provider>
   )

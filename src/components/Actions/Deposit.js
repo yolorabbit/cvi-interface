@@ -15,7 +15,7 @@ import Contract from 'web3-eth-contract';
 const Deposit = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { disabled, type, setIsOpen, token, amount, setAmount, updateAvailableBalance } = useActionController();
+    const { disabled, type, setIsOpen, token, amount, setAmount, cb: updateAvailableBalance } = useActionController();
     const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);

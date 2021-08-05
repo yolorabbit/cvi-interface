@@ -21,7 +21,7 @@ const Withdraw = () => {
     const isActiveInDOM = useInDOM();
     const { library } = useWeb3React(config.web3ProviderId);
     const { library: web3, account } = useActiveWeb3React();
-    const { isOpen, setIsOpen, isModal, disabled, token, amount, setAmount, updateAvailableBalance, balances } = useActionController();
+    const { isOpen, setIsOpen, isModal, disabled, token, amount, setAmount, balances } = useActionController();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
     const [isProcessing, setProcessing] = useState();
@@ -71,10 +71,8 @@ const Withdraw = () => {
     }
 
     const onClick = async () => {
-        if(!isOpen) {
-            updateAvailableBalance();
-            return setIsOpen(true);
-        }
+        if(!isOpen) return setIsOpen(true);
+        
         setProcessing(true);
         
         try {
@@ -122,7 +120,6 @@ const Withdraw = () => {
             if(isActiveInDOM()) {
                 setProcessing(false);
                 setAmount("");
-                updateAvailableBalance();
             }
         }
     }
