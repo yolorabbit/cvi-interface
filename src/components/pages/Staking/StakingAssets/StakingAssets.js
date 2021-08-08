@@ -10,7 +10,6 @@ import { useSelector } from 'react-redux';
 import './StakingAssets.scss';
 
 const StakingAssets = ({type}) => {
-    const isTablet = useIsTablet();
     const [update, forceUpdate] = useState(false);
     const filteredAssets = useAssets(type, update);
     const { selectedNetwork } = useSelector(({app}) => app);
@@ -26,11 +25,18 @@ const StakingAssets = ({type}) => {
                     subHeaders={stakingConfig.tableSubHeaders?.[type]?.[selectedNetwork]}
                     cb={()=>delay(()=>forceUpdate(!update),5000)}
                 >
-                    {isTablet ? <ExpandList /> : <Table />}
+                    <DataView />
                 </DataController>
             </div>
-        ) //eslint-disable-next-line
-    }, [isTablet, filteredAssets, selectedNetwork, update]);
+        )
+    }, [filteredAssets, selectedNetwork, type, update]);
+}
+
+const DataView = () => {
+    const isTablet = useIsTablet();
+    return useMemo(() => {
+        return isTablet ? <ExpandList /> : <Table />
+    }, [isTablet]);
 }
 
 export default StakingAssets;

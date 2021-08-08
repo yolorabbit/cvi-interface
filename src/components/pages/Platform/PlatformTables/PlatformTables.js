@@ -39,8 +39,14 @@ const PlatformTables = () => {
     )
 }
 
-const DefaultTable = ({activeTab}) => {
+const DataView = () => {
     const isTablet = useIsTablet();
+    return useMemo(() => {
+        return isTablet ? <ExpandList /> : <Table />
+    }, [isTablet]);
+}
+
+const DefaultTable = ({activeTab}) => {
     const filterAssets = useAssets(activeTab);
 
     return useMemo(() => {
@@ -49,13 +55,12 @@ const DefaultTable = ({activeTab}) => {
             activeTab={activeTab} 
             data={filterAssets}
         >
-            {isTablet ? <ExpandList /> : <Table />}
+           <DataView />
         </DataController>
-    }, [activeTab, isTablet, filterAssets])
+    }, [activeTab, filterAssets])
 }
 
 const HistoryTable = ({activeTab}) => {
-    const isTablet = useIsTablet();
     const { activeView } = useContext(platformViewContext);
     const wallet = useSelector(({wallet}) => wallet);
     
@@ -70,9 +75,9 @@ const HistoryTable = ({activeTab}) => {
             data={historyData}
             showPaginator
         >
-            {isTablet ? <ExpandList /> : <Table />}
+            <DataView />
         </DataController>
-    }, [activeTab, historyData, isTablet])
+    }, [activeTab, historyData])
 }
 
 export default PlatformTables;
