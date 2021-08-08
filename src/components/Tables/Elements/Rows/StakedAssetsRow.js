@@ -16,17 +16,18 @@ import StakedAmount from "../Values/StakedAmount";
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();
 
-    const RowDataComponent = () => 
-    <RowData 
+    const RowDataComponent = () => useMemo(() => <RowData 
         isHeader={isHeader} 
         token={token} 
         protocol={protocol}
         data={data}
-    />
+    />, []);
+  
 
-    return isTablet ? <RowDataComponent /> : <tr>
-        <RowDataComponent />
-    </tr>
+    return useMemo(()=> {
+        return isTablet ? <RowDataComponent /> : <tr><RowDataComponent /></tr>
+    //eslint-disable-next-line
+    },[]);
 }
 
 export default StakedAssetsRow;
