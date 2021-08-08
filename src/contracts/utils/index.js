@@ -6,11 +6,33 @@ import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
 import moment from 'moment';
 
+export const platformCreationTimestamp = {
+  [chainNames.Ethereum]: {
+    USDT: {
+      // creationBlock: 11686790,
+      creationTimestamp: 1611073144
+    },
+    WETH: {
+      // creationBlock: 12139444,
+      creationTimestamp: 1617091637,
+    }
+  },
+  [chainNames.Matic]: {
+    USDT: {
+      // creationBlock: 15129735,
+      creationTimestamp: 1622406129,
+    },
+    USDC: {
+      // creationBlock: 17002125,
+      creationTimestamp: 1626623755,
+    }
+  }
+}
+
 const getRpcUrl = async () => {
   const chainId = await getChainId();
   return chainId !== 1 ? RPC_URLS_NETWORK_BY_ENV[chainId] : (window?.ethereum?.selectedAddress && window?.ethereum) || RPC_URLS_NETWORK_BY_ENV[chainId];
 }
-
 
 const getWebProvider = async () => {
   return new Web3(await getRpcUrl());

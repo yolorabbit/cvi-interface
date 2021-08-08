@@ -1,4 +1,4 @@
-import { aprToAPY, convert, fromLPTokens, getChainName, getWeb3Contract, getBalance } from "contracts/utils";
+import { aprToAPY, convert, fromLPTokens, getChainName, getWeb3Contract, getBalance, platformCreationTimestamp } from "contracts/utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount, toFixed } from "utils";
 
@@ -247,8 +247,17 @@ const stakingApi = {
             amount: 0,
             symbol
         }
+
         const sum = events.reduce((p, e) => p.add(toBN(e.returnValues ? e.returnValues[2] : e.tokenAmount)), toBN(0));
-        const creationTimestamp = await staking.methods.creationTimestamp().call();
+        const chainName = await getChainName();
+        let creationTimestamp = 0;
+        
+        if(platformCreationTimestamp[chainName][symbol]) {
+            creationTimestamp = platformCreationTimestamp[chainName][symbol].creationTimestamp;
+        } else {
+            creationTimestamp = await staking.methods.creationTimestamp().call()
+        }
+
         const timePassedSinceCreation = now - creationTimestamp;
         const secondsInDay = 86400;
         const reward = sum.mul(toBN(secondsInDay)).div(toBN(timePassedSinceCreation));
