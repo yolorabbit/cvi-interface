@@ -8,7 +8,7 @@ import moment from 'moment';
 
 const getRpcUrl = async () => {
   const chainId = await getChainId();
-  return chainId !== 1 ? RPC_URLS_NETWORK_BY_ENV[chainId] : window?.ethereum || RPC_URLS_NETWORK_BY_ENV[chainId];
+  return chainId !== 1 ? RPC_URLS_NETWORK_BY_ENV[chainId] : (window?.ethereum?.selectedAddress && window?.ethereum) || RPC_URLS_NETWORK_BY_ENV[chainId];
 }
 
 
