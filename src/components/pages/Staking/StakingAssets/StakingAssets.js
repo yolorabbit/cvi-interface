@@ -29,7 +29,8 @@ const StakingAssets = ({type}) => {
                 </DataController>
             </div>
         )
-    }, [filteredAssets, selectedNetwork, type, update]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filteredAssets, selectedNetwork, update]);
 }
 
 const DataView = () => {

@@ -16,18 +16,21 @@ import StakedAmount from "../Values/StakedAmount";
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();
 
-    const RowDataComponent = () => useMemo(() => <RowData 
-        isHeader={isHeader} 
-        token={token} 
-        protocol={protocol}
-        data={data}
-    />, []);
-  
-
-    return useMemo(()=> {
-        return isTablet ? <RowDataComponent /> : <tr><RowDataComponent /></tr>
-    //eslint-disable-next-line
-    },[]);
+    return useMemo(() => {
+        return isTablet ? <RowData 
+            isHeader={isHeader} 
+            token={token} 
+            protocol={protocol}
+            data={data}
+        /> : <tr>
+            <RowData 
+                isHeader={isHeader} 
+                token={token} 
+                protocol={protocol}
+                data={data}
+            />
+        </tr>
+    }, [token, protocol, data, isHeader, isTablet])
 }
 
 export default StakedAssetsRow;
@@ -108,5 +111,5 @@ const RowData = ({isHeader, token, protocol, data}) => {
             {(!isTablet || isMobile) && <RowItem content={UnstakeController} />}
         </>
         //eslint-disable-next-line
-    )}, [stakedData, isTablet, isMobile, amount]);
+    )}, [stakedData, isTablet, isMobile, amount, data]);
 }
