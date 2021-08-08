@@ -24,7 +24,7 @@ const ExpandList = () => {
                 {currentData.map((rowData, index) => [
                         subHeaders?.[index] && <SubHeader key={subHeaders[index]} title={subHeaders[index]} />, 
                         <Expand 
-                            key={`${rowData.token}${index}`} 
+                            key={`${rowData.token}${index}${currentPage}`} 
                             header={<ActiveRow rowData={rowData} activeTab={activeTab} isHeader />} 
                             expandedView={<ActiveRow rowData={rowData} activeTab={activeTab} />} 
                         />
