@@ -1,5 +1,3 @@
-import { useWeb3React } from "@web3-react/core";
-import config from "config/config";
 import { contractsContext } from "contracts/ContractContext";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +7,7 @@ import { useActiveWeb3React } from "../wallet";
 const useSubscribe = () => {
     const { selectedNetwork } = useSelector(({app}) => app);
     const assets = require(`./${selectedNetwork.toLowerCase()}.json`);
-    const {library: web3} = useWeb3React(config.web3ProviderId);
-    const { account } = useActiveWeb3React();
+    const { account, library: web3 } = useActiveWeb3React();
     const [subscribedEvents,  setSubscribedEvents] = useState({});
     const [called,  setCalled] = useState(null);
     const contracts = useContext(contractsContext);
