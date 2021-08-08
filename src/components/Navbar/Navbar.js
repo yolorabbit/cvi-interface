@@ -63,8 +63,7 @@ const Navbar = () => {
               </div>
             </div>
         )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pageYOffset]) 
+    }, [pageYOffset, RenderView]) 
 }
 
 const NavbarConnectMemoized = () => {
