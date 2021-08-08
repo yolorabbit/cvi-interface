@@ -40,7 +40,7 @@ const config = {
     { iconName: 'telegram', to: 'https://t.me/cviofficial' },
     { iconName: 'twitter', to: 'https://twitter.com/official_cvi' },
     { iconName: 'medium', to: 'https://cviofficial.medium.com' },
-    { iconName: 'defipulse', to: 'https://defipulse.com' },
+    { iconName: 'defipulse', to: 'https://defipulse.com/crypto-volatility-index' },
     { iconName: 'discord', to: 'https://discord.gg/jXba8HmTs5' },
   ],
   alerts: {
