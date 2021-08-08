@@ -243,36 +243,44 @@ const stakingApi = {
         return dailyReward
     },
     getDailyRewardPerToken: async function (staking, account, events, now, symbol, tokenDecimals, decimalsCountDisplay = 8) {
-        if(!account) return {
-            amount: 0,
-            symbol
+        try {
+            if(!account) return {
+                amount: 0,
+                symbol
+            }
+    
+            const sum = events.reduce((p, e) => p.add(toBN(e.returnValues ? e.returnValues[2] : e.tokenAmount)), toBN(0));
+            const chainName = await getChainName();
+            let creationTimestamp = 0;
+            
+            if(platformCreationTimestamp[chainName][symbol]) {
+                creationTimestamp = platformCreationTimestamp[chainName][symbol].creationTimestamp;
+            } else {
+                throw new Error(`Please add creation timestamp to ${symbol} platform token.`)
+            }
+    
+            const timePassedSinceCreation = now - creationTimestamp;
+            const secondsInDay = 86400;
+            const reward = sum.mul(toBN(secondsInDay)).div(toBN(timePassedSinceCreation));
+            // console.log(`daily reward ${reward}`);
+    
+            let balance = await staking.methods.stakes(account).call();
+            let total = await staking.methods.totalStaked().call();
+            
+            const dailyRewards = toBN(total).isZero() ? toBN(0) : reward.mul(toBN(balance)).div(toBN(total));
+    
+            const dailyReward = {
+                amount: commaFormatted(customFixed(toFixed(toDisplayAmount(dailyRewards, tokenDecimals)), decimalsCountDisplay)),
+                symbol,
+            }
+            return dailyReward;
+        } catch(error) {
+            console.log(error);
+            return {
+                amount: 0,
+                symbol
+            }
         }
-
-        const sum = events.reduce((p, e) => p.add(toBN(e.returnValues ? e.returnValues[2] : e.tokenAmount)), toBN(0));
-        const chainName = await getChainName();
-        let creationTimestamp = 0;
-        
-        if(platformCreationTimestamp[chainName][symbol]) {
-            creationTimestamp = platformCreationTimestamp[chainName][symbol].creationTimestamp;
-        } else {
-            creationTimestamp = await staking.methods.creationTimestamp().call()
-        }
-
-        const timePassedSinceCreation = now - creationTimestamp;
-        const secondsInDay = 86400;
-        const reward = sum.mul(toBN(secondsInDay)).div(toBN(timePassedSinceCreation));
-        // console.log(`daily reward ${reward}`);
-
-        let balance = await staking.methods.stakes(account).call();
-        let total = await staking.methods.totalStaked().call();
-        
-        const dailyRewards = toBN(total).isZero() ? toBN(0) : reward.mul(toBN(balance)).div(toBN(total));
-
-        const dailyReward = {
-            amount: commaFormatted(customFixed(toFixed(toDisplayAmount(dailyRewards, tokenDecimals)), decimalsCountDisplay)),
-            symbol,
-        }
-        return dailyReward
     },
     uniswapLPTokenToUSD: async (amount, USDTToken, uniswapLPToken, uniswapToken) => {
         let totalSupply = toBN(await uniswapLPToken.contract.methods.totalSupply().call());

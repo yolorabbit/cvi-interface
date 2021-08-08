@@ -12,7 +12,7 @@ export const platformCreationTimestamp = {
       // creationBlock: 11686790,
       creationTimestamp: 1611073144
     },
-    WETH: {
+    ETH: {
       // creationBlock: 12139444,
       creationTimestamp: 1617091637,
     }
