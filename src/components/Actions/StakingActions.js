@@ -1,5 +1,6 @@
 import CountdownComponent, { useIsLockedTime } from "components/Countdown/Countdown";
 import Button from "components/Elements/Button";
+import { useInDOM } from "components/Hooks";
 import useApproveToken from "components/Hooks/useApproveToken";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import config from "config/config";
@@ -14,6 +15,7 @@ import Contract from "web3-eth-contract";
 import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
+    const isActiveInDom = useInDOM();
     const {disabled, type, token: tokenName, isModal, isOpen, setIsOpen, amount, setAmount, protocol } = useActionController();
     const dispatch = useDispatch();
     const contracts = useContext(contractsContext);
@@ -35,7 +37,9 @@ const StakingActions = () => {
             try{
                 if(contracts[platfromName].methods.lpsLockupPeriod) {
                     const locktime = await contracts[platfromName].methods.lpsLockupPeriod().call();
-                    setLockup(locktime / 60 / 60)
+                    if(isActiveInDom()) {
+                        setLockup(locktime / 60 / 60)
+                    }
                 }
             } catch (error) {
                 console.log("getLockuptime error: ", error);
@@ -107,9 +111,11 @@ const StakingActions = () => {
                 message: "Transaction failed!"
             }));
         } finally {
-            setAmount("0");
-            setIsOpen(false);
-            setProcessing(false);
+            if(isActiveInDom()) {
+                setAmount("0");
+                setIsOpen(false);
+                setProcessing(false);
+            } 
         }
     }
 
