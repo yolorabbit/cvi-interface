@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import Expand from 'components/Expand';
-import { uniqueId } from 'lodash';
 import Paginator from 'components/Paginator';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
@@ -23,9 +22,9 @@ const ExpandList = () => {
         return (
             <div className={`expand-list-component ${activeTab?.toLowerCase()}`}>
                 {currentData.map((rowData, index) => [
-                        subHeaders?.[index] && <SubHeader key={uniqueId()} title={subHeaders[index]} />, 
+                        subHeaders?.[index] && <SubHeader key={subHeaders[index]} title={subHeaders[index]} />, 
                         <Expand 
-                            key={uniqueId()} 
+                            key={`${rowData.token}${index}`} 
                             header={<ActiveRow rowData={rowData} activeTab={activeTab} isHeader />} 
                             expandedView={<ActiveRow rowData={rowData} activeTab={activeTab} />} 
                         />

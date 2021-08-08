@@ -55,13 +55,16 @@ const Navbar = () => {
         //eslint-disable-next-line
     }, [activePath, isTablet]);
 
-    return (
-        <div className={`navbar-component ${pageYOffset > 25 ? 'is-scroll' : ''}`}>
-          <div className="navbar-component__container">
-            {RenderView}
-          </div>
-        </div>
-    )
+    return useMemo(() => {
+        return (
+            <div className={`navbar-component ${pageYOffset > 25 ? 'is-scroll' : ''}`}>
+              <div className="navbar-component__container">
+                {RenderView}
+              </div>
+            </div>
+        )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pageYOffset]) 
 }
 
 const NavbarConnectMemoized = () => {
