@@ -114,7 +114,7 @@ const stakingApi = {
             lastStakedAmount: {...lastStakedAmount}
         }
     },
-    getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData, period = 31536000, enforceMax = false) => {
+    getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData, enforceMax = false) => {
         try {
           const cname = await platform.methods.name().call();
           let rate = await stakingRewards.methods.rewardRate().call();
@@ -134,9 +134,9 @@ const stakingApi = {
       
           let total = await stakingRewards.methods.totalSupply().call();
           // console.log(`total ${total}`);
-          let yearlyReward = toBN(period).mul(toBN(rate));
+          let dailyReward = toBN(DAY).mul(toBN(rate));
           // console.log(`GOVI yearlyReward ${yearlyReward}`);
-          let USDYearlyReward = toDisplayAmount(await convert(yearlyReward, GOVIData, USDTData), USDTData.decimals);
+          let USDDailyReward = toDisplayAmount(await convert(dailyReward, GOVIData, USDTData), USDTData.decimals);
           // console.log(`USDYearlyReward ${USDYearlyReward}`);
           // convert from USDT-LP to USDT
           let stakedTokens = await fromLPTokens(platform, toBN(total));
@@ -144,9 +144,12 @@ const stakingApi = {
           // console.log(`stakedTokens converted ${await convert(stakedTokens, tokenData, USDTData, chainId, library.currentProvider)}`);
           let USDStakedTokens = toDisplayAmount(await convert(stakedTokens, tokenData, USDTData), USDTData.decimals);
           // console.log(`USDStakedTokens ${USDStakedTokens}`);
-          
-          return USDStakedTokens === 0 ? 0 : aprToAPY((USDYearlyReward / USDStakedTokens) * 100);
-       
+        //   console.log((USDDailyReward / USDStakedTokens) * 100);
+        //   console.log(aprToAPY((USDDailyReward / USDStakedTokens) * 100));
+        //   console.log(aprToAPY);
+
+          const dailyApr = (USDDailyReward / USDStakedTokens) * 100;
+          return USDStakedTokens === 0 ? 0 : [aprToAPY(dailyApr, 365, 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365 * 365)];
       
         } catch(error) {
             console.log(error);

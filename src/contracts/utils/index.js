@@ -219,10 +219,10 @@ export async function getBalance(address, tokenAddress = undefined) {
   }
 }
 
-export const aprToAPY = (apr, period = 365 * 24 * 60) => {
+export const aprToAPY = (apr, period = 365 * 24 * 60, rate = 365 * 24 * 60) => { // daily apr * period of 365 and rate + period of 365 than the apy will be yearly.
   const blocksPerMin = period === 365 ? 1 : 4;
   const n = period * blocksPerMin;
-  const apy = ((1 + apr / 100 / n) ** n - 1) * 100;
+  const apy = ((1 + apr / 100 / n) ** rate - 1) * 100;
   return apy === Infinity || apy > 1000000 ? 1000000 : apy;
 };
 

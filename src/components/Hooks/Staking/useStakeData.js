@@ -100,11 +100,17 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       }
     }
 
-    const periodsArray = isStaked ? [365*DAY] : [365*DAY, 7*DAY, DAY]
+    const periodsArray = isStaked ? [365*DAY] : [DAY]
     const apyByPeriods = periodsArray.map(async period => await getAPYByTokenName(period));
-    const apy = await(await Promise.allSettled(apyByPeriods))
+    console.log(apyByPeriods);
+    let apy = await(await Promise.allSettled(apyByPeriods))
     .filter(({status}) =>  status === "fulfilled")
     .map(({value}) => value);
+    console.log(apy);
+
+    apy = apy?.[0]?.length > 0 ? [...apy[0].reverse()] : apy;
+
+    console.log(apy);
 
     cb(() => setStakedData((prev)=> ({
       ...prev,
