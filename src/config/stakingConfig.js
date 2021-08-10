@@ -31,6 +31,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          tokenAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
           rel: {
             contractKey: "USDTPlatform",
             platform: "USDTPlatform",
@@ -47,6 +48,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
           rel: {
             contractKey: "ETHPlatform",
             platform: "ETHPlatform",
@@ -165,6 +167,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          tokenAddress: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
           rel: {
             contractKey: "USDTPlatform",
             platform: "USDTPlatform",
@@ -181,6 +184,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
+          tokenAddress: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
           rel: {
             contractKey: "USDCPlatform",
             platform: "USDCPlatform",

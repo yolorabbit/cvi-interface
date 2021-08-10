@@ -1,6 +1,9 @@
-import { aprToAPY, convert, fromLPTokens, getChainName, getWeb3Contract, getBalance, platformCreationTimestamp } from "contracts/utils";
+import { aprToAPY, convert, fromLPTokens, getChainName, platformCreationTimestamp } from "contracts/utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount, toFixed } from "utils";
+import * as TheGraph from 'graph/queries';
+import moment from "moment";
+import { DAY } from "components/Hooks/useEvents";
 
 const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 };
 const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 };
@@ -150,39 +153,35 @@ const stakingApi = {
             return 0;
         }
     },
-    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, days, period) {
-
+    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, period) {
         try {
-            async function getTotalProfits(token, events) {
-                try {
-                    const selectedNetwork = await getChainName();
-                    let isETH = false;
-                    if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
-                    const _getWeb3Contract = await getWeb3Contract("ETHStakingProxy", selectedNetwork);
-                    let initialValue = isETH ? toBN(await getBalance(_getWeb3Contract._address)): toBN(0);
-                    // console.log(`initialValue ${initialValue}`);
-                    return events.reduce((p, e) => p.add(toBN(e.returnValues ? e.returnValues[2] : e.tokenAmount)), initialValue);
-
-                } catch(error) {
-                    console.log(error);
-                    return 0;
-                }
-            }
-
-            async function getTokenYearlyProfitInUSD(tokenData, USDTData) {
+            async function getTokenYearlyProfitInUSD(USDTData) {
                 // console.log(`checking relative to the last ${days} days`);
-                const DAY = 86400;
                 const YEAR = DAY*365;
                 try {
-                    // console.log(`checking relative to the last ${days} days`);
-                    const totalProfits = await getTotalProfits(tokenData.contract, tokenData.events, days);
-                    // console.log(`totalProfits ${totalProfits}`);
-                    const yearlyProfits = toBN(totalProfits)
-                      .mul(toBN(YEAR))
-                      .div(toBN(DAY * days));
-                    // console.log(`yearlyProfits ${yearlyProfits}`);
-                    let USDYearlyProfits = (await convert(yearlyProfits, tokenData, USDTData)).div(toBN(1).pow(toBN(USDTData.decimals)));
-                    // console.log(`USDYearlyProfits ${USDYearlyProfits}`);
+                    const selectedNetwork = await getChainName();
+
+                    let res = await TheGraph.collectedFeesSum();
+                    const includeUSDC = tokensData.some(token => token.symbol === "USDC");
+                    if(includeUSDC) {
+                        let usdc_res = await TheGraph.collectedFeesSumUSDC();
+                        res.collectedFeesAggregations = res.collectedFeesAggregations.concat(usdc_res.collectedFeesAggregations);
+                    }
+                    
+                    const collectedFees = res.collectedFeesAggregations.map(({id, sum}) => ({
+                        tokenData: tokensData.find(item => item.address.toLowerCase() === id.toLowerCase()),
+                        sum
+                    }))
+
+                    const tokensUsdtProfit = await collectedFees.map(async ({tokenData, sum: fee}) => {
+                        const creationTimestampAgo = moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol].creationTimestamp * 1000);
+                        const yearlyProfit = toBN(fee).mul(toBN(YEAR)).div(toBN(parseInt(creationTimestampAgo / 1000)));
+                        let USDYearlyProfits = (await convert(yearlyProfit, tokenData, USDTData)).div(toBN(1).pow(toBN(USDTData.decimals)));
+                        return USDYearlyProfits;
+                    });
+
+                    const USDYearlyProfits = (await Promise.all(tokensUsdtProfit)).reduce((sum = 0, item) => item.add(toBN(sum)), 0)
+
                     return USDYearlyProfits;
                 } catch(error) {
                     console.log(error);
@@ -193,22 +192,18 @@ const stakingApi = {
             async function getAPR() {
                // yearly profits = totalProfits * seconds in year / time since contract creation
                 // APR = value of (yearly profits) / value of (total staked GOVI) * 100
-                let USDYearlyProfits = toBN("0");
-                for (const tokenData of tokensData) {
-                    USDYearlyProfits = USDYearlyProfits.add(await getTokenYearlyProfitInUSD(tokenData, USDTData, days));
-                }
-                USDYearlyProfits = toBN(USDYearlyProfits, USDTData.decimals);
+                let USDYearlyProfits = toBN((await getTokenYearlyProfitInUSD(USDTData)), USDTData.decimals);
                 // console.log(`USDYearlyProfits ${USDYearlyProfits.toString()}`);
                 const totalStaked = await staking.methods.totalStaked().call();
                 // console.log(`totalStaked ${totalStaked}`);
                 let USDTotalStaked = (await convert(totalStaked, GOVIData, USDTData))
                 // console.log(`USDTotalStaked ${USDTotalStaked}`);
-                // console.log(toDisplayAmount(USDYearlyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals));
-
                 if (USDTotalStaked.isZero()) return toBN("0");
                 return toDisplayAmount(USDYearlyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals);
             }
+            
             const apr = await getAPR();
+            // console.log(apr);
             const apy = aprToAPY(apr);
             return apy / (365/period)
         } catch (error) {

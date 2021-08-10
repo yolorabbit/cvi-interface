@@ -86,14 +86,8 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
         case 'govi': {
           try {
             const periodInDays = period/DAY;
-            const tokensData = await (await Promise.all(
-              await token.rewardsTokens.map(async t => {
-                const tokenData = await getTokenData(contracts[t]);
-                tokenData.events = await eventsUtils.getTransferEvents(stakingRewards, contracts[t], 30, t);
-                return tokenData;
-                })
-              ));
-              return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData, 30, periodInDays);
+            const tokensData = await (await Promise.all(await token.rewardsTokens.map(async t =>  await getTokenData(contracts[t]))));
+            return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData, periodInDays);
             } catch (error) {
               console.log(error)
               return []
