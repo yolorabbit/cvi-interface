@@ -174,7 +174,7 @@ const stakingApi = {
                     }))
 
                     const tokensUsdtProfit = await collectedFees.map(async ({tokenData, sum: fee}) => {
-                        const creationTimestampAgo = moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol].creationTimestamp * 1000);
+                        const creationTimestampAgo = moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
                         const yearlyProfit = toBN(fee).mul(toBN(YEAR)).div(toBN(parseInt(creationTimestampAgo / 1000)));
                         let USDYearlyProfits = (await convert(yearlyProfit, tokenData, USDTData)).div(toBN(1).pow(toBN(USDTData.decimals)));
                         return USDYearlyProfits;
