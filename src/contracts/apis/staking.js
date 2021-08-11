@@ -135,9 +135,9 @@ const stakingApi = {
           let total = await stakingRewards.methods.totalSupply().call();
           // console.log(`total ${total}`);
           let dailyReward = toBN(DAY).mul(toBN(rate));
-          // console.log(`GOVI yearlyReward ${yearlyReward}`);
+          // console.log(`GOVI dailyReward ${dailyReward}`);
           let USDDailyReward = toDisplayAmount(await convert(dailyReward, GOVIData, USDTData), USDTData.decimals);
-          // console.log(`USDYearlyReward ${USDYearlyReward}`);
+          // console.log(`USDDailyReward ${USDDailyReward}`);
           // convert from USDT-LP to USDT
           let stakedTokens = await fromLPTokens(platform, toBN(total));
           // console.log(`stakedTokens ${stakedTokens}`);
@@ -149,18 +149,16 @@ const stakingApi = {
         //   console.log(aprToAPY);
 
           const dailyApr = (USDDailyReward / USDStakedTokens) * 100;
-          return USDStakedTokens === 0 ? 0 : [aprToAPY(dailyApr, 365, 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365 * 365)];
-      
+          return USDStakedTokens === 0 ? 0 : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
         } catch(error) {
             console.log(error);
             return 0;
         }
     },
-    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, period) {
+    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData) {
         try {
-            async function getTokenYearlyProfitInUSD(USDTData) {
+            async function getTokenDailyProfitInUSD(USDTData) {
                 // console.log(`checking relative to the last ${days} days`);
-                const YEAR = DAY*365;
                 try {
                     const selectedNetwork = await getChainName();
 
@@ -178,14 +176,14 @@ const stakingApi = {
 
                     const tokensUsdtProfit = await collectedFees.map(async ({tokenData, sum: fee}) => {
                         const creationTimestampAgo = moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
-                        const yearlyProfit = toBN(fee).mul(toBN(YEAR)).div(toBN(parseInt(creationTimestampAgo / 1000)));
-                        let USDYearlyProfits = (await convert(yearlyProfit, tokenData, USDTData)).div(toBN(1).pow(toBN(USDTData.decimals)));
-                        return USDYearlyProfits;
+                        const dailyProfit = toBN(fee).mul(toBN(DAY)).div(toBN(parseInt(creationTimestampAgo / 1000)));
+                        let USDDailyProfits = (await convert(dailyProfit, tokenData, USDTData)).div(toBN(1).pow(toBN(USDTData.decimals)));
+                        return USDDailyProfits;
                     });
 
-                    const USDYearlyProfits = (await Promise.all(tokensUsdtProfit)).reduce((sum = 0, item) => item.add(toBN(sum)), 0)
+                    const USDDailyProfits = (await Promise.all(tokensUsdtProfit)).reduce((sum = 0, item) => item.add(toBN(sum)), 0)
 
-                    return USDYearlyProfits;
+                    return USDDailyProfits;
                 } catch(error) {
                     console.log(error);
                     return 0;
@@ -193,22 +191,20 @@ const stakingApi = {
             }
 
             async function getAPR() {
-               // yearly profits = totalProfits * seconds in year / time since contract creation
-                // APR = value of (yearly profits) / value of (total staked GOVI) * 100
-                let USDYearlyProfits = toBN((await getTokenYearlyProfitInUSD(USDTData)), USDTData.decimals);
-                // console.log(`USDYearlyProfits ${USDYearlyProfits.toString()}`);
+               // daily profits = totalProfits * seconds in year / time since contract creation
+                // APR = value of (daily profits) / value of (total staked GOVI) * 100
+                let USDDailyProfits = toBN((await getTokenDailyProfitInUSD(USDTData)), USDTData.decimals);
+                // console.log(`USDDailyProfits ${USDDailyProfits.toString()}`);
                 const totalStaked = await staking.methods.totalStaked().call();
                 // console.log(`totalStaked ${totalStaked}`);
                 let USDTotalStaked = (await convert(totalStaked, GOVIData, USDTData))
                 // console.log(`USDTotalStaked ${USDTotalStaked}`);
                 if (USDTotalStaked.isZero()) return toBN("0");
-                return toDisplayAmount(USDYearlyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals);
+                return toDisplayAmount(USDDailyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals);
             }
             
-            const apr = await getAPR();
-            // console.log(apr);
-            const apy = aprToAPY(apr);
-            return apy / (365/period)
+            const dailyApr = await getAPR();
+            return dailyApr === 0 ? 0 : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
         } catch (error) {
             console.log(error);
             return 0;
@@ -324,24 +320,18 @@ const stakingApi = {
         let total = await stakingRewards.methods.totalSupply().call();
         // console.log(`total ${total}`);
         
-        const apyPeriods = isStaked ? [86400*365] : [86400*365, 86400*7, 86400];
-        // const apyPeriods = [86400*365];
-        const apysPeriods = [];
+        let periodRewards = toBN(DAY).mul(toBN(rate));
+        // console.log(`GOVI periodRewards ${periodRewards}`);
+        let USDPeriodRewards = toDisplayAmount(await convert(periodRewards, GOVIData, USDTToken), USDTToken.decimals);
+        // console.log(`USDPeriodRewards ${USDPeriodRewards}`);
         
-        for(const period of apyPeriods) {
-            let periodRewards = toBN(period).mul(toBN(rate));
-            // console.log(`GOVI periodRewards ${periodRewards}`);
-            let USDPeriodRewards = toDisplayAmount(await convert(periodRewards, GOVIData, USDTToken), USDTToken.decimals);
-            // console.log(`USDPeriodRewards ${USDPeriodRewards}`);
-            
-            // convert from coti/eth or govi/eth to USDT using uniswapLPTokenToUSD (cant use uniswap for this)
-            let USDStakedTokens = await this.uniswapLPTokenToUSD(toBN(total), USDTToken, uniswapLPToken, uniswapToken);
-            // console.log(`USDStakedTokens ${USDStakedTokens}`);
-            const val = USDStakedTokens.toString() === "0" ? 0 : aprToAPY((USDPeriodRewards / USDStakedTokens) * 100, period);
-            apysPeriods.push(val)
-        }
+        // convert from coti/eth or govi/eth to USDT using uniswapLPTokenToUSD (cant use uniswap for this)
+        let USDStakedTokens = await this.uniswapLPTokenToUSD(toBN(total), USDTToken, uniswapLPToken, uniswapToken);
+        // console.log(`USDStakedTokens ${USDStakedTokens}`);
+
+        const dailyApr = USDStakedTokens.toString() === "0" ? 0 : (USDPeriodRewards / USDStakedTokens) * 100;
         // console.log(apysPeriods);
-        return apysPeriods
+        return isStaked ? [aprToAPY(dailyApr, 365, 365 * 365)] : dailyApr === 0 ? 0 : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
         
     },
     getClaimableRewards: async (contracts, asset, account) => {
