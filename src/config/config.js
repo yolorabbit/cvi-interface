@@ -71,15 +71,6 @@ const config = {
        NOTICE: "NOTICE"
     },
   },
-  cviInfoCurrencyIndex: { // index of api.cvx.finance/cvx (cvxInfo[index][cviInfCurrencyIndex])
-    CVI: 1,
-    BTC: 2,
-    ETH: 3
-  },
-  volatilityKey: {
-    BTC: "btcVolatilityInfo",
-    ETH: "ethVolatilityInfo"
-  },
   web3ProviderId: "NETWORK",
   networkStatuses: {
      pending: 'pending',

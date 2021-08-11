@@ -19,7 +19,8 @@ const axsV2 = axios.create({
 
 
 const Api = {
-   GET_INDEX_HISTORY: () => axs.get('/cvx'),
+   GET_INDEX_HISTORY: () => axs.get('/history'),
+   GET_INDEX_LATEST: () => axs.get('/latest'),
    GET_FEES_COLLECTED: (queryParams = "") => axsV2.get('/fees' + queryParams)
 };
 

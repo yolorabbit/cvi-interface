@@ -10,8 +10,6 @@ const initialState = {
     networkStatus: 'disconnected',
     cviInfo: {
         cviInfo: null,
-        btcVolatilityInfo: null,
-        ethVolatilityInfo: null,
         series: []
     },
 };

@@ -86,7 +86,7 @@ const Buy = () => {
 
     const getMaxAvailableToOpen = useCallback(async () => {
         try {
-            const index = toBNAmount(cviInfo.price, 2);
+            const index = toBNAmount(cviInfo.value, 2);
             let totalToOpen = await getMaxAmount(index);
             return [totalToOpen.cmp(toBN(toBNAmount(amount, activeToken.decimals))) > -1, toDisplayAmount(totalToOpen.toString(), activeToken.decimals)];
         } catch(error) {

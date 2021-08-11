@@ -215,7 +215,7 @@ const chartInitialize = {
 
 const FundingFeesGraph = ({ maxWidth = 350, maxHeight = 338 }) => {
     const { cviInfo } = useSelector(({ app }) => app.cviInfo);
-    const cviValue = Math.floor(cviInfo?.price ?? 0);
+    const cviValue = Math.floor(cviInfo?.value ?? 0);
     const ref = useRef();
     const [chart, setChart] = useState();
     const { windowWidth } = useContext(viewportContext);
