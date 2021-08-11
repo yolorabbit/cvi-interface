@@ -102,11 +102,9 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
 
     let apy = await getAPYByTokenName(DAY);
 
-    apy = apy?.[0]?.length > 0 ? [...apy[0]] : apy;
-
     cb(() => setStakedData((prev)=> ({
       ...prev,
-      apy: apy.map((value)=>value ? `${customFixed(value, 2)}%` : "N/A")
+      apy: apy.map((value) => value ? `${customFixed(value, 2)}%` : "N/A")
     })));
   }
 

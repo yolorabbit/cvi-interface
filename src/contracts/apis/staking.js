@@ -149,10 +149,10 @@ const stakingApi = {
         //   console.log(aprToAPY);
 
           const dailyApr = (USDDailyReward / USDStakedTokens) * 100;
-          return USDStakedTokens === 0 ? 0 : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
+          return USDStakedTokens === 0 ? [0, 0, 0] : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
         } catch(error) {
             console.log(error);
-            return 0;
+            return [0, 0, 0];
         }
     },
     getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData) {
@@ -182,7 +182,6 @@ const stakingApi = {
                     });
 
                     const USDDailyProfits = (await Promise.all(tokensUsdtProfit)).reduce((sum = 0, item) => item.add(toBN(sum)), 0)
-
                     return USDDailyProfits;
                 } catch(error) {
                     console.log(error);
@@ -204,10 +203,10 @@ const stakingApi = {
             }
             
             const dailyApr = await getAPR();
-            return dailyApr === 0 ? 0 : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
+            return [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
         } catch (error) {
             console.log(error);
-            return 0;
+            return [0, 0, 0];
         }
     },
     getDailyReward: async (stakingRewards, account, tokenDecimals, decimalsCountDisplay = 8) => {
@@ -331,7 +330,7 @@ const stakingApi = {
 
         const dailyApr = USDStakedTokens.toString() === "0" ? 0 : (USDPeriodRewards / USDStakedTokens) * 100;
         // console.log(apysPeriods);
-        return isStaked ? [aprToAPY(dailyApr, 365, 365 * 365)] : dailyApr === 0 ? 0 : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
+        return isStaked ? [aprToAPY(dailyApr, 365, 365 * 365)] : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
         
     },
     getClaimableRewards: async (contracts, asset, account) => {
