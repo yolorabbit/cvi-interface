@@ -1,20 +1,20 @@
 import moment from 'moment';
 
 export const mappedSeriesData = (series = []) => {
-    if(!series?.length) return historicalData;
-    const lastHistoryDate = moment.utc(historicalData[historicalData.length -1][0]).format('l');
+    if (!series?.length) return historicalData;
+    const lastHistoryDate = moment.utc(historicalData[historicalData.length - 1][0]).format('l');
     const findIndex = series.findIndex((item) => {
         return moment.utc(item[0]).format('l') === lastHistoryDate;
     });
 
-    if(findIndex > 0) {
-        series = series.slice(findIndex+1, series.length-1); 
-        historicalData = historicalData.slice(0, historicalData.length-2)
+    if (findIndex > 0) {
+        series = series.slice(findIndex + 1, series.length - 1);
+        historicalData = historicalData.slice(0, historicalData.length - 2)
     }
 
     const result = [];
     let lastDate = moment.utc(series[series.length - 1][0]).format("l");
-   
+
     for (let i = 0; i < series.length; i = i + 24) {
         if (i % 24 === 0) {
             result.push(series[i]);
@@ -866,5 +866,178 @@ export let historicalData = [
     [1625443200000, 99.33740486],
     [1625529600000, 98.18104025],
     [1625616000000, 98.19193358],
- ];
- 
+    [
+        1625616000000,
+        98.22255107
+    ],
+    [
+        1625702400000,
+        97.44786061
+    ],
+    [
+        1625788800000,
+        97.83957427
+    ],
+    [
+        1625875200000,
+        94.62564128
+    ],
+    [
+        1625961600000,
+        93.13315987
+    ],
+    [
+        1626048000000,
+        91.93506926
+    ],
+    [
+        1626134400000,
+        92.05265041
+    ],
+    [
+        1626220800000,
+        92.30611159
+    ],
+    [
+        1626307200000,
+        92.17602818
+    ],
+    [
+        1626393600000,
+        89.95436666
+    ],
+    [
+        1626480000000,
+        87.92623441
+    ],
+    [
+        1626566400000,
+        87.18616817
+    ],
+    [
+        1626652800000,
+        87.28455047
+    ],
+    [
+        1626739200000,
+        90.59897669
+    ],
+    [
+        1626825600000,
+        95.00069323
+    ],
+    [
+        1626912000000,
+        93.21359579
+    ],
+    [
+        1626998400000,
+        90.90954918
+    ],
+    [
+        1627084800000,
+        87.34194007
+    ],
+    [
+        1627171200000,
+        87.90986774
+    ],
+    [
+        1627257600000,
+        89.12114481
+    ],
+    [
+        1627344000000,
+        92.41919086
+    ],
+    [
+        1627430400000,
+        92.20299728
+    ],
+    [
+        1627516800000,
+        98.69920601
+    ],
+    [
+        1627603200000,
+        97.47532199
+    ],
+    [
+        1627689600000,
+        94.29585894
+    ],
+    [
+        1627776000000,
+        94.2278665
+    ],
+    [
+        1627862400000,
+        94.87548957
+    ],
+    [
+        1627948800000,
+        94.70705836
+    ],
+    [
+        1628035200000,
+        95.67824235
+    ],
+    [
+        1628121600000,
+        97.9615812
+    ],
+    [
+        1628208000000,
+        101.0601583
+    ],
+    [
+        1628294400000,
+        99.38350184
+    ],
+    [
+        1628380800000,
+        102.029369
+    ],
+    [
+        1628467200000,
+        103.3186188
+    ],
+    [
+        1628553600000,
+        110.5816223
+    ],
+    [
+        1628640000000,
+        112.5526644
+    ]
+];
+
+
+
+
+//  console.log(moment); = temp1
+// const tz = {};
+// const array = [
+//   ["7/7/2021 1:00",98.22255107  ],
+//   ["7/7/2021 2:00",98.22788603  ],
+// ]
+
+// const data = array.map(item => { // check the date format
+//   let date = item[0].split(" ")[0].split("/");
+
+//     console.log(date)
+
+//   return [date.join('/'), item[1]]
+// })
+
+// let result = data.filter(item => {
+//   if(!tz[item[0]]) {
+//     tz[item[0]] = item[0]
+//     return true;
+//   }
+//   return false
+// }).map(item => [temp1.utc(item[0]).valueOf(), item[1]])
+
+// console.log(data);
+// console.log(result);
+// console.log(tz);
