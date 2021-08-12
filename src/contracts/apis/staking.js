@@ -251,17 +251,14 @@ const stakingApi = {
             } else {
                 throw new Error(`Please add creation timestamp to ${symbol} platform token.`)
             }
-    
             const timePassedSinceCreation = now - creationTimestamp;
-            const secondsInDay = 86400;
-            const reward = sum.mul(toBN(secondsInDay)).div(toBN(timePassedSinceCreation));
-            // console.log(`daily reward ${reward}`);
+            const oneMonth = (DAY * 30);
+            const reward = sum.mul(toBN(DAY)).div(toBN(timePassedSinceCreation >= oneMonth ? oneMonth : timePassedSinceCreation));
     
             let balance = await staking.methods.stakes(account).call();
             let total = await staking.methods.totalStaked().call();
             
             const dailyRewards = toBN(total).isZero() ? toBN(0) : reward.mul(toBN(balance)).div(toBN(total));
-    
             const dailyReward = {
                 amount: commaFormatted(customFixed(toFixed(toDisplayAmount(dailyRewards, tokenDecimals)), decimalsCountDisplay)),
                 symbol,

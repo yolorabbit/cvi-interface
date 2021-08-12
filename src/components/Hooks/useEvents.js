@@ -111,7 +111,7 @@ export const useEvents = () => {
     }
 
     async function getBlockDaysAgo(days, from) {
-        const BLOCK_RATE = chainName === chainNames.Matic ? 2 : 13.25;
+        const BLOCK_RATE = chainName === chainNames.Matic ? 2.21 : 13.695;
         from = from ? from : (await getBlockCached(getBlock)).number;
         const blocksPerDay = DAY / BLOCK_RATE;
         return Math.floor(from - blocksPerDay * days);
