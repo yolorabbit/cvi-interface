@@ -113,7 +113,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const getGoviValueStaked = async (cb) => {
     try {
         const GOVIData = await getTokenData(contracts.GOVI);
-        const USDTData = await getTokenData(contracts.USDT);
+        const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
         const goviPrice = await getPrice(GOVIData, USDTData);
         const stakedAmount = await contracts[tokenRel.stakingRewards].methods.totalStaked().call();
         const goviValueStaked = customFixed(toFixed(toDisplayAmount(stakedAmount, GOVIData.decimals)) * goviPrice, USDTData.decimals);
