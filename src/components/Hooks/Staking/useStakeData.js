@@ -8,6 +8,7 @@ import { DAY, useEvents } from "../useEvents";
 import BigNumber from "bignumber.js";
 import { useActiveWeb3React } from "../wallet";
 import { useSelector } from "react-redux";
+import { chainNames } from "connectors";
 
 const initialState = {
   stakedTokenAmount: null,
@@ -47,6 +48,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const { account } = useActiveWeb3React();
   const [stakedData, setStakedData] = useState(initialState);
   const eventsUtils = useEvents();
+  const { selectedNetwork } = useSelector(({app}) => app);
   const token = stakingConfig.tokens[chainName][protocol][tokenName];
   const tokenRel = token.rel;
   const decimalsCountDisplay = 8;
@@ -78,7 +80,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
 
   const getAPY = async (cb) => {
     const [platform, stakingRewards] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards]];
-    const USDTData = await getTokenData(contracts.USDT);
+    const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
     const GOVIData = await getTokenData(contracts.GOVI);
 
     const getAPYByTokenName = async (period) => {
