@@ -20,7 +20,7 @@ export const supportedNetworksConfig = {
                 symbol: 'ETH',
                 decimals: 18
             },
-            rpcUrls: ["https://eth-mainnet.alchemyapi.io/v2/KhQWOrbOeWZoTIkwRt4a4aXPPxx5wj5J"],
+            rpcUrls: "https://eth-mainnet.alchemyapi.io/v2/KhQWOrbOeWZoTIkwRt4a4aXPPxx5wj5J",
             blockExplorerUrls: ['https://etherscan.com']
         },
         // matic
@@ -32,7 +32,7 @@ export const supportedNetworksConfig = {
                 symbol: 'MATIC',
                 decimals: 18
             },
-            rpcUrls: ['https://rpc-mainnet.maticvigil.com'],
+            rpcUrls: 'https://rpc-mainnet.maticvigil.com',
             blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
         },
     },
@@ -45,7 +45,7 @@ export const supportedNetworksConfig = {
                 symbol: 'ETH',
                 decimals: 18
             },
-            rpcUrls: ['https://staging-ethereum.cvi.finance'],
+            rpcUrls: 'https://staging-ethereum.cvi.finance',
             blockExplorerUrls: null
         },
         // matic testnet mumbai
@@ -68,7 +68,7 @@ export const supportedNetworksConfig = {
                 symbol: 'MATIC',
                 decimals: 18
             },
-            rpcUrls: ['https://staging-polygon.cvi.finance'], // https://matic-testnet-archive-rpc.bwarelabs.com
+            rpcUrls: 'https://staging-polygon.cvi.finance', // https://matic-testnet-archive-rpc.bwarelabs.com
             blockExplorerUrls: ['https://matic.network']
         },
     }
@@ -153,7 +153,6 @@ const walletconnectorInstance = new WalletConnectConnector({
     rpc: { [defaultChainId]: RPC_URLS_BY_ENV[defaultChainId]},
     bridge: 'https://bridge.walletconnect.org',
     qrcode: true,
-    pollingInterval: POLLING_INTERVAL,
     qrcodeModalOptions: {
         mobileLinks: [
             "metamask",
