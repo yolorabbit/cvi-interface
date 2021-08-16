@@ -8,14 +8,47 @@ import rewardsApi from './apis/rewards';
 import liquidityApi from "./apis/liquidity";
 import moment from "moment";
 import { chainNames } from "connectors";
+import platformConfig from "config/platformConfig";
+import stakingConfig from "config/stakingConfig";
 import { bottomBlockByNetwork, maticBottomBlockSinTheGraphStopToWork } from "components/Hooks/useEvents";
 import Api from "Api";
  
 export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
 
+const findTokenByAddress = (address) => {
+    try {
+        const platformTokens = Object.values(platformConfig.tokens);
+        const filteredPlatformTokensByAddress = platformTokens
+            .map(item => Object.values(item).filter(a => !a.soon && a.address && a.address.toLowerCase() === address.toLowerCase()))
+            .reduce((prev, next) => prev.concat(next));
+
+        const stakingTokens = Object.values(stakingConfig.tokens);
+      
+        const filteredStakingTokensByAddress = stakingTokens
+            .map(item => Object.values(item)
+            .reduce((prev, next) => prev.concat(Object.values(next)), [])
+            .filter(a => !a.soon && a.address && a.address.toLowerCase() === address.toLowerCase()))
+            .reduce((prev, next) => prev.concat(next));
+
+        const result = filteredPlatformTokensByAddress.concat(filteredStakingTokensByAddress);
+
+        return result?.length > 0 ? result[0] : null;
+    } catch(error) {
+        console.log(error);
+        return null;
+    }
+}
+
 export const getTokenData = async (contract) => {
     if(!contract) return null;
     const address = await contract.options.address;
+    const tokenData = findTokenByAddress(address);
+    
+    if(tokenData) {
+        const { decimals, key, address} = tokenData;
+        return { address, symbol: key === "eth" ? "WETH" : key?.toUpperCase(), decimals, contract };
+    }
+
     const symbol = await contract.methods.symbol().call();
     const decimals = await contract.methods.decimals().call();
     return { address, symbol, decimals, contract };

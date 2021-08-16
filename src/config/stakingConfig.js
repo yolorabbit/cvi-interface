@@ -217,6 +217,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           poolLink: "https://info.quickswap.exchange/pair/0x1dab41a0e410c25857f0f49b2244cd089ab88de6",
+          address: "0x1dAb41a0E410C25857F0f49B2244Cd089AB88DE6",
           rel: {
             stakingRewards: "GOVIETHStakingRewards",
             token: "UNIV2GOVIETH",

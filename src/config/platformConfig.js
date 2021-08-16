@@ -35,6 +35,7 @@ const platformConfig = {
         fixedDecimals: 6,
         lpTokensDecimals: 18,
         type: "v1",
+        address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
@@ -53,6 +54,7 @@ const platformConfig = {
         fixedDecimals: 8,
         lpTokensDecimals: 18,
         type: "eth",
+        address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
         rel: {
           contractKey: "WETH",
           platform: "ETHPlatform",
@@ -76,6 +78,7 @@ const platformConfig = {
         fixedDecimals: 6,
         lpTokensDecimals: 18,
         type: "v2",
+        address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
@@ -94,6 +97,7 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "usdc",
         leverage: ["1", "2"],
+        address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
         rel: {
           contractKey: "USDC",
           platform: "USDCPlatform",
