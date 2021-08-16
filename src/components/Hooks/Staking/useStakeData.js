@@ -159,7 +159,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const getTVLLM = async (cb) => {
     try{
       const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
-      const USDTData = await getTokenData(contracts.USDT);
+      const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
       const GOVIData = await getTokenData(contracts.GOVI);
       const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
       const uniswapLPToken = await getTokenData(platformLPToken);
@@ -186,7 +186,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const getAPYLM = async (cb) => {
     try{
       const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
-      const USDTData = await getTokenData(contracts.USDT);
+      const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
       const GOVIData = await getTokenData(contracts.GOVI);
       const uniswapLPToken = await getTokenData(platformLPToken);
       const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
