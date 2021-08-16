@@ -19,8 +19,8 @@ const axsV2 = axios.create({
 
 
 const Api = {
-   GET_INDEX_HISTORY: () => axs.get('/history'),
-   GET_INDEX_LATEST: () => axs.get('/latest'),
+   GET_INDEX_HISTORY: (chainName) => axs.get(`/history?chain=${chainName}`),
+   GET_INDEX_LATEST: (chainName) => axs.get(`/latest?chain=${chainName}`),
    GET_FEES_COLLECTED: (queryParams = "") => axsV2.get('/fees' + queryParams)
 };
 

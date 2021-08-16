@@ -3,9 +3,9 @@ import moment from 'moment';
 import Api from "Api";
 import { useDispatch, useSelector } from "react-redux";
 import { setCviInfo } from "store/actions";
-import { useContext } from "react";
-import { contractsContext } from "contracts/ContractContext";
-import { customFixed, toDisplayAmount } from "utils";
+import { customFixed } from "utils";
+import { chainNames } from "connectors";
+import { debounce } from "lodash";
 
 export const getPercentageChange = (oldNumber, newNumber) => {
    const decreaseValue = oldNumber - newNumber;
@@ -15,27 +15,23 @@ export const getPercentageChange = (oldNumber, newNumber) => {
 const useCvi = () => {
    const dispatch = useDispatch();
    const interval = useRef();
-   const [isProcessing, setIsProcessing] = useState();
-   const contracts = useContext(contractsContext);
    const [timeDuration, setTimeDuration] = useState(); // next hour + 2 minutes
-   const { cviInfo: appCviInfo } = useSelector(({app}) => app);
-   const  { cviInfo, series } = appCviInfo;
+   const { cviInfo: appCviInfo, selectedNetwork } = useSelector(({app}) => app);
+   const { cviInfo, series } = appCviInfo;
 
-   useEffect(() => {
-      const startOfHourPlus2Minutes = moment.utc().startOf('hour').add(2, "minutes");
-      if(startOfHourPlus2Minutes.isAfter(moment.utc())) {
-         setTimeDuration(startOfHourPlus2Minutes.diff(moment.utc()));
-      } else {
-         setTimeDuration((moment.utc().endOf("hour").diff(moment.utc())) + 120000);
-      }
-   }, []);
-
+   const startPollingInterval = () => {
+      const nextUpdateOnMinutes = selectedNetwork === chainNames.Matic ? 21 : 62;
+      const now = moment.utc();
+      const pollingTime = ((nextUpdateOnMinutes - (now.minute() % nextUpdateOnMinutes))) * 60 * 1000;
+      setTimeDuration(pollingTime);
+   }
 
    const getData = async () => {
       try {
-         const { data: series } = await Api.GET_INDEX_HISTORY();
-         const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST();
-           
+         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
+         const { data: series } = await Api.GET_INDEX_HISTORY(chainName);
+         const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST(chainName);
+         
          if(series || latestRoundInfo) {
             const sortedCviSeries = series.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
             
@@ -46,49 +42,55 @@ const useCvi = () => {
                }), {}),
                series: sortedCviSeries
             }
-
-            try {
-               const { getCVILatestRoundData } = contracts["CVIOracle"].methods;
-               const _data = await getCVILatestRoundData().call();
-               cviData.cviInfo.value = toDisplayAmount(_data.cviValue, 2);
-            } catch(error) {
-               console.log(error);
-            }  
-
+            
             dispatch(setCviInfo(cviData));
          }
       } catch (error) {
          console.log(error);
       }
    }   
-
-   useEffect(()=> {
-      if(!contracts || cviInfo || series.length) return;
-      if(!isProcessing) {
-         getData();
-         setIsProcessing(true);
-      }
-      //eslint-disable-next-line
-   }, [contracts]);
+   
+   const getDataDebounce = useMemo(
+      () => debounce(getData, 750)
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   , []);
 
    useEffect(() => {
+      if(!selectedNetwork) return;
+      startPollingInterval();
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [selectedNetwork]);
+
+   useEffect(()=> {
+      if(!selectedNetwork) return;
+      getDataDebounce();
+
+      return () => {
+         getDataDebounce.cancel();
+      }
+      //eslint-disable-next-line
+   }, [selectedNetwork]);
+
+
+   useEffect(() => {
+      if(!selectedNetwork) return;
       interval.current = setInterval(() => {
             if(timeDuration) {
-               getData();
-               setTimeDuration((moment.utc().endOf("hour").diff(moment.utc())) + 120000); // next hour + 2 minutes
+               getDataDebounce();
+               startPollingInterval();
             }
       }, timeDuration);
       return () => interval.current && clearInterval(interval.current);
    //eslint-disable-next-line
-   }, [timeDuration]);
+   }, [timeDuration, selectedNetwork]);
 
 
     return useMemo(() => {
       try {
          if(!cviInfo || !series) return {};
          return {
-               cviInfo,
-               series,
+            cviInfo,
+            series,
          }
       } catch (error) {   
             console.error('Failed to get cvi info', error)
