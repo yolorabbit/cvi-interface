@@ -28,7 +28,7 @@ node {
 
       def cotipay_url = "https://pay-dev.coti.io";
       def coti_url = "https://dev.coti.io";
-      def host = "https://api-dev.cvx.finance";
+      def host = "https://api-v2.cvi.finance";
       def node_env = "development";
       def chain_id = "1337";
       def generate_sourcemap = false;
