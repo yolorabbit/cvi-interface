@@ -21,7 +21,9 @@ export const useContracts = () => {
             Contract.setProvider(provider);
 
             contractsKeys.forEach((key) => {
-                contractsObject[key] = new Contract(contractsJSON[key].abi, contractsJSON[key].address);
+                contractsObject[key] = new Contract(contractsJSON[key].abi, contractsJSON[key].address, {
+                    network: selectedNetwork,
+                });
             });
 
             setContracts(contractsObject);

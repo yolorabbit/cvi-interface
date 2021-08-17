@@ -15,42 +15,31 @@ import Api from "Api";
  
 export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
 
-const findTokenByAddress = (address) => {
-    try {
-        const platformTokens = Object.values(platformConfig.tokens);
-        const filteredPlatformTokensByAddress = platformTokens
-            .map(item => Object.values(item).filter(a => !a.soon && a.address && a.address.toLowerCase() === address.toLowerCase()))
-            .reduce((prev, next) => prev.concat(next));
-
-        const stakingTokens = Object.values(stakingConfig.tokens);
-      
-        const filteredStakingTokensByAddress = stakingTokens
-            .map(item => Object.values(item)
-            .reduce((prev, next) => prev.concat(Object.values(next)), [])
-            .filter(a => !a.soon && a.address && a.address.toLowerCase() === address.toLowerCase()))
-            .reduce((prev, next) => prev.concat(next));
-
-        const result = filteredPlatformTokensByAddress.concat(filteredStakingTokensByAddress);
-
-        return result?.length > 0 ? result[0] : null;
-    } catch(error) {
-        console.log(error);
-        return null;
-    }
+const findTokenByAddress = (tokens = [], address = "") => {
+    return Object.values(tokens).find(token => 
+        token.address && token.address.toLowerCase() === address.toLowerCase()
+    )
 }
 
-export const getTokenData = async (contract) => {
+export const getTokenData = async (contract, protocol) => {
     if(!contract) return null;
-    const address = await contract.options.address;
-    const tokenData = findTokenByAddress(address);
-    
+    const { address, network } = contract.options;
+
+    let tokenData = protocol ? 
+        findTokenByAddress(stakingConfig.tokens[network][protocol], address) : 
+        findTokenByAddress(platformConfig.tokens[network], address);
+
+    console.log(tokenData);
+
     if(tokenData) {
         const { decimals, key, address} = tokenData;
         return { address, symbol: key === "eth" ? "WETH" : key?.toUpperCase(), decimals, contract };
     }
-
+    
     const symbol = await contract.methods.symbol().call();
     const decimals = await contract.methods.decimals().call();
+    console.log(address, symbol, decimals, protocol);
+ 
     return { address, symbol, decimals, contract };
 }
 
@@ -194,7 +183,7 @@ const web3Api = {
     getGoviPrice: async ({GOVI, USDC, USDT}) => {
         try {
             const chainName = await getChainName();
-            const GOVIData = await getTokenData(GOVI);
+            const GOVIData = await getTokenData(GOVI, stakingProtocols.platform);
             const TokenData = await getTokenData(chainName === chainNames.Matic ? USDC : USDT);
             const goviPrice = await getPrice(GOVIData, TokenData);
             return goviPrice;
