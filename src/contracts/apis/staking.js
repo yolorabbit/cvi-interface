@@ -10,7 +10,7 @@ const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol
 const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 };
 
 const stakingApi = {
-    getStakedAmountAndPoolShareByToken: async (contracts, asset, account) => {
+    getStakedAmountAndPoolShareByToken: async (contracts, asset, account, selectedNetwork) => {
         const {protocol, key: tokenName, fixedDecimals, rel, ...token} = asset
         
         if(protocol === "platform") {
@@ -38,14 +38,14 @@ const stakingApi = {
                 stakedAmountUSD: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmountUSD.toString(), USDTData.decimals)), fixedDecimals))
             }
         } 
-        return web3Api.getPoolSizeLiquidityMining(contracts, asset, account)
+        return web3Api.getPoolSizeLiquidityMining(contracts, asset, account, selectedNetwork)
     },
-    getPoolSizeLiquidityMining: async (contracts, asset, account, percentageDecimals=4) => {
+    getPoolSizeLiquidityMining: async (contracts, asset, account, selectedNetwork, percentageDecimals=4) => {
         try {
 
             const {key: tokenName, fixedDecimals, rel, ...token} = asset
             const [stakingRewards, platformLPToken] = [contracts[rel.stakingRewards], contracts[rel.token]]
-            const USDTData = await getTokenData(contracts.USDT);
+            const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
             const GOVIData = await getTokenData(contracts.GOVI);
             const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
             const uniswapLPToken = await getTokenData(platformLPToken);
