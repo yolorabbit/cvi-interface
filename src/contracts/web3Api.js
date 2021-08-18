@@ -50,11 +50,14 @@ const web3Api = {
             
             const promiseList = tokens.map(async ({rel: { platform, contractKey}, key, fixedDecimals}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
-                const balance = key === "eth" ? 
-                await library.eth.getBalance(contracts[platform].options.address) 
-                : toBN(await (await contracts[contractKey].methods.balanceOf(contracts[platform].options.address).call()));
 
-                const amountConverted = await convert(balance, tokenData, USDTData)
+                let totalBalance = toBN(
+                    key === 'eth' ? await library.eth.getBalance(contracts[platform]._address) : 
+                    key === "usdc" ? await toBN(await contracts[platform].methods.totalLeveragedTokensAmount().call()) :
+                    await contracts[contractKey].methods.balanceOf(contracts[platform]._address).call()
+                )
+
+                const amountConverted = await convert(totalBalance, tokenData, USDTData)
                 return [
                     `${customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), fixedDecimals)} (${key.toUpperCase()} pool)`, 
                     amountConverted,
