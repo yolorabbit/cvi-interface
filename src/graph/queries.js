@@ -1,6 +1,5 @@
 import { getGraphEndpoint } from "contracts/utils";
 import { request, gql } from "graphql-request";
-const POLYGON_USDC_GRAPH_ENDPOINT = "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc";
 
 const allPlatformEventsQuery = gql`
   {
@@ -205,7 +204,7 @@ export async function account_liquidities(account, platformAddress, fromTimestam
 }
 
 export async function account_liquiditiesUSDC(account, platformAddress, fromTimestamp) {
-  return await request(POLYGON_USDC_GRAPH_ENDPOINT, accountLiquidityQuery, { account, platformAddress, fromTimestamp });
+  return await request(await getGraphEndpoint("platform", "usdc"), accountLiquidityQuery, { account, platformAddress, fromTimestamp });
 }
 
 export async function account_positions(account, platformAddress, fromTimestamp) {
@@ -213,7 +212,7 @@ export async function account_positions(account, platformAddress, fromTimestamp)
 }
 
 export async function account_positionsUSDC(account, platformAddress, fromTimestamp) {
-  return await request(POLYGON_USDC_GRAPH_ENDPOINT, accountPositionsQuery, { account, platformAddress, fromTimestamp });
+  return await request(await getGraphEndpoint("platform", "usdc"), accountPositionsQuery, { account, platformAddress, fromTimestamp });
 }
 
 export async function lastOpen(account, platformAddress) {
@@ -221,7 +220,7 @@ export async function lastOpen(account, platformAddress) {
 }
 
 export async function lastOpenUSDC(account, platformAddress) {
-  return await request(POLYGON_USDC_GRAPH_ENDPOINT, lastOpenQuery, { account, platformAddress });
+  return await request(await getGraphEndpoint("platform", "usdc"), lastOpenQuery, { account, platformAddress });
 }
 
 export async function allPlatformEvents() {
@@ -229,17 +228,17 @@ export async function allPlatformEvents() {
 }
 
 export async function collectedFees(fromTimestamp = 0) {
-  return await request(await getGraphEndpoint(), collectedFeesQuery, { fromTimestamp });
+  return await request(await getGraphEndpoint("fees", "usdt"), collectedFeesQuery, { fromTimestamp });
 }
 
 export async function collectedFeesUSDC(fromTimestamp = 0) {
-  return await request(POLYGON_USDC_GRAPH_ENDPOINT, collectedFeesQuery, { fromTimestamp });
+  return await request(await getGraphEndpoint("fees", "usdc"), collectedFeesQuery, { fromTimestamp });
 }
 
 export async function collectedFeesSum() {
-  return await request(await getGraphEndpoint(), collectedFeesAggregationsQuery);
+  return await request(await getGraphEndpoint("fees", "usdt"), collectedFeesAggregationsQuery);
 }
 
 export async function collectedFeesSumUSDC(endpoint) {
-  return await request(POLYGON_USDC_GRAPH_ENDPOINT, collectedFeesAggregationsQuery);
+  return await request(await getGraphEndpoint("fees", "usdc"), collectedFeesAggregationsQuery);
 }

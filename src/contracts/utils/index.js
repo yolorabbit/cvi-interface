@@ -107,10 +107,14 @@ export async function getERC20Contract(address) {
   }
 }
 
-export const getGraphEndpoint = async () => {
+export const getGraphEndpoint = async (type = "platform", token = "usdt") => {
     try {
         const chainId = await getChainId();
-        return graphEndpoints[process.env.REACT_APP_ENVIRONMENT][chainId];
+        if(chainId === 137 || chainId === 31338) { // use ony for matic 
+          return graphEndpoints[process.env.REACT_APP_ENVIRONMENT][chainId][token][type];
+        }
+
+        return graphEndpoints[process.env.REACT_APP_ENVIRONMENT][chainId]; // in ethereum the graph endpoint fetch both usdt and eth data, instead of matic that there is a graph instance for each token seperated.
     } catch(error) {
         console.log(error);
     }

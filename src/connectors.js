@@ -103,14 +103,33 @@ export const networksFormatted = {
     }
 }
 
+
 export const graphEndpoints = {
     "mainnet": {
         1: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi",
-        137: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon",
+        137: {
+          usdt: {
+            fees: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon",
+            platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdt-platform"
+          },
+          usdc: {
+            fees: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc",
+            platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc-platform"
+          }
+        },
     },
     "staging": {
         31337: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi",
-        31338: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon",
+        31338: {
+          usdt: {
+            fees: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon",
+            platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdt-platform"
+          },
+          usdc: {
+            fees: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc",
+            platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc-platform"
+          }
+        },
     }
 }
 
