@@ -6,6 +6,7 @@ import config from "config/config";
 import { useSelector } from "react-redux";
 import moment from 'moment';
 import { useWeb3React } from "@web3-react/core";
+import { getChainName } from "contracts/utils";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
@@ -15,6 +16,7 @@ export const bottomBlockByNetwork = {
 export const DEFAULT_STEPS = 30;
 
 export const DAY = 86400;
+export const maticBottomBlockSinTheGraphStopToWork = 18071224;
 
 const EventOptionsDefaults = {
     eventsCount: Number.MAX_SAFE_INTEGER,
@@ -118,16 +120,26 @@ export const useEvents = () => {
     }
   
     async function getTransferEvents(staking, token, days, tokenName) {
-        // if(chainName === chainNames.Matic) {
-        //     const _events = await TheGraph[`collectedFees${tokenName === "USDC" ? "USDC" : ""}`](Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
-        //     return _events.collectedFees
-        // }
+        const selectedNetwork = await getChainName();
+        const bottomBlock = selectedNetwork === chainNames.Matic ? maticBottomBlockSinTheGraphStopToWork :  bottomBlockByNetwork[selectedNetwork]; 
+
         let isETH = false;
         if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
-        const options = { days, stepSize: 2000, steps: Number.MAX_SAFE_INTEGER };
+
+        const latestBlockNumber = await (await getBlock("latest")).number;
+        const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName]
+        let options = { bottomBlock, stepSize: chainName === chainNames.Ethereum ? (parseInt(stepSize / DEFAULT_STEPS) + 1000) : 2000, steps: chainName === chainNames.Ethereum ? DEFAULT_STEPS : Number.MAX_SAFE_INTEGER };
+        if(chainName === chainNames.Ethereum) {
+            options.days = days;
+        }
         const filter = { [isETH ? "dst" : "to"]: staking._address };
         const eventsData = [{ contract: token, events: { Transfer: [filter] } }];
-        return await getEvents(eventsData, options, getBlock);
+        const contractEvents = await getEvents(eventsData, options, getBlock);
+        if(chainName === chainNames.Matic) {
+            const _events = await TheGraph[`collectedFees${tokenName === "USDC" ? "USDC" : ""}`](Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
+            return _events.collectedFees.concat(contractEvents);
+        }
+        return contractEvents;
     }
 
     async function getLastOpenEvent(account, token) {
