@@ -1,6 +1,6 @@
 import { aprToAPY, convert, fromLPTokens, getChainName, platformCreationTimestamp } from "contracts/utils";
-import web3Api, { getTokenData } from "contracts/web3Api";
-import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount, toFixed } from "utils";
+import web3Api, { getFeesCollectedFromEvents, getTokenData } from "contracts/web3Api";
+import { commaFormatted, customFixed, fromBN, toBN, toBNAmount, toDisplayAmount, toFixed } from "utils";
 import * as TheGraph from 'graph/queries';
 import moment from "moment";
 import { DAY } from "components/Hooks/useEvents";
@@ -155,7 +155,7 @@ const stakingApi = {
             return [0, 0, 0];
         }
     },
-    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData) {
+    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, {eventsUtils, library}) {
         try {
             async function getTokenDailyProfitInUSD(USDTData) {
                 // console.log(`checking relative to the last ${days} days`);
@@ -169,11 +169,21 @@ const stakingApi = {
                         res.collectedFeesAggregations = res.collectedFeesAggregations.concat(usdc_res.collectedFeesAggregations);
                     }
                     
-                    const collectedFees = res.collectedFeesAggregations.map(({id, sum}) => ({
+                    let collectedFees = res.collectedFeesAggregations.map(({id, sum}) => ({
                         tokenData: tokensData.find(item => item.address.toLowerCase() === id.toLowerCase()),
                         sum
-                    }))
+                    }));
 
+                    if(selectedNetwork === chainNames.Matic) {
+                        const usdtSum = await getFeesCollectedFromEvents(staking, USDTData, [tokensData[0]], {eventsUtils, library });
+                        const usdcSum = await getFeesCollectedFromEvents(staking, USDTData, [tokensData[1]], {eventsUtils, library });
+                        const eventsSum = [toBNAmount(usdtSum, 6), toBNAmount(usdcSum, 6)]
+                        collectedFees = collectedFees.map((item, index) => ({
+                            ...item,
+                            sum: toBN(eventsSum[index]).add(toBN(item.sum)).toString()
+                        }))
+                    }
+                    
                     const tokensUsdtProfit = await collectedFees.map(async ({tokenData, sum: fee}) => {
                         const creationTimestampAgo = moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
                         const dailyProfit = toBN(fee).mul(toBN(DAY)).div(toBN(parseInt(creationTimestampAgo / 1000)));

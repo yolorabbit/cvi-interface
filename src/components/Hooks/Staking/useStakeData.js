@@ -9,6 +9,8 @@ import BigNumber from "bignumber.js";
 import { useActiveWeb3React } from "../wallet";
 import { useSelector } from "react-redux";
 import { chainNames } from "connectors";
+import { useWeb3React } from "@web3-react/core";
+import config from "config/config";
 
 const initialState = {
   stakedTokenAmount: null,
@@ -46,6 +48,7 @@ const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', sym
 const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const contracts = useContext(contractsContext);
   const { account } = useActiveWeb3React();
+  const { library } = useWeb3React(config.web3ProviderId);
   const [stakedData, setStakedData] = useState(initialState);
   const eventsUtils = useEvents();
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -87,9 +90,8 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       switch (tokenName) {
         case 'govi': {
           try {
-            const periodInDays = period/DAY;
             const tokensData = await (await Promise.all(await token.rewardsTokens.map(async t =>  await getTokenData(contracts[t]))));
-            return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData, periodInDays);
+            return await web3Api.getGOVIAPY(stakingRewards, tokensData, USDTData, GOVIData, {eventsUtils, library});
             } catch (error) {
               console.log(error)
               return []
