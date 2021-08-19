@@ -8,6 +8,9 @@ import rewardsApi from './apis/rewards';
 import liquidityApi from "./apis/liquidity";
 import moment from "moment";
 import { chainNames } from "connectors";
+import platformConfig from "config/platformConfig";
+import stakingConfig from "config/stakingConfig";
+import { bottomBlockByNetwork, DEFAULT_STEPS } from "components/Hooks/useEvents";
  
 export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
 
@@ -19,7 +22,31 @@ export const getTokenData = async (contract) => {
     return { address, symbol, decimals, contract };
 }
 
-export async function getFeesCollected(USDTData, tokensData) {
+async function getFeesCollectedFromEvents(USDTData, tokensData, { eventsUtils, library }) {
+    const selectedNetwork = await getChainName();
+    let options = {};
+    const latestBlockNumber = await (await library.eth.getBlock("latest")).number;
+    const bottomBlock = selectedNetwork === chainNames.Matic ? 18071224 :  bottomBlockByNetwork[selectedNetwork]; // temporary fix for matic
+    const stepSize = latestBlockNumber - bottomBlock;
+    options = {bottomBlock: bottomBlock, stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS }
+    let usdSum = toBN(selectedNetwork === chainNames.Matic ? "131007869134" : "0");
+
+    for (let i = 0; i < tokensData.length; i++) {
+        const token = tokensData[i].contract;
+        const tokenData = tokensData[i];
+        const to = tokenData.symbol === "WETH" ? "dst" : "to";
+        const eventsData = [{ contract: token, events: { Transfer: [{ [to]: tokenData.address }] } }];
+        const events = await eventsUtils.getEventsFast(eventsData, options, library.eth.getBlock);
+        // console.log("events: ", events);
+        // sum of transfer events from the last SAMPLE_DAYS days
+        const sum = events.reduce((p, e) => p.add(toBN(e.returnValues[2])), toBN(0));
+        // console.log(`sum ${toDisplayAmount(sum, tokenData.decimals)} ${tokenData.symbol}`);
+        usdSum = usdSum.add(await convert(sum, tokenData, USDTData));
+    }
+    return toDisplayAmount(usdSum, USDTData.decimals);
+}
+
+const getFeesCollectedFromGraph = async (USDTData, tokensData) => {
     let res = await TheGraph.collectedFeesSum();
     const includeUSDC = tokensData.some(token => token.symbol === "USDC");
     if(includeUSDC) {
@@ -42,6 +69,14 @@ export async function getFeesCollected(USDTData, tokensData) {
     return toDisplayAmount(sum, USDTData.decimals);
 }
 
+export async function getFeesCollected(USDTData, tokensData, { eventsUtils, library }) {
+    const chainName = await getChainName();
+    if(chainName === chainNames.Matic) {
+        return await getFeesCollectedFromEvents(USDTData, tokensData, { eventsUtils, library });
+    } else {
+        return await getFeesCollectedFromGraph(USDTData, tokensData);
+    }
+}
 
 const web3Api = {
     getPlatformBalance: async (contracts, tokens = [], {library}) => {
@@ -109,14 +144,14 @@ const web3Api = {
             return "N/A"
         }
     },
-    getFeesCollected: async (contracts, tokens) => {
+    getFeesCollected: async (contracts, tokens, {eventsUtils, library}) => {
         try {
             const USDTData = await getTokenData(contracts.USDT);
             const tokensData = [];
             for(let token of tokens) {
                 tokensData.push(await getTokenData(contracts[token.rel.contractKey]));
             }
-            const totalFeesCollected = await getFeesCollected(USDTData, tokensData);
+            const totalFeesCollected = await getFeesCollected(USDTData, tokensData, {eventsUtils, library});
             return customFixed(totalFeesCollected, 2);
         } catch(error) {
             console.log(error);
