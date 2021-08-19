@@ -4,6 +4,7 @@ import { commaFormatted, customFixed, fromBN, toBN, toBNAmount, toDisplayAmount,
 import * as TheGraph from 'graph/queries';
 import moment from "moment";
 import { DAY } from "components/Hooks/useEvents";
+import { chainNames } from "connectors";
 
 const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 };
 const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 };
