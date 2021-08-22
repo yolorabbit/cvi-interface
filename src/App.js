@@ -22,7 +22,6 @@ import RestrictedModal from 'components/Modals/RestrictedModal';
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
-  const { status } = useSelector(({app}) => app.cviInfo);
   const appRef = useRef(null);
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const App = () => {
 
   return useMemo(() => (
     <>
-      <div className={`app-component ${status}`} ref={appRef}>
+      <div className="app-component" ref={appRef}>
         <NotificationList />
         <Web3ReactManager key={selectedNetwork}>
           <ContractsContext>
@@ -58,7 +57,7 @@ const App = () => {
       </div>
     </>
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  ), [selectedNetwork, status]) 
+  ), [selectedNetwork]) 
 }
 
 export default App;
