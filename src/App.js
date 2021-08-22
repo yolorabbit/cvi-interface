@@ -24,6 +24,7 @@ import Home from 'components/pages/Home';
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
   const appRef = useRef(null);
+  useCvi();
 
   useEffect(() => {
     // fix a bug in Web3ReactProvider - render a text element ",". 
