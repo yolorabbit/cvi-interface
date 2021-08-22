@@ -9,7 +9,7 @@ import liquidityApi from "./apis/liquidity";
 import moment from "moment";
 import { chainNames } from "connectors";
 import platformConfig from "config/platformConfig";
-import stakingConfig from "config/stakingConfig";
+import stakingConfig, { stakingProtocols } from "config/stakingConfig";
 import { bottomBlockByNetwork, maticBottomBlockSinTheGraphStopToWork } from "components/Hooks/useEvents";
 import Api from "Api";
  
