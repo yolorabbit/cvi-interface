@@ -32,13 +32,13 @@ const useCvi = () => {
          const { data: series } = await Api.GET_INDEX_HISTORY(chainName);
          const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST(chainName);
          
-         if(series || latestRoundInfo) {
+         if(series || latestRoundInfo?.data) {
             const sortedCviSeries = series.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
             
             let cviData = {
-               cviInfo: Object.keys(latestRoundInfo).reduce((old, key) => ({
+               cviInfo: Object.keys(latestRoundInfo.data).reduce((old, key) => ({
                   ...old,
-                  [key]: customFixed(latestRoundInfo[key], 2)
+                  [key]: customFixed(latestRoundInfo.data[key], 2)
                }), {}),
                series: sortedCviSeries
             }

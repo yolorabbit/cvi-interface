@@ -8,7 +8,7 @@ import './CviValue.scss';
 
 const CviValue = ({type}) => {
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
-    const isPositive = cviInfo?.oneDayChangePercent > 0;
+    const isPositive = cviInfo?.cviOneDayChangePercent > 0;
     const isMobile = useIsMobile();
     const cviDate = useMemo(() => cviInfo ? moment.utc(cviInfo?.timestamp * 1000).format('LLL') : cviInfo, [cviInfo])
 
@@ -22,8 +22,8 @@ const CviValue = ({type}) => {
                         </span>
                         <b className="cvi-info-component__top--value">{cviInfo?.price}</b>
                         <div className={`cvi-info-component__top--info ${isPositive ? 'high' : 'low'}`}>
-                            <span>{cviInfo?.oneDayChange}</span> 
-                            <span>({`${isPositive ? '+' : ''}`}{cviInfo?.oneDayChangePercent}%)</span>
+                            <span>{cviInfo?.cviOneDayChange}</span> 
+                            <span>({`${isPositive ? '+' : ''}`}{cviInfo?.cviOneDayChangePercent}%)</span>
                             <img src={require(`images/icons/${isPositive ? 'up-arrow' : 'down-arrow'}.svg`).default} alt="arrow" />
                         </div>
                     </div>

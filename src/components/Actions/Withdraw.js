@@ -51,7 +51,7 @@ const Withdraw = () => {
 
     const getMaxAvailableToWithdraw = async () => {
         try {
-            const index = toBNAmount(cviInfo.value, 2);
+            const index = toBNAmount(cviInfo.cvi, 2);
             let totalToWithdraw = await getMaxAmount(index);
             return [toBN(toBNAmount(amount, activeToken.decimals)).cmp(totalToWithdraw) < 1, toDisplayAmount(totalToWithdraw.toString(), activeToken.decimals)]
         } catch(error) {

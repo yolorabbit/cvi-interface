@@ -101,7 +101,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                     _suffix={selectedCurrency}
                 />
     
-                <Stat title="CVI Index" value={cviInfo?.value} />
+                <Stat title="CVI Index" value={cviInfo?.cvi} />
             </>
         )
     }, [actLowRules, collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
@@ -136,9 +136,9 @@ const LiquidityView = ({amount, selectedCurrency}) => {
                 _suffix={`CVI-${selectedCurrency} LP`}
             />
 
-            <Stat title="CVI Index" value={cviInfo?.value} />
+            <Stat title="CVI Index" value={cviInfo?.cvi} />
         </>
-    }, [collateralRatioData, amount, selectedCurrency, cviInfo?.value, lpTokenAmount, activeToken])
+    }, [collateralRatioData, amount, selectedCurrency, cviInfo?.cvi, lpTokenAmount, activeToken])
 }
 
 const Amount = ({title, amount, selectedCurrency}) => {
