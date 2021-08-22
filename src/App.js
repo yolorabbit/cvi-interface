@@ -15,13 +15,44 @@ import Web3ReactManager from 'components/Web3ReactManager';
 import './App.scss';
 import { useEffect, useMemo, useRef } from 'react';
 import { ContractsContext } from 'contracts/ContractContext';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ReactGA from 'react-ga';
 import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
+import Modal from 'components/Modal';
+import { setCviInfo } from 'store/actions';
+import useCvi from 'components/Hooks/Cvi';
+import axios from 'axios';
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
+  const { status } = useSelector(({app}) => app.cviInfo);
   const appRef = useRef(null);
+  const dispatch = useDispatch();
+
+  // TODO: remove it after taking staging useCvi updates.
+  const checkRestrictedCountry = async () => {
+    try {
+       const latestCviResponse = await axios.get('https://api-v2.cvi.finance/latest', {
+          headers: {
+             'Content-Type': 'application/json',
+             'cache-control': 'no-cache',
+          }
+       });
+ 
+       if(latestCviResponse.data?.status === 'Failure') {
+          dispatch(setCviInfo({
+             status: "Failure"
+          }));
+       }
+    } catch(error) {
+       console.log(error);
+    }
+ }
+
+  useEffect(() => {
+      checkRestrictedCountry();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     // fix a bug in Web3ReactProvider - render a text element ",". 
@@ -43,17 +74,31 @@ const App = () => {
 
     initializeGA();
   }, []);
+
+  const closeModal = () => {
+    dispatch(setCviInfo({
+      status: null
+    }));
+  }
   
-  return (
-    <div className="app-component" ref={appRef}>
-      <NotificationList />
-      <Web3ReactManager key={selectedNetwork}>
-        <ContractsContext>
-          <Routes />
-        </ContractsContext>
-      </Web3ReactManager>
-    </div>
-  );
+  return useMemo(() => (
+    <>
+      {status === "Failure" && <Modal className="restricted-modal" clickOutsideDisabled closeIcon handleCloseModal={closeModal}>
+        <img src={require('./images/icons/notice-red-icon.svg').default} alt="warning" />
+        <p>Access denied</p>
+      </Modal>}
+      
+      <div className={`app-component ${status}`} ref={appRef}>
+        <NotificationList />
+        <Web3ReactManager key={selectedNetwork}>
+          <ContractsContext>
+            <Routes />
+          </ContractsContext>
+        </Web3ReactManager>
+      </div>
+    </>
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ), [selectedNetwork, status]) 
 }
 
 export default App;
@@ -61,9 +106,10 @@ export default App;
 
 const Routes = () => {
   useSubscribe();
-  
+  useCvi();
+
   return useMemo(() => {
-    return (
+    return <> 
       <Router>
         <Navbar />
         <Switch>
@@ -74,6 +120,6 @@ const Routes = () => {
         </Switch>
         <Footer />
       </Router>
-    )
+     </>
   }, [])
 }
