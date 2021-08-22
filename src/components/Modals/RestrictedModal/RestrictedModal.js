@@ -42,7 +42,7 @@ const RestrictedModal = () => {
     return showRestrictedModal ? (
         <Modal className="restricted-modal" clickOutsideDisabled>
             <img src={require('../../../images/icons/notifications/notice.svg').default} alt="warning" />
-            <p>I confirm that I am not an Israeli citizen or a citizen of the USA</p>
+            <p>I confirm that I am not an Israeli citizen nor a citizen of the USA</p>
 
             <div className="restricted-modal___actions">
                 <Button className="button" onClick={confirmButton} buttonText="Confirm" />
