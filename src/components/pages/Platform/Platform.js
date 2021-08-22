@@ -12,11 +12,13 @@ import Form from './Form';
 import platformConfig from 'config/platformConfig';
 import PlatformTables from './PlatformTables';
 import useHistoryEvents from 'components/Hooks/useHistoryEvents';
+import useCvi from 'components/Hooks/Cvi';
 import './Platform.scss';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
     useHistoryEvents();
+    useCvi();
 
     return useMemo(() => {
         return (
