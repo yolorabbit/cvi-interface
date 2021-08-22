@@ -201,7 +201,7 @@ export const reInitiateConnector = () => {
         [ConnectorNames.MetaMask]: injected,
         [ConnectorNames.Network]: network,
         [ConnectorNames.WalletConnect]: new WalletConnectConnector({
-            rpc: { [defaultChainId]: RPC_URLS_BY_ENV[defaultChainId] },
+            rpc: { [defaultChainId]: RPC_URLS_BY_ENV[defaultChainId][0] },
             bridge: 'https://bridge.walletconnect.org',
             qrcode: true,
             pollingInterval: POLLING_INTERVAL,
