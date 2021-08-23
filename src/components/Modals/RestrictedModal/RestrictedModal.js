@@ -45,8 +45,8 @@ const RestrictedModal = () => {
             <p>Please confirm you are not a resident in one of CVI's restricted jurisdictions detailed in the website terms and conditions, including United States, Israel and Gibraltar</p>
 
             <div className="restricted-modal___actions">
-                <Button className="button" onClick={confirmButton} buttonText="Confirm" />
-                <Button className="button" onClick={onIsCitizen} buttonText="I am a citizen" />
+                <Button className="button" onClick={confirmButton} buttonText="Continue to CVI platform" />
+                <Button className="button" onClick={onIsCitizen} buttonText="Cancel" />
             </div>
         </Modal>
     ) : null
