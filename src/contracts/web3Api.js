@@ -15,21 +15,15 @@ import Api from "Api";
  
 export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
 
-const findTokenByAddress = (tokens = [], address = "") => {
-    return Object.values(tokens).find(token => 
-        token.address && token.address.toLowerCase() === address.toLowerCase()
-    )
-}
+const findTokenByAddress = (tokens = [], address = "") => Object.values(tokens).find((token) => {
+    return (token.address && token.address.toLowerCase() === address.toLowerCase());
+})
 
 export const getTokenData = async (contract, protocol) => {
     if(!contract) return null;
     const { address, network } = contract.options;
 
-    let tokenData = protocol ? 
-        findTokenByAddress(stakingConfig.tokens[network][protocol], address) : 
-        findTokenByAddress(platformConfig.tokens[network], address);
-
-    console.log(tokenData);
+    let tokenData = findTokenByAddress(Object.assign(stakingConfig.tokens[network][protocol] || {}, platformConfig.tokens[network]), address); 
 
     if(tokenData) {
         const { decimals, key, address} = tokenData;
@@ -38,7 +32,6 @@ export const getTokenData = async (contract, protocol) => {
     
     const symbol = await contract.methods.symbol().call();
     const decimals = await contract.methods.decimals().call();
-    console.log(address, symbol, decimals, protocol);
  
     return { address, symbol, decimals, contract };
 }

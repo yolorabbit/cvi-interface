@@ -54,8 +54,8 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const [stakedData, setStakedData] = useState(initialState);
   const eventsUtils = useEvents();
   const { selectedNetwork } = useSelector(({app}) => app);
-  const token = stakingConfig.tokens[chainName][protocol][tokenName];
-  const tokenRel = token.rel;
+  const token = stakingConfig.tokens[chainName]?.[protocol]?.[tokenName];
+  const tokenRel = token?.rel;
   const decimalsCountDisplay = 8;
   const events = useSelector(({events})=> events);
   

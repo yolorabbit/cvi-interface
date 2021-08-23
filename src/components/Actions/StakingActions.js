@@ -23,13 +23,13 @@ const StakingActions = () => {
     const approvalValidation = useApproveToken();
     const lockedTime = useIsLockedTime(type === stakingConfig.actionsConfig.unstake.key && tokenName === "govi");
     const { selectedNetwork } = useSelector(({app})=>app);
-    const token = stakingConfig.tokens[selectedNetwork][protocol][tokenName]
+    const token = stakingConfig.tokens[selectedNetwork]?.[protocol]?.[tokenName]
     const [processing, setProcessing] = useState(false);
     const unstakeModalButtonDisabled = ((isOpen && !isModal && (disabled || !(Number(amount ?? "0") > 0))));
-    const unstakeTableButtonDisabled = (token.key === 'govi' && (lockedTime > 0 || lockedTime === null));
+    const unstakeTableButtonDisabled = (token?.key === 'govi' && (lockedTime > 0 || lockedTime === null));
     const stakeModalDisabled = (isOpen && !isModal) && !(Number(amount ?? "0") > 0);
     const [lockup, setLockup] = useState(24);
-    const platfromName = stakingConfig.tokens[selectedNetwork].platform[tokenName]?.rel.contractKey;
+    const platfromName = stakingConfig.tokens[selectedNetwork].platform[tokenName]?.rel?.contractKey;
     
     useEffect(()=>{
         if(!contracts || !platfromName || !selectedNetwork || !tokenName) return
