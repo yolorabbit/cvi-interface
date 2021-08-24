@@ -26,8 +26,12 @@ const Question = ({title, content, id}) => {
                            return <span key={uniqueId(content.type)} className={`question-component__container--${content.class}`}>{content.text}</span>
                         case 'link': 
                             return <Link key={uniqueId(content.type)} className={`question-component__container--${content.class}`} target="_blank" to={{pathname: content.to}}>{content.text}</Link>
-                        case 'br': 
+                            case 'br': 
                             return <span key={uniqueId(content.type)}><br/></span>
+                        case 'ul': 
+                            return <ul key={uniqueId(content.type)}>
+                                {content.list.map(item => <li key={item}>{item}</li>)}
+                            </ul>
                         default: 
                             return <span key={uniqueId(content.type)}>{content}</span>;
                     }

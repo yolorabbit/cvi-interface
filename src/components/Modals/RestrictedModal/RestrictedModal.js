@@ -42,7 +42,7 @@ const RestrictedModal = () => {
     return showRestrictedModal ? (
         <Modal className="restricted-modal" clickOutsideDisabled>
             <img src={require('../../../images/icons/notifications/notice.svg').default} alt="warning" />
-            <p>Please confirm you are not a resident in one of CVI's restricted jurisdictions detailed in the website terms and conditions, including United States, Israel and Gibraltar</p>
+            <p>Please confirm you are not a resident in one of CVI's restricted jurisdictions detailed in the website's help center, including United Stated, Israel and Gibraltar.</p>
 
             <div className="restricted-modal___actions">
                 <Button className="button" onClick={confirmButton} buttonText="Continue to CVI platform" />

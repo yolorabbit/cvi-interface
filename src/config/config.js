@@ -268,6 +268,48 @@ const config = {
         title: "Trading",
         questions: [
           {
+            title: "Which countries are supported?",
+            content: [
+              "Our service supports users from all over the world. However, users from the following countries are not allowed to use CVI Platform in order to trade cryptocurrencies, for regulation rules.",
+              {
+                type: "ul",
+                class: "faq-ul-list",
+                list: [
+                  "Albania",
+                  "Bahamas",
+                  "Barbados",
+                  "Botswana",
+                  "Cambodia",
+                  "Cuba",
+                  "Democratic People's Republic of Korea (North Korea)",
+                  "Estonia",
+                  "Ghana",
+                  "Gibraltar",
+                  "Iceland",
+                  "Iran",
+                  "Iraq",
+                  "Israel",
+                  "Jamaica",
+                  "Kyrgyzstan",
+                  "Lebanon",
+                  "Mauritius",
+                  "Mongolia",
+                  "Myanmar",
+                  "Nicaragua",
+                  "Pakistan",
+                  "Panama",
+                  "Sudan",
+                  "Syria",
+                  "Trinidad and Tobago",
+                  "United States",
+                  "Uganda",
+                  "Yemen",
+                  "Zimbabwe"
+                ]
+              }
+            ]
+          },
+          {
             title: "Do you have a quick guide for trading?",
             content: [
               "Yes. A quick guide for traders can be found",
