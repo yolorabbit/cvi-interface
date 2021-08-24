@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import moment from 'moment';
+//TODO: further customizations available at https://www.npmjs.com/package/@jtdaugh/react-lightweight-charts
 import Chart from 'kaktana-react-lightweight-charts';
 import Column from 'components/Layout/Column';
 import Container from 'components/Layout/Container';
 import Layout from 'components/Layout/Layout';
 import Row from 'components/Layout/Row';
 import config from '../../../config/config';
+//TODO: all parameters and customizations available at https://github.com/tradingview/lightweight-charts
 import options from './chartOptions.json';
 import historicalData from '../../CviIndexGraph/historicalData.json';
 //TODO: create a dedicated css data - right now taken from staking component
