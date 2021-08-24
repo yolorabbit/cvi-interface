@@ -6,21 +6,24 @@ import Container from 'components/Layout/Container';
 import Layout from 'components/Layout/Layout';
 import Row from 'components/Layout/Row';
 import config from '../../../config/config';
+import options from './chartOptions.json';
 import historicalData from '../../CviIndexGraph/historicalData.json';
+//TODO: create a dedicated css data - right now taken from staking component
 import '../Staking/Staking.scss';
 
-const options = {
-  color: '#f48fb1',
-  lineStyle: 0,
-  lineWidth: 1,
-  crosshairMarkerVisible: true,
-  crosshairMarkerRadius: 6,
-  lineType: 1
+//TODO: better styling of error component
+const Error = ({message}) => {
+  <Container title="Error occured" style={{background: 'red', text: 'white'}}>
+    {message}
+  </Container>
 };
+
+//TODO: better styling of loading component
+const Loading = () => <Container>Loading...</Container>;
 
 const CVIIndex = () => {
   const [data, setData] = useState(undefined);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(undefined);
 
   const mergeData = apiResults => {
     //reverse and fix date
@@ -32,7 +35,8 @@ const CVIIndex = () => {
       time: moment(item[0]).format('YYYY-MM-DD'), 
       value: item[1]
     }));
-    //TODO: remove duplicate dates?
+    //remove duplicate dates - first of every day is kept!
+    //TODO: better logic
     let s = new Set(), result = [];
     mergedData.forEach(item => {
       if(!s.has(item.time)) {
@@ -40,9 +44,8 @@ const CVIIndex = () => {
         result.push(item);
       }
     });
-    console.log(mergedData.length, result.length);
     return result;    
-  }
+  };
 
   useEffect(() => {
     const getHistory = async () => {
@@ -50,12 +53,11 @@ const CVIIndex = () => {
         const response = await fetch(config.routes.cviindex.dataUrl);
         const result = await response.json();
         const lineSeries = mergeData(result);
-        console.log(lineSeries);
         setData([{data: lineSeries}]);
       }
       catch(err) {
         console.error(err);
-        setError(true);
+        setError('Couldn\'t get API results');
       }
     };
     getHistory();
@@ -69,9 +71,7 @@ const CVIIndex = () => {
             <>
               {
                 error ?
-                  <Container title="Error occured" style={{background: 'red', text: 'white'}}>
-                    Error occured while getting CVI index data
-                  </Container>
+                  <Error message={error}/>
                 :
                   <>
                     {
@@ -86,7 +86,7 @@ const CVIIndex = () => {
                           />
                         </div>  
                       :
-                        <div>Loading...</div>
+                        <Loading />
                     }
                   </>
               }
