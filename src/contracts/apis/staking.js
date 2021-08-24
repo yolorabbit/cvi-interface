@@ -162,7 +162,7 @@ const stakingApi = {
                 // console.log(`checking relative to the last ${days} days`);
                 try {
                     const selectedNetwork = await getChainName();
-
+                    if(selectedNetwork === chainNames.Matic) return "N/A";
                     let res = await TheGraph.collectedFeesSum();
                     const includeUSDC = tokensData.some(token => token.symbol === "USDC");
                     if(includeUSDC) {

@@ -72,7 +72,7 @@ const getFeesCollectedFromGraph = async (USDTData, tokensData) => {
 export async function getFeesCollected(staking, USDTData, tokensData, { eventsUtils, library }) {
     const chainName = await getChainName();
     if(chainName === chainNames.Matic) {
-        return await getFeesCollectedFromEvents(staking, USDTData, tokensData, { eventsUtils, library, useInitialValue: true });
+        return "N/A";
     } else {
         return await getFeesCollectedFromGraph(USDTData, tokensData);
     }
