@@ -15,12 +15,7 @@ const Navbar = () => {
     const isTablet = useIsTablet();
     const [activePath, setActivePath] = useState();
     const links = Object.values(config.routes);
-    
-    const onClickLink = (path) => {
-        window.scrollTo(0, 0);
-        track(path);
-    }
-
+ 
     useEffect(() => {
         if(isActiveInDOM()) setActivePath(location?.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,11 +36,7 @@ const Navbar = () => {
         return (
             <> 
                 <Logo />
-
-                {!isTablet && links.map(({label, path}) => <div key={path} className="navbar-component__list-item">
-                    <Link className={path === activePath ? 'active' : ''} to={path} onClick={() => onClickLink(path)}>{label}</Link>
-                </div>)}    
-
+                {!isTablet && links.map(({label, path, external}) => <NavLink label={label} path={path} external={external} activePath={activePath} />)}    
                 {isTablet ? <Hamburger activePath={activePath} links={links} /> : <div className="navbar-component__container--connect">
                     <SelectNetwork />
                     <NavbarConnectMemoized />
@@ -66,29 +57,14 @@ const Navbar = () => {
     }, [pageYOffset, RenderView]) 
 }
 
-const NavbarConnectMemoized = () => {
-    return useMemo(() => <ConnectWallet type="navbar" buttonText="CONNECT" hasErrorButtonText="Wrong network" />, []);
-}
 
 const Hamburger = ({links, activePath}) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const onClick = () => {
-        setIsOpen(false);
-        window.scrollTo(0, 0);
-    }
-
     return (
         <> 
             {isOpen && <div className="mobile-menu">
-                {links.map(({label, path}) => <div key={path} className="navbar-component__list-item">
-                        <Link 
-                            className={path === activePath ? 'active' : ''} 
-                            to={path}
-                            onClick={onClick}
-                        >{label}</Link>
-                </div>)}
-
+                {links.map(({label, path, external}) => <NavLink label={label} path={path} external={external} activePath={activePath} setIsOpen={setIsOpen} />)}
                 <div className="navbar-component__list-item">
                     <SelectNetwork />
                 </div>
@@ -108,6 +84,35 @@ const Hamburger = ({links, activePath}) => {
         </>
     )
 }
+
+const NavLink = ({label, path, external, activePath, setIsOpen}) => {
+    return useMemo(() => {
+        const onClickLink = (path) => {
+            window.scrollTo(0, 0);
+            track(path);
+
+            if(setIsOpen) setIsOpen(false);
+        }
+        
+        return <div key={path} className="navbar-component__list-item">
+            {external ? <a href={path} onClick={() => onClickLink(path)} rel="noopener noreferrer" target="_blank">
+                {label}
+            </a> : <Link 
+                className={path === activePath ? 'active' : ''} 
+                to={path} 
+                onClick={() => onClickLink(path)}
+            >
+                {label}
+            </Link>}
+        </div>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [path, external, label, activePath]);
+}
+
+const NavbarConnectMemoized = () => {
+    return useMemo(() => <ConnectWallet type="navbar" buttonText="CONNECT" hasErrorButtonText="Wrong network" />, []);
+}
+
 
 export const Logo = () => {
     return useMemo(() => {
