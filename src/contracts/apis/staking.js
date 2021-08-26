@@ -5,6 +5,7 @@ import * as TheGraph from 'graph/queries';
 import moment from "moment";
 import { DAY } from "components/Hooks/useEvents";
 import { chainNames } from "connectors";
+import Api from "Api";
 
 const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 };
 const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 };
@@ -162,29 +163,14 @@ const stakingApi = {
                 // console.log(`checking relative to the last ${days} days`);
                 try {
                     const selectedNetwork = await getChainName();
-                    if(selectedNetwork === chainNames.Matic) return "N/A";
-                    let res = await TheGraph.collectedFeesSum();
-                    const includeUSDC = tokensData.some(token => token.symbol === "USDC");
-                    if(includeUSDC) {
-                        let usdc_res = await TheGraph.collectedFeesSumUSDC();
-                        res.collectedFeesAggregations = res.collectedFeesAggregations.concat(usdc_res.collectedFeesAggregations);
-                    }
-                    
-                    let collectedFees = res.collectedFeesAggregations.map(({id, sum}) => ({
-                        tokenData: tokensData.find(item => item.address.toLowerCase() === id.toLowerCase()),
-                        sum
-                    }));
+                    const response = await Api.GET_FEES_COLLECTED();
+                    const feesCollected = response.data[selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork];
 
-                    if(selectedNetwork === chainNames.Matic) {
-                        const usdtSum = await getFeesCollectedFromEvents(staking, USDTData, [tokensData[0]], {eventsUtils, library });
-                        const usdcSum = await getFeesCollectedFromEvents(staking, USDTData, [tokensData[1]], {eventsUtils, library });
-                        const eventsSum = [toBNAmount(usdtSum, 6), toBNAmount(usdcSum, 6)]
-                        collectedFees = collectedFees.map((item, index) => ({
-                            ...item,
-                            sum: toBN(eventsSum[index]).add(toBN(item.sum)).toString()
-                        }))
-                    }
-                    
+                    const collectedFees = Object.keys(feesCollected).map((key) => ({
+                        tokenData: tokensData.find(item => item.symbol.toLowerCase() === key.toLowerCase()),
+                        sum: feesCollected[key]
+                    })).filter(({tokenData}) => tokenData);
+
                     const tokensUsdtProfit = await collectedFees.map(async ({tokenData, sum: fee}) => {
                         const creationTimestampAgo = moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
                         const dailyProfit = toBN(fee).mul(toBN(DAY)).div(toBN(parseInt(creationTimestampAgo / 1000)));
@@ -246,14 +232,13 @@ const stakingApi = {
         }
         return dailyReward
     },
-    getDailyRewardPerToken: async function (staking, account, events, now, symbol, tokenDecimals, decimalsCountDisplay = 8) {
+    getDailyRewardPerToken: async function (staking, account, feesSum, now, symbol, tokenDecimals, decimalsCountDisplay = 8) {
         try {
             if(!account) return {
                 amount: 0,
                 symbol
             }
     
-            const sum = events.reduce((p, e) => p.add(toBN(e.returnValues ? e.returnValues[2] : e.tokenAmount)), toBN(0));
             const chainName = await getChainName();
             let creationTimestamp = 0;
             
@@ -264,7 +249,7 @@ const stakingApi = {
             }
             const timePassedSinceCreation = now - creationTimestamp;
             const oneMonth = (DAY * 30);
-            const reward = sum.mul(toBN(DAY)).div(toBN(timePassedSinceCreation >= oneMonth ? oneMonth : timePassedSinceCreation));
+            const reward = toBN(feesSum).mul(toBN(DAY)).div(toBN(timePassedSinceCreation >= oneMonth ? oneMonth : timePassedSinceCreation));
     
             let balance = await staking.methods.stakes(account).call();
             let total = await staking.methods.totalStaked().call();

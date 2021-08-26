@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { chainNames } from "connectors";
 import { useWeb3React } from "@web3-react/core";
 import config from "config/config";
+import Api from "Api";
 
 const initialState = {
   stakedTokenAmount: null,
@@ -61,11 +62,13 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     const getDailyRewardsByTokenName = async () => {
       switch (tokenName) {
         case 'govi': {
+          const response = await Api.GET_FEES_COLLECTED();
+          const feesCollected = response.data[chainName === chainNames.Matic ? 'Polygon' : chainName];
+        
           return await token.rewardsTokens.map(async (t,idx) => {
-            return {amount: "N/A", symbol: t};
-            // const events = await eventsUtils.getTransferEvents(contracts[tokenRel.stakingRewards], contracts[t], 30, t);
-            // const now = await eventsUtils.getNow();
-            // return await web3Api.getDailyRewardPerToken(contracts[tokenRel.stakingRewards], account, events, now, t.replace("W",""), tokenRel.tokenDecimals[idx]);
+            const feesSum = feesCollected[t.toUpperCase()];
+            const now = await eventsUtils.getNow();
+            return await web3Api.getDailyRewardPerToken(contracts[tokenRel.stakingRewards], account, feesSum, now, t.replace("W",""), tokenRel.tokenDecimals[idx]);
           })
         }
         default: 
