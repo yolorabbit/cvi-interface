@@ -69,7 +69,7 @@ const Routes = () => {
   return useMemo(() => {
     return <> 
       <Router>
-        <RestrictedModal />
+        {/* <RestrictedModal /> */}
         <Navbar />
         <Switch>
           <Route path={config.routes.staking.path} component={Staking} />
