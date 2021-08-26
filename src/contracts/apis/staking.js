@@ -1,7 +1,6 @@
 import { aprToAPY, convert, fromLPTokens, getChainName, platformCreationTimestamp } from "contracts/utils";
-import web3Api, { getFeesCollectedFromEvents, getTokenData } from "contracts/web3Api";
-import { commaFormatted, customFixed, fromBN, toBN, toBNAmount, toDisplayAmount, toFixed } from "utils";
-import * as TheGraph from 'graph/queries';
+import web3Api, { getTokenData } from "contracts/web3Api";
+import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount, toFixed } from "utils";
 import moment from "moment";
 import { DAY } from "components/Hooks/useEvents";
 import { chainNames } from "connectors";
@@ -146,9 +145,6 @@ const stakingApi = {
           // console.log(`stakedTokens converted ${await convert(stakedTokens, tokenData, USDTData, chainId, library.currentProvider)}`);
           let USDStakedTokens = toDisplayAmount(await convert(stakedTokens, tokenData, USDTData), USDTData.decimals);
           // console.log(`USDStakedTokens ${USDStakedTokens}`);
-        //   console.log((USDDailyReward / USDStakedTokens) * 100);
-        //   console.log(aprToAPY((USDDailyReward / USDStakedTokens) * 100));
-        //   console.log(aprToAPY);
 
           const dailyApr = (USDDailyReward / USDStakedTokens) * 100;
           return USDStakedTokens === 0 ? [0, 0, 0] : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
@@ -164,12 +160,13 @@ const stakingApi = {
                 try {
                     const selectedNetwork = await getChainName();
                     const response = await Api.GET_FEES_COLLECTED();
-                    const feesCollected = response.data[selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork];
-
-                    const collectedFees = Object.keys(feesCollected).map((key) => ({
+                    const feesCollected = response.data[selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork]; // get platform fees sum. (formatted to tokens object)
+                    
+                    // EXAMPLE: feesCollected (sum of tokens object) = {USDC: "0", USDT: "0"} by network.
+                    const collectedFees = Object.keys(feesCollected).map((key) => ({ // map tokens and add tokenData object to each one back from the api.
                         tokenData: tokensData.find(item => item.symbol.toLowerCase() === key.toLowerCase()),
-                        sum: feesCollected[key]
-                    })).filter(({tokenData}) => tokenData);
+                        sum: feesCollected[key] // fee sum
+                    })).filter(({tokenData}) => tokenData); // filter token who exist in api, but not supported in the platform tokens config. 
 
                     const tokensUsdtProfit = await collectedFees.map(async ({tokenData, sum: fee}) => {
                         const creationTimestampAgo = moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
