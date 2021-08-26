@@ -36,7 +36,7 @@ const Navbar = () => {
         return (
             <> 
                 <Logo />
-                {!isTablet && links.map(({label, path, external}) => <NavLink label={label} path={path} external={external} activePath={activePath} />)}    
+                {!isTablet && links.map(({label, path, external}) => <NavLink key={path} label={label} path={path} external={external} activePath={activePath} />)}    
                 {isTablet ? <Hamburger activePath={activePath} links={links} /> : <div className="navbar-component__container--connect">
                     <SelectNetwork />
                     <NavbarConnectMemoized />
@@ -64,7 +64,7 @@ const Hamburger = ({links, activePath}) => {
     return (
         <> 
             {isOpen && <div className="mobile-menu">
-                {links.map(({label, path, external}) => <NavLink label={label} path={path} external={external} activePath={activePath} setIsOpen={setIsOpen} />)}
+                {links.map(({label, path, external}) => <NavLink key={path} label={label} path={path} external={external} activePath={activePath} setIsOpen={setIsOpen} />)}
                 <div className="navbar-component__list-item">
                     <SelectNetwork />
                 </div>
