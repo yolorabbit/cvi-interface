@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const { REACT_APP_HOST: baseURL } = process.env;
+const { REACT_APP_HOST: baseURL, REACT_APP_HOST_V2: baseUrlV2 } = process.env;
 
 const headers = {
    'Content-Type': 'application/json',
@@ -12,9 +12,15 @@ const axs = axios.create({
    headers,
 });
 
+const axsV2 = axios.create({
+   baseURL: baseUrlV2,
+   headers,
+});
 
-const EXPORT_API = {
+
+const Api = {
    GET_INDEX_HISTORY: () => axs.get('/cvx'),
+   GET_FEES_COLLECTED: () => axsV2.get('/fees')
 };
 
-export default EXPORT_API;
+export default Api;
