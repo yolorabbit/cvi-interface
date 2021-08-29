@@ -28,7 +28,8 @@ node {
 
       def cotipay_url = "https://pay-dev.coti.io";
       def coti_url = "https://dev.coti.io";
-      def host = "https://api-v2.cvi.finance";
+      def host = "https://api-dev.cvx.finance";
+      def host2 = "https://api-v2.cvi.finance";
       def node_env = "development";
       def chain_id = "1337";
       def generate_sourcemap = false;
@@ -63,7 +64,7 @@ node {
         generate_sourcemap = true;
       }
       if (env.BRANCH_NAME == "staging"){
-        app = docker.build(imageName, "--build-arg REACT_APP_NETWORK_URL=${network_url} --build-arg GENERATE_SOURCEMAP=${generate_sourcemap} --build-arg REACT_APP_HOST=${host} --build-arg REACT_APP_ENVIRONMENT=${node_env} --build-arg REACT_APP_COTI_URL=${coti_url} --build-arg REACT_APP_COTIPAY_URL=${cotipay_url} --build-arg REACT_APP_CHAIN_ID=${chain_id} .")
+        app = docker.build(imageName, "--build-arg REACT_APP_NETWORK_URL=${network_url} --build-arg GENERATE_SOURCEMAP=${generate_sourcemap} --build-arg REACT_APP_HOST_V2=${host2} --build-arg REACT_APP_HOST=${host} --build-arg REACT_APP_ENVIRONMENT=${node_env} --build-arg REACT_APP_COTI_URL=${coti_url} --build-arg REACT_APP_COTIPAY_URL=${cotipay_url} --build-arg REACT_APP_CHAIN_ID=${chain_id} .")
       } else {
         return
       }
