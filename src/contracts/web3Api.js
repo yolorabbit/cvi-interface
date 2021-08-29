@@ -23,7 +23,8 @@ export const getTokenData = async (contract, protocol) => {
     if(!contract) return null;
     const { address, network } = contract.options;
 
-    let tokenData = findTokenByAddress(Object.assign(stakingConfig.tokens[network][protocol] || {}, platformConfig.tokens[network]), address); 
+    const tokensJsonConfig = {...stakingConfig.tokens[network][protocol], ...platformConfig.tokens[network]}
+    let tokenData = findTokenByAddress(tokensJsonConfig, address); 
 
     if(tokenData) {
         const { decimals, key, address} = tokenData;
