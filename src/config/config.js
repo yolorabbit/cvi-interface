@@ -30,11 +30,11 @@ const config = {
       label: "Staking",
       path: '/staking'
     },
-    // analytics: {
-    //   label: "Analytics",
-    //   path: 'https://dune.xyz/govidev/CVI',
-    //   external: true
-    // },
+    analytics: {
+      label: "Analytics",
+      path: 'https://dune.xyz/govidev/CVI',
+      external: true
+    },
     "help-center": {
       label: "Help center",
       path: '/help'
