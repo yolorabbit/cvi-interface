@@ -26,7 +26,7 @@ const Tooltip = ({type = "info", left, mobileLeft, right, maxWidth, minWidth, co
             </div>
         )
         //eslint-disable-next-line
-    }, [isDesktop]);
+    }, [isDesktop, content]);
 }
 
 export default Tooltip;

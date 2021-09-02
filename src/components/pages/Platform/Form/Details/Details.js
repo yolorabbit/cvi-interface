@@ -48,12 +48,12 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
 
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount, leverage, purchaseFee}), [account, leverage, tokenAmount, purchaseFee]);
     const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload, { validAmount: true });
-
+    const isUSDC = activeToken.key === "usdc";
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
         const turbulence = purchaseFee === "N/A" ? "0" : purchaseFee?.turbulence ?? "0";
         const haveTurbulence = toBN(turbulence).cmp(toBN(100)) > -1;
-        const isHighCollateralRatio = (collateralRatioData !== "N/A" && collateralRatioData?.collateralRatio) ? toBN(collateralRatioData.collateralRatio).cmp(toBN(platformConfig.collateralRatios.buy.markedLevel, 8)) > 0 : false;
+        const isHighCollateralRatio = (collateralRatioData !== "N/A" && collateralRatioData?.collateralRatio) ? toBN(collateralRatioData.collateralRatio).cmp(toBN(isUSDC ? 65 : platformConfig.collateralRatios.buy.markedLevel[activeToken.key] ?? 80, 8)) > 0 : false;
         
         return  (
             <> 
@@ -70,6 +70,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     
                 <Stat 
                     name="purchaseFee"
+                    isUSDC={isUSDC}
                     value={purchaseFee === "N/A" || purchaseFee === "0" ? purchaseFee : purchaseFee?.openFee?.toString()} 
                     _suffix={selectedCurrency}
                     className={haveTurbulence || isHighCollateralRatio ? 'low' : ''}
@@ -100,7 +101,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat title="CVI Index" value={cviInfo?.price} />
             </>
         )
-    }, [collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
+    }, [isUSDC, collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
    
 }
 
@@ -119,7 +120,7 @@ const LiquidityView = ({amount, selectedCurrency}) => {
                 name="collateralRatio" 
                 value={collateralRatioData?.collateralRatio} 
                 format={`${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0)}%`}
-                className={`bold ${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0) >= 80 ? 'low' : 'high'}`} 
+                className={`bold ${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0) >= (activeToken.key === "usdc" ? 65 : 80) ? 'low' : 'high'}`} 
             />
 
             <Amount title="Deposit" amount={amount} selectedCurrency={selectedCurrency} />
