@@ -1,7 +1,7 @@
 import { commaFormatted, customFixed, fromTokenAmountToUnits, toBN, toDisplayAmount, toFixed } from '../../utils';
 import { getOpenPositionFee } from './position';
 import Web3 from 'web3';
-import { getPositionRewardsContract, getNow } from 'contracts/utils';
+import { getPositionRewardsContract, getNow, getCviValue } from 'contracts/utils';
 import moment from 'moment';
 import { DAY } from '../../components/Hooks/useEvents';
 
@@ -39,46 +39,35 @@ export async function getClaimableReward(contracts, token, { account }) {
 }
 
 
-async function calculatePositionReward(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0}) {
-  const PositionRewardsHelper = await getPositionRewardsContract(token);
-  //TODO: Yovel/Vladi/Yaniv - is this if needed?
-  //if(!PositionRewardsHelper){
-    openTime = await getNow();
-  //}
+async function calculatePositionRewardMinMax(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0, index = 0}) {
+  // const PositionRewardsHelper = getPositionRewardsContract("PositionRewardsHelper", isEth);
   let fees = await getOpenPositionFee(contracts, token, {tokenAmount, leverage});
-  const { getCVILatestRoundData  } = contracts[token.rel.cviOracle].methods || {};
-  const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
-  let positionUnits = fromTokenAmountToUnits(tokenAmount.sub(toBN(fees.openFee)), cviValue);
+  let positionUnits = fromTokenAmountToUnits(tokenAmount.sub(toBN(fees.openFee)), index);
   let currentReward = 0;
-  let maxCurrentReward = 0;
-  let rewardHelper = 0;
-  let maxHelperReward = 0;
-
   try {
     let pos = await contracts[token.rel.platform].methods.positions(account).call();
     let unclaimed = await contracts[token.rel.positionRewards].methods.unclaimedPositionUnits(account).call();
     let min = BN.min(toBN(unclaimed), toBN(pos.positionUnitsAmount));
-   
-    try {
-      currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, openTime).call();
-      maxCurrentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, 0).call();
-    } catch(error) {
-      console.log(error);
-    }
+    currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, openTime).call();
     positionUnits = positionUnits.add(min);
-   
-    if(PositionRewardsHelper) {
-      rewardHelper = await PositionRewardsHelper.methods.calculatePositionReward(positionUnits, openTime).call();
-      maxHelperReward = await PositionRewardsHelper.methods.calculatePositionReward(positionUnits, 0).call();
-    } else {
-      rewardHelper = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, openTime).call();
-      maxHelperReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, 0).call();
-    }
   } catch (error) {
     console.log(error);
   }
+  const reward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, openTime).call();
+  return toBN(reward).sub(toBN(currentReward));
+}
 
-  return [toBN(rewardHelper).sub(toBN(currentReward)), toBN(maxHelperReward).sub(toBN(maxCurrentReward))];
+async function calculatePositionReward(contracts, token, {account, tokenAmount, leverage = 1}) {
+  try {
+    const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
+    const now = await getNow();
+    const beforeOpeningPositionRewardMin = await calculatePositionRewardMinMax(contracts, token, { account, leverage, openTime: now, tokenAmount, index: cviValue } );
+    const beforeOpeningPositionRewardMax = await calculatePositionRewardMinMax(contracts, token, { account, leverage, openTime: 0, tokenAmount, index: cviValue });
+    return [beforeOpeningPositionRewardMin, beforeOpeningPositionRewardMax];
+  } catch(error) {
+    console.log(error);
+    return [toBN("0"), toBN("0")];
+  }
 }
 
 async function getOpenPositionDays(events, getBlock) {
