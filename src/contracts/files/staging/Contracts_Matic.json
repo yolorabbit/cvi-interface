@@ -3496,7 +3496,7 @@
     ]
   },
   "CVIFeedOracle": {
-    "address": "0xB527769842f997d56dD1Ff73C34192141b69077e",
+    "address": "0x3b49ad7aDf9E348852C529F621aEcD7ABD99907e",
     "abi": [
       {
         "inputs": [
@@ -3697,7 +3697,7 @@
     ]
   },
   "CVIOracle": {
-    "address": "0x37960e1e359541ffd071065b685026899bcB96c3",
+    "address": "0x981475d6a0eE63027F7A67574d8eED3Bd170D11d",
     "abi": [
       {
         "inputs": [
@@ -4909,7 +4909,7 @@
     ]
   },
   "USDCFeesCalculator": {
-    "address": "0xed982E24697C7bceA182ba8dd1a190aB66A16384",
+    "address": "0x13461e22265Fb9fCDD89bD27b6601A7d0d1C7861",
     "abi": [
       {
         "inputs": [
