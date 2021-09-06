@@ -38,7 +38,6 @@ export async function getClaimableReward(contracts, token, { account }) {
 
 }
 
-
 async function calculatePositionRewardMinMax(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0, index = 0}) {
   // const PositionRewardsHelper = getPositionRewardsContract("PositionRewardsHelper", isEth);
   let fees = await getOpenPositionFee(contracts, token, {tokenAmount, leverage});
@@ -48,7 +47,7 @@ async function calculatePositionRewardMinMax(contracts, token, {account, tokenAm
     let pos = await contracts[token.rel.platform].methods.positions(account).call();
     let unclaimed = await contracts[token.rel.positionRewards].methods.unclaimedPositionUnits(account).call();
     let min = BN.min(toBN(unclaimed), toBN(pos.positionUnitsAmount));
-    currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, openTime).call();
+    currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, 0).call();
     positionUnits = positionUnits.add(min);
   } catch (error) {
     console.log(error);
