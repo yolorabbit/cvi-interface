@@ -15,7 +15,9 @@ const Navbar = () => {
     const isTablet = useIsTablet();
     const [activePath, setActivePath] = useState();
     const links = Object.values(config.routes);
- 
+    const filteredLink = links.filter(({hide}) => !hide?.some(path => !(path && path !== activePath)));
+    const showEnterApp = links.some(({enterApp, path}) => (enterApp && activePath) && activePath === path);
+
     useEffect(() => {
         if(isActiveInDOM()) setActivePath(location?.pathname);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,42 +38,68 @@ const Navbar = () => {
         return (
             <> 
                 <Logo />
-                {!isTablet && links.map(({label, path, external}) => <NavLink key={path} label={label} path={path} external={external} activePath={activePath} />)}    
-                {isTablet ? <Hamburger activePath={activePath} links={links} /> : <div className="navbar-component__container--connect">
-                    <SelectNetwork />
-                    <NavbarConnectMemoized />
-                </div>}
+                {!isTablet && <Links links={filteredLink} activePath={activePath} /> }
+                {isTablet ? <Hamburger links={filteredLink} activePath={activePath} showEnterApp={showEnterApp} /> : <AppButton showEnterApp={showEnterApp} />}
             </>
         )
         //eslint-disable-next-line
-    }, [activePath, isTablet]);
+    }, [showEnterApp, activePath, isTablet]);
 
     return useMemo(() => {
         return (
-            <div className={`navbar-component ${pageYOffset > 25 ? 'is-scroll' : ''}`}>
+            <div className={`navbar-component ${showEnterApp ? 'is-home' : ''} ${pageYOffset > 25 ? 'is-scroll' : ''}`}>
               <div className="navbar-component__container">
                 {RenderView}
               </div>
             </div>
         )
-    }, [pageYOffset, RenderView]) 
+    }, [showEnterApp, pageYOffset, RenderView]) 
 }
 
+export const EnterApp = () => {
+    return useMemo(() => <div className="navbar-component__container--connect">
+        <Link to={config.routes.platform.path} className="navbar-component__container--connect-enter-app">
+            <div>
+                ENTER APP
+            </div>
+        </Link>
+    </div>, []);
+}
 
-const Hamburger = ({links, activePath}) => {
+const AppButton = ({showEnterApp}) => {
+    return useMemo(() => {
+        if(showEnterApp) return <EnterApp />
+
+        return <div className="navbar-component__container--connect">
+            <SelectNetwork />
+            <NavbarConnectMemoized />
+        </div>
+    }, [showEnterApp]);
+}
+
+const Links = ({links, activePath}) => {
+    return useMemo(() => links.map(({label, path, external}) => <NavLink key={path} label={label} path={path} external={external} activePath={activePath} />), [links, activePath])
+}
+
+const Hamburger = ({links, activePath, showEnterApp}) => {
     const [isOpen, setIsOpen] = useState(false);
-
+    
     return (
         <> 
             {isOpen && <div className="mobile-menu">
-                {links.map(({label, path, external}) => <NavLink key={path} label={label} path={path} external={external} activePath={activePath} setIsOpen={setIsOpen} />)}
-                <div className="navbar-component__list-item">
-                    <SelectNetwork />
-                </div>
+                {links
+                    .filter(({hide}) => !hide?.some(path => activePath === path)) // use for hiding link by hide paths list config.
+                    .map(({label, path, external}) => <NavLink key={path} label={label} path={path} external={external} activePath={activePath} setIsOpen={setIsOpen} />)}
+                
+                {showEnterApp ? <AppButton showEnterApp={showEnterApp} /> : <> 
+                    <div className="navbar-component__list-item">
+                        <SelectNetwork />
+                    </div>
 
-                <div className="navbar-component__list-item">
-                    <ConnectWallet type="navbar" buttonText="CONNECT" hasErrorButtonText="Wrong network" />
-                </div>
+                    <div className="navbar-component__list-item">
+                        <ConnectWallet type="navbar" buttonText="CONNECT" hasErrorButtonText="Wrong network" />
+                    </div>
+                </>}
             </div>}
             
             <Button className={`hamburger-component ${isOpen ? 'opened' : 'closed'}`} onClick={() => setIsOpen(!isOpen)} >

@@ -3,8 +3,8 @@
     z-index: 9999;
     transition: 0.2s all;
     background-color: #03070f;
-    
-    @media (max-width: 1365px) { 
+
+    @media (max-width: 1365px) {
         padding-top: 5.861vw;
     }
 
@@ -22,7 +22,13 @@
             &__container {
                 background-color: #03070f;
             }
-        } 
+        }
+    }
+
+    &.is-home {
+        & .navbar-component__container--connect {
+            margin-left: unset;
+        }
     }
 
     &__container {
@@ -36,16 +42,16 @@
         z-index: 99;
         top: 0;
 
-        @media (max-width: 1365px) { 
+        @media (max-width: 1365px) {
             height: 5.861vw;
             padding: 0 2.345vw;
         }
-    
+
         @media (max-width: 1024px) {
             height: 10.43vw;
             padding: 0 3.129vw;
         }
-    
+
         @media (max-width: 767px) {
             height: 26.667vw;
             background-color: transparent;
@@ -56,6 +62,71 @@
             display: flex;
             margin-left: auto;
             align-items: center;
+
+            &-enter-app {
+                background-image: linear-gradient(107deg, #2bbede 1%, #007acb 49%, #007acb 59%, #f8ba15 99%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                padding: 0.104vw;
+                border-radius: 0.417vw;
+                width: 8.125vw;
+                height: 2.604vw;
+                margin-left: 1.25vw;
+
+                @media (max-width: 1365px) {
+                    padding: 0.147vw;
+                    border-radius: 0.586vw;
+                    width: 11.429vw;
+                    height: 3.663vw;
+                    margin-left: 1.758vw;
+                }
+                  
+                @media (max-width: 1024px) {
+                    padding: 0.261vw;
+                    border-radius: 1.043vw;
+                    width: 20.339vw;
+                    height: 6.519vw;
+                    margin-left: 3.129vw;
+                }
+                
+                @media (max-width: 767px){
+                    padding: 0.556vw;
+                    border-radius: 2.222vw;
+                    width: 43.333vw;
+                    height: 13.889vw;
+                    margin-left: 6.667vw;
+                }
+
+                &:active {
+                    transform: scale(1.02);
+                }
+
+                & div {
+                    width: 100%;
+                    background-color: #1b1d38;
+                    height: 100%;
+                    border-radius: inherit;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 0.833vw;
+                    @media (max-width: 1365px) {
+                        font-size: 1.172vw;
+                    }
+                      
+                    @media (max-width: 1024px) {
+                        font-size: 1.825vw;
+                    }
+             
+                    @media (max-width: 767px){
+                        font-size: 3.889vw;
+                    }
+                }
+            }
         }
     }
 
@@ -63,9 +134,9 @@
         width: 6.25vw;
         height: inherit;
 
-        @media (max-width: 1365px){   
+        @media (max-width: 1365px) {
             width: 8.791vw;
-        }   
+        }
 
         & a {
             font-size: 0.833vw;
@@ -82,11 +153,11 @@
                 border-bottom: 0.22vw solid transparent;
                 font-size: 1.172vw;
             }
-    
+
             @media (max-width: 1024px) {
                 border-bottom: 0.261vw solid transparent;
             }
-    
+
             @media (max-width: 767px) {
                 border-bottom: 0.548vw solid transparent;
             }
@@ -99,59 +170,69 @@
     }
 }
 
-.logo-component {
-    margin-right: 3.854vw;
-    text-decoration: none;  
-    z-index: 1;
+.navbar-component {
 
-    @media (max-width: 1365px) {  
-        margin-right: 5.421vw;
-    }
-
-    @media (max-width: 1024px) { 
-
-    }
-
-    @media (max-width: 767px) { 
-
-    }
-
-    & img {
-        width: 4.888vw;
-        height: 1.354vw;
-
-        @media (max-width: 1365px) {  
-            width: 6.875vw;
-            height: 1.905vw;
-        }
-    
-        @media (max-width: 1024px) { 
-            width: 12.235vw;
-            height: 3.39vw;
-        }
-    
-        @media (max-width: 767px) { 
-            width: 26.067vw;
-            height: 7.223vw;
+    &.is-home {
+        & .navbar-component__container--connect { 
+            margin-left: auto;
+            @media (max-width: 1024px) { 
+                margin-left: unset;
+            }
         }
     }
 
-    & div {
-        font-size: 0.521vw;
-        font-weight: normal;
-        color: white;
+    .logo-component {
+        margin-right: 3.854vw;
         text-decoration: none;
-
-        @media (max-width: 1365px) {  
-            font-size: 0.733vw;
+        z-index: 1;
+    
+        @media (max-width: 1365px) {
+            margin-right: 5.421vw;
         }
     
-        @media (max-width: 1024px) { 
-            font-size: 1.304vw;
+        @media (max-width: 1024px) {
         }
     
-        @media (max-width: 767px) { 
-            font-size: 2.778vw;
+        @media (max-width: 767px) {
+        }
+    
+        & img {
+            width: 4.888vw;
+            height: 1.354vw;
+    
+            @media (max-width: 1365px) {
+                width: 6.875vw;
+                height: 1.905vw;
+            }
+    
+            @media (max-width: 1024px) {
+                width: 12.235vw;
+                height: 3.39vw;
+            }
+    
+            @media (max-width: 767px) {
+                width: 26.067vw;
+                height: 7.223vw;
+            }
+        }
+    
+        & div {
+            font-size: 0.521vw;
+            font-weight: normal;
+            color: white;
+            text-decoration: none;
+    
+            @media (max-width: 1365px) {
+                font-size: 0.733vw;
+            }
+    
+            @media (max-width: 1024px) {
+                font-size: 1.304vw;
+            }
+    
+            @media (max-width: 767px) {
+                font-size: 2.778vw;
+            }
         }
     }
 }
@@ -177,7 +258,7 @@
                 &:first-child {
                     transform: rotate(45deg) translate(-2px, 0px);
 
-                    @media (max-width: 400px){  
+                    @media (max-width: 400px) {
                         transform: rotate(45deg) translate(-3px, 0px);
                     }
                 }
@@ -186,12 +267,12 @@
                     opacity: 0;
                     height: 0;
                 }
-                
+
                 &:last-child {
                     transform: rotate(-45deg) translate(1px, -4px);
                     width: 20px;
 
-                    @media (max-width: 400px){ 
+                    @media (max-width: 400px) {
                         width: 16px;
                     }
                 }
@@ -201,9 +282,8 @@
 
     &__container {
         & div {
-            transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-            background 0.5s cubic-bezier(0.77,0.2,0.05,1.0),
-            opacity 0.55s ease;
+            transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1),
+                background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.55s ease;
             background-color: white;
             width: 20px;
             height: 3px;
@@ -214,12 +294,12 @@
             &:nth-child(2) {
                 opacity: 1;
             }
-            
+
             &:last-child {
                 width: 16px;
             }
 
-            @media (max-width: 400px){
+            @media (max-width: 400px) {
                 width: 16px;
                 height: 2px;
                 border-radius: 1px;
@@ -247,7 +327,7 @@
 .mobile-menu {
     width: 100%;
     position: fixed;
-    background-color: #11254d;
+    background-color: #0f112d;
     left: 0;
     top: 0;
     height: 100%;
@@ -255,13 +335,29 @@
     flex-direction: column;
     padding-top: 13.038vw;
     overflow-y: auto;
-    @media (max-width: 767px){
+    @media (max-width: 767px) {
         padding-top: 27.778vw;
     }
 
     animation: NavbarfadeOut 0.5s;
     animation-fill-mode: forwards;
 
+    .navbar-component__container--connect-enter-app {
+        width: 100%;
+        margin: 1.25vw;
+        @media (max-width: 1365px) {
+            margin: 24px;
+        }
+          
+        @media (max-width: 1024px) {
+    
+        }
+        
+        @media (max-width: 767px){
+           
+        }
+    }
+    
     .navbar-component__list-item {
         height: auto;
         width: 100%;
@@ -272,18 +368,21 @@
             }
         }
 
-        & a, & .select-network-component, & .connect-wallet-button__connected, & .connect-wallet-button.navbar {
+        & a,
+        & .select-network-component,
+        & .connect-wallet-button__connected,
+        & .connect-wallet-button.navbar {
             font-size: 2.086vw;
             padding: 2.868vw 5.215vw 2.608vw 5.215vw;
             border-bottom: solid 1px #182f5d;
             text-align: left;
             display: block;
 
-            @media (max-width: 767px){
+            @media (max-width: 767px) {
                 padding: 6.111vw 7.222vw 5.556vw 7.222vw;
                 font-size: 4.444vw;
             }
-            
+
             &.active {
                 color: #fea716;
             }
@@ -305,11 +404,13 @@
         }
 
         &:not(.wrong-network) {
-            & .select-network-component, & .connect-wallet-button__connected, & .connect-wallet-button.navbar {
+            & .select-network-component,
+            & .connect-wallet-button__connected,
+            & .connect-wallet-button.navbar {
                 padding-top: 0.652vw;
                 padding-bottom: 0.652vw;
-                    
-                @media (max-width: 767px){
+
+                @media (max-width: 767px) {
                     padding-top: 1.389vw;
                     padding-bottom: 1.389vw;
                 }
@@ -318,14 +419,14 @@
     }
 
     @keyframes NavbarfadeOut {
-       from {
-        left: -100%;
-        top: 0;
-       }
+        from {
+            left: -100%;
+            top: 0;
+        }
 
-       to {
-        left: 0;
-        top: 0;
-       }
+        to {
+            left: 0;
+            top: 0;
+        }
     }
 }

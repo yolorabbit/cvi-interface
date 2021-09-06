@@ -1,0 +1,35 @@
+.home-component {
+    background-color: #0f112d;
+    flex: 1;
+}
+
+.govi-dao-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10.833vw auto 5.625vw auto;
+    max-width: 30.833vw;
+
+    @media (max-width: 1365px) {
+        margin: 15.238vw auto 7.912vw auto;
+        max-width: 43.37vw;
+    }
+      
+    @media (max-width: 1024px) {
+        max-width: 100%;
+        padding: 0 3.129vw;
+        margin: 18.688vw auto 0 auto;
+    }
+
+    @media (max-width: 767px){
+        max-width: 100%;
+        padding: 0 6.667vw;
+        margin: 35.556vw auto 0 auto;
+    }
+
+    & .usecase-component {
+        @media (max-width: 767px){
+            margin-bottom: 13.333vw;
+        }
+    }
+}

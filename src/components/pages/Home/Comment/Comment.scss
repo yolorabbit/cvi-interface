@@ -1,0 +1,146 @@
+.comment-component {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    @media (max-width: 767px){
+        width: 100%;  
+        flex: 100%;    
+    }
+
+    &.subtitle {
+        & p {
+            margin: 0.833vw 0 0 0;
+            @media (max-width: 1365px) {
+                margin: 1.172vw 0 0 0;
+            }
+              
+            @media (max-width: 1024px) {
+                margin: 3.129vw 0 0 0;
+            }
+            
+            @media (max-width: 767px){
+                margin: 6.667vw 0 0 0;
+            }
+        }
+    }
+
+    &:nth-child(odd) {
+        margin-right: 1.667vw;
+        @media (max-width: 1365px) {
+            margin-right: 2.344vw;
+        }
+          
+        @media (max-width: 767px){
+            margin-right: 0; 
+            margin-bottom: 13.333vw;
+
+        }
+    }
+
+    &:nth-child(even) {
+        margin-left: 1.667vw;
+        @media (max-width: 1365px) {
+            margin-left: 2.344vw;
+        }
+          
+        @media (max-width: 1024px) {
+            margin-left: 0;
+        }
+
+        @media (max-width: 767px){
+            margin-left: 0;
+        }
+    }
+
+    & img {
+        width: 12.5vw;
+        height: 12.5vw;
+
+        @media (max-width: 1365px) {
+            width: 17.582vw;
+            height: 17.582vw;
+        }
+          
+        @media (max-width: 1024px) {
+            width: 19.817vw;
+            height: 19.817vw;
+        }
+        
+        @media (max-width: 767px){
+            width: 42.222vw;
+            height: 42.222vw;
+        }
+    }
+
+    & h2 {
+        font-weight: bold;
+        font-size: 1.25vw;
+        margin: 1.25vw 0 0 0;
+
+        @media (max-width: 1365px) {
+            font-size: 1.758vw;
+            margin: 1.758vw 0 0 0;
+        }
+          
+        @media (max-width: 1024px) {
+            font-size: 2.086vw;
+            margin: 3.129vw 0 0 0;
+        }
+        
+        @media (max-width: 767px){
+            font-size: 4.444vw;
+            margin: 6.666vw 0 0 0;
+        }
+    }
+
+    & h3 {
+        font-weight: normal;
+        color: #f8ba15;
+        font-size: 1.25vw;
+        margin: 0.208vw 0 0 0;
+
+        @media (max-width: 1365px) {
+            font-size: 1.758vw;
+            margin: 0.293vw 0 0 0;
+        }
+          
+        @media (max-width: 1024px) {
+            font-size: 2.086vw;
+        }
+        
+        @media (max-width: 767px){
+            font-size: 4.444vw;
+        }
+    }
+
+    & p {
+        font-weight: 300;
+        font-style: italic;
+        text-align: center;
+        margin: 2.396vw 0 0 0;
+        font-size: 0.833vw;
+        line-height: 1.25vw;
+        padding: 0 3.021vw;
+        @media (max-width: 1365px) {
+            margin: 3.37vw 0 0 0;
+            font-size: 1.172vw;
+            line-height: 1.758vw;
+            padding: 0 4.249vw;
+        }
+          
+        @media (max-width: 1024px) {
+            font-size: 1.825vw;
+            padding: 0 5.215vw;
+            line-height: 2.608vw;
+            margin-top: 3.129vw;
+        }
+        
+        @media (max-width: 767px){
+            font-size: 3.889vw;
+            padding: 0 11.111vw;
+            line-height: 5.556vw;
+            margin-top: 6.667vw;
+        }
+    }
+}

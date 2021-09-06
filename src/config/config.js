@@ -22,13 +22,21 @@ const config = {
   },
   isMainnet: process.env.REACT_APP_ENVIRONMENT === "mainnet",
   routes: {
+    home: {
+      label: "Home",
+      path: "/",
+      hide: ['/', '/platform', '/staking', '/help', '/index'],
+      enterApp: true
+    },
     platform: {
       label: "Platform",
-      path: '/platform'
+      path: '/platform',
+      hide: ['/', '/help']
     },
     staking: {
       label: "Staking",
-      path: '/staking'
+      path: '/staking',
+      hide: ['/', '/help']
     },
     analytics: {
       label: "Analytics",
@@ -37,7 +45,8 @@ const config = {
     },
     "help-center": {
       label: "Help center",
-      path: '/help'
+      path: '/help',
+      enterApp: true
     },
   },
   socialLinks: [

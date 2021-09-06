@@ -1,0 +1,13 @@
+.graphs-component {
+    &.single-graph {
+        margin-left: 0;
+        margin-bottom: 32px;
+        @media (max-width: 767px){
+            margin-bottom: 8px;
+        }
+
+        #vix-graph {
+            transform: translateX(20px) scale(0.96)
+        }
+    }
+}

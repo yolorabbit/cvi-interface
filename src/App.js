@@ -18,7 +18,7 @@ import { ContractsContext } from 'contracts/ContractContext';
 import { useSelector } from 'react-redux';
 import ReactGA from 'react-ga';
 import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
-import RestrictedModal from 'components/Modals/RestrictedModal';
+import Home from 'components/pages/Home';
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -69,13 +69,13 @@ const Routes = () => {
   return useMemo(() => {
     return <> 
       <Router>
-        {/* <RestrictedModal /> */}
         <Navbar />
         <Switch>
           <Route path={config.routes.staking.path} component={Staking} />
           <Route path={config.routes['help-center'].path} component={HelpCenter} />
           <Route path={config.routes.platform.path} component={Platform} />
-          <Redirect to="/platform" />
+          <Route path={config.routes.home.path} component={Home} />
+          <Redirect to="/" />
         </Switch>
         <Footer />
       </Router>
