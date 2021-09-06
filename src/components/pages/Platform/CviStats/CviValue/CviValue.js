@@ -20,34 +20,21 @@ const CviValue = ({type}) => {
                         <span className="cvi-info-component__top--title">
                             <CviTitle type={type}/>
                         </span>
-                        <b className="cvi-info-component__top--value">{cviInfo?.price}</b>
+                        <b className="cvi-info-component__top--value">{cviInfo?.cvi}</b>
                         <div className={`cvi-info-component__top--info ${isPositive ? 'high' : 'low'}`}>
                             <span>{cviInfo?.cviOneDayChange}</span> 
                             <span>({`${isPositive ? '+' : ''}`}{cviInfo?.cviOneDayChangePercent}%)</span>
                             <img src={require(`images/icons/${isPositive ? 'up-arrow' : 'down-arrow'}.svg`).default} alt="arrow" />
                         </div>
                     </div>
-
-                    {!isMobile && type !== 'home' && <> 
-                        <CviVol />
-                        <div className="cvi-info-component__bottom">
-                            <span>{cviInfo?.time}</span>
-                        </div>
-                    </>}
-                
                 </> : <> 
                     <div className="cvi-info-component__top"> <span className="cvi-info-component__top--title"><CviTitle type={type}/> </span></div>
                     <div className="cvi-info-component__bottom"> <Spinner className="statistics-spinner"/></div>
                 </>}
-                {!isMobile && <CviDateView cviDate={cviDate} /> }
+                {(!isMobile && type !== 'home') && <CviDateView cviDate={cviDate} /> }
             </div>
 
-            {isMobile && type !== 'home' && <div className="cvi-info-component__mobile-vol"> 
-                <CviVol />
-                <div className="cvi-info-component__bottom">
-                    <span>{cviInfo?.time}</span>
-                </div>
-            </div>}
+            {isMobile && type !== 'home' && <CviDateView cviDate={cviDate} /> }
         </>
     )
 }

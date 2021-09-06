@@ -12,7 +12,7 @@ const CviVol = () => {
          <div className="cvi-volatility-component">
             <div className="cvi-volatility-component__vol">
                <span className="cvi-volatility-component__vol--title">ETH Volatility (ETHVol)</span>
-               <span className="cvi-volatility-component__vol--value">{cviInfo.ethVolValue}</span>
+               <span className="cvi-volatility-component__vol--value">{cviInfo.ethVol}</span>
                <span className={`cvi-info-component__top--info cvi-volatility-component__vol--precent ${isPositive ? 'high' : 'low'}`}>
                   {cviInfo.ethVolOneDayChange} ({isPositive ? '+' : ''}{cviInfo.ethVolOneDayChangePercent}%) <img src={require(`images/icons/${isPositive ? 'up-arrow' : 'down-arrow'}.svg`).default} alt="arrow" />
                </span>

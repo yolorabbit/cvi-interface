@@ -12,13 +12,13 @@ const CviStats = ({type}) => {
             <div className="cvi-stats-component">
                 <div className="cvi-stats-component__container">
                     <CviValue type={type} />
-                    <Stat title="Previous hour" value={cviInfo?.previousHour} />
-                    <Stat prefix="" className="green" title="Last week high" value={cviInfo?.periodHigh}/>
-                    <Stat prefix="" className="red" title="Last week low" value={cviInfo?.periodLow}/>
+                    <Stat title="Previous hour" value={cviInfo?.cviOneHourAgo} />
+                    <Stat prefix="" className="green" title="Last week high" value={cviInfo?.cviOneWeekHigh}/>
+                    <Stat prefix="" className="red" title="Last week low" value={cviInfo?.cviOneWeekLow}/>
                 </div>
             </div>
         )
-    }, [cviInfo?.periodHigh, cviInfo?.periodLow, cviInfo?.previousHour, type]) 
+    }, [cviInfo?.cviOneWeekHigh, cviInfo?.cviOneWeekLow, cviInfo?.cviOneHourAgo, type]) 
 }
 
 export default CviStats;
