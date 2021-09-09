@@ -21,6 +21,7 @@ import ReactGA from 'react-ga';
 import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 import Home from 'components/pages/Home';
 
+
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
   const appRef = useRef(null);
