@@ -6,7 +6,7 @@ import { getChainName } from "contracts/utils";
 import moment from "moment";
 import { actionConfirm } from "store/actions/events";
 
-export const gas = config.isMainnet ? { } : { gas: 5000000, gasPrice: '25000000000' };
+export const gas = config.isMainnet ? { } : { };
 
 export const getTimeDurationFormatted = (lockedTime) => {
     const minutesDuration = moment.duration(lockedTime).asMinutes();
