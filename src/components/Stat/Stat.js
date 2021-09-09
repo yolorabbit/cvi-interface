@@ -5,9 +5,9 @@ import React from 'react'
 import { commaFormatted } from 'utils';
 import './Stat.scss';
 
-const Stat = ({isUSDC, name, hideTooltip, prefix = "", _suffix, title, format, className, formats, value, values, hideNa }) => {
+const Stat = ({actLowRules, name, hideTooltip, prefix = "", _suffix, title, format, className, formats, value, values, hideNa }) => {
     let { prefix: _prefix = prefix, suffix = _suffix, title: configTitle = "", className: _className, tooltip: { left, content, mobileLeft} = {} } = config?.statisticsDetails?.[name] ?? {};
-    content = isUSDC ? content.replace("80","65") : content;
+    content = actLowRules ? content.replace("80","65") : content;
     
     return (
         <div className={`stat-component ${(format && format?.length >= 14) || (!format && value?.length >= 14) ? 'large-value' : ''} ${className ?? ''} ${_className ?? ''} ${values !== "N/A" && values?.length > 0 ? 'multiline' : ''}`}>

@@ -9739,7 +9739,7 @@
     ]
   },
   "FeesCalculatorV3": {
-    "address": "0x2d05Ba27fe35410972EA1D3f59Dc358E95E16C6f",
+    "address": "0xC3e853dB35d0477291Aa30d7Cb27f751D52879Ff",
     "abi": [
         {
             "anonymous": false,

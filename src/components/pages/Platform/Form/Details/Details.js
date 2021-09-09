@@ -8,6 +8,7 @@ import { useActiveToken } from '../../../../Hooks';
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import './Details.scss';
 import platformConfig from "config/platformConfig";
+import { chainNames } from "connectors";
 
 const Details = ({selectedCurrency, amount, leverage}) => {
     const { activeView } = useContext(platformViewContext);
@@ -32,6 +33,7 @@ const Details = ({selectedCurrency, amount, leverage}) => {
 
 const TradeView = ({amount, leverage, selectedCurrency}) => {
     const { cviInfo } = useSelector(({app}) => app.cviInfo);
+    const { selectedNetwork } = useSelector(({app}) => app);
     const { account } = useActiveWeb3React();
 
     const activeToken = useActiveToken(selectedCurrency);
@@ -48,12 +50,13 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
 
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount, leverage, purchaseFee}), [account, leverage, tokenAmount, purchaseFee]);
     const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload, { validAmount: true });
-    const isUSDC = activeToken.key === "usdc";
+    const actLowRules = !(activeToken.key === "usdt" && selectedNetwork === chainNames.Ethereum);
+
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
         const turbulence = purchaseFee === "N/A" ? "0" : purchaseFee?.turbulence ?? "0";
         const haveTurbulence = toBN(turbulence).cmp(toBN(100)) > -1;
-        const isHighCollateralRatio = (collateralRatioData !== "N/A" && collateralRatioData?.collateralRatio) ? toBN(collateralRatioData.collateralRatio).cmp(toBN(isUSDC ? 65 : platformConfig.collateralRatios.buy.markedLevel[activeToken.key] ?? 80, 8)) > 0 : false;
+        const isHighCollateralRatio = (collateralRatioData !== "N/A" && collateralRatioData?.collateralRatio) ? toBN(collateralRatioData.collateralRatio).cmp(toBN(actLowRules ? 65 : platformConfig.collateralRatios.buy.markedLevel[activeToken.key] ?? 80, 8)) > 0 : false;
         
         return  (
             <> 
@@ -70,7 +73,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
     
                 <Stat 
                     name="purchaseFee"
-                    isUSDC={isUSDC}
+                    actLowRules={actLowRules}
                     value={purchaseFee === "N/A" || purchaseFee === "0" ? purchaseFee : purchaseFee?.openFee?.toString()} 
                     _suffix={selectedCurrency}
                     className={haveTurbulence || isHighCollateralRatio ? 'low' : ''}
@@ -101,7 +104,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat title="CVI Index" value={cviInfo?.price} />
             </>
         )
-    }, [isUSDC, collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
+    }, [actLowRules, collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
    
 }
 
