@@ -1,9 +1,11 @@
 import { contractState } from "components/Hooks/useHistoryEvents";
 import config from "config/config";
+import { chainNames } from "connectors";
 import { getChainName } from "contracts/utils";
 import * as TheGraph from 'graph/queries';
+import moment from "moment";
 import { toBN, toDisplayAmount } from "utils";
-import { bottomBlockByNetwork, DEFAULT_STEPS } from '../../components/Hooks/useEvents';
+import { DEFAULT_STEPS } from '../../components/Hooks/useEvents';
 
 export async function toLPTokens(contracts, token, { tokenAmount }) {
   let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
@@ -18,14 +20,21 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}
       events = await TheGraph[`account_liquidities${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({...event, event: Object.keys(contractState.liquidities)[idx]}))).flat();
     } else {
+      events = await TheGraph[`account_liquidities${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
+      events = Object.values(events).map((_events, idx) => _events.map((event) => ({...event, event: ["deposits", "withdraws"][idx]}))).flat();
       const chainName = await getChainName();
       let options = {};
-      const latestBlockNumber = await (await library.eth.getBlock("latest")).number;
-      const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName]
-      options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS }
+      const {number: latestBlockNumber, timestamp: latestTimestamp} = await (await library.eth.getBlock("latest"));
+      const oneWeekBeforeLastestTimestamp = moment(latestTimestamp*1000).subtract(1, "week").valueOf()
+      const oneWeekBeforeBlockNumber = latestBlockNumber - Math.floor((((latestTimestamp*1000) - oneWeekBeforeLastestTimestamp) / 1000) / (chainName === chainNames.Matic ? 2.06 : 13)) 
+      const stepSize = latestBlockNumber - oneWeekBeforeBlockNumber;
+      events = events.filter(event => event.blockNumber < oneWeekBeforeBlockNumber);
+      console.log('events: ', events);
+      options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS, bottomBlock: oneWeekBeforeBlockNumber }
       const filters = { Deposit: [{ account }], Withdraw: [{ account }] };
       const eventsData = [{ contract: contracts[token.rel.platform], events: filters }];
-      events = await eventsUtils.getEventsFast(eventsData, options);
+      const latestEvents = await eventsUtils.getEventsFast(eventsData, options);
+      events = events.concat(latestEvents);
     }
 
     events.sort((a, b) => toBN(a.timestamp ?? a.blockNumber).cmp(toBN(b.timestamp ?? b.blockNumber)));

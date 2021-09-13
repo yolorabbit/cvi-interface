@@ -4,9 +4,10 @@ import { gas, maxUint256, toBN, toDisplayAmount } from "utils";
 import * as TheGraph from 'graph/queries';
 import { contractState } from "components/Hooks/useHistoryEvents";
 import config from "config/config";
-import { bottomBlockByNetwork, DEFAULT_STEPS } from "components/Hooks/useEvents";
+import { DEFAULT_STEPS } from "components/Hooks/useEvents";
 import moment from "moment";
 import { getLatestBlockTimestamp } from './../web3Api';
+import { chainNames } from "connectors";
 
 export const MAX_CVI_VALUE = 20000;
 
@@ -181,14 +182,30 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils 
       events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) || 0);
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: Object.keys(contractState.positions)[idx] }))).flat();
     } else {
+      const pos = await contracts[token.rel.platform].methods.positions(account).call();
+      events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) || 0);
+      events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: ["closePositions", "openPositions"][idx] }))).flat();
+      // console.log("events: ", events);
       const chainName = await getChainName();
       let options = {};
-      const latestBlockNumber = await (await library.eth.getBlock("latest")).number;
-      const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName];
-      options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS }
+      const {number: latestBlockNumber, timestamp: latestTimestamp} = await (await library.eth.getBlock("latest"));
+      // console.log("latestBlockNumber: ", latestBlockNumber);
+      // console.log("latestTimestamp: ", latestTimestamp);
+      const oneWeekBeforeLastestTimestamp = moment(latestTimestamp*1000).subtract(1, "week").valueOf()
+      const oneWeekBeforeBlockNumber = latestBlockNumber - Math.floor((((latestTimestamp*1000) - oneWeekBeforeLastestTimestamp) / 1000) / (chainName === chainNames.Matic ? 2.06 : 13)) 
+      // console.log("oneWeekBeforeBlockNumber: ", oneWeekBeforeBlockNumber);
+      
+      events = events.filter(event => event.blockNumber < oneWeekBeforeBlockNumber);
+      // console.log('events: ', events);
+      const stepSize = latestBlockNumber - oneWeekBeforeBlockNumber;
+      // console.log("stepSize: ", stepSize);
+      options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS, bottomBlock: oneWeekBeforeBlockNumber }
       const filters = { OpenPosition: [{ account }], ClosePosition: [{ account }], LiquidatePosition: [{ positionAddress: account }] };
       const eventsData = [{ contract: contracts[token.rel.platform], events: filters }];
-      events = await eventsUtils.getEventsFast(eventsData, options);
+      // console.log("options: ", options);
+      const latestEvents = await eventsUtils.getEventsFast(eventsData, options);
+      // console.log("latestEvents: ", latestEvents);
+      events = events.concat(latestEvents);
     }
 
     events = events.sort((a, b) => toBN(a.timestamp ?? a.blockNumber).cmp(toBN(b.timestamp ?? b.blockNumber)));
