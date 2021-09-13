@@ -8,10 +8,9 @@ const Header = () => {
             <div className="header-component">
                 <div className="header-component__container">
                     <h1>Crypto Volatility Index</h1>
+                    <h2>Make Volatility Your Asset</h2>
                     <p>
-                        Crypto Volatility Index (CVI) is the first-of-its-kind decentralized Crypto Volatility Index for the crypto market. Among the use cases, it allows users to hedge themselves against market volatility and impermanent loss. <br/> <br/>
-                        It is created by computing a decentralized volatility index from cryptocurrency option prices, together with analyzing the market’s expectation of future volatility. <br/> <br/>
-                        The Crypto Volatility Index (CVI) is a decentralized VIX for crypto, built on Ethereum and Polygon. Among the use cases, it allows users to hedge themselves against market volatility and impermanent loss. 
+                        The Crypto Volatility Index (CVI) is a decentralized VIX for crypto that allows users<br/> to hedge themselves against market volatility and impermanent loss. 
                     </p>
                     <EnterApp />
                 </div>

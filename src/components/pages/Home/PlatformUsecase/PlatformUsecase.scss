@@ -1,19 +1,13 @@
 .platform-usecases-component {
-    padding: 0 10vw;
-  
+    margin: 0 auto;
+    padding: 0 0 6.667vw 0;
+    max-width: calc(100% - 25vw);
 
     @media (max-width: 1365px) {
-        padding: 0 2.5vw;
+        max-width: 100%;
+        padding: 0 0 9.377vw 0;
     }
-      
-    @media (max-width: 1024px) {
-        padding: 0 3.129vw; 
-    }
-    
-    @media (max-width: 767px){
-        padding: 0 6.667vw; 
-    }
-
+        
     & .row-component:not(.graph-section) {
         &:last-child {
             padding-top: 7.552vw;
@@ -32,18 +26,6 @@
         }
     }
 
-    &__cards-row {
-        & .usecase-component {
-            &:first-child {
-                margin-left: 0;
-            }
-
-            &:last-child {
-                margin-right: 0;
-            }
-        }
-    }
-
     & .row-component.graph-section {
         padding-top: 7.083vw;
 
@@ -58,22 +40,6 @@
         @media (max-width: 767px){
             padding-top: 6.667vw;
         }
-
-        & > .container-component {
-            &:nth-child(even) {
-                margin-left: 1.667vw;
-                @media (max-width: 1365px) {
-                    margin-left: 0;
-                }
-            }
-
-            &:nth-child(odd) {
-                margin-right: 1.667vw;
-                @media (max-width: 1365px) {
-                    margin-right: 0;
-                }
-            }
-        }
     }
 
     &__title {
@@ -82,51 +48,51 @@
         width: 100%;
         margin-top: 0;
         font-size: 2.083vw;
-
+        box-shadow: 0px -12px 14px 1px #0f112ded;
+        
         @media (max-width: 1365px) {
             font-size: 2.93vw;
         }
           
         @media (max-width: 1024px) {
             font-size: 3.347vw;
-            margin-top: 2.086vw;
             margin-bottom: 0;
         }
 
         @media (max-width: 767px){
             font-size: 5vw;
-            margin-top: 15.556vw;
         }
     }
 }
 
 .usecase-component {
     position: relative;
-    margin: 0 1.667vw;
     padding: 4.583vw 1.667vw 1.667vw 1.667vw;
+    max-width: 16.25vw;
 
     @media (max-width: 1365px) {
+        max-width: 22.857vw;
         margin: 0 2.344vw;
         padding: 6.447vw 2.344vw 2.344vw 2.344vw;
     }
       
     @media (max-width: 1024px) {
+        max-width: 100%;
         padding: 11.474vw 4.172vw 4.172vw 4.172vw;
-        margin: 0 0 13.777vw 0;
+        margin: 0 3.129vw 14.777vw 3.129vw;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
     
     @media (max-width: 767px){
-        margin: 0 0 29.222vw 0;
+        margin: 0 6.667vw 29.222vw 6.667vw;
         padding: 24.445vw 8.888vw 8.888vw 8.888vw;
-
-        &:last-child {
-            margin: 0;
-        }
     }
 
     & h3 {
         font-weight: bold;
-        text-align: center;
         font-size: 0.833vw;
         margin: 0.417vw 0 0.833vw 0;
 
@@ -212,7 +178,9 @@
                 font-size: 4.444vw;
             }
         }
+    }
 
+    &__icon {
         & img {
             width: 3.75vw;
             height: 3.75vw;
@@ -230,6 +198,28 @@
             @media (max-width: 767px){
                 width: 20.001vw;
                 height: 20.001vw;  
+            }
+        }
+    }
+
+    &__icon-inner {
+        & img {
+            width: 3.75vw;
+            height: 3.75vw;
+
+            @media (max-width: 1365px) {
+                width: 5.275vw;
+                height: 5.275vw;
+            }
+    
+            @media (max-width: 1024px) {
+                width: 5.215vw;
+                height: 5.215vw; 
+            }
+            
+            @media (max-width: 767px){
+                width: 11.111vw;
+                height: 11.111vw; 
             }
         }
     }

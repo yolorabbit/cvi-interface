@@ -3,33 +3,65 @@
     flex: 1;
 }
 
+.graph-section {
+    background-color: #0c0d23;
+}
+
 .govi-dao-row {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10.833vw auto 5.625vw auto;
-    max-width: 30.833vw;
-
+    align-items: flex-start;
+    justify-content: space-between;
+    margin: 6.667vw auto 6.667vw  auto;
+    max-width: calc(100% - 432px);
+    flex: 1;
+    align-items: baseline;
+    
     @media (max-width: 1365px) {
-        margin: 15.238vw auto 7.912vw auto;
-        max-width: 43.37vw;
+        flex-wrap: wrap;
+        margin: 9.377vw auto 7.912vw auto;
+        max-width: 100%;
     }
       
     @media (max-width: 1024px) {
-        max-width: 100%;
         padding: 0 3.129vw;
-        margin: 18.688vw auto 0 auto;
+        margin: 6.258vw auto 0 auto;
     }
 
     @media (max-width: 767px){
         max-width: 100%;
         padding: 0 6.667vw;
-        margin: 35.556vw auto 0 auto;
+        margin: 13.333vw auto 0 auto;
     }
 
     & .usecase-component {
+        max-width: 50%;
+        margin: 0 1.667vw;
+        padding: 3.333vw 3.333vw 5vw;
+        height: 20.167vw;
+   
+        @media (max-width: 1365px){
+            height: auto;
+            margin: 0 12.344vw 2.344vw 12.344vw;
+            padding: 4.688vw 4.688vw 7.033vw;
+            max-width: 100%;
+        }
+        
+        @media (max-width: 1024px){
+            margin: 0 0 4.172vw 0;
+            padding: 6.258vw 3.129vw;
+        }
+
         @media (max-width: 767px){
-            margin-bottom: 13.333vw;
+            margin: 0 0 8.889vw 0;
+            padding: 13.333vw 6.667vw;
+        }
+
+        & h3 {
+            display: flex;
+            align-items: center;
+            & img {
+                margin-right: 16px;
+            }
         }
     }
 }

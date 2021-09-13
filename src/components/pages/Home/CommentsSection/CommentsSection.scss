@@ -2,16 +2,4 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    padding: 6.667vw 12.5vw 0 12.5vw;
-    @media (max-width: 1365px) {
-        padding: 9.377vw 17.582vw 0 17.582vw;
-    }
-      
-    @media (max-width: 1024px) {
-        padding: 6.258vw 0 0 0;   
-    }
-    
-    @media (max-width: 767px){
-        padding: 13.333vw 0 0 0;      
-    }
 }

@@ -1,5 +1,7 @@
 .cvi-info-component {
     display: block;
+    position: relative;
+    
     @media (max-width: 1365px){
         width: 100%;
         margin-bottom: 0.879vw;

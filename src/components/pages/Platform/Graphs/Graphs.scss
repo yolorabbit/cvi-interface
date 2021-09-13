@@ -1,9 +1,19 @@
 .graphs-component {
     &.single-graph {
+        background-color: transparent;
         margin-left: 0;
-        margin-bottom: 32px;
+        margin-bottom: 128px;
+
+        @media (max-width: 1365px) {
+            margin-bottom: 9.377vw;
+        }
+            
+        @media (max-width: 1024px){
+            margin-bottom: 6.258vw;
+        }
+
         @media (max-width: 767px){
-            margin-bottom: 8px;
+            margin-bottom: 0;
         }
 
         #vix-graph {

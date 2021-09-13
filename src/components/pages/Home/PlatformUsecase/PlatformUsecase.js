@@ -3,27 +3,27 @@ import Container from 'components/Layout/Container';
 import Layout from 'components/Layout/Layout';
 import Row from 'components/Layout/Row';
 import React, { useMemo } from 'react';
-import CviChartAndData from '../CviChartAndData';
-import VolatilityToken from '../VolatilityToken';
 import './PlatformUsecase.scss';
 
 const _platformUsecases = [{
     title: "Trade",
     key: 'trade',
-    description: `Go long on a position in the index if one believes that the volatility in crypto is about to grow, as a speculation or as a hedge for their portfolio`
+    description: `Find profitable trading opportunities without committing to the direction of the market. 
+    If Volatility increases, you make a profit regardless of the price change.`
   }, {
     title: "Provide liquidity",
     key: 'liquidity',
-    description: `Become a platform liquidity provider to earn fees if one believes that the volatility will decrease or remain the same.`
+    description: `Earn a share of all trading transactions fees by providing liquidity within our platform.
+    Moreover, profit when volatility decreases.
+    `
   }, {
     title: "Stake",
     key: 'stake',
-    description: `Stake the supported tokens within the platform to earn part of the platform collected fees.
-    We also have a liquidity mining program where you can stake different LP tokens and earn GOVI rewards.`
+    description: `Gain governance rights and platform fees from all supported chains within a few clicks.`
   }, {
     title: "Arbitrage",
     key: 'arbitrage',
-    description: `The volatility tokens create a unique and incredible landscape for arbitrageurs to build strategies and profit from any deviation between the DEX/AMMs and the CVI Platform`
+    description: `Maximize revenues from your trading strategies by profit from any deviation between the volatility tokens traded in DEX/AMMs and the CVI Platform.`
 }];
 
 const PlatformUsecase = () => {
@@ -32,35 +32,35 @@ const PlatformUsecase = () => {
             <Layout className="platform-usecases-component">
                 <Column>
                     <Row>
-                        <h2 className="platform-usecases-component__title">CVI platform use case</h2>
+                        <h2 className="platform-usecases-component__title">Explore CVI Platform</h2>
                     </Row>
                     <Row className="platform-usecases-component__cards-row">
                         {_platformUsecases.map(({title, key, description}) => <UseCase key={key} icon={key} title={title} description={description} />)}
                     </Row>
                 </Column>
-
-                <Row className="graph-section">
-                    <CviChartAndData />
-                    <VolatilityToken />
-                </Row>
             </Layout>
         )
     }, []);
 }
 
-export const UseCase = ({title, icon, description}) => {
+export const UseCase = ({title, icon, description, type}) => {
     return useMemo(() => {
         return (
             <Container className="usecase-component">
-                <div className="usecase-component__icon">
+                {type !== "inner-icon" && <div className="usecase-component__icon">
                     <img src={require(`../../../../images/icons/home/${icon}.svg`).default} alt={icon} />
-                </div>
+                </div> }
 
-                <h3>{title}</h3>
+                <h3>
+                    {type === 'inner-icon' && <div className="usecase-component__icon-inner">
+                        <img src={require(`../../../../images/icons/home/${icon}.svg`).default} alt={icon} />
+                    </div>}
+                    {title}
+                </h3>
                 <p>{typeof description === 'function' ? description() : description}</p>
             </Container>
         )
-    }, [title, description, icon]);   
+    }, [title, description, icon, type]);   
 }
 
 export default PlatformUsecase;
