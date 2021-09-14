@@ -12,6 +12,7 @@ import { chainNames } from "connectors";
 import { useWeb3React } from "@web3-react/core";
 import config from "config/config";
 import Api from "Api";
+import moment from 'moment';
 
 const initialState = {
   stakedTokenAmount: null,
@@ -62,8 +63,8 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     const getDailyRewardsByTokenName = async () => {
       switch (tokenName) {
         case 'govi': {
-          const response = await Api.GET_FEES_COLLECTED();
-          const feesCollected = response.data[chainName === chainNames.Matic ? 'Polygon' : chainName];
+          const response = await Api.GET_FEES_COLLECTED(`?chain=${chainName === chainNames.Matic ? 'Polygon' : chainName}&from=${Math.floor(moment().subtract(90, "days").valueOf() / 1000) }`);
+          const feesCollected = response.data;
         
           return await token.rewardsTokens.map(async (t,idx) => {
             const feesSum = feesCollected[t.toUpperCase()];

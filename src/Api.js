@@ -20,7 +20,7 @@ const axsV2 = axios.create({
 
 const Api = {
    GET_INDEX_HISTORY: () => axs.get('/cvx'),
-   GET_FEES_COLLECTED: () => axsV2.get('/fees')
+   GET_FEES_COLLECTED: (queryParams = "") => axsV2.get('/fees' + queryParams)
 };
 
 export default Api;

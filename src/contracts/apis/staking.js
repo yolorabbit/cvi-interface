@@ -159,8 +159,11 @@ const stakingApi = {
                 // console.log(`checking relative to the last ${days} days`);
                 try {
                     const selectedNetwork = await getChainName();
-                    const response = await Api.GET_FEES_COLLECTED();
-                    const feesCollected = response.data[selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork]; // get platform fees sum. (formatted to tokens object)
+                    //const response = await Api.GET_FEES_COLLECTED();
+                    const response = await Api.GET_FEES_COLLECTED(`?chain=${selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork}&from=${Math.floor(moment().subtract(90, "days").valueOf() / 1000) }`);
+                    const feesCollected = response.data;
+                    
+                    // const feesCollected = response.data[selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork]; // get platform fees sum. (formatted to tokens object)
                     
                     // EXAMPLE: feesCollected (sum of tokens object) = {USDC: "0", USDT: "0"} by network.
                     const collectedFees = Object.keys(feesCollected).map((key) => ({ // map tokens and add tokenData object to each one back from the api.
@@ -169,8 +172,11 @@ const stakingApi = {
                     })).filter(({tokenData}) => tokenData); // filter token who exist in api, but not supported in the platform tokens config. 
 
                     const tokensUsdtProfit = await collectedFees.map(async ({tokenData, sum: fee}) => {
-                        const creationTimestampAgo = moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
-                        const dailyProfit = toBN(fee).mul(toBN(DAY)).div(toBN(parseInt(creationTimestampAgo / 1000)));
+                        const creationTimestampAgo = Math.floor(moment().subtract(90, "days").valueOf() / 1000) ;// moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
+                        
+                        const dailyProfit = toBN(fee).div(toBN(90));
+                        
+                        
                         let USDDailyProfits = (await convert(dailyProfit, tokenData, USDTData)).div(toBN(1).pow(toBN(USDTData.decimals)));
                         return USDDailyProfits;
                     });
@@ -244,10 +250,13 @@ const stakingApi = {
             } else {
                 throw new Error(`Please add creation timestamp to ${symbol} platform token.`)
             }
+            
             const timePassedSinceCreation = now - creationTimestamp;
-            const oneMonth = (DAY * 30);
-            const reward = toBN(feesSum).mul(toBN(DAY)).div(toBN(timePassedSinceCreation >= oneMonth ? oneMonth : timePassedSinceCreation));
-    
+            
+            const period = (DAY * 90);
+            
+            const reward = toBN(feesSum).mul(toBN(DAY)).div(toBN(timePassedSinceCreation >= period ? period : timePassedSinceCreation));
+            
             let balance = await staking.methods.stakes(account).call();
             let total = await staking.methods.totalStaked().call();
             
