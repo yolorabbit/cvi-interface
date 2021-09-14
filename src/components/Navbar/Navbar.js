@@ -46,7 +46,7 @@ const Navbar = () => {
     const RenderView = useMemo(() => {
         return (
             <> 
-                <Logo />
+                <Logo showEnterApp={showEnterApp} />
                 {!isTablet && <Links links={filteredLink} activePath={activePath} activeFrom={from} /> }
                 {isTablet ? <Hamburger links={filteredLink} activePath={activePath} showEnterApp={showEnterApp} /> : <AppButton showEnterApp={showEnterApp} />}
             </>
@@ -177,13 +177,22 @@ const NavbarConnectMemoized = () => {
 }
 
 
-export const Logo = () => {
+export const Logo = ({showEnterApp}) => {
     return useMemo(() => {
-        return <div className="logo-component">
+        const onClickLogo = () => {
+            window.scrollTo(0, 0);
+            track('CVI Logo');
+        }
+    
+        return <Link 
+            className="logo-component" 
+            to={showEnterApp ? config.routes.home.path : config.routes.platform.path} 
+            onClick={onClickLogo}
+        >
             <img src={require('../../images/logo.svg').default} alt="logo" />
             <div>Crypto Volatility Index</div>
-        </div>
-    }, []);
+        </Link>
+    }, [showEnterApp]);
 }
 
 export default Navbar;
