@@ -154,7 +154,7 @@ const NavLink = ({label, path, external, activePath, prevPath, setIsOpen}) => {
             {external ? <a href={path} onClick={() => onClickLink(path)} rel="noopener noreferrer" target="_blank">
                 {label}
             </a> : <Link 
-                className={path.includes(activePath) ? 'active' : ''} 
+                className={(typeof path === "string") ? (path === activePath ? 'active' : '') : path.includes(activePath) ? 'active' : ''}
                 to={{
                     pathname: (!path.toString().includes('help') ? path : (activePath === '/' || activePath === '/help') ? '/help' : '/platform/help'),
                     state: {from: prevPath}
