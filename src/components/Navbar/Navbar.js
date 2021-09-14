@@ -16,11 +16,7 @@ const Navbar = () => {
     const [activePath, setActivePath] = useState();
     const links = Object.values(config.routes);
     const from = location?.state?.from;
-
-    let showEnterApp = links.some(({enterApp, path}) => (enterApp && activePath) && activePath === path); // show "enter app button" if config match enterApp flag.
-    if(from) {
-        showEnterApp = showEnterApp && from === 'home';
-    }
+    const showEnterApp = activePath === '/help' || links.some(({enterApp, path}) => (enterApp && activePath) && activePath === path); // show "enter app button" if config match enterApp flag.
 
     const filteredLink = links.filter(({hide, path}) => !hide?.some(hidePath => {
         const isHidePath = !(hidePath && hidePath !== activePath); // hide current link by hiding list in routes (config.js)
@@ -153,14 +149,14 @@ const NavLink = ({label, path, external, activePath, prevPath, setIsOpen}) => {
             track(path);
             if(setIsOpen) setIsOpen(false);
         }
-        
+
         return <div key={path} className="navbar-component__list-item">
             {external ? <a href={path} onClick={() => onClickLink(path)} rel="noopener noreferrer" target="_blank">
                 {label}
             </a> : <Link 
-                className={path === activePath ? 'active' : ''} 
+                className={path.includes(activePath) ? 'active' : ''} 
                 to={{
-                    pathname: path,
+                    pathname: (!path.toString().includes('help') ? path : (activePath === '/' || activePath === '/help') ? '/help' : '/platform/help'),
                     state: {from: prevPath}
                 }} 
                 onClick={() => onClickLink(path)}
@@ -175,7 +171,6 @@ const NavLink = ({label, path, external, activePath, prevPath, setIsOpen}) => {
 const NavbarConnectMemoized = () => {
     return useMemo(() => <ConnectWallet type="navbar" buttonText="CONNECT" hasErrorButtonText="Wrong network" />, []);
 }
-
 
 export const Logo = ({showEnterApp}) => {
     return useMemo(() => {

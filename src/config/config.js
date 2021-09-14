@@ -45,7 +45,7 @@ const config = {
     },
     "help-center": {
       label: "Help center",
-      path: '/help',
+      path: ['/help', '/platform/help'],
       enterApp: true,
       prevLink: true
     },
