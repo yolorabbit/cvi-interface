@@ -60,7 +60,7 @@ export const EnterApp = () => {
     return useMemo(() => <div className="navbar-component__container--connect">
         <Link to={config.routes.platform.path} className="navbar-component__container--connect-enter-app">
             <div>
-                ENTER APP
+                ENTER PLATFORM
             </div>
         </Link>
     </div>, []);

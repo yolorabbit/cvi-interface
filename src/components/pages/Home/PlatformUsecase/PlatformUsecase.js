@@ -2,14 +2,15 @@ import Column from 'components/Layout/Column';
 import Container from 'components/Layout/Container';
 import Layout from 'components/Layout/Layout';
 import Row from 'components/Layout/Row';
+import { isArray } from 'lodash';
 import React, { useMemo } from 'react';
 import './PlatformUsecase.scss';
 
 const _platformUsecases = [{
     title: "Trade",
     key: 'trade',
-    description: `Find profitable trading opportunities without committing to the direction of the market. 
-    If Volatility increases, you make a profit regardless of the price change.`
+    description: [`Find profitable trading opportunities without committing to the direction of the market.`,
+    `If Volatility increases, you make a profit regardless of the price change.`]
   }, {
     title: "Provide liquidity",
     key: 'liquidity',
@@ -57,7 +58,13 @@ export const UseCase = ({title, icon, description, type}) => {
                     </div>}
                     {title}
                 </h3>
-                <p>{typeof description === 'function' ? description() : description}</p>
+                <p>{
+                    // description can be a function
+                    typeof description === 'function' ? description() : 
+                    isArray(description) // if description is array of strings, it will render a br element in each iteration without the last one.
+                    ? description.map((d, i) => <>{d} {i !== (description.length -1) && <br/>}</>) 
+                    : description}
+                </p>
             </Container>
         )
     }, [title, description, icon, type]);   
