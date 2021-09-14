@@ -14,7 +14,7 @@ const _platformUsecases = [{
   }, {
     title: "Provide liquidity",
     key: 'liquidity',
-    description: `Earn a share of all trading transactions fees by providing liquidity within our platform.
+    description: `Earn a share of all trading transactions fees by providing liquidity to the platform.
     Moreover, profit when volatility decreases.
     `
   }, {
@@ -47,7 +47,7 @@ const PlatformUsecase = () => {
 export const UseCase = ({title, icon, description, type}) => {
     return useMemo(() => {
         return (
-            <Container className="usecase-component">
+            <Container key={type} className="usecase-component">
                 {type !== "inner-icon" && <div className="usecase-component__icon">
                     <img src={require(`../../../../images/icons/home/${icon}.svg`).default} alt={icon} />
                 </div> }
@@ -62,7 +62,7 @@ export const UseCase = ({title, icon, description, type}) => {
                     // description can be a function
                     typeof description === 'function' ? description() : 
                     isArray(description) // if description is array of strings, it will render a br element in each iteration without the last one.
-                    ? description.map((d, i) => <>{d} {i !== (description.length -1) && <br/>}</>) 
+                    ? description.map((d, i) => <span key={i}>{d} {i !== (description.length -1) && <br/>}</span>) 
                     : description}
                 </p>
             </Container>

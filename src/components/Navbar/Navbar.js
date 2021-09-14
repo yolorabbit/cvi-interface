@@ -15,8 +15,17 @@ const Navbar = () => {
     const isTablet = useIsTablet();
     const [activePath, setActivePath] = useState();
     const links = Object.values(config.routes);
-    const filteredLink = links.filter(({hide}) => !hide?.some(path => !(path && path !== activePath)));
-    const showEnterApp = links.some(({enterApp, path}) => (enterApp && activePath) && activePath === path);
+    const from = location?.state?.from;
+
+    let showEnterApp = links.some(({enterApp, path}) => (enterApp && activePath) && activePath === path); // show "enter app button" if config match enterApp flag.
+    if(from) {
+        showEnterApp = showEnterApp && from === 'home';
+    }
+
+    const filteredLink = links.filter(({hide, path}) => !hide?.some(hidePath => {
+        const isHidePath = !(hidePath && hidePath !== activePath); // hide current link by hiding list in routes (config.js)
+        return (isHidePath && showEnterApp) || path === '/'; // always hide home page link
+    })); // don't show links who hided in config by active path and "show enter app" state
 
     useEffect(() => {
         if(isActiveInDOM()) setActivePath(location?.pathname);
@@ -38,7 +47,7 @@ const Navbar = () => {
         return (
             <> 
                 <Logo />
-                {!isTablet && <Links links={filteredLink} activePath={activePath} /> }
+                {!isTablet && <Links links={filteredLink} activePath={activePath} activeFrom={from} /> }
                 {isTablet ? <Hamburger links={filteredLink} activePath={activePath} showEnterApp={showEnterApp} /> : <AppButton showEnterApp={showEnterApp} />}
             </>
         )
@@ -56,29 +65,55 @@ const Navbar = () => {
     }, [showEnterApp, pageYOffset, RenderView]) 
 }
 
-export const EnterApp = () => {
+export const EnterApp = ({setIsOpen}) => {
     return useMemo(() => <div className="navbar-component__container--connect">
-        <Link to={config.routes.platform.path} className="navbar-component__container--connect-enter-app">
+        <Link 
+            to={config.routes.platform.path} 
+            className="navbar-component__container--connect-enter-app"
+            onClick={() => setIsOpen && setIsOpen(false)}
+        >
             <div>
                 ENTER PLATFORM
             </div>
         </Link>
-    </div>, []);
+    </div>, 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []);
 }
 
-const AppButton = ({showEnterApp}) => {
+const AppButton = ({showEnterApp, setIsOpen}) => {
     return useMemo(() => {
-        if(showEnterApp) return <EnterApp />
+        if(showEnterApp) return <EnterApp setIsOpen={setIsOpen} />
 
         return <div className="navbar-component__container--connect">
             <SelectNetwork />
             <NavbarConnectMemoized />
         </div>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showEnterApp]);
 }
 
-const Links = ({links, activePath}) => {
-    return useMemo(() => links.map(({label, path, external}) => <NavLink key={path} label={label} path={path} external={external} activePath={activePath} />), [links, activePath])
+const Links = ({links, activePath, activeFrom, setIsOpen}) => {
+    return useMemo(() => {
+        const generatePath = (path, prevLink) => {
+            if (prevLink) {
+                if(activeFrom) return activeFrom;
+                return activePath === '/' ? 'home' : activePath?.replace('/', '');
+            }
+            return path;
+        };
+
+        return links.map(({ label, path, external, prevLink}) => <NavLink
+            key={path}
+            label={label}
+            path={path}
+            prevPath={generatePath(path, prevLink)}
+            external={external}
+            activePath={activePath} 
+            setIsOpen={setIsOpen}
+        />);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [links, activePath, activeFrom])
 }
 
 const Hamburger = ({links, activePath, showEnterApp}) => {
@@ -87,11 +122,9 @@ const Hamburger = ({links, activePath, showEnterApp}) => {
     return (
         <> 
             {isOpen && <div className="mobile-menu">
-                {links
-                    .filter(({hide}) => !hide?.some(path => activePath === path)) // use for hiding link by hide paths list config.
-                    .map(({label, path, external}) => <NavLink key={path} label={label} path={path} external={external} activePath={activePath} setIsOpen={setIsOpen} />)}
+                <Links links={links} activePath={activePath} setIsOpen={setIsOpen}/>
                 
-                {showEnterApp ? <AppButton showEnterApp={showEnterApp} /> : <> 
+                {showEnterApp ? <AppButton showEnterApp={showEnterApp} setIsOpen={setIsOpen} /> : <> 
                     <div className="navbar-component__list-item">
                         <SelectNetwork />
                     </div>
@@ -113,12 +146,11 @@ const Hamburger = ({links, activePath, showEnterApp}) => {
     )
 }
 
-const NavLink = ({label, path, external, activePath, setIsOpen}) => {
+const NavLink = ({label, path, external, activePath, prevPath, setIsOpen}) => {
     return useMemo(() => {
         const onClickLink = (path) => {
             window.scrollTo(0, 0);
             track(path);
-
             if(setIsOpen) setIsOpen(false);
         }
         
@@ -127,14 +159,17 @@ const NavLink = ({label, path, external, activePath, setIsOpen}) => {
                 {label}
             </a> : <Link 
                 className={path === activePath ? 'active' : ''} 
-                to={path} 
+                to={{
+                    pathname: path,
+                    state: {from: prevPath}
+                }} 
                 onClick={() => onClickLink(path)}
             >
                 {label}
             </Link>}
         </div>
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [path, external, label, activePath]);
+    }, [path, external, label, activePath, prevPath]);
 }
 
 const NavbarConnectMemoized = () => {
@@ -144,15 +179,10 @@ const NavbarConnectMemoized = () => {
 
 export const Logo = () => {
     return useMemo(() => {
-        const onClickLogo = () => {
-            window.scrollTo(0, 0);
-            track('CVI Logo');
-        }
-    
-        return <Link className="logo-component" to="/" onClick={onClickLogo}>
+        return <div className="logo-component">
             <img src={require('../../images/logo.svg').default} alt="logo" />
             <div>Crypto Volatility Index</div>
-        </Link>
+        </div>
     }, []);
 }
 

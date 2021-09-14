@@ -46,7 +46,8 @@ const config = {
     "help-center": {
       label: "Help center",
       path: '/help',
-      enterApp: true
+      enterApp: true,
+      prevLink: true
     },
   },
   socialLinks: [
