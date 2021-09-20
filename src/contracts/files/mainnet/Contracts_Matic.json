@@ -3066,7 +3066,7 @@
     ]
   },
   "FeesCalculatorV4": {
-    "address": "0xA1A91054949Cf03fddc97Bc8d8aB8980c17B0d36",
+    "address": "0x44420529DB74807b69721A5A71ee4bdC2c762616",
     "abi": [
       {
         "anonymous": false,
