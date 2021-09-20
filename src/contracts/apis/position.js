@@ -197,9 +197,9 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils 
       
       events = events.filter(event => event.blockNumber < oneWeekBeforeBlockNumber);
       // console.log('events: ', events);
-      const stepSize = latestBlockNumber - oneWeekBeforeBlockNumber;
+      // const stepSize = latestBlockNumber - oneWeekBeforeBlockNumber;
       // console.log("stepSize: ", stepSize);
-      options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS, bottomBlock: oneWeekBeforeBlockNumber }
+      options = { stepSize: 9999, steps: DEFAULT_STEPS, days: 7 }
       const filters = { OpenPosition: [{ account }], ClosePosition: [{ account }], LiquidatePosition: [{ positionAddress: account }] };
       const eventsData = [{ contract: contracts[token.rel.platform], events: filters }];
       // console.log("options: ", options);

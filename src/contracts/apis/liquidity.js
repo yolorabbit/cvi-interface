@@ -27,10 +27,10 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}
       const {number: latestBlockNumber, timestamp: latestTimestamp} = await (await library.eth.getBlock("latest"));
       const oneWeekBeforeLastestTimestamp = moment(latestTimestamp*1000).subtract(1, "week").valueOf()
       const oneWeekBeforeBlockNumber = latestBlockNumber - Math.floor((((latestTimestamp*1000) - oneWeekBeforeLastestTimestamp) / 1000) / (chainName === chainNames.Matic ? 2.06 : 13)) 
-      const stepSize = latestBlockNumber - oneWeekBeforeBlockNumber;
+      // const stepSize = latestBlockNumber - oneWeekBeforeBlockNumber;
       events = events.filter(event => event.blockNumber < oneWeekBeforeBlockNumber);
-      console.log('events: ', events);
-      options = { stepSize: (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: DEFAULT_STEPS, bottomBlock: oneWeekBeforeBlockNumber }
+      // console.log('events: ', events);
+      options = { stepSize: 9999, steps: DEFAULT_STEPS, days: 7 }
       const filters = { Deposit: [{ account }], Withdraw: [{ account }] };
       const eventsData = [{ contract: contracts[token.rel.platform], events: filters }];
       const latestEvents = await eventsUtils.getEventsFast(eventsData, options);

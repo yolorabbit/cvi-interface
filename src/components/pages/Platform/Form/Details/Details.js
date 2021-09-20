@@ -104,7 +104,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat title="CVI Index" value={cviInfo?.cvi} />
             </>
         )
-    }, [actLowRules, collateralRatioData, cviInfo?.price, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
+    }, [actLowRules, collateralRatioData, cviInfo?.cvi, amount, leverage, purchaseFee, selectedCurrency, activeToken, tokenAmount, positionRewards, currentFundingFee]) 
    
 }
 
