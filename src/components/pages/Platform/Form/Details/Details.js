@@ -50,7 +50,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
 
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount, leverage, purchaseFee}), [account, leverage, tokenAmount, purchaseFee]);
     const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload, { validAmount: true });
-    const actLowRules = !(activeToken.key === "usdt" && selectedNetwork === chainNames.Ethereum);
+    const actLowRules = selectedNetwork === chainNames.Matic
 
     return useMemo(() => {
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
