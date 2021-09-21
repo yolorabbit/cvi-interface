@@ -23,7 +23,7 @@ const Graphs = ({tabs = ["cvi index", "funding fee"]}) => {
 
     return useMemo(() => {
         return (
-            <Container className={`graphs-component single-graph`}>
+            <Container className={`graphs-component${isSingleGraph ? " single-graph" : ""}`}>
                 {isSingleGraph ? <div className="single-graph__container" ref={tabsFormRef}> 
                     <ActiveGraph activeTab={activeTab} tabsFormHeight={tabsFormHeight} tabsFormWidth={tabsFormWidth} width={width} />
                 </div> : <TabsForm 
