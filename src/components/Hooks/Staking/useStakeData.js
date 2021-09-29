@@ -241,7 +241,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       let balance = 0;
       const getUSDBalanceByProtocol = async() => {
         let tokenData;
-        const USDTData = await getTokenData(contracts.USDT);
+        const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC":"USDT"]);
         switch (protocol) {
           case "platform": {
             tokenData = await getTokenData(contracts[tokenName === "govi" ? "GOVI" : tokenRel.platform]);

@@ -28,7 +28,7 @@ const stakingApi = {
                 }
             }
             const data = await getDataByTokenName();
-            const USDTData = await getTokenData(contracts.USDT);
+            const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC":"USDT"]);
             
             const getAmount = async () => tokenName === "govi" ? data.stakedTokenAmount : await fromLPTokens(contracts[rel.platform], toBN(data.stakedTokenAmount));
             const stakedAmountUSD = await convert(await getAmount(), tokenData, USDTData);
