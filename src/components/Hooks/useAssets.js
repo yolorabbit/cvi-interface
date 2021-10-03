@@ -67,6 +67,9 @@ const useAssets = (type) => {
                     return !shouldFiltered
                 })
             }
+            case "available-to-stake": {
+                return filteredAssets.filter(({disable}) => !disable);
+            }
             case "Open trades": {
                 filteredAssets = filteredAssets.map(async asset => {
 

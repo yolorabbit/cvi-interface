@@ -106,6 +106,7 @@ const stakingConfig = {
           }
         },
         "rhegic2-eth-lp": {
+          disable: true,
           key: "rhegic2-eth-lp",
           label: "rHEGIC2-ETH LP",
           address: "0x51996fc38c8d839abd6c2db9a4c221df1cb487a0",
