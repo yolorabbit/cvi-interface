@@ -172,7 +172,7 @@ const stakingApi = {
                     })).filter(({tokenData}) => tokenData); // filter token who exist in api, but not supported in the platform tokens config. 
 
                     const tokensUsdtProfit = await collectedFees.map(async ({tokenData, sum: fee}) => {
-                        const creationTimestampAgo = Math.floor(moment().subtract(90, "days").valueOf() / 1000) ;// moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
+                        //const creationTimestampAgo = Math.floor(moment().subtract(90, "days").valueOf() / 1000) ;// moment.utc().diff(platformCreationTimestamp[selectedNetwork][tokenData.symbol === "WETH" ? "ETH" : tokenData.symbol].creationTimestamp * 1000);
                         
                         const dailyProfit = toBN(fee).div(toBN(90));
                         
