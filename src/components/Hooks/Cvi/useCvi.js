@@ -26,20 +26,32 @@ const useCvi = () => {
       setTimeDuration(pollingTime);
    }
 
+   const mappedCviData = (key, {index, oneHourAgo, oneDayChange, oneDayChangePercent, oneWeekHigh, oneWeekLow, timestamp}) => {
+      return {
+         key,
+         timestamp,
+         [key]: customFixed(index, 2),
+         [`${key}OneDayChange`]: customFixed(oneDayChange, 2),
+         [`${key}OneDayChangePercent`]: customFixed(oneDayChangePercent, 2),
+         [`${key}OneHourAgo`]: customFixed(oneHourAgo, 2),
+         [`${key}OneWeekHigh`]: customFixed(oneWeekHigh, 2),
+         [`${key}OneWeekLow`]: customFixed(oneWeekLow, 2),
+         lastHoursIndex: 970
+      }
+   }
+
    const getData = async () => {
       try {
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
          const { data: series } = await Api.GET_INDEX_HISTORY(chainName);
          const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST(chainName);
          
-         if(series || latestRoundInfo?.data) {
+         if(series || latestRoundInfo?.data?.CVI) {
             const sortedCviSeries = series.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
             
             let cviData = {
-               cviInfo: Object.keys(latestRoundInfo.data).reduce((old, key) => ({
-                  ...old,
-                  [key]: customFixed(latestRoundInfo.data[key], 2)
-               }), {}),
+               cviInfo: mappedCviData('cvi', latestRoundInfo?.data?.CVI),
+               ethVolInfo: mappedCviData('ethvol', latestRoundInfo?.data?.ETHVOL),
                series: sortedCviSeries
             }
             
