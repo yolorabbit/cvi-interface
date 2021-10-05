@@ -40,23 +40,43 @@ const useCvi = () => {
       }
    }
 
+   const fetchGraphData = async () => {
+      try {
+         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
+         const { data: hourlySeries } = await Api.GET_INDEX_HISTORY(chainName); // @TODO: use different series for ethvol
+         const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY(chainName); // @TODO: use different series for ethvol
+         const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
+         const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
+
+         // merged daily and history
+         const firstHourlyDate = moment(sortedHourlySeries[0][0]).utc(); 
+         const lastHourlyDate = moment(sortedHourlySeries[sortedHourlySeries.length - 1][0]).utc();
+         const diffDays = lastHourlyDate.diff(firstHourlyDate, 'days');
+         const slicedDailySeries = sortedDailySeries.slice(0, (sortedDailySeries.length - 1) - diffDays)
+         const mergedDailyAndHourly = slicedDailySeries.concat(sortedHourlySeries).sort((a,b)=> a[0] - b[0]);
+         return mergedDailyAndHourly;
+      } catch(error) {
+         console.log(error);
+      }
+   }
+
+
    const getData = async () => {
       try {
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
-         const { data: series } = await Api.GET_INDEX_HISTORY(chainName);
+         const series = await fetchGraphData();
+         dispatch(setCviInfo({
+            series
+         }));
+
          const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST(chainName);
          
-         if(series || latestRoundInfo?.data?.CVI) {
-            const sortedCviSeries = series.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
-            
-            let cviData = {
-               cviInfo: mappedCviData('cvi', latestRoundInfo?.data?.CVI),
-               ethVolInfo: mappedCviData('ethvol', latestRoundInfo?.data?.ETHVOL),
-               series: sortedCviSeries
-            }
-            
-            dispatch(setCviInfo(cviData));
+         const cviData = {
+            cviInfo: latestRoundInfo?.data?.CVI ?  mappedCviData('cvi', latestRoundInfo?.data?.CVI) : null,
+            ethVolInfo: latestRoundInfo?.data?.ETHVOL ? mappedCviData('ethvol', latestRoundInfo?.data?.ETHVOL) : null,
          }
+         
+         dispatch(setCviInfo(cviData));
       } catch (error) {
          console.log(error);
       }

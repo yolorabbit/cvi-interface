@@ -8,7 +8,6 @@ import Row from 'components/Layout/Row';
 import { Loading, Error } from './HelperComponents';
 import config from '../../../config/config';
 import options from './chartOptions.js';
-import historicalData from '../../CviIndexGraph/historicalData.json';
 //TODO: create a dedicated css data - right now taken from staking component
 import '../Staking/Staking.scss';
 
@@ -21,7 +20,7 @@ const CVIIndex = () => {
     //reverse and fix date
     apiResults = apiResults.reverse().map(i => ([i[0]*1000, i[1]]));
     //merge with historical data
-    let mergedData = [...historicalData, ...apiResults];
+    let mergedData = [...apiResults];
     //convert API result to TV LineSeries: https://github.com/tradingview/lightweight-charts/blob/v2.0.0/docs/line-series.md#customization
     mergedData = mergedData.map(item => ({
       time: moment(item[0]).format('YYYY-MM-DD'), 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import ChartOptions from "./ChartOptions";
 import { useRef } from "react";
-import { mappedSeriesData } from "shared/historicalData";
 import { viewportContext } from "components/Context";
 import "./CviIndexGraph.scss";
 import { useSelector } from "react-redux";
@@ -10,7 +9,7 @@ const chartInitialize = {
     id: "vix-graph"
 }
 
-const CviIndexGraph = ({id, maxWidth = 700, maxHeight = 370}) => {
+const CviIndexGraph = ({maxWidth = 700, maxHeight = 370}) => {
     const ref = useRef();
     const [chart, setChart] = useState();
     const { width: windowWidth } = useContext(viewportContext);
@@ -37,10 +36,12 @@ const CviIndexGraph = ({id, maxWidth = 700, maxHeight = 370}) => {
     }, [windowWidth, chart]);
 
     useEffect(()=> {
+        if(!series) return;
+        
         setChart(ChartOptions({
             chartInitialize, 
             activeRange: activeRange, 
-            series: (!series?.length || activeRange === "all") ? mappedSeriesData(series) : series, 
+            series: series, 
             onClick: (id) => {
                 setActiveRange(id);
             }
