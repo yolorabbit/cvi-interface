@@ -15,6 +15,11 @@ export const platformCreationTimestamp = {
     ETH: {
       // creationBlock: 12139444,
       creationTimestamp: 1617091637,
+    },
+    USDC: {
+      // 12909261
+      creationTimestamp: 1627404737
+       
     }
   },
   [chainNames.Matic]: {

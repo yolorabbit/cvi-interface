@@ -35,7 +35,7 @@ const store = createStore(
 sagaMiddleware.run(watchApp);
 
 function getLibrary(provider) {
-  const library = new Web3(provider)
+  const library = new Web3(provider);
   library.pollingInterval = 12000
   return library;
 }

@@ -108,7 +108,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
                 content={<StakingClaim protocol={protocol} tokenName={token} claim={data.claim} /> } 
             />
 
-            {(!isTablet || isMobile) && <RowItem content={UnstakeController} />}
+            {(!isTablet || isMobile) && <RowItem token={token} content={UnstakeController} />}
         </>
         //eslint-disable-next-line
     )}, [stakedData, isTablet, isMobile, amount, data]);

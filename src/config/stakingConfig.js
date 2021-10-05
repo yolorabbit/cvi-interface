@@ -64,11 +64,11 @@ const stakingConfig = {
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
-          rewardsTokens: ["USDT", "WETH"],
+          rewardsTokens: ["USDT", "WETH", "USDC"],
           rel: {
             contractKey: "GOVI",
             stakingRewards: "Staking",
-            tokenDecimals: [6, 18]
+            tokenDecimals: [6, 18, 6]
           }
         }
       },

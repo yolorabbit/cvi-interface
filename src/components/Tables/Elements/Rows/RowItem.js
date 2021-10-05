@@ -1,10 +1,13 @@
 import { useIsTablet } from "components/Hooks";
+import { useDataController } from "components/Tables/DataController/DataController";
 import Tooltip from "components/Tooltip";
 
-const RowItem = ({type, header, content, tooltip, hide}) => {
+const RowItem = ({token, type, header, content, tooltip, hide}) => {
   const isTablet = useIsTablet();
+  const { activeTab } = useDataController();
+
   if(hide) return <div className=""></div>;
-  return isTablet ? <div className={`row-item-component ${type ?? ''}`}>
+  return isTablet ? <div className={`row-item-component ${type ?? ''} ${activeTab ?? ''}`}>
     {!hide && <> 
       {header && isTablet && <span className="row-item-component--title">
         {header} 
@@ -19,7 +22,7 @@ const RowItem = ({type, header, content, tooltip, hide}) => {
       </span>}
       {content}
     </>}
-  </div> : <td>{content}</td>
+  </div> : <td className={token ? `row-item-component--${token}` : ''}>{content}</td>
 }
 
 export default RowItem;

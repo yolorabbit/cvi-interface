@@ -55,7 +55,7 @@
             }
         }
     }
-
+    
     &.history, &.available-to-stake, &.staked {
         & thead {
             & tr {
@@ -193,6 +193,10 @@
 
                 &:last-child {
                     width: auto;
+                    
+                    &.row-item-component--govi {
+                        display: table-cell;
+                    }
                 }
             }
 
