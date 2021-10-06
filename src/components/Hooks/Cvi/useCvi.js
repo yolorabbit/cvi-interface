@@ -1,11 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import moment from 'moment';
 import Api from "Api";
 import { useDispatch, useSelector } from "react-redux";
 import { setCviInfo } from "store/actions";
-import { customFixed } from "utils";
+import { customFixed, toDisplayAmount } from "utils";
 import { chainNames } from "connectors";
 import { debounce } from "lodash";
+import { getCviValue } from "contracts/utils";
+import { contractsContext } from "contracts/ContractContext";
 
 export const getPercentageChange = (oldNumber, newNumber) => {
    const decreaseValue = oldNumber - newNumber;
@@ -18,6 +20,7 @@ const useCvi = () => {
    const [timeDuration, setTimeDuration] = useState(); // next hour + 2 minutes
    const { cviInfo: appCviInfo, selectedNetwork } = useSelector(({app}) => app);
    const { cviInfo, series } = appCviInfo;
+   const contracts = useContext(contractsContext);
 
    const startPollingInterval = () => {
       const nextUpdateOnMinutes = selectedNetwork === chainNames.Matic ? 21 : 62;
@@ -26,21 +29,23 @@ const useCvi = () => {
       setTimeDuration(pollingTime);
    }
 
-   const mappedCviData = (key, {index, oneHourAgo, oneDayChange, oneDayChangePercent, oneWeekHigh, oneWeekLow, timestamp}) => {
+   const mappedCviData = (key, customIndex, {index, oneHourAgo, oneDayChange, oneDayChangePercent, oneWeekHigh, oneWeekLow, timestamp}) => {
       return {
          key,
          timestamp,
-         [key]: customFixed(index, 2),
+         [key]: customIndex ? toDisplayAmount(customIndex, 2) : customFixed(index, 2),
          [`${key}OneDayChange`]: customFixed(oneDayChange, 2),
          [`${key}OneDayChangePercent`]: customFixed(oneDayChangePercent, 2),
          [`${key}OneHourAgo`]: customFixed(oneHourAgo, 2),
          [`${key}OneWeekHigh`]: customFixed(oneWeekHigh, 2),
          [`${key}OneWeekLow`]: customFixed(oneWeekLow, 2),
+         [`${key}ApiV2`]: index,
+         [`${key}Oracle`]: customIndex,
          lastHoursIndex: 970
       }
    }
 
-   const fetchGraphData = async () => {
+   const fetchGraphData = useCallback(async () => {
       try {
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
          const { data: hourlySeries } = await Api.GET_INDEX_HISTORY(chainName); // @TODO: use different series for ethvol
@@ -58,34 +63,41 @@ const useCvi = () => {
       } catch(error) {
          console.log(error);
       }
-   }
+   }, [selectedNetwork])
 
+   const getIndexFromOracle = useCallback(async () => {
+      try {
+         return await getCviValue(contracts.CVIOracle);
+      } catch(error) {
+         console.log(error);
+      }
+   }, [contracts?.CVIOracle])
 
-   const getData = async () => {
+   const getData = useCallback(async () => {
       try {
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
          const series = await fetchGraphData();
          dispatch(setCviInfo({
             series
          }));
-
+         
          const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST(chainName);
+         const customIndex = await getIndexFromOracle();
          
          const cviData = {
-            cviInfo: latestRoundInfo?.data?.CVI ?  mappedCviData('cvi', latestRoundInfo?.data?.CVI) : null,
-            ethVolInfo: latestRoundInfo?.data?.ETHVOL ? mappedCviData('ethvol', latestRoundInfo?.data?.ETHVOL) : null,
+            cviInfo: latestRoundInfo?.data?.CVI ?  mappedCviData('cvi', customIndex, latestRoundInfo?.data?.CVI) : null,
+            ethVolInfo: latestRoundInfo?.data?.ETHVOL ? mappedCviData('ethvol', customIndex, latestRoundInfo?.data?.ETHVOL) : null,
          }
          
          dispatch(setCviInfo(cviData));
       } catch (error) {
          console.log(error);
       }
-   }   
+   }, [dispatch, fetchGraphData, getIndexFromOracle, selectedNetwork])  
    
    const getDataDebounce = useMemo(
       () => debounce(getData, 750)
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   , []);
+   , [getData]);
 
    useEffect(() => {
       if(!selectedNetwork) return;
@@ -94,18 +106,17 @@ const useCvi = () => {
    }, [selectedNetwork]);
 
    useEffect(()=> {
-      if(!selectedNetwork) return;
+      if(!selectedNetwork || !contracts) return;
       getDataDebounce();
 
       return () => {
          getDataDebounce.cancel();
       }
       //eslint-disable-next-line
-   }, [selectedNetwork]);
-
+   }, [selectedNetwork, contracts]);
 
    useEffect(() => {
-      if(!selectedNetwork) return;
+      if(!selectedNetwork || !contracts) return;
       interval.current = setInterval(() => {
             if(timeDuration) {
                getDataDebounce();
