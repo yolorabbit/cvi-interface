@@ -14,8 +14,8 @@ const CviIndexGraph = ({maxWidth = 700, maxHeight = 370}) => {
     const [chart, setChart] = useState();
     const { width: windowWidth } = useContext(viewportContext);
     const [activeRange, setActiveRange] = useState();
-    const { series } = useSelector(({app}) => app.cviInfo);
-    
+    const {series, historicalData} = useSelector(({app}) => app.cviInfo);
+
     useEffect(() => {
         const getChartSize = () => {
             return window.innerWidth < 767 ? {
@@ -36,18 +36,18 @@ const CviIndexGraph = ({maxWidth = 700, maxHeight = 370}) => {
     }, [windowWidth, chart]);
 
     useEffect(()=> {
-        if(!series) return;
+        if(!series || !historicalData) return;
         
         setChart(ChartOptions({
             chartInitialize, 
             activeRange: activeRange, 
-            series: series, 
+            series: (!series?.length || activeRange === "all") ? (historicalData ?? []) : series,
             onClick: (id) => {
                 setActiveRange(id);
             }
         }));
         //eslint-disable-next-line
-    },[series, activeRange]);
+    },[series, historicalData, activeRange]);
 
     useEffect(() => {
         if(ref.current && ref.current?.children[0]?.style) {
