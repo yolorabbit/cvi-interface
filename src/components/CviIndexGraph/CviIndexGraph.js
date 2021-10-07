@@ -36,7 +36,7 @@ const CviIndexGraph = ({maxWidth = 700, maxHeight = 370}) => {
     }, [windowWidth, chart]);
 
     useEffect(()=> {
-        if(!series || !historicalData) return;
+        if(!series) return;
         
         setChart(ChartOptions({
             chartInitialize, 
