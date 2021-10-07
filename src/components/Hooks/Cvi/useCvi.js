@@ -65,15 +65,16 @@ const useCvi = () => {
       }
    }, [selectedNetwork])
 
-   const getIndexFromOracle = useCallback(async () => {
+   const getIndexFromOracle = useCallback(async (type) => {
       try {
-         return await getCviValue(contracts.CVIOracle);
+         return await getCviValue(contracts[type]);
       } catch(error) {
          console.log(error);
       }
-   }, [contracts?.CVIOracle])
+   }, [contracts]);
 
    const getData = useCallback(async () => {
+      
       try {
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
          const series = await fetchGraphData();
@@ -82,11 +83,12 @@ const useCvi = () => {
          }));
          
          const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST(chainName);
-         const customIndex = await getIndexFromOracle();
+         const customIndex = await getIndexFromOracle("CVIOracle");
+         const customETHVol = await getIndexFromOracle("ETHVolOracle");
          
          const cviData = {
             cviInfo: latestRoundInfo?.data?.CVI ?  mappedCviData('cvi', customIndex, latestRoundInfo?.data?.CVI) : null,
-            ethVolInfo: latestRoundInfo?.data?.ETHVOL ? mappedCviData('ethvol', customIndex, latestRoundInfo?.data?.ETHVOL) : null,
+            ethVolInfo: latestRoundInfo?.data?.ETHVOL ? mappedCviData('ethvol', customETHVol, latestRoundInfo?.data?.ETHVOL) : null,
          }
          
          dispatch(setCviInfo(cviData));
