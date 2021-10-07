@@ -87,11 +87,14 @@ const useCvi = () => {
          
          const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST(chainName);
          const customIndex = await getIndexFromOracle("CVIOracle");
-         const customETHVol = await getIndexFromOracle("ETHVolOracle");
          
          const cviData = {
             cviInfo: latestRoundInfo?.data?.CVI ?  mappedCviData('cvi', customIndex, latestRoundInfo?.data?.CVI) : null,
-            ethVolInfo: latestRoundInfo?.data?.ETHVOL ? mappedCviData('ethvol', customETHVol, latestRoundInfo?.data?.ETHVOL) : null,
+         }
+         
+         if(selectedNetwork === chainNames.Ethereum) {
+            const customETHVol = await getIndexFromOracle("ETHVolOracle");
+            cviData.ethVolInfo = latestRoundInfo?.data?.ETHVOL ? mappedCviData('ethvol', customETHVol, latestRoundInfo?.data?.ETHVOL) : null
          }
          
          dispatch(setCviInfo(cviData));
