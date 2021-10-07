@@ -45,7 +45,6 @@ const stakingApi = {
         try {
 
             const {protocol, key: tokenName, fixedDecimals, rel, ...token} = asset;
-            console.log(protocol);
             const [stakingRewards, platformLPToken] = [contracts[rel.stakingRewards], contracts[rel.token]]
             const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
             const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
