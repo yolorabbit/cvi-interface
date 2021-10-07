@@ -48,11 +48,6 @@ const config = {
       path: ['/help', '/platform/help'],
       enterApp: true,
       prevLink: true
-    },
-    cviindex: {
-      label: "CVI Index",
-      path: '/index',
-      dataUrl: 'https://api-v2.cvi.finance/history'
     }
   },
   socialLinks: [
