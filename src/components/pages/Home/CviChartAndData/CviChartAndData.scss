@@ -182,6 +182,18 @@
                     font-size: 5.001vw;
                 }
             }
+
+            & .index-value-component__top--value {
+                margin-right: 0.417vw;
+                @media (max-width: 1365px) {
+                    margin-right: 0.586vw;
+                }
+                  
+                @media (max-width: 1024px) {
+                    margin-left: auto;
+                    margin-right: 2.5vw;
+                }
+            }
         }
     }
 }

@@ -105,7 +105,7 @@ const useCvi = () => {
          });
           
       } catch (error) {
-         console.log(error);
+            console.log(error);
       }
    }, [dispatch, fetchGraphData, getIndexFromOracle, indexInfo, selectedNetwork]);
 
@@ -122,7 +122,7 @@ const useCvi = () => {
          getDataDebounce.cancel();
       }
       //eslint-disable-next-line
-   }, [selectedNetwork, contracts]);
+   }, [selectedNetwork]);
 
 
    useEffect(() => {

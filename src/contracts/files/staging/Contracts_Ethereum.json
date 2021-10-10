@@ -8743,7 +8743,20 @@
         "type": "event"
       },
       {
-        "anonymous": false,
+        "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
+        "name": "balanceOf",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
         "inputs": [
           { "indexed": true, "internalType": "uint256", "name": "roundId", "type": "uint256" },
           { "indexed": true, "internalType": "address", "name": "startedBy", "type": "address" },
@@ -8753,7 +8766,6 @@
         "type": "event"
       },
       {
-        "anonymous": false,
         "inputs": [
           { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
           { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
@@ -8913,6 +8925,17 @@
         "outputs": [{ "internalType": "contract AggregatorV3Interface", "name": "", "type": "address" }],
         "stateMutability": "view",
         "type": "function"
+      }
+    ]
+  },
+  "PositionRewardsHelper": {
+    "address": "0xd5A222B80788E36F707adDc74c3Cb5de7e43F1B0",
+    "abi": [
+      {
+        "inputs": [{ "internalType": "contract PositionRewards", "name": "_positionRewards", "type": "address" }],
+        "stateMutability": "nonpayable",
+        "type": "constructor",
+        "signature": "constructor"
       },
       {
         "inputs": [],
@@ -8983,7 +9006,8 @@
         "name": "setDeviationCheck",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
+        "type": "constructor",
+        "signature": "constructor"
       },
       {
         "inputs": [{ "internalType": "uint16", "name": "_newMaxDeviation", "type": "uint16" }],
@@ -9962,7 +9986,25 @@
           { "internalType": "uint80", "name": "answeredInRound", "type": "uint80" }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true,
+        "signature": "0x7e3dd0f0"
+      }
+    ]
+  },
+  "USDCPlatform": {
+    "address": "0x0E0DA40101D8f6eB1b1d6b0215327e8452e0Bc60",
+    "abi": [
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "spender", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }
+        ],
+        "name": "Approval",
+        "type": "event",
+        "signature": "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925"
       },
       {
         "inputs": [],
@@ -9975,14 +10017,17 @@
           { "internalType": "uint80", "name": "answeredInRound", "type": "uint80" }
         ],
         "stateMutability": "view",
-        "type": "function"
+        "type": "function",
+        "constant": true,
+        "signature": "0xdd62ed3e"
       },
       {
         "inputs": [{ "internalType": "uint256", "name": "_latestRound", "type": "uint256" }],
         "name": "setLatestRound",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
+        "type": "function",
+        "signature": "0x095ea7b3"
       },
       {
         "inputs": [],
