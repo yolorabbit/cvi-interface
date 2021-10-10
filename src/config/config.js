@@ -50,11 +50,6 @@ const config = {
       path: 'https://docs.cvi.finance',
       external: true
     },
-    cviindex: {
-      label: "CVI Index",
-      path: '/index',
-      dataUrl: 'https://api-v2.cvi.finance/history'
-    }
   },
   socialLinks: [
     { iconName: 'github', to: 'https://github.com/coti-io/cvi-contracts' },
