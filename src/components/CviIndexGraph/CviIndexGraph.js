@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { viewportContext } from "components/Context";
 import { useActiveVolInfo } from "components/Hooks";
 import "./CviIndexGraph.scss";
-import moment from 'moment';
 
 const chartInitialize = {
     id: "vix-graph"
@@ -37,19 +36,18 @@ const CviIndexGraph = ({activeVolIndex, maxWidth = 700, maxHeight = 370}) => {
     }, [windowWidth, chart]);
 
     useEffect(()=> {
-        if(!series) return;
+        if(!activeVolInfo) return;
         
         setChart(ChartOptions({
             activeVolIndex,
             chartInitialize, 
             activeRange: activeRange, 
-            series: (!series?.length || activeRange === "all") ? (historicalData ?? []) : series,
+            series: activeRange === "all" ? (activeVolInfo?.history?.daily ?? []) : activeVolInfo?.history?.hourly ?? [],
             onClick: (id) => {
                 setActiveRange(id);
             }
         }));
-        //eslint-disable-next-line
-    },[series, historicalData, activeRange]);
+    },[activeRange, activeVolInfo, activeVolIndex]);
 
     useEffect(() => {
         if(ref.current && ref.current?.children[0]?.style) {

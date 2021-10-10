@@ -3,10 +3,12 @@ import moment from 'moment';
 import Api from "Api";
 import { useDispatch, useSelector } from "react-redux";
 import { setVolInfo, updateVolInfo } from "store/actions";
-import { customFixed } from "utils";
+import { customFixed, toDisplayAmount } from "utils";
 import { chainNames } from "connectors";
 import { debounce } from "lodash";
 import config from "config/config";
+import { contractsContext } from "contracts/ContractContext";
+import { getCviValue } from "contracts/utils";
 
 export const getPercentageChange = (oldNumber, newNumber) => {
    const decreaseValue = oldNumber - newNumber;
@@ -16,21 +18,33 @@ export const getPercentageChange = (oldNumber, newNumber) => {
 const useCvi = () => {
    const dispatch = useDispatch();
    const interval = useRef();
-   const { cviVolInfo, ethVolInfo, series } = useSelector(({app}) => app.indexInfo);
+   const { cviVolInfo, ethVolInfo } = useSelector(({app}) => app.indexInfo);
    const { selectedNetwork } = useSelector(({app}) => app);
    const [timeDuration, setTimeDuration] = useState();
+   const contracts = useContext(contractsContext);
+   
+   const getIndexFromOracle = useCallback(async (type) => {
+      try {
+         if(!contracts) return null;
+         return await getCviValue(contracts[type]);
+      } catch(error) {
+         console.log(error);
+      }
+   }, [contracts]);
 
-   const mappedIndexData = (key, {index, oneHourAgo, oneDayChange, oneDayChangePercent, oneWeekHigh, oneWeekLow, timestamp}) => {
+   const mappedIndexData = (key, customIndex, {index, oneHourAgo, oneDayChange, oneDayChangePercent, oneWeekHigh, oneWeekLow, timestamp}) => {
       return {
          key,
          time: moment.utc(timestamp * 1000).format("LLL"),
-         index: customFixed(index, 2),
+         index: customIndex ? toDisplayAmount(customIndex, 2) : customFixed(index, 2),
          oneDayChange: customFixed(oneDayChange, 2),
          oneDayChangePercent: customFixed(oneDayChangePercent, 2),
          oneHourAgo: customFixed(oneHourAgo, 2),
          cviOneWeekHigh: customFixed(oneWeekHigh, 2),
          cviOneWeekLow: customFixed(oneWeekLow, 2),
-         lastHoursIndex: 970
+         lastHoursIndex: 970,
+         [`${key}ApiV2`]: index,
+         [`${key}Oracle`]: customIndex,
       }
    }
 
@@ -41,79 +55,65 @@ const useCvi = () => {
       setTimeDuration(pollingTime);
    }
 
-   const fetchGraphData = async () => {
-      try {
-         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
-         const { data: hourlySeries } = await Api.GET_INDEX_HISTORY(chainName); // @TODO: use different series for ethvol
-         const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY(); // @TODO: use different series for ethvol
-         const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
-         const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
-
-         dispatch(updateVolInfo({
-            history: {
-               daily: sortedDailySeries,
-               hourly: sortedHourlySeries
-            }
-         }, config.volatilityKey.cvi));
-
-         dispatch(updateVolInfo({ // @TODO: update details to ethvol
-            history: {
-               daily: sortedDailySeries,
-               hourly: sortedHourlySeries
-            }
-         }, config.volatilityKey.ethvol));
-
-      } catch(error) {
-         console.log(error);
-      }
-   }
-
-   const mappedCviData = (key, customIndex, {index, oneHourAgo, oneDayChange, oneDayChangePercent, oneWeekHigh, oneWeekLow, timestamp}) => {
-      return {
-         key,
-         timestamp,
-         [key]: customIndex ? toDisplayAmount(customIndex, 2) : customFixed(index, 2),
-         [`${key}OneDayChange`]: customFixed(oneDayChange, 2),
-         [`${key}OneDayChangePercent`]: customFixed(oneDayChangePercent, 2),
-         [`${key}OneHourAgo`]: customFixed(oneHourAgo, 2),
-         [`${key}OneWeekHigh`]: customFixed(oneWeekHigh, 2),
-         [`${key}OneWeekLow`]: customFixed(oneWeekLow, 2),
-         [`${key}ApiV2`]: index,
-         [`${key}Oracle`]: customIndex,
-         lastHoursIndex: 970
-      }
-   }
-
    const fetchGraphData = useCallback(async () => {
+         try {
+            const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
+            const { data: hourlySeries } = await Api.GET_INDEX_HISTORY(chainName); // @TODO: use different series for ethvol
+            const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY(); // @TODO: use different series for ethvol
+            const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
+            const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
+   
+            dispatch(updateVolInfo({
+               history: {
+                  daily: sortedDailySeries,
+                  hourly: sortedHourlySeries
+               }
+            }, config.volatilityKey.cvi));
+   
+            dispatch(updateVolInfo({ // @TODO: update details to ethvol
+               history: {
+                  daily: sortedDailySeries,
+                  hourly: sortedHourlySeries
+               }
+            }, config.volatilityKey.ethvol));
+   
+         } catch(error) {
+            console.log(error);
+         }
+      }, [dispatch, selectedNetwork],
+   )
+
+   const fetchVolData = useCallback(async () => {
       try {
-         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
-         const { data: volInfo } = await Api.GET_VOL_INFO(chainName);
-         
          fetchGraphData();
 
-         if(volInfo?.data?.CVI) {
-            dispatch(setVolInfo({
-               cviVolInfo: mappedIndexData('cvi', volInfo.data.CVI)
-            }));
+         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
+         const { data: volInfo } = await Api.GET_VOL_INFO(chainName);
+         const cviIndex = await getIndexFromOracle(config.oracles.cvi);
+         
+         let cviData = {
+            cviVolInfo: volInfo?.data?.CVI ?  mappedIndexData('cvi', cviIndex, volInfo?.data?.CVI) : null,
          }
 
-         if(volInfo?.data?.ETHVOL) {
-            dispatch(setVolInfo({
-               ethVolInfo: selectedNetwork === chainNames.Matic ? null : mappedIndexData('ethvol', volInfo.data.ETHVOL)
-            }));
+         if(selectedNetwork === chainNames.Ethereum) {
+            const customETHVol = await getIndexFromOracle("ETHVolOracle");
+            cviData.ethVolInfo = volInfo?.data?.ETHVOL ? mappedIndexData('ethvol', customETHVol, volInfo?.data?.ETHVOL) : null
+         } else {
+            cviData.ethVolInfo = null;
          }
+
+         dispatch(setVolInfo(cviData));
       } catch (error) {
             console.log(error);
       }
-   }, [contracts]);
+   }, [dispatch, fetchGraphData, getIndexFromOracle, selectedNetwork]);
 
    const getDataDebounce = useMemo(
-      () => debounce(getData, 750)
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   , []);
+      () => debounce(fetchVolData, 750)
+   , [fetchVolData]);
 
    useEffect(()=> {
-      if(!selectedNetwork) return;
+      if(!selectedNetwork || !contracts) return;
       startPollingInterval();
       getDataDebounce();
 
@@ -121,7 +121,7 @@ const useCvi = () => {
          getDataDebounce.cancel();
       }
       //eslint-disable-next-line
-   }, [selectedNetwork]);
+   }, [selectedNetwork, contracts]);
 
 
    useEffect(() => {
@@ -139,17 +139,16 @@ const useCvi = () => {
 
     return useMemo(() => {
       try {
-         if(!cviVolInfo || !ethVolInfo || !series) return {};
+         if(!cviVolInfo || !ethVolInfo) return {};
          return {
                cviVolInfo,
                ethVolInfo,
-               series,
          }
       } catch (error) {   
             console.error('Failed to get cvi info', error)
             return {}
         }// eslint-disable-next-line
-    }, [cviVolInfo, series])
+    }, [cviVolInfo, ethVolInfo])
 }
 
 export default useCvi;

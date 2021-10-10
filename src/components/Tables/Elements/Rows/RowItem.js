@@ -1,5 +1,4 @@
 import { useIsTablet } from "components/Hooks";
-import { useDataController } from "components/Tables/DataController/DataController";
 import Tooltip from "components/Tooltip";
 
 const RowItem = ({token, type, header, content, tooltip, hide, isTable}) => {
