@@ -41,7 +41,9 @@ export async function getClaimableReward(contracts, token, { account }) {
 async function calculatePositionRewardMinMax(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0, index = 0}) {
   // const PositionRewardsHelper = getPositionRewardsContract("PositionRewardsHelper", isEth);
   let fees = await getOpenPositionFee(contracts, token, {tokenAmount, leverage});
-  let positionUnits = fromTokenAmountToUnits(tokenAmount.sub(toBN(fees.openFee)), index);
+  const { getCVILatestRoundData  } = contracts[token.rel.oracle].methods || {};
+  const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
+  let positionUnits = fromTokenAmountToUnits(tokenAmount.sub(toBN(fees.openFee)), cviValue);
   let currentReward = 0;
   try {
     let pos = await contracts[token.rel.platform].methods.positions(account).call();

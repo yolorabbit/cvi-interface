@@ -258,9 +258,9 @@ export const getPositionRewardsContract = async (token) => {
   }
 }
 
-export const getCviValue = async (cviOracle) => {
+export const getCviValue = async (oracle) => {
   try {
-    const { cviValue } = await cviOracle.methods.getCVILatestRoundData().call();
+    const { cviValue } = await oracle.methods.getCVILatestRoundData().call();
     return cviValue;
   } catch(error) {
     console.log(error);

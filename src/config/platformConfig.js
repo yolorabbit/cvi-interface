@@ -12,16 +12,25 @@ const tabs = {
       "view-liquidity": "Provide Liquidity"
   },
   graphs: {
-      "cvi index": "CVI Index",
-      "funding fee": "Funding fee"
+    "index": "Index",
+    "fee": "Funding fee",
   },
   trade: {
-      "positions": "Open trades",
+      "positions": "Open positions",
       "history": "History"
   },
   "view-liquidity": {
       "liquidity": "Liquidity",
       "history": "History"
+  },
+  "index": {
+    [chainNames.Ethereum]: {
+      "cvi": "CVI index",
+      "ethvol": "ETHVol index"
+    },
+    [chainNames.Matic]: {
+      "cvi": "CVI index",
+    }
   }
 };
 
@@ -41,7 +50,7 @@ const platformConfig = {
           platform: "USDTPlatform",
           feesCalc: "FeesCalculatorV2",
           feesModel: "FeesModelV2",
-          cviOracle: "CVIOracle",
+          oracle: "CVIOracle",
           positionRewards: "PositionRewards",
           stakingRewards: "USDTLPStakingRewards",
           liquidation: "Liquidation",
@@ -60,15 +69,35 @@ const platformConfig = {
           platform: "ETHPlatform",
           feesCalc: "FeesCalculatorV3",
           feesModel: "ETHPlatform",
-          cviOracle: "CVIOracle",
+          oracle: "CVIOracle",
           positionRewards: "PositionRewardsV2",
           stakingRewards: "ETHLPStakingRewards",
           liquidation: "Liquidation"
         },
       },
+      usdc: {
+        key: "usdc",
+        decimals: 6,
+        fixedDecimals: 2,
+        lpTokensDecimals: 18,
+        type: "usdc",
+        rel: {
+          contractKey: "USDC",
+          platform: "ETHVolUSDCPlatform",
+          feesCalc: "ETHVolUSDCFeesCalculator",
+          feesModel: "ETHVolUSDCPlatform",
+          positionRewards: "ETHVolUSDCPositionRewards",
+          oracle: "ETHVolOracle",
+          stakingRewards: "ETHVolUSDCLPStakingRewards",
+          liquidation: "ETHVolUSDCLiquidation"
+        }
+      },
       coti: {
         key: "coti",
         soon: true,
+        rel: {
+          oracle: "CVIOracle"
+        }
       },
     },
     [chainNames.Matic]: {
@@ -85,7 +114,7 @@ const platformConfig = {
           feesCalc: "FeesCalculatorV4",
           feesModel: "USDTPlatform",
           positionRewards: "PositionRewardsV3",
-          cviOracle: "CVIOracle",
+          oracle: "CVIOracle",
           stakingRewards: "USDTLPStakingRewards",
           liquidation: "LiquidationV2"
         },
@@ -104,7 +133,7 @@ const platformConfig = {
           feesCalc: "USDCFeesCalculator",
           feesModel: "USDCPlatform",
           positionRewards: "USDCPositionRewards",
-          cviOracle: "CVIOracle",
+          oracle: "CVIOracle",
           stakingRewards: "USDCLPStakingRewards",
           liquidation: "LiquidationV2"
         }
@@ -112,9 +141,31 @@ const platformConfig = {
     }
   },
   headers: {
+    "stats": { 
+      "Index": {
+        label: "Index"
+      }, 
+      "Liquidity pools": {
+        label: "Liquidity pools",
+        tooltip: {
+          content: "The total value locked in all liquidity pools in USD. It is the total value deposited into the platform by liquidity providers who expect the CVI index to drop or stay the same.",
+          left: -30
+        }
+      }, 
+      "Open positions": {
+        label: "Open positions",
+        tooltip: {
+          content: "The total value of open positions in USD. Positions are bought by traders who expect the CVI index to increase.",
+          left: -30
+        }
+      }, 
+    },
+    "index": ["Index", "Previous hour", "Last week high", "Last week low"],
     [activeViews.trade]: {
       [tabs.trade.positions]: {
-        icon: "",
+        index: {
+          label: "Index"
+        },
         "Value": {
           label: "Value"
         },
@@ -137,11 +188,13 @@ const platformConfig = {
         },
         action: ""
       },
-      "History": ["Action date", "Action type", "CVI index value", "Leverage", "Amount", "Fees", "Net amount"]
+      "History": ["Action date", "Action type", "Index", "Value", "Leverage", "Amount", "Fees", "Net amount"],
     },
     [activeViews["view-liquidity"]]:  {
       [tabs['view-liquidity'].liquidity]: {
-        icon: "",
+        index: {
+          label: "Index"
+        },
         "My liquidity (pool share)": {
           label: "My liquidity (pool share)"
         },
@@ -157,8 +210,8 @@ const platformConfig = {
         },
         action: ""
       },
-      "History":  ["Action date", "Action type", "Amount"]
-    }
+      "History":  ["Action date", "Action type", "Index", "Amount"],
+    }, 
   },
   actionsConfig: {
     "buy": {

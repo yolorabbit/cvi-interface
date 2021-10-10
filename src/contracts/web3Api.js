@@ -1,4 +1,4 @@
-import { customFixed, toBN, toDisplayAmount, toFixed } from "utils";
+import { commaFormatted, customFixed, toBN, toDisplayAmount, toFixed } from "utils";
 import { convert, getPrice, getChainName, getBalance, fromLPTokens } from './utils';
 import * as TheGraph from 'graph/queries';
 import config from "config/config";
@@ -64,11 +64,14 @@ export async function getFeesCollectedFromEvents(staking, USDTData, tokensData, 
 }
 
 const getFeesCollectedFromGraph = async (USDTData, tokensData) => {
+    const selectedNetwork = await getChainName();
     let res = await TheGraph.collectedFeesSum();
-    const includeUSDC = tokensData.some(token => token.symbol === "USDC");
-    if(includeUSDC) {
-        let usdc_res = await TheGraph.collectedFeesSumUSDC();
-        res.collectedFeesAggregations = res.collectedFeesAggregations.concat(usdc_res.collectedFeesAggregations);
+    if(selectedNetwork === chainNames.Matic) {
+        const includeUSDC = tokensData.some(token => token.symbol === "USDC");
+        if(includeUSDC) {
+            let usdc_res = await TheGraph.collectedFeesSumUSDC();
+            res.collectedFeesAggregations = res.collectedFeesAggregations.concat(usdc_res.collectedFeesAggregations);
+        }
     }
     // console.log(`res collectedFees size ${res.collectedFees.length}`);
     let sum = toBN(0);
@@ -156,12 +159,12 @@ const web3Api = {
         try {
             const USDTData = await getTokenData(contracts["USDT"]);
             
-            const promiseList = tokens.map(async ({rel: { platform, contractKey}, key}) => {
+            const promiseList = tokens.map(async ({rel: { platform, contractKey, oracle}, key}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
                 const value = await contracts[platform].methods.totalBalanceWithAddendum().call();
                 const amountConverted = await convert(toBN(value), tokenData, USDTData);
-                const amountFormatted  = customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), 2)
-                return [`${amountFormatted} (${key.toUpperCase()} pool)`, amountConverted, key];
+                const amountFormatted = commaFormatted(customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), 2))
+                return [`${amountFormatted} (${key.toUpperCase()} pool)`, amountConverted, key, oracle];
             });
 
             const result = await (await Promise.allSettled(promiseList))
@@ -200,37 +203,19 @@ const web3Api = {
             return "N/A"
         }
     },
-    getTotalGoviRewards: async (contracts) => { // @TODO: use promise all setteled
+    getTotalGoviRewards: async (contracts, tokens) => {
         try {
-            const chainName = await getChainName();
-            const PositionRewards = contracts[config.contractsMapped?.[chainName]?.["PositionRewards"]];
-            const PositionRewardsV2 = contracts[config.contractsMapped?.[chainName]?.["PositionRewardsV2"] ?? "PositionRewardsV2"];
-            const USDCPositionRewards = contracts[config.contractsMapped?.[chainName]?.["USDCPositionRewards"] ?? "USDCPositionRewards"];
+            const maxPositionRewards = tokens.map(async token => [toDisplayAmount(await contracts[token.rel.positionRewards].methods.maxDailyReward().call(), 18), token.rel.oracle]);
+            const fulfilledPositionRewards = (await Promise.allSettled(maxPositionRewards))
+                .filter(({status}) => status === "fulfilled")
+                .map(({value}) => value)
+                .reduce((current, acc) => ({ // sum all max govi daily reward by oracle
+                    ...current,
+                    [acc[1]]: current[acc[1]] !== undefined ? Number(current[acc[1]]) + Number(acc[0]) : Number(acc[0])
+                }), {});
 
-            let usdtMaxPositionRewards = toBN("0"), 
-            ethMaxPositionRewards = toBN("0"),
-            usdcMaxPositionRewards = toBN("0"),
-            errorCounter = 0;
-
-            try {
-                usdtMaxPositionRewards = await PositionRewards.methods.maxDailyReward().call();
-            } catch(error) {
-                errorCounter++;
-            }
-
-            try {
-                ethMaxPositionRewards = await PositionRewardsV2.methods.maxDailyReward().call();
-            } catch(error) {
-                errorCounter++;
-            }
-
-            try {
-                usdcMaxPositionRewards = await USDCPositionRewards.methods.maxDailyReward().call();
-            } catch (error) {
-                errorCounter++;
-            }
-
-            return errorCounter < 2 ? toBN(usdcMaxPositionRewards).add(toBN(usdtMaxPositionRewards)).add(toBN(ethMaxPositionRewards)).toString() : "N/A";
+            
+            return Object.keys(fulfilledPositionRewards).map(reward => [fulfilledPositionRewards[reward], reward]);
         } catch(error) {
             console.log(error);
             return "N/A";

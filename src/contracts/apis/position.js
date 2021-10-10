@@ -125,7 +125,7 @@ async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {
 export async function getOpenPositionFee(contracts, token, { leverage = 1, tokenAmount, library }) {
   try {
     const tokenData = await getTokenData(contracts[token.rel.contractKey]);
-    const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
+    const cviValue = await getCviValue(contracts[token.rel.oracle]);
     let openFeeAmount = await getOpenPositionFeePercent(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenAmount);
     const { fee, percent, turbulence } = await getBuyingPremiumFee(contracts, token, {tokenAmount, cviValue, leverage, tokenData, library});
     return { openFee: openFeeAmount.mul(toBN(leverage)).add(fee), buyingPremiumFeePercent: percent, turbulence }
@@ -166,7 +166,7 @@ async function getCurrentFundingFee(contracts, token, { account }) {
 async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, purchaseFee, leverage = 1, period = 86400 }) {
   if(purchaseFee === null) return null;
   if(purchaseFee === "N/A") return "N/A";
-  const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
+  const cviValue = await getCviValue(contracts[token.rel.oracle]);
   let decimals = await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call();
   let fee = toBN(await contracts[token.rel.feesCalc].methods.calculateSingleUnitFundingFee([{ period, cviValue }]).call());
   let positionUnitsAmount = fromTokenAmountToUnits(toBN(tokenAmount.sub(purchaseFee.openFee)).mul(toBN(leverage)), toBN(cviValue));
@@ -303,7 +303,7 @@ async function getEstimatedLiquidationV1(platform, feeCalc, index, tokenAmount, 
 
 async function getEstimatedLiquidation(contracts, token, { tokenAmount, account, library }) {
   try {
-    const { getCVILatestRoundData } = contracts[token.rel.cviOracle].methods;
+    const { getCVILatestRoundData } = contracts[token.rel.oracle].methods;
     const { cviValue } = await getCVILatestRoundData().call();
     let _estimatedLiquidation;
     if(token.type === "eth" || token.type === "v1") {

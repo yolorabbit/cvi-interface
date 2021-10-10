@@ -1,6 +1,6 @@
 import Button from 'components/Elements/Button';
 import { useMemo, useState } from 'react';
-import { useActiveToken, useInDOM } from 'components/Hooks';
+import { useActiveToken, useActiveVolInfo, useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
@@ -28,7 +28,7 @@ const Withdraw = () => {
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lockedTime = useIsLockedTime();
     const [errorMessage, setErrorMessage] = useState();
-    const { cviInfo } = useSelector(({app}) => app.cviInfo);
+    const activeVolInfo = useActiveVolInfo(activeToken.rel.oracle);
     const { selectedNetwork } = useSelector(({app}) => app);
     
     const getContract = (contractKey) => {
@@ -51,7 +51,7 @@ const Withdraw = () => {
 
     const getMaxAvailableToWithdraw = async () => {
         try {
-            const index = toBNAmount(cviInfo.cvi, 2);
+            const index = toBNAmount(activeVolInfo?.index, 2);
             let totalToWithdraw = await getMaxAmount(index);
             return [toBN(toBNAmount(amount, activeToken.decimals)).cmp(totalToWithdraw) < 1, toDisplayAmount(totalToWithdraw.toString(), activeToken.decimals)]
         } catch(error) {

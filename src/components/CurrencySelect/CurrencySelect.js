@@ -1,37 +1,46 @@
 import React, { useEffect } from 'react';
 import Button from '../Elements/Button';
 import { useLocation } from 'react-router';
-import './CurrencySelect.scss';
 import platformConfig from 'config/platformConfig';
 import { useSelector } from 'react-redux';
+import './CurrencySelect.scss';
+import config from 'config/config';
 
-const CurrencySelect = ({selectedCurrency, setSelectedCurrency}) => {
+const CurrencySelect = ({selectedCurrency, setSelectedCurrency, activeVolIndex}) => {
     const location = useLocation();
     const { selectedNetwork } = useSelector(({app}) => app);
-    const currencies = platformConfig.tokens[selectedNetwork];
-
+    const tokens = platformConfig.tokens[selectedNetwork];
+    const filteredTokens = Object.values(tokens).filter(({key}) => !activeVolIndex || tokens[key]?.rel?.oracle === config.oracles[activeVolIndex])
+    
     useEffect(() => {
         const getCurrencyQuery = new URLSearchParams(location?.search).get('currency');
         if(getCurrencyQuery) {
-            const currenctCurrency = currencies[getCurrencyQuery];
+            const currenctCurrency = filteredTokens[getCurrencyQuery];
             if(!currenctCurrency || currenctCurrency?.soon) return;
-            setSelectedCurrency(currenctCurrency.symbol);
+            setSelectedCurrency(currenctCurrency.key);
         }
         //eslint-disable-next-line
     }, [location?.search]);
+
+    useEffect(() => {
+        if(!filteredTokens.find(token => token.key === selectedCurrency)) {
+            setSelectedCurrency(filteredTokens[0].key);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeVolIndex]);
 
     return (
         <div className="currency-select-component">
             <h2 className="currency-select-component__title">Select currency</h2>
             <div className="currency-select-component__container">
-                {Object.keys(currencies)
-                .map(key => 
+                {filteredTokens
+                .map(token => 
                     <Currency 
-                        key={key} 
-                        state={selectedCurrency === currencies[key].key ? 'selected' : ''} 
-                        soon={currencies[key].soon} 
-                        name={currencies[key].key?.toUpperCase()} 
-                        symbol={currencies[key].key} 
+                        key={token.key} 
+                        state={selectedCurrency === token.key ? 'selected' : ''} 
+                        soon={token.soon} 
+                        name={token.key?.toUpperCase()} 
+                        symbol={token.key} 
                         setSelectedCurrency={setSelectedCurrency}
                 />)}
             </div>

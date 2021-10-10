@@ -1,3 +1,4 @@
+import config from "config/config";
 import Highcharts from "highcharts/highstock";
 import Exporting from 'highcharts/modules/map';
 Exporting(Highcharts);
@@ -6,7 +7,7 @@ export const markedEventsData = {
     // 100: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin purus mauris, cursus eleifend pharetra et, tempor vitae dolor. Proin facilisis tellus ut odio pharetra ullamcorper. "
 }
 
-const ChartOptions = ({ chartInitialize, series, height, maxWidth, activeRange, onClick }) => Highcharts.stockChart(chartInitialize.id, {
+const ChartOptions = ({ chartInitialize, series, height, maxWidth, activeRange, onClick, activeVolIndex }) => Highcharts.stockChart(chartInitialize.id, {
     credits: { enabled: false },
     mapNavigation: {
         enableMouseWheelZoom: true,
@@ -153,7 +154,7 @@ const ChartOptions = ({ chartInitialize, series, height, maxWidth, activeRange, 
     },
     series: [{
         color: "#f8ba15",
-        name: 'CVI',
+        name: config.volatilityLabel?.[activeVolIndex] ?? 'CVI',
         turboThreshold: 4000,
         data: series.map((item, index) => {
             // if(index === 806) {

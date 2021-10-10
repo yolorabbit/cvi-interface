@@ -12,7 +12,7 @@ import options from './chartOptions.js';
 import '../Staking/Staking.scss';
 
 
-const CVIIndex = () => {
+const CVIIndex = () => { // @TODO: use Amir new api for fetching history
   const [data, setData] = useState(undefined);
   const [error, setError] = useState(undefined);
 
@@ -20,7 +20,7 @@ const CVIIndex = () => {
     //reverse and fix date
     apiResults = apiResults.reverse().map(i => ([i[0]*1000, i[1]]));
     //merge with historical data
-    let mergedData = [...apiResults];
+    let mergedData = [...apiResults]; 
     //convert API result to TV LineSeries: https://github.com/tradingview/lightweight-charts/blob/v2.0.0/docs/line-series.md#customization
     mergedData = mergedData.map(item => ({
       time: moment(item[0]).format('YYYY-MM-DD'), 

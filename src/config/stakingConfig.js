@@ -57,6 +57,23 @@ const stakingConfig = {
             tokenDecimals: [18]
           }
         },
+        "ethvol-usdc-lp": {
+          key: "ethvol-usdc-lp",
+          label: "ETHVOL-USDC LP",
+          address: "0x0E0DA40101D8f6eB1b1d6b0215327e8452e0Bc60",
+          protocol: stakingProtocols.platform,
+          decimals: 18,
+          fixedDecimals: 8,
+          rewardsTokens: ["GOVI"],
+          tokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          rel: {
+            contractKey: "ETHVolUSDCPlatform",
+            platform: "ETHVolUSDCPlatform",
+            stakingRewards: "ETHVolUSDCLPStakingRewards",
+            token: "USDC",
+            tokenDecimals: [18]
+          }
+        },
         "govi": {
           key: "govi",
           label: "GOVI",
@@ -243,6 +260,7 @@ const stakingConfig = {
         "cvi-eth-lp": "CVI-ETH LP",
         "coti-eth-lp": "COTI-ETH LP",
         "govi-eth-lp": "GOVI-ETH LP",
+        "ethvol-usdc-lp": "ETHVOL-ETH LP",
         "rhegic2-eth-lp": "RHEGIC2-ETH LP",
         "govi": "GOVI",
       },
@@ -274,7 +292,7 @@ const stakingConfig = {
     [stakingViews["available-to-stake"]]: {
       [chainNames.Ethereum]: {
         0: "Platform tokens", // 0 - index to add the sub header
-        3: "Liquidity mining"
+        4: "Liquidity mining"
       },
       [chainNames.Matic]: {
         0: "Platform tokens", // 0 - index to add the sub header

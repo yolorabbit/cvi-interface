@@ -5,14 +5,15 @@ import SelectLeverage from 'components/SelectLeverage';
 import Details from './Details/Details';
 import platformConfig, { activeViews } from 'config/platformConfig';
 import ActionController from 'components/Actions/ActionController';
-import './Form.scss';
 import { useSelector } from 'react-redux';
 import { contractsContext } from 'contracts/ContractContext';
 import { useInDOM } from 'components/Hooks';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
+import Graphs from '../Graphs';
+import './Form.scss';
 
-const Form = () => {
+const Form = ({activeTab}) => {
     const { account } = useActiveWeb3React();
     const { activeView } = useContext(platformViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
@@ -42,7 +43,12 @@ const Form = () => {
         return (
             <div className="platform-form-component">
                <div className="platform-form-component__left">
-                    <CurrencySelect selectedCurrency={selectedCurrency} setSelectedCurrency={setSelectedCurrency} />
+                    <CurrencySelect 
+                        selectedCurrency={selectedCurrency} 
+                        setSelectedCurrency={setSelectedCurrency} 
+                        activeVolIndex={activeTab}
+                    />
+
                     {activeView === 'trade' 
                         && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage 
                         && <SelectLeverage selectedCurrency={selectedCurrency} leverage={leverage} tokenLeverageList={tokenLeverageList} setLeverage={setLeverage} /> }
@@ -61,15 +67,28 @@ const Form = () => {
                     />
                </div>
     
-               <div className="platform-form-component__right">
-                    <Details selectedCurrency={selectedCurrency?.toUpperCase()} amount={amount} leverage={leverage} />
+               <div className="platform-form-component__middle">
+                    <Details 
+                        activeVolIndex={activeTab}
+                        selectedCurrency={selectedCurrency?.toUpperCase()} 
+                        amount={amount} 
+                        leverage={leverage} 
+                    />
                </div>
+
+               <div className="platform-form-component__right">
+                    <Graphs 
+                        activeVolIndex={activeTab}
+                        tabs={["index", "fee"]} 
+                    />  
+                </div>
+
             
                 <SeeMore selectedCurrency={selectedCurrency?.toUpperCase()}/>    
             </div>
         )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCurrency, activeView, selectedNetwork, leverage, tokenLeverageList, amount, type, availableBalance]) 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedCurrency, activeTab, activeView, selectedNetwork, leverage, tokenLeverageList, amount, type, availableBalance]) 
 }
 
 const SeeMore = ({selectedCurrency}) => {
@@ -111,7 +130,7 @@ const SeeMore = ({selectedCurrency}) => {
             {activeView === activeViews.trade ? <p>
                 <b>Pay Attention: </b> 
                 GOVI tokens will become claimable starting the day after your last open position action (UTC time) and for a period not exceeding 30 days.
-                Please also note that you won't be able to sell your position within the next 6 hours.
+                <br/>Please also note that you won't be able to sell your position within the next 6 hours.
             </p> : <p><b>Pay Attention: </b>you won't be able to withdraw your liquidity within the next {lockup} hours.</p>}
         </div>
     }, [activeView, lockup]);

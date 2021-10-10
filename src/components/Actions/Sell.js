@@ -47,7 +47,7 @@ const Sell = () => {
     const sell = async () => {
         try {
             
-            const { getCVILatestRoundData } = contracts[activeToken.rel.cviOracle].methods;
+            const { getCVILatestRoundData } = contracts[activeToken.rel.oracle].methods;
             const { cviValue } = await getCVILatestRoundData().call();
             let positionUnitsAmount = false;
             

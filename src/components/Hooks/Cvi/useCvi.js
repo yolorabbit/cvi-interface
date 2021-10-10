@@ -2,12 +2,11 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "r
 import moment from 'moment';
 import Api from "Api";
 import { useDispatch, useSelector } from "react-redux";
-import { setCviInfo } from "store/actions";
-import { customFixed, toDisplayAmount } from "utils";
+import { setVolInfo, updateVolInfo } from "store/actions";
+import { customFixed } from "utils";
 import { chainNames } from "connectors";
 import { debounce } from "lodash";
-import { getCviValue } from "contracts/utils";
-import { contractsContext } from "contracts/ContractContext";
+import config from "config/config";
 
 export const getPercentageChange = (oldNumber, newNumber) => {
    const decreaseValue = oldNumber - newNumber;
@@ -17,16 +16,56 @@ export const getPercentageChange = (oldNumber, newNumber) => {
 const useCvi = () => {
    const dispatch = useDispatch();
    const interval = useRef();
-   const [timeDuration, setTimeDuration] = useState(); // next hour + 2 minutes
-   const { cviInfo: appCviInfo, selectedNetwork } = useSelector(({app}) => app);
-   const { cviInfo, series } = appCviInfo;
-   const contracts = useContext(contractsContext);
+   const { cviVolInfo, ethVolInfo, series } = useSelector(({app}) => app.indexInfo);
+   const { selectedNetwork } = useSelector(({app}) => app);
+   const [timeDuration, setTimeDuration] = useState();
+
+   const mappedIndexData = (key, {index, oneHourAgo, oneDayChange, oneDayChangePercent, oneWeekHigh, oneWeekLow, timestamp}) => {
+      return {
+         key,
+         time: moment.utc(timestamp * 1000).format("LLL"),
+         index: customFixed(index, 2),
+         oneDayChange: customFixed(oneDayChange, 2),
+         oneDayChangePercent: customFixed(oneDayChangePercent, 2),
+         oneHourAgo: customFixed(oneHourAgo, 2),
+         cviOneWeekHigh: customFixed(oneWeekHigh, 2),
+         cviOneWeekLow: customFixed(oneWeekLow, 2),
+         lastHoursIndex: 970
+      }
+   }
 
    const startPollingInterval = () => {
       const nextUpdateOnMinutes = selectedNetwork === chainNames.Matic ? 21 : 62;
       const now = moment.utc();
       const pollingTime = ((nextUpdateOnMinutes - (now.minute() % nextUpdateOnMinutes))) * 60 * 1000;
       setTimeDuration(pollingTime);
+   }
+
+   const fetchGraphData = async () => {
+      try {
+         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
+         const { data: hourlySeries } = await Api.GET_INDEX_HISTORY(chainName); // @TODO: use different series for ethvol
+         const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY(); // @TODO: use different series for ethvol
+         const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
+         const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
+
+         dispatch(updateVolInfo({
+            history: {
+               daily: sortedDailySeries,
+               hourly: sortedHourlySeries
+            }
+         }, config.volatilityKey.cvi));
+
+         dispatch(updateVolInfo({ // @TODO: update details to ethvol
+            history: {
+               daily: sortedDailySeries,
+               hourly: sortedHourlySeries
+            }
+         }, config.volatilityKey.ethvol));
+
+      } catch(error) {
+         console.log(error);
+      }
    }
 
    const mappedCviData = (key, customIndex, {index, oneHourAgo, oneDayChange, oneDayChangePercent, oneWeekHigh, oneWeekLow, timestamp}) => {
@@ -48,83 +87,45 @@ const useCvi = () => {
    const fetchGraphData = useCallback(async () => {
       try {
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
-         const { data: hourlySeries } = await Api.GET_INDEX_HISTORY(chainName); // @TODO: use different series for ethvol
-         const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY(chainName); // @TODO: use different series for ethvol
-         const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
-         const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
+         const { data: volInfo } = await Api.GET_VOL_INFO(chainName);
          
-         
-         // merged daily and history
-         // const firstHourlyDate = moment(sortedHourlySeries[0][0]).utc(); 
-         // const lastHourlyDate = moment(sortedHourlySeries[sortedHourlySeries.length - 1][0]).utc();
-         // const diffDays = lastHourlyDate.diff(firstHourlyDate, 'days');
-         // const slicedDailySeries = sortedDailySeries.slice(0, (sortedDailySeries.length - 1) - diffDays)
-         
-         // const mergedDailyAndHourly = slicedDailySeries.concat(sortedHourlySeries).sort((a,b)=> a[0] - b[0]);
-         return {series: sortedHourlySeries, historicalData: sortedDailySeries};
-      } catch(error) {
-         console.log(error);
-      }
-   }, [selectedNetwork])
+         fetchGraphData();
 
-   const getIndexFromOracle = useCallback(async (type) => {
-      try {
-         return await getCviValue(contracts[type]);
-      } catch(error) {
-         console.log(error);
+         if(volInfo?.data?.CVI) {
+            dispatch(setVolInfo({
+               cviVolInfo: mappedIndexData('cvi', volInfo.data.CVI)
+            }));
+         }
+
+         if(volInfo?.data?.ETHVOL) {
+            dispatch(setVolInfo({
+               ethVolInfo: selectedNetwork === chainNames.Matic ? null : mappedIndexData('ethvol', volInfo.data.ETHVOL)
+            }));
+         }
+      } catch (error) {
+            console.log(error);
       }
    }, [contracts]);
 
-   const getData = useCallback(async () => {
-      
-      try {
-         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
-         const {series, historicalData} = await fetchGraphData();
-         dispatch(setCviInfo({
-            series,
-            historicalData
-         }));
-         
-         const { data: latestRoundInfo } = await Api.GET_INDEX_LATEST(chainName);
-         const customIndex = await getIndexFromOracle("CVIOracle");
-         
-         const cviData = {
-            cviInfo: latestRoundInfo?.data?.CVI ?  mappedCviData('cvi', customIndex, latestRoundInfo?.data?.CVI) : null,
-         }
-         
-         if(selectedNetwork === chainNames.Ethereum) {
-            const customETHVol = await getIndexFromOracle("ETHVolOracle");
-            cviData.ethVolInfo = latestRoundInfo?.data?.ETHVOL ? mappedCviData('ethvol', customETHVol, latestRoundInfo?.data?.ETHVOL) : null
-         }
-         
-         dispatch(setCviInfo(cviData));
-      } catch (error) {
-         console.log(error);
-      }
-   }, [dispatch, fetchGraphData, getIndexFromOracle, selectedNetwork])  
-   
    const getDataDebounce = useMemo(
       () => debounce(getData, 750)
-   , [getData]);
-
-   useEffect(() => {
-      if(!selectedNetwork) return;
-      startPollingInterval();
    // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [selectedNetwork]);
+   , []);
 
    useEffect(()=> {
-      if(!selectedNetwork || !contracts) return;
+      if(!selectedNetwork) return;
+      startPollingInterval();
       getDataDebounce();
 
       return () => {
          getDataDebounce.cancel();
       }
       //eslint-disable-next-line
-   }, [selectedNetwork, contracts]);
+   }, [selectedNetwork]);
+
 
    useEffect(() => {
-      if(!selectedNetwork || !contracts) return;
+      if(!selectedNetwork) return;
       interval.current = setInterval(() => {
             if(timeDuration) {
                getDataDebounce();
@@ -138,16 +139,17 @@ const useCvi = () => {
 
     return useMemo(() => {
       try {
-         if(!cviInfo || !series) return {};
+         if(!cviVolInfo || !ethVolInfo || !series) return {};
          return {
-            cviInfo,
-            series,
+               cviVolInfo,
+               ethVolInfo,
+               series,
          }
       } catch (error) {   
             console.error('Failed to get cvi info', error)
             return {}
         }// eslint-disable-next-line
-    }, [cviInfo, series])
+    }, [cviVolInfo, series])
 }
 
 export default useCvi;

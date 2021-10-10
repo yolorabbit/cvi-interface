@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { viewportContext } from "../Context";
 import platformConfig from '../../config/platformConfig';
 import stakingConfig from "config/stakingConfig";
+import config from "config/config";
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);
@@ -111,3 +112,11 @@ export const useIsMount = () => {
   }, []);
   return isMountRef.current;
 };
+
+export const useActiveVolInfo = (volKeyOrOracle = "cvi") => { // use active vol info by oracle or vol key
+    const volsInfo = useSelector(({app}) => app.indexInfo);
+
+    return volsInfo[config.volatilityKey[volKeyOrOracle] 
+      || config.volatilityKey[config.volatilityOracles[volKeyOrOracle]]] 
+      || null;
+}

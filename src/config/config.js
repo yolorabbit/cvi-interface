@@ -49,6 +49,11 @@ const config = {
       label: "Docs",
       path: 'https://docs.cvi.finance',
       external: true
+    },
+    cviindex: {
+      label: "CVI Index",
+      path: '/index',
+      dataUrl: 'https://api-v2.cvi.finance/history'
     }
   },
   socialLinks: [
@@ -66,6 +71,31 @@ const config = {
        FAILED: "FAILED",
        NOTICE: "NOTICE"
     },
+  },
+  cviVolInfoCurrencyIndex: { // index of api.cvx.finance/cvx (cvxInfo[index][cviInfCurrencyIndex])
+    CVI: 1,
+    BTC: 2,
+    ETH: 3
+  },
+  volatilityKey: {
+    "cvi": "cviVolInfo",
+    "ethvol": "ethVolInfo",
+  },
+  volatilityOracles: {
+    "CVIOracle": "cvi",
+    "ETHVolOracle": "ethvol",
+  },
+  volatilityLabel: {
+    "cvi": "CVI",
+    "ethvol": "ETHVol",
+  },
+  oracles: {
+    "cvi": "CVIOracle",
+    "ethvol": "ETHVolOracle"
+  },
+  oracleLabel: {
+    "CVIOracle": "CVI",
+    "ETHVolOracle": "ETHVol",
   },
   web3ProviderId: "NETWORK",
   networkStatuses: {
@@ -88,7 +118,7 @@ const config = {
       className: "bold green",
       prefix: "$",
       tooltip: {
-        content: "The total value locked(TVL) in the platform in USD",
+        content: "The total value locked(TVL) in both CVI and ETHVOL platforms in USD",
         left: -30,
       }
     },
@@ -96,37 +126,32 @@ const config = {
       title: "Liquidity pools",
       prefix: "$",
       tooltip: {
-        content: "The total value locked in all liquidity pools in USD. It is the total value deposited into the platform by liquidity providers who expect the CVI index to drop or stay the same.",
+        content: "The total value locked in all liquidity pools of CVI and ETHVOL platforms in USD.",
         mobileLeft: -30,
       }
     },
-    openTrades: {
-      title: "Open trades",
+    openPositions: {
+      title: "Open positions",
       prefix: "$",
       tooltip: {
-        content: "The total value of open positions in USD. Positions are bought by traders who expect the CVI index to increase.",
+        content: "The total value of open positions in CVI and ETHVOL platforms in USD.",
         mobileLeft: -30,
       }
     },
     goviPrice: {
       title: "GOVI price",
       prefix: "$",
+      className: "bold"
     },
     feesCollected: {
       title: "Accumulated fees earned by GOVI stakers",
       className: "bold green",
       prefix: "$",
     },
-    totalGoviRewards: {
-      title: "Today's rewards for new positions",
-      className: "bold green",
-      suffix: "GOVI"
-    },
     collateralRatio: {
       title: "Collateral ratio",
-      className: "bold",
       tooltip: {
-        content: "The collateral ratio is the ratio between the potential maximum value of open positions(open positions value when CVI index is 200) and the total value locked in the platform.",
+        content: "The collateral ratio is the ratio between the potential maximum value of open trades(open trades value when CVI index is 200) and the total value locked in the platform.",
         left: "0",
         mobileLeft: -40,
       }
@@ -134,7 +159,7 @@ const config = {
     purchaseFee: {
       title: "Purchase fee",
       tooltip: {
-        content: "A purchase fee is a fee that you pay every time you buy a CVI position. The fee amount will increase if the collateral ratio is above 80% or in case of rapid changes in CVI value (turbulence).",
+        content: "A purchase fee is a fee that you pay every time you buy a CVI position. The fee amount will increase if the collateral ratio is above 65% or in case of rapid changes in CVI value (turbulence).",
         left: "0",
         mobileLeft: -40,
       }

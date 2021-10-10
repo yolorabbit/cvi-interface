@@ -4,13 +4,19 @@
       &:first-child {
         & td {
           &:first-child {
-            width: 3.646vw;
+            width: 5.646vw;
 
             @media (max-width: 1365px) {
-              width: 5.128vw;
+              width: 6.128vw;
             }
           }
         }
+      }
+
+      & .coin-component--img {
+        width: 18px;
+        height: 18px;
+        margin-right: 8px;
       }
     }
     

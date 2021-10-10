@@ -2,19 +2,20 @@ import React, { useState, useEffect, useContext } from "react";
 import ChartOptions from "./ChartOptions";
 import { useRef } from "react";
 import { viewportContext } from "components/Context";
+import { useActiveVolInfo } from "components/Hooks";
 import "./CviIndexGraph.scss";
-import { useSelector } from "react-redux";
+import moment from 'moment';
 
 const chartInitialize = {
     id: "vix-graph"
 }
 
-const CviIndexGraph = ({maxWidth = 700, maxHeight = 370}) => {
+const CviIndexGraph = ({activeVolIndex, maxWidth = 700, maxHeight = 370}) => {
     const ref = useRef();
     const [chart, setChart] = useState();
     const { width: windowWidth } = useContext(viewportContext);
     const [activeRange, setActiveRange] = useState();
-    const {series, historicalData} = useSelector(({app}) => app.cviInfo);
+    const activeVolInfo = useActiveVolInfo(activeVolIndex);
 
     useEffect(() => {
         const getChartSize = () => {
@@ -39,6 +40,7 @@ const CviIndexGraph = ({maxWidth = 700, maxHeight = 370}) => {
         if(!series) return;
         
         setChart(ChartOptions({
+            activeVolIndex,
             chartInitialize, 
             activeRange: activeRange, 
             series: (!series?.length || activeRange === "all") ? (historicalData ?? []) : series,

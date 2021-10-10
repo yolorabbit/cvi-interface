@@ -64,13 +64,14 @@ const useHistoryEvents = () => {
                 const amount = activeToken.key === 'eth' ? fromWei(tokenAmount) : toDisplayAmount(tokenAmount, activeToken.decimals);
                 const fees = activeToken.key === 'eth' ? fromWei(feeAmount) : toDisplayAmount(feeAmount, activeToken.decimals);
                 const netAmount = activeToken.key === 'eth' ? fromWei(toBN(tokenAmount).sub(toBN(feeAmount))) : toDisplayAmount(toBN(tokenAmount).sub(toBN(feeAmount)).toString(), activeToken.decimals);
-                
+             
                 return Promise.resolve({
                     transactionHash: event.transactionHash,
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
                     type,
-                    index: cviValue / 100,
+                    index: config.oracleLabel[activeToken.rel.oracle],
+                    value: cviValue / 100,
                     leverage: `X${leverage ?? '1'}`,
                     amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`,
                     fees: `${commaFormatted(customFixed(fees, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`,
@@ -88,6 +89,7 @@ const useHistoryEvents = () => {
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
                     type,
+                    index: config.oracleLabel[activeToken.rel.oracle],
                     amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`,
                 });
             }

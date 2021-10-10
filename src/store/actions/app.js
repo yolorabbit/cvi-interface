@@ -27,7 +27,13 @@ export const setNetworkStatus = (status) => ({
   status
 });
 
-export const setCviInfo = (data) => ({
-  type: actionTypes.SET_CVI_INFO,
+export const setVolInfo = (data) => ({
+  type: actionTypes.SET_VOL_INFO,
   data,
+});
+
+export const updateVolInfo = (data, key) => ({
+  type: actionTypes.UPDATE_VOL_INFO,
+  data,
+  key
 });

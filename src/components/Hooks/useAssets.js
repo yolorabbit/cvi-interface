@@ -7,7 +7,7 @@ import stakingConfig from "config/stakingConfig";
 import { useSelector } from "react-redux";
 import platformConfig from "config/platformConfig";
 import web3Api from "contracts/web3Api";
-import { useIsMount } from ".";
+import { useInDOM, useIsMount } from ".";
 import { useWeb3React } from '@web3-react/core';
 import config from "config/config";
 
@@ -22,6 +22,7 @@ const useAssets = (type) => {
     const { positions, liquidities } = useSelector(({wallet}) => wallet);
     const actionConfirmedCounter = useSelector(({events}) => events.actionConfirmed);
     const isMount = useIsMount();
+    const isActiveInDom = useInDOM();
 
     const getAssets = () => {
         const stakingAssets = () => {
@@ -39,7 +40,7 @@ const useAssets = (type) => {
                 return stakingAssets();
             case "available-to-stake":
                 return stakingAssets();
-            case "Open trades": 
+            case "Open positions": 
                 return platformAsset();
             case "Liquidity": 
                 return platformAsset();
@@ -59,6 +60,7 @@ const useAssets = (type) => {
                     return {...asset, data: {staked, claim} };
                 })
                 filteredAssets = await Promise.all(filteredAssets);
+                if(!isActiveInDom()) return;
                 return filteredAssets.filter(({decimals, data: {staked, claim}}) => {
                     const stakedTokenAmount = staked.stakedTokenAmount ?? 0
                     const hasStaked = toBN(stakedTokenAmount).gt(toBN(0));
@@ -70,9 +72,8 @@ const useAssets = (type) => {
             case "available-to-stake": {
                 return filteredAssets.filter(({disable}) => !disable);
             }
-            case "Open trades": {
+            case "Open positions": {
                 filteredAssets = filteredAssets.map(async asset => {
-
                     const pos = await contracts[asset.rel.platform].methods.positions(account).call();
                     const positionValue = toBN(pos.positionUnitsAmount).gt(toBN(0)) ?
                         await web3Api.getAvailableBalance(contracts, asset, {library, account, type: "sell", errorValue: "0" } ) 
@@ -139,7 +140,7 @@ const useAssets = (type) => {
 
     useEffect(() => {
         let canceled = false
-        if(type === "Open trades") {
+        if(type === "Open positions") {
             eventsUpdateRef.current = setTimeout(() => {
                     dataFiltering((cb)=>{
                     if(canceled) return

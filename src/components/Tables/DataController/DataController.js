@@ -13,7 +13,7 @@ export const useDataController = () => {
     return context;
 }
 
-const DataController = ({children, data = [], subHeaders = {}, activeTab, authGuard, pageSize = 5, showPaginator, cb}) => {
+const DataController = ({children, data = [], subHeaders = {}, activeTab, authGuard, pageSize = 5, showPaginator, customTableHeaders, cb}) => {
     const { activeView } = useContext(platformViewContext);
     const [currentPage, setCurrentPage] = useState(1);
     const { account } = useActiveWeb3React();
@@ -27,12 +27,12 @@ const DataController = ({children, data = [], subHeaders = {}, activeTab, authGu
     
     if(!data?.length) return <EmptyData isSpinner={data === null} text={`You have no ${activeTabLabel ?? 'data'}`} />
 
-    if(!activeTab || 
-        (activeView && !platformConfig.headers?.[activeView]?.[activeTab]) ||
-        (!activeView && !stakingConfig.headers?.[activeTab])) return null;
+    if(!activeTab) return null;
+    if(!activeView && !stakingConfig.headers?.[activeTab]) return null; 
+    if(activeView && (!platformConfig.headers?.[activeView]?.[activeTab] && !platformConfig.headers?.[activeTab])) return null;
 
-    const tableHeaders = stakingViews?.[activeTab] ? Object.values(stakingConfig.headers?.[activeTab]) :  
-        Object.values(platformConfig.headers?.[activeView]?.[activeTab]);
+    const tableHeaders = customTableHeaders || (stakingViews?.[activeTab] ? Object.values(stakingConfig.headers?.[activeTab]) :  
+        Object.values(platformConfig.headers?.[activeView]?.[activeTab]));
 
     const currentData = showPaginator ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize) : data;
     const _showPaginator = showPaginator && data.length > pageSize;

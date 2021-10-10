@@ -37,6 +37,44 @@
         text-transform: capitalize;
         font-weight: normal;
     }
+
+    &.multiline {
+        display: block;
+
+        &:not(:first-child) {
+            margin-top: 0.313vw;
+            @media (max-width: 1365px){
+                margin-top: 0.44vw;
+            }
+        
+            @media (max-width: 1024px){
+                margin-top: 0.782vw;
+            }
+        
+            @media (max-width: 767px){
+                margin-top: 1.111vw;
+            }
+        }
+
+        & span {
+            font-size: 0.629vw;
+            @media (max-width: 1365px){
+                font-size: 0.879vw;
+            }
+
+            @media (max-width: 1024px){
+                font-size: 1.565vw;
+            }
+    
+            @media (max-width: 767px){
+                font-size: 3.333vw;   
+            }
+        }
+    }
+
+    &.green {
+        color: #2bdec1;
+    }
 }
 
 .staked-amount-component {

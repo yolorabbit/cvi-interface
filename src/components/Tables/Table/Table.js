@@ -3,8 +3,8 @@ import Tooltip from 'components/Tooltip';
 import React, { useMemo } from 'react';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
-import './Table.scss';
 import { useDataController } from '../DataController/DataController';
+import './Table.scss';
 
 const Table = () => {
     const { 
@@ -23,7 +23,7 @@ const Table = () => {
         return (
         <div className={`table-component ${activeTab?.toLowerCase()}`}>
             <table>
-                <thead>
+                {tableHeaders?.length > 0 && <thead>
                     <tr>
                         {tableHeaders?.map((item, index) => 
                             <th 
@@ -41,7 +41,7 @@ const Table = () => {
                             </th>
                         )}
                     </tr>
-                </thead>
+                </thead> }
 
                 <tbody>
                     {currentData.map((rowData, index) => {

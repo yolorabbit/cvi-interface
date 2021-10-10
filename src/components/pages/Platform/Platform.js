@@ -1,22 +1,22 @@
 import React, { useMemo, useState } from 'react';
 import { platformViewContext } from 'components/Context';
 import SubNavbar from 'components/SubNavbar';
-import Graphs from './Graphs';
 import Statistics from './Statistics';
-import CviStats from './CviStats';
 import Column from 'components/Layout/Column';
 import Layout from 'components/Layout/Layout';
 import Row from 'components/Layout/Row';
 import Container from 'components/Layout/Container';
-import Form from './Form';
 import platformConfig from 'config/platformConfig';
 import PlatformTables from './PlatformTables';
 import useHistoryEvents from 'components/Hooks/useHistoryEvents';
-import useCvi from 'components/Hooks/Cvi';
+import IndexStats from './IndexStats';
+import IndexTabs from './IndexTabs';
 import './Platform.scss';
+import useCvi from 'components/Hooks/Cvi';
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
+
     useHistoryEvents();
     useCvi();
 
@@ -27,34 +27,26 @@ const Platform = () => {
                
                 <platformViewContext.Provider value={{activeView}}>
                     <Layout>
-                        <Row>
+                        <Row className="statistics-row-component">
                             <Column>
-                                <Row flex="unset">
-                                    <Container>
-                                        <Statistics />
-                                    </Container>
-                                </Row>
-    
-                                <Row flex="1">
-                                    <Container>
-                                        <Form />
-                                    </Container>
+                                <Row>
+                                    <Statistics />
                                 </Row>
                             </Column>
     
                             <Column>
-                                <Row flex="unset">
-                                    <Container>
-                                        <CviStats />
-                                    </Container>
-                                </Row>
-    
                                 <Row>
-                                    <Graphs />
+                                    <Container className="index-stats-container">
+                                        <IndexStats />
+                                    </Container>
                                 </Row>
                             </Column>
                         </Row>
-    
+
+                        <Row flex="100%">
+                            <IndexTabs />
+                        </Row>
+
                         <Row>
                             <PlatformTables />
                         </Row>

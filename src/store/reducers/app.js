@@ -8,9 +8,9 @@ const initialState = {
     alerts: [],
     selectedNetwork: chainNames[localStorage.getItem('selectedNetwork')] || chainNames.Ethereum,
     networkStatus: 'disconnected',
-    cviInfo: {
-        cviInfo: null,
-        series: []
+    indexInfo: {
+        cviVolInfo: null,
+        ethVolInfo: null,
     },
 };
 
@@ -34,12 +34,24 @@ export const appReducer = (state = initialState, action) => {
             if(!config.networkStatuses[action.status]) return state;
             return { ...state, networkStatus: action.status}
         }
-        case actionTypes.SET_CVI_INFO: {
+        case actionTypes.SET_VOL_INFO: {
             return { 
                 ...state, 
-                cviInfo: {
-                    ...state.cviInfo,
+                indexInfo: {
+                    ...state.indexInfo,
                     ...action.data
+                }
+            }
+        }
+        case actionTypes.UPDATE_VOL_INFO: {
+            return { 
+                ...state, 
+                indexInfo: {
+                    ...state.indexInfo,
+                    [action.key]: {
+                        ...state.indexInfo[action.key],
+                        ...action.data
+                    }
                 }
             }
         }

@@ -116,36 +116,14 @@ const stakingApi = {
             lastStakedAmount: {...lastStakedAmount}
         }
     },
-    getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData, enforceMax = false) => {
+    getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData) => {
         try {
-          const cname = await platform.methods.name().call();
           let rate = await stakingRewards.methods.rewardRate().call();
-          // console.log(`enforceMax ? ${enforceMax}, name: ${cname} reward rate ${rate}`);
-          
-          const maxRateConfig = {
-              "USDT-LP": "10615079365079365",
-              "USDT-LP-V2": "15839947089947089",
-              "CVI-SHORT": "15839947089947089",
-              "CVI-LP": "15839947089947089",
-              "ETH-LP-V2": "18750000000000000",
-          }
-      
-          if(!enforceMax && toBN(rate).gt(toBN(maxRateConfig[cname]))) {
-              rate = maxRateConfig[cname];
-          }
-      
           let total = await stakingRewards.methods.totalSupply().call();
-          // console.log(`total ${total}`);
           let dailyReward = toBN(DAY).mul(toBN(rate));
-          // console.log(`GOVI dailyReward ${dailyReward}`);
           let USDDailyReward = toDisplayAmount(await convert(dailyReward, GOVIData, USDTData), USDTData.decimals);
-          // console.log(`USDDailyReward ${USDDailyReward}`);
-          // convert from USDT-LP to USDT
           let stakedTokens = await fromLPTokens(platform, toBN(total));
-          // console.log(`stakedTokens ${stakedTokens}`);
-          // console.log(`stakedTokens converted ${await convert(stakedTokens, tokenData, USDTData, chainId, library.currentProvider)}`);
           let USDStakedTokens = toDisplayAmount(await convert(stakedTokens, tokenData, USDTData), USDTData.decimals);
-          // console.log(`USDStakedTokens ${USDStakedTokens}`);
 
           const dailyApr = (USDDailyReward / USDStakedTokens) * 100;
           return USDStakedTokens === 0 ? [0, 0, 0] : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];

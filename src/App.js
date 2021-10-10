@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Platform from './components/pages/Platform';
 import Staking from './components/pages/Staking';
+import CVIIndex from './components/pages/CVIIndex';
 import Footer from './components/Footer/Footer';
 import config from './config/config';
 import NotificationList from 'components/NotificationList';
@@ -76,6 +77,7 @@ const Routes = () => {
           <Route exact path={config.routes.staking.path} component={Staking} />
           <Route exact path={config.routes.platform.path} component={Platform} />
           <Route exact path={config.routes.home.path} component={Home} />
+          <Route path={config.routes.cviindex.path} component={CVIIndex} />
           <Redirect to="/" />
         </Switch>
         <Footer />

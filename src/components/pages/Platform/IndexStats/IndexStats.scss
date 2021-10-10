@@ -1,21 +1,5 @@
-.cvi-stats-component {
-    padding: 1.667vw;
-    min-height: 6.558vw;
-
-    @media (max-width: 1365px){
-        min-height: 10vw;
-    	padding: 1.099vw 1.667vw;
-    }
-
-    @media (max-width: 1024px){
-        padding: 3.129vw;
-        min-height: 100%;
-        height: 100%;
-    }
-
-    @media (max-width: 767px){
-        padding: 6.667vw 4.444vw;
-    }
+.index-stats-component {
+    min-height: auto;
 
     &__container {
         width: 100%;
@@ -49,18 +33,43 @@
             }
 
             & h2 {
-                margin-bottom: 0.417vw;
-
-                @media (max-width: 1024px){
-                	margin-bottom: 1.043vw;
-                }
-
                 @media (max-width: 767px){
                     font-size: 3.333vw;
                     line-height: 6.667vw;
                     margin-bottom: 0;
                 }
             }
+        }
+    }
+
+    .index-value-component__top {
+        min-height: auto;
+    }
+
+    .index-value-component__top--title {
+        margin-right: 1.042vw;
+        width: 3.125vw;
+
+        @media (max-width: 1365px){
+            margin-right: 1.026vw;
+            width: 4.396vw;
+        }
+    
+        @media (max-width: 1024px){
+            margin-right: 1.565vw;
+            width: 7.823vw;
+        }
+    }
+    
+    .index-value-component__top--title, .index-value-component__top--value, .index-value-component__top--info span {
+        font-size: 0.938vw;
+    
+        @media (max-width: 1024px){
+            font-size: 2.347vw;
+        }
+
+        @media (max-width: 767px){
+            font-size: 5vw;
         }
     }
 }

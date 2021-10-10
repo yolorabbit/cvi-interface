@@ -7,7 +7,7 @@ import Container from '../../../Layout/Container';
 import TabsForm from '../../../TabsForm';
 import './Graphs.scss';
 
-const Graphs = ({tabs = ["cvi index", "funding fee"]}) => {
+const Graphs = ({tabs = ["index", "fee"], activeVolIndex}) => {
     const tabsFormRef = useRef();
     const isSingleGraph = tabs.length === 1;
     const [activeTab, setActiveTab] = useState(isSingleGraph ? tabs[0] : undefined);
@@ -25,25 +25,38 @@ const Graphs = ({tabs = ["cvi index", "funding fee"]}) => {
         return (
             <Container className={`graphs-component${isSingleGraph ? " single-graph" : ""}`}>
                 {isSingleGraph ? <div className="single-graph__container" ref={tabsFormRef}> 
-                    <ActiveGraph activeTab={activeTab} tabsFormHeight={tabsFormHeight} tabsFormWidth={tabsFormWidth} width={width} />
-                </div> : <TabsForm 
-                        ref={tabsFormRef}
-                        id="graph"
-                        tabs={tabs} 
+                    <ActiveGraph 
                         activeTab={activeTab} 
-                        setActiveTab={(tab) => setActiveTab(tab)}>
-                            <ActiveGraph activeTab={activeTab} tabsFormHeight={tabsFormHeight} tabsFormWidth={tabsFormWidth} width={width} />
-                    </TabsForm>
+                        activeVolIndex={activeVolIndex} 
+                        tabsFormHeight={tabsFormHeight} 
+                        tabsFormWidth={tabsFormWidth} 
+                        width={width} 
+                    />
+                </div> : <TabsForm 
+                            ref={tabsFormRef}
+                            id="graphs"
+                            tabs={tabs} 
+                            activeTab={activeTab} 
+                            setActiveTab={(tab) => setActiveTab(tab)}>
+                                <ActiveGraph 
+                                    activeVolIndex={activeVolIndex} 
+                                    activeTab={activeTab} 
+                                    tabsFormHeight={tabsFormHeight} 
+                                    tabsFormWidth={tabsFormWidth} 
+                                    width={width} 
+                                />
+                        </TabsForm>
                 }
             </Container>
         )
-    }, [isSingleGraph, activeTab, tabsFormHeight, tabsFormWidth, width, tabs])
+    }, [isSingleGraph, activeTab, tabsFormHeight, tabsFormWidth, width, tabs, activeVolIndex])
 }
 
-const ActiveGraph = ({activeTab, tabsFormHeight, tabsFormWidth, width}) => {
+const ActiveGraph = ({activeTab = "", activeVolIndex, tabsFormHeight, tabsFormWidth, width}) => {
     return useMemo(() => {
-        return activeTab === platformConfig.tabs.graphs['cvi index']?.toLowerCase() ? 
+        return activeTab.toLowerCase() === platformConfig.tabs.graphs['index']?.toLowerCase() ? 
             <CviIndexGraph    
+                activeVolIndex={activeVolIndex}
                 key={width}  
                 maxWidth={tabsFormWidth ?? 400} 
                 maxHeight={tabsFormHeight ?? 400}  
@@ -53,7 +66,7 @@ const ActiveGraph = ({activeTab, tabsFormHeight, tabsFormWidth, width}) => {
                 maxWidth={tabsFormWidth ?? 400} 
                 maxHeight={tabsFormHeight ?? 400} 
             />
-    }, [activeTab, tabsFormHeight, tabsFormWidth, width]);
+    }, [activeTab, activeVolIndex, tabsFormHeight, tabsFormWidth, width]);
 }
 
 export default Graphs;

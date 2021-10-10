@@ -1,8 +1,12 @@
 .platform-form-component {
     height: 100%;
-    padding: 2.917vw;
+    padding: 2.917vw 0.833vw 2.917vw 2.917vw;
     display: flex;
     flex-wrap: wrap;
+    background-color:#1b1d38;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    
     @media (max-width: 1365px){
         padding: 4.103vw;
     }
@@ -17,12 +21,12 @@
 
     &__left {
         padding-right: 1.875vw;
-        flex: 50%;
-        width: 50%;
+        width: 30%;
+        flex: 30%;
         order: 0;
 
         @media (max-width: 1365px){
-            padding: 0;
+            padding: 0 1.172vw 0 0;
         }
 
         @media (max-width: 767px) {
@@ -30,10 +34,26 @@
         }
     }
 
+    &__middle {
+        width: 30%;
+        flex: 30%;
+        order: 1;
+
+        @media (max-width: 1365px){
+            padding-left: 1.172vw;
+        }
+
+        @media (max-width: 1024px) { 
+            padding-left: 0;
+            margin-top: 2.086vw;
+        }
+    }
+
     &__right {
-        width: 50%;
-        flex: 50%;
-        padding-left: 1.875vw;
+        width: 40%;
+        flex: 40%;
+        order: 3;
+
         @media (max-width: 1365px){
             padding: 0;
             flex: 100%;
@@ -42,7 +62,7 @@
 
         @media (max-width: 1024px){
         	flex: 100%;
-            margin-top: 2.086vw;
+            margin-top: 3.129vw;
             padding: 0;
             order: 1;
         }
@@ -56,9 +76,12 @@
     &__bottom {
         flex: 1;
         margin-top: 1.25vw;
+        order: 4;
 
         @media (max-width: 1365px){
             margin-top: 1.758vw;
+            order: 2;
+            flex: 100% 1;
         }
 
         @media (max-width: 1024px){ 
@@ -92,6 +115,52 @@
 
             & b {
                 color: #fea716;
+            }
+        }
+    }
+
+    & .graphs-component {
+        & .tabs-form-component__header {
+            background-color: transparent;
+        }
+
+        & .tabs-form-component__container {
+            border: 0;
+
+            & #vix-graph, #funding-fees-graph {
+                @media (max-width: 1365px){ 
+                    transform: translateX(20px) scale(1);
+                }
+            }
+        }
+
+        & .tabs-component__tab {
+            display: flex;
+            height: 2.083vw;
+            @media (max-width: 1365px){
+                height: 2.93vw;
+                padding: 0;
+            }
+
+            @media (max-width: 1024px){
+                height: 4.172vw;
+            }
+
+            @media (max-width: 767px){
+                height: 8.172vw;
+                text-align: center;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                margin-bottom: 2.222vw;
+            }
+        }
+
+        & .tabs-component {
+            &.default {
+                @media (max-width: 1365px){ 
+                    padding: 0 0 1.172vw 0;
+                }
             }
         }
     }

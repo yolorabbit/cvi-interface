@@ -48,12 +48,10 @@
             }
 
             @media (max-width: 767px){
-            	font-size: 3.056vw;
+            	font-size: 3.333vw;
             }
         }
     }
-    
-
 
     & h2 {
         font-size: 0.625vw;
@@ -79,10 +77,10 @@
 
     &.large-value {
         & p {
-            font-size: 0.729vw;
+            font-size: 0.833vw;
     
             @media (max-width: 1365px){
-                font-size: 1.026vw;
+                font-size: 1.172vw;
             }
     
             @media (max-width: 1024px){

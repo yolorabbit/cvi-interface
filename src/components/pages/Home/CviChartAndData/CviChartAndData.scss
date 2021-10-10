@@ -22,7 +22,7 @@
         margin-bottom: 13.333vw;
     }
 
-    & .cvi-info-component__bottom {
+    & .index-value-component__bottom {
         position: absolute;
         top: 0.625vw;
         left: 2.5vw;
@@ -127,12 +127,32 @@
     & .cvi-stats-component {
         min-height: auto;
 
-        & .cvi-info-component {
+        & .statistics-spinner {
+            margin-top: 4px;
+        }
+        
+        & .index-value-component__top.index-value-spinner-container {
+            align-items: flex-end;
+
+            & .index-value-component__top--title {
+                margin-right: 22px !important;
+            }
+
+            & .statistics-spinner {
+                height: 16px;
+                width: 16px;
+                margin-bottom: 2px;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        & .index-value-component {
             @media (max-width: 767px){
                 margin-bottom: 4.444vw;
             }
 
-            & .cvi-info-component__top {
+            & .index-value-component__top {
                 padding: 0;
                 &.border {
                     margin: 0;
@@ -143,20 +163,12 @@
                     }
                 }
 
-                & .cvi-info-component__top--title {
-                    margin-right: 44px;
-
-                    @media (max-width: 767px){
-                        margin-right: 0;
-                    }
-                }
-
-                & .cvi-info-component__top--info {
+                & .index-value-component__top--info {
                     align-items: flex-end;
                 }
             }
 
-            & .cvi-info-component__top--info span, & .cvi-info-component__top--value, & .cvi-info-component__top--title {
+            & .index-value-component__top--info span, & .index-value-component__top--value, & .index-value-component__top--title {
                 font-size: 0.938vw;
                 @media (max-width: 1365px) {
                     font-size: 1.319vw;
@@ -171,7 +183,7 @@
                 }
             }
 
-            & .cvi-info-component__top--value {
+            & .index-value-component__top--value {
                 margin-right: 0.417vw;
                 @media (max-width: 1365px) {
                     margin-right: 0.586vw;

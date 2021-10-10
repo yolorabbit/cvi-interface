@@ -5,7 +5,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: rgba(#182f5d, 0.3);
+        background-color: #222540;
         border-radius: 0.833vw;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
@@ -33,20 +33,10 @@
     }
 
     &__container {
-        border-top: solid 0.052vw #2b387c;
         border-bottom-left-radius: 0.833vw;
         border-bottom-right-radius: 0.833vw;
 
-        @media (max-width: 1365px){
-        	border-top: solid 0.073vw #2b387c;
-        }
-
-        @media (max-width: 1024px){
-        	border-top: solid 0.13vw #2b387c;
-        }
-
         @media (max-width: 767px) {
-            border-top: solid 0.278vw #2b387c;
             display: flex;
             justify-content: center;
             border: 0;

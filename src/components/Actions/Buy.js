@@ -1,6 +1,6 @@
 import Button from 'components/Elements/Button';
 import { useCallback, useMemo, useState } from 'react';
-import { useActiveToken, useInDOM } from 'components/Hooks';
+import { useActiveToken, useActiveVolInfo, useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from './../../contracts/ContractContext';
@@ -31,7 +31,7 @@ const Buy = () => {
     const activeToken = useActiveToken(token);
     const [isProcessing, setProcessing] = useState();
     const { selectedNetwork } = useSelector(({app}) => app);
-    const { cviInfo } = useSelector(({app}) => app.cviInfo);
+    const activeVolInfo = useActiveVolInfo(activeToken.rel.oracle);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const purchaseFeePayload = useMemo(() => ({ tokenAmount,leverage } ), [tokenAmount, leverage]);
     const [purchaseFee, getPurchaseFees] = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload, { validAmount: true});
@@ -86,13 +86,13 @@ const Buy = () => {
 
     const getMaxAvailableToOpen = useCallback(async () => {
         try {
-            const index = toBNAmount(cviInfo.cvi, 2);
+            const index = toBNAmount(activeVolInfo?.index, 2);
             let totalToOpen = await getMaxAmount(index);
             return [totalToOpen.cmp(toBN(toBNAmount(amount, activeToken.decimals))) > -1, toDisplayAmount(totalToOpen.toString(), activeToken.decimals)];
         } catch(error) {
             console.log(error);
         }
-    }, [cviInfo, activeToken, amount, getMaxAmount]);
+    }, [activeVolInfo, activeToken, amount, getMaxAmount]);
 
     const feesValidation = useCallback(async () => {
         let fees = await getPurchaseFees();

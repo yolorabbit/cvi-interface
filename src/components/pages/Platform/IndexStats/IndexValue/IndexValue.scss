@@ -1,4 +1,4 @@
-.cvi-info-component {
+.index-value-component {
     display: block;
     position: relative;
     
@@ -10,16 +10,28 @@
     @media (max-width: 1024px){ 
         width: auto;
         margin-bottom: 0;
+        padding-right: 7.171vw;
     }
 
     @media (max-width: 767px){
     	width: 100%;
+        padding-right: 0;
+    }
+
+    &__header {
+        vertical-align: top;
+        display: inline-block;
+        font-size: 5vw;
+        padding-bottom: 2.222vw;
+        border-bottom: 0.556vw solid rgba(248, 186, 21, 0.6);
+        font-size: 5vw;
+        margin-bottom: 2.222vw;
     }
 
     &__top {
         display: flex;
         justify-content: flex-start;
-        align-items: center;
+        align-items: flex-end;
         min-height: 1.667vw;
         position: relative;
         
@@ -28,7 +40,7 @@
         }
 
         @media (max-width: 1024px){
-            margin-bottom: 0.782vw;
+            margin-bottom: 0;
         }
 
         @media (max-width: 767px){
@@ -109,7 +121,7 @@
             font-size: 1.25vw;
 
             @media (max-width: 1365px){
-                margin-right: 1.758vw;
+                margin-right: 1vw;
                 font-size: 1.758vw;
             }
     
@@ -120,7 +132,7 @@
     
             @media (max-width: 767px){
                 font-size: 5.667vw;
-                margin-right: 5.556vw;
+                margin-right: 2.222vw;
             }
         }
 
@@ -238,9 +250,7 @@
         }
     }
 
-    &--cvi-value {
-        & span {
-            
-        }
+    & .index-value-spinner-container {
+        align-items: center;
     }
 }

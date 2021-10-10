@@ -10,6 +10,7 @@ import { useActiveWeb3React } from '../../../Hooks/wallet';
 import { useWeb3Api } from '../../../../contracts/useWeb3Api';
 import { customFixedTokenValue } from "utils";
 import { customFixed } from '../../../../utils';
+import config from "config/config";
 
 const LiquidityRow = ({token, isHeader, className}) => {
     const { key: tokenName } = token;
@@ -42,9 +43,14 @@ const LiquidityRow = ({token, isHeader, className}) => {
 
     const RowData = useMemo(() => (
         <> 
+            <RowItem 
+                header={header.index.label}
+                content={<Value text={config.oracleLabel[token.rel.oracle]} />} 
+            />
+
             {!isTablet && <> 
-                <RowItem content={<Coin token={tokenName} />} />
                 <RowItem content={<Value 
+                    coin={token.key}
                     text={liquidityShareData} 
                     subText={`${tokenName.toUpperCase()} (${customFixed(liquidityShareData?.poolShare, 2) ?? '0'}%)`} 
                     format={customFixedTokenValue(liquidityShareData?.myShare, token.fixedDecimals, token.decimals)}
@@ -73,7 +79,7 @@ const LiquidityRow = ({token, isHeader, className}) => {
 
             {(!isTablet || isMobile) && <RowItem content={withdrawController} />}
         </>
-    ), [isTablet, tokenName, liquidityShareData, token.fixedDecimals, token.decimals, header, liquidityPnl, poolSize, isMobile, withdrawController]);
+    ), [header, token.rel.oracle, token.key, token.fixedDecimals, token.decimals, isTablet, liquidityShareData, tokenName, liquidityPnl, poolSize, isMobile, withdrawController]);
 
     if(isHeader) {
         return <>

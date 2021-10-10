@@ -8,6 +8,7 @@ import PlatformClaim from "components/Actions/PlatformClaim";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { customFixedTokenValue } from "utils";
+import config from "config/config";
 
 const TradeRow = ({token, isHeader, className}) => {
     const { account } = useActiveWeb3React();
@@ -39,9 +40,15 @@ const TradeRow = ({token, isHeader, className}) => {
 
     const RowData = useMemo(() => (
         <> 
+            <RowItem 
+                header={header.index.label}
+                content={<Value text={config.oracleLabel[token.rel.oracle]} />} 
+            />
+
+            
             {!isTablet && <> 
-                <RowItem content={<Coin token={token.key} />} />
                 <RowItem content={<Value 
+                    coin={token.key}
                     text={positionValue} 
                     subText={`${token.key.toUpperCase()}`} 
                     format={customFixedTokenValue(positionValue?.toString(), token.fixedDecimals, token.decimals)}

@@ -47,6 +47,7 @@ const Navbar = () => {
   }, []);
 
   const RenderView = useMemo(() => {
+    if(!activePath) return null;
     return (
       <>
         <Logo showEnterApp={showEnterApp} />
@@ -70,6 +71,7 @@ const Navbar = () => {
     );
     //eslint-disable-next-line
   }, [showEnterApp, activePath, isTablet]);
+       
 
   return useMemo(() => {
     return (

@@ -1,9 +1,10 @@
 import Container from 'components/Layout/Container';
-import CviStats from 'components/pages/Platform/CviStats';
+import IndexStats from 'components/pages/Platform/IndexStats';
 import Graphs from 'components/pages/Platform/Graphs';
 import React, { useMemo } from 'react';
 import CommentsSection from '../CommentsSection';
 import './CviChartAndData.scss';
+import platformConfig from 'config/platformConfig';
 
 const CviChartAndData = () => {
     
@@ -12,8 +13,8 @@ const CviChartAndData = () => {
             <Container className="cvi-index-chart-and-data-component">
                 <CommentsSection />
                 <h3>CVI Index Chart & Data</h3>
-                <CviStats type="home" />
-                <Graphs tabs={["cvi index"]} />
+                <IndexStats type="home" />
+                <Graphs tabs={[platformConfig.tabs.graphs.index]} />
             </Container>
         )
     }, []);
