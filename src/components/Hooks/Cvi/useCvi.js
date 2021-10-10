@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "r
 import moment from 'moment';
 import Api from "Api";
 import { useDispatch, useSelector } from "react-redux";
-import { setVolInfo, updateVolInfo } from "store/actions";
+import { updateVolInfo } from "store/actions";
 import { customFixed, toDisplayAmount } from "utils";
 import { chainNames } from "connectors";
 import { debounce } from "lodash";
@@ -91,18 +91,19 @@ const useCvi = () => {
          const { data: volInfo } = await Api.GET_VOL_INFO(chainName);
          const cviIndex = await getIndexFromOracle(config.oracles.cvi);
          
-         let cviData = {
+         let volData = {
             cviVolInfo: volInfo?.data?.CVI ?  mappedIndexData('cvi', cviIndex, volInfo?.data?.CVI) : null,
          }
 
          if(selectedNetwork === chainNames.Ethereum) {
             const customETHVol = await getIndexFromOracle("ETHVolOracle");
-            cviData.ethVolInfo = volInfo?.data?.ETHVOL ? mappedIndexData('ethvol', customETHVol, volInfo?.data?.ETHVOL) : null
+            volData.ethVolInfo = volInfo?.data?.ETHVOL ? mappedIndexData('ethvol', customETHVol, volInfo?.data?.ETHVOL) : null
          } else {
-            cviData.ethVolInfo = null;
+            volData.ethVolInfo = null;
          }
 
-         dispatch(setVolInfo(cviData));
+         dispatch(updateVolInfo(volData.cviVolInfo, config.volatilityKey.cvi));
+         dispatch(updateVolInfo(volData.ethVolInfo, config.volatilityKey.ethvol));
       } catch (error) {
             console.log(error);
       }

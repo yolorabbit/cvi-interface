@@ -48,7 +48,7 @@ export const appReducer = (state = initialState, action) => {
                 ...state, 
                 indexInfo: {
                     ...state.indexInfo,
-                    [action.key]: {
+                    [action.key]: action.data === null ? null : {
                         ...state.indexInfo[action.key],
                         ...action.data
                     }
