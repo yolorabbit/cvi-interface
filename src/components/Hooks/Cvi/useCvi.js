@@ -122,7 +122,7 @@ const useCvi = () => {
          getDataDebounce.cancel();
       }
       //eslint-disable-next-line
-   }, [selectedNetwork]);
+   }, [selectedNetwork, contracts]);
 
 
    useEffect(() => {
