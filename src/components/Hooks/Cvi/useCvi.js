@@ -26,7 +26,8 @@ const useCvi = () => {
    const getIndexFromOracle = useCallback(async (type) => {
       try {
          if(!contracts) return null;
-         return await getCviValue(contracts[type]);
+         const value = await getCviValue(contracts[type]);
+         return value === "N/A" ? null : value;
       } catch(error) {
          console.log(error);
       }
@@ -90,16 +91,15 @@ const useCvi = () => {
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
          const { data: volInfo } = await Api.GET_VOL_INFO(chainName);
          const cviIndex = await getIndexFromOracle(config.oracles.cvi);
-         
+
          let volData = {
             cviVolInfo: volInfo?.data?.CVI ?  mappedIndexData('cvi', cviIndex, volInfo?.data?.CVI) : null,
+            ethVolInfo: null
          }
 
          if(selectedNetwork === chainNames.Ethereum) {
             const customETHVol = await getIndexFromOracle("ETHVolOracle");
             volData.ethVolInfo = volInfo?.data?.ETHVOL ? mappedIndexData('ethvol', customETHVol, volInfo?.data?.ETHVOL) : null
-         } else {
-            volData.ethVolInfo = null;
          }
 
          dispatch(updateVolInfo(volData.cviVolInfo, config.volatilityKey.cvi));

@@ -130,7 +130,7 @@ const config = {
     collateralRatio: {
       title: "Collateral ratio",
       tooltip: {
-        content: "The collateral ratio is the ratio between the potential maximum value of open trades(open trades value when CVI index is 200) and the total value locked in the platform.",
+        content: "The collateral ratio is the ratio between the potential maximum value of open positions(open positions value when CVI index is 200) and the total value locked in the platform.",
         left: "0",
         mobileLeft: -40,
       }

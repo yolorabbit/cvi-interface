@@ -155,7 +155,7 @@ const platformConfig = {
       "Open positions": {
         label: "Open positions",
         tooltip: {
-          content: "The total value of open trades in CVI and ETHVOL platforms in USD.",
+          content: "The total value of open positions in CVI and ETHVOL platforms in USD.",
           left: -30
         }
       }, 
