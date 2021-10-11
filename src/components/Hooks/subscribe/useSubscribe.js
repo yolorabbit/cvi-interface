@@ -19,14 +19,14 @@ const useSubscribe = () => {
                 const contract = contracts[name];
                 if(!contract) return;
                 events.forEach(eventName => {
-                    const eventJsonInterface = web3.utils._.find(
+                    const eventJsonInterface = web3.utils?._?.find(
                         contract._jsonInterface,
                         o => o.name === eventName && o.type === 'event',
                     )
                     if(!['openposition', "closeposition", "deposit", "withdraw", "approval"].includes(eventName.toLowerCase())){
                         const subscription = web3.eth.subscribe('logs', {
                             address: contract.options.address,
-                            topics: [eventJsonInterface.signature, web3.utils.padLeft(account, 64)]
+                            topics: [eventJsonInterface?.signature, web3.utils.padLeft(account, 64)]
                         }, (error, result) => {
                             if (!error) {
                                 // console.log('...result: ', result);
