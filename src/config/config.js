@@ -117,22 +117,6 @@ const config = {
         left: -30,
       }
     },
-    liquidityPoolBalance: {
-      title: "Liquidity pools",
-      prefix: "$",
-      tooltip: {
-        content: "The total value locked in all liquidity pools of CVI and ETHVOL platforms in USD.",
-        mobileLeft: -30,
-      }
-    },
-    openPositions: {
-      title: "Open positions",
-      prefix: "$",
-      tooltip: {
-        content: "The total value of open positions in CVI and ETHVOL platforms in USD.",
-        mobileLeft: -30,
-      }
-    },
     goviPrice: {
       title: "GOVI price",
       prefix: "$",

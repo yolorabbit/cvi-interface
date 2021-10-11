@@ -148,14 +148,14 @@ const platformConfig = {
       "Liquidity pools": {
         label: "Liquidity pools",
         tooltip: {
-          content: "The total value locked in all liquidity pools in USD. It is the total value deposited into the platform by liquidity providers who expect the CVI index to drop or stay the same.",
+          content: "The total value locked in all liquidity pools of CVI and ETHVOL platforms in USD.",
           left: -30
         }
       }, 
       "Open positions": {
         label: "Open positions",
         tooltip: {
-          content: "The total value of open positions in USD. Positions are bought by traders who expect the CVI index to increase.",
+          content: "The total value of open trades in CVI and ETHVOL platforms in USD.",
           left: -30
         }
       }, 
