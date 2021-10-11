@@ -8743,20 +8743,7 @@
         "type": "event"
       },
       {
-        "inputs": [{ "internalType": "address", "name": "account", "type": "address" }],
-        "name": "balanceOf",
-        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
-        "inputs": [],
-        "name": "decimals",
-        "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
-        "stateMutability": "view",
-        "type": "function"
-      },
-      {
+        "anonymous": false,
         "inputs": [
           { "indexed": true, "internalType": "uint256", "name": "roundId", "type": "uint256" },
           { "indexed": true, "internalType": "address", "name": "startedBy", "type": "address" },
@@ -8766,6 +8753,7 @@
         "type": "event"
       },
       {
+        "anonymous": false,
         "inputs": [
           { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
           { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
@@ -8925,17 +8913,6 @@
         "outputs": [{ "internalType": "contract AggregatorV3Interface", "name": "", "type": "address" }],
         "stateMutability": "view",
         "type": "function"
-      }
-    ]
-  },
-  "PositionRewardsHelper": {
-    "address": "0xd5A222B80788E36F707adDc74c3Cb5de7e43F1B0",
-    "abi": [
-      {
-        "inputs": [{ "internalType": "contract PositionRewards", "name": "_positionRewards", "type": "address" }],
-        "stateMutability": "nonpayable",
-        "type": "constructor",
-        "signature": "constructor"
       },
       {
         "inputs": [],
@@ -9006,8 +8983,7 @@
         "name": "setDeviationCheck",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "constructor",
-        "signature": "constructor"
+        "type": "function"
       },
       {
         "inputs": [{ "internalType": "uint16", "name": "_newMaxDeviation", "type": "uint16" }],
@@ -9986,25 +9962,7 @@
           { "internalType": "uint80", "name": "answeredInRound", "type": "uint80" }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x7e3dd0f0"
-      }
-    ]
-  },
-  "USDCPlatform": {
-    "address": "0x0E0DA40101D8f6eB1b1d6b0215327e8452e0Bc60",
-    "abi": [
-      {
-        "anonymous": false,
-        "inputs": [
-          { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
-          { "indexed": true, "internalType": "address", "name": "spender", "type": "address" },
-          { "indexed": false, "internalType": "uint256", "name": "value", "type": "uint256" }
-        ],
-        "name": "Approval",
-        "type": "event",
-        "signature": "0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925"
+        "type": "function"
       },
       {
         "inputs": [],
@@ -10017,17 +9975,14 @@
           { "internalType": "uint80", "name": "answeredInRound", "type": "uint80" }
         ],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xdd62ed3e"
+        "type": "function"
       },
       {
         "inputs": [{ "internalType": "uint256", "name": "_latestRound", "type": "uint256" }],
         "name": "setLatestRound",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x095ea7b3"
+        "type": "function"
       },
       {
         "inputs": [],
@@ -12404,272 +12359,6 @@
           { "internalType": "string", "name": "_symbol", "type": "string" },
           { "internalType": "uint256", "name": "_supply", "type": "uint256" },
           { "internalType": "uint8", "name": "_decimals", "type": "uint8" }
-        ],
-        "stateMutability": "nonpayable",
-        "type": "constructor"
-      },
-      {
-        "inputs": [],
-        "name": "afterTargetMaxTime",
-        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x0d731009"
-      },
-      {
-        "inputs": [],
-        "name": "afterTargetMaxTimePenaltyFeePercent",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x22470032"
-      },
-      {
-        "inputs": [],
-        "name": "afterTargetMidTime",
-        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xbf0ded66"
-      },
-      {
-        "inputs": [],
-        "name": "afterTargetMidTimePenaltyFeePercent",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x2e5ad605"
-      },
-      {
-        "inputs": [],
-        "name": "beforeTargetTimeMaxPenaltyFeePercent",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x4f592a50"
-      },
-      {
-        "inputs": [],
-        "name": "findersFeePercent",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x530fd7af"
-      },
-      {
-        "inputs": [],
-        "name": "maxTimeDelayFeePercent",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x738b553f"
-      },
-      {
-        "inputs": [],
-        "name": "maxTimeWindow",
-        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xd0b68652"
-      },
-      {
-        "inputs": [],
-        "name": "minTimeDelayFeePercent",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xa5759c93"
-      },
-      {
-        "inputs": [],
-        "name": "minTimeWindow",
-        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xa8859ed1"
-      },
-      {
-        "inputs": [],
-        "name": "minWaitTime",
-        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xce521f26"
-      },
-      {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x8da5cb5b"
-      },
-      {
-        "inputs": [],
-        "name": "renounceOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x715018a6"
-      },
-      {
-        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xf2fde38b"
-      },
-      {
-        "inputs": [
-          {
-            "components": [
-              { "internalType": "uint8", "name": "requestType", "type": "uint8" },
-              { "internalType": "uint168", "name": "tokenAmount", "type": "uint168" },
-              { "internalType": "uint16", "name": "timeDelayRequestFeesPercent", "type": "uint16" },
-              { "internalType": "uint16", "name": "maxRequestFeesPercent", "type": "uint16" },
-              { "internalType": "address", "name": "owner", "type": "address" },
-              { "internalType": "uint32", "name": "requestTimestamp", "type": "uint32" },
-              { "internalType": "uint32", "name": "targetTimestamp", "type": "uint32" }
-            ],
-            "internalType": "struct IVolatilityToken.Request",
-            "name": "_request",
-            "type": "tuple"
-          }
-        ],
-        "name": "calculateTimePenaltyFee",
-        "outputs": [{ "internalType": "uint16", "name": "feePercentage", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x8cfc94b7"
-      },
-      {
-        "inputs": [{ "internalType": "uint256", "name": "_timeDelay", "type": "uint256" }],
-        "name": "calculateTimeDelayFee",
-        "outputs": [{ "internalType": "uint16", "name": "feePercentage", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x051a497b"
-      },
-      {
-        "inputs": [{ "internalType": "uint256", "name": "tokensLeftAmount", "type": "uint256" }],
-        "name": "calculateFindersFee",
-        "outputs": [{ "internalType": "uint256", "name": "findersFeeAmount", "type": "uint256" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x7693aa61"
-      },
-      {
-        "inputs": [
-          {
-            "components": [
-              { "internalType": "uint8", "name": "requestType", "type": "uint8" },
-              { "internalType": "uint168", "name": "tokenAmount", "type": "uint168" },
-              { "internalType": "uint16", "name": "timeDelayRequestFeesPercent", "type": "uint16" },
-              { "internalType": "uint16", "name": "maxRequestFeesPercent", "type": "uint16" },
-              { "internalType": "address", "name": "owner", "type": "address" },
-              { "internalType": "uint32", "name": "requestTimestamp", "type": "uint32" },
-              { "internalType": "uint32", "name": "targetTimestamp", "type": "uint32" }
-            ],
-            "internalType": "struct IVolatilityToken.Request",
-            "name": "_request",
-            "type": "tuple"
-          }
-        ],
-        "name": "isLiquidable",
-        "outputs": [{ "internalType": "bool", "name": "liquidable", "type": "bool" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xc8d288b2"
-      },
-      {
-        "inputs": [
-          { "internalType": "uint32", "name": "_minTimeWindow", "type": "uint32" },
-          { "internalType": "uint32", "name": "_maxTimeWindow", "type": "uint32" }
-        ],
-        "name": "setTimeWindow",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x6f15d7b0"
-      },
-      {
-        "inputs": [
-          { "internalType": "uint16", "name": "_minTimeDelayFeePercent", "type": "uint16" },
-          { "internalType": "uint16", "name": "_maxTimeDelayFeePercent", "type": "uint16" }
-        ],
-        "name": "setTimeDelayFeesParameters",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xbb8870a9"
-      },
-      {
-        "inputs": [{ "internalType": "uint32", "name": "_minWaitTime", "type": "uint32" }],
-        "name": "setMinWaitTime",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x6417b0e0"
-      },
-      {
-        "inputs": [
-          { "internalType": "uint16", "name": "_beforeTargetTimeMaxPenaltyFeePercent", "type": "uint16" },
-          { "internalType": "uint32", "name": "_afterTargetMidTime", "type": "uint32" },
-          { "internalType": "uint16", "name": "_afterTargetMidTimePenaltyFeePercent", "type": "uint16" },
-          { "internalType": "uint32", "name": "_afterTargetMaxTime", "type": "uint32" },
-          { "internalType": "uint16", "name": "_afterTargetMaxTimePenaltyFeePercent", "type": "uint16" }
-        ],
-        "name": "setTimePenaltyFeeParameters",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x9188a6e6"
-      },
-      {
-        "inputs": [{ "internalType": "uint16", "name": "_findersFeePercent", "type": "uint16" }],
-        "name": "setFindersFee",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xce645762"
-      },
-      {
-        "inputs": [],
-        "name": "getMaxFees",
-        "outputs": [{ "internalType": "uint16", "name": "maxFeesPercent", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x77c46f80"
-      }
-    ]
-  },
-  "UNIV2USDCETHVol-USDC-LONG": {
-    "address": "0x197e99bD87F98DFde461afE3F706dE36c9635a5D",
-    "abi": [
-      {
-        "inputs": [
-          { "internalType": "string", "name": "name", "type": "string" },
-          { "internalType": "string", "name": "symbol", "type": "string" },
-          { "internalType": "uint256", "name": "supply", "type": "uint256" },
-          { "internalType": "uint8", "name": "decimals", "type": "uint8" }
         ],
         "stateMutability": "nonpayable",
         "type": "constructor"
