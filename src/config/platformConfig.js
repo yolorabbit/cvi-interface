@@ -175,7 +175,7 @@ const platformConfig = {
         "P&L": {
           label: "P&L",
           tooltip: {
-            content: "Profit and loss of your position is calculated continuously and is based on the CVI index change, purchase and funding fees.",
+            content: "Profit and loss of your position is calculated continuously and is based on the index change, purchase and funding fees.",
             left: -30,
           }
         },
@@ -201,7 +201,7 @@ const platformConfig = {
         "P&L": {
           label: "P&L",
           tooltip: {
-            content: "Profit and loss is calculated continuously and is based on the CVI index change, incoming funding fees that traders pay, and your share of the pool.",
+            content: "Profit and loss is calculated continuously and is based on the index change, incoming funding fees that traders pay, and your share of the pool.",
             left: -30,
           }
         },
