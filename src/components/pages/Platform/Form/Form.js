@@ -7,13 +7,14 @@ import platformConfig, { activeViews } from 'config/platformConfig';
 import ActionController from 'components/Actions/ActionController';
 import { useSelector } from 'react-redux';
 import { contractsContext } from 'contracts/ContractContext';
-import { useInDOM } from 'components/Hooks';
+import { useInDOM, useIsTablet } from 'components/Hooks';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Graphs from '../Graphs';
 import './Form.scss';
 
 const Form = ({activeTab}) => {
+    const isTablet = useIsTablet();
     const { account } = useActiveWeb3React();
     const { activeView } = useContext(platformViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
@@ -65,6 +66,8 @@ const Form = ({activeTab}) => {
                         }}
                         cb={updateAvailableBalance}
                     />
+
+                    {!isTablet && <SeeMore selectedCurrency={selectedCurrency?.toUpperCase()}/>}
                </div>
     
                <div className="platform-form-component__middle">
@@ -83,12 +86,11 @@ const Form = ({activeTab}) => {
                     />  
                 </div>
 
-            
-                <SeeMore selectedCurrency={selectedCurrency?.toUpperCase()}/>    
+                {isTablet && <SeeMore selectedCurrency={selectedCurrency?.toUpperCase()}/>}
             </div>
         )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCurrency, activeTab, activeView, selectedNetwork, leverage, tokenLeverageList, amount, type, availableBalance]) 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedCurrency, activeTab, activeView, selectedNetwork, leverage, tokenLeverageList, amount, type, availableBalance, isTablet]) 
 }
 
 const SeeMore = ({selectedCurrency}) => {
