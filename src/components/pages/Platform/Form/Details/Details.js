@@ -135,7 +135,7 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
         return  <> 
             <Stat 
                 className="bold amount"
-                title="Buy amount" 
+                title="Deposit amount" 
                 value={!amount ? "0" : amount} 
                 _suffix={selectedCurrency} 
             />
@@ -146,7 +146,7 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
                 title="You will receive" 
                 value={lpTokenAmount} 
                 format={customFixedTokenValue(lpTokenAmount, 6, activeToken.lpTokensDecimals)}
-                _suffix={`CVI-${selectedCurrency} LP`}
+                _suffix={`${activeVolInfo?.key?.toUpperCase()}-${selectedCurrency} LP`}
             />
 
            <Stat 
@@ -163,7 +163,7 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
                 value={activeVolInfo?.index} 
             />
         </>
-    }, [collateralRatioData?.collateralRatio, activeToken.lpTokensDecimals, amount, selectedCurrency, lpTokenAmount, selectedNetwork, activeVolIndex, activeVolInfo?.index])
+    }, [amount, selectedCurrency, lpTokenAmount, activeToken.lpTokensDecimals, activeVolInfo?.key, activeVolInfo?.index, collateralRatioData?.collateralRatio, activeVolIndex, selectedNetwork])
 }
 
 export default Details;
