@@ -26,7 +26,7 @@ const tabs = {
   "index": {
     [chainNames.Ethereum]: {
       "cvi": "CVI index",
-      "ethvol": "ETHVol index"
+      "ethvol": "ETHVOL index"
     },
     [chainNames.Matic]: {
       "cvi": "CVI index",

@@ -87,7 +87,7 @@ const config = {
   },
   volatilityLabel: {
     "cvi": "CVI",
-    "ethvol": "ETHVol",
+    "ethvol": "ETHVOL",
   },
   oracles: {
     "cvi": "CVIOracle",
@@ -95,7 +95,7 @@ const config = {
   },
   oracleLabel: {
     "CVIOracle": "CVI",
-    "ETHVolOracle": "ETHVol",
+    "ETHVolOracle": "ETHVOL",
   },
   web3ProviderId: "NETWORK",
   networkStatuses: {
