@@ -56,28 +56,20 @@ const useCvi = () => {
       setTimeDuration(pollingTime);
    }
 
-   const fetchGraphData = useCallback(async () => {
+   const fetchGraphData = useCallback(async (index = "CVI") => {
          try {
             const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
-            const { data: hourlySeries } = await Api.GET_INDEX_HISTORY(chainName); // @TODO: use different series for ethvol
-            const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY(); // @TODO: use different series for ethvol
+            const { data: hourlySeries } = await Api.GET_INDEX_HISTORY({chainName, index}); 
+            const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY({chainName, index}); 
             const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
-            const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0]) // sort and mul seconds to miliseconds
-   
+            const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0])
+            
             dispatch(updateVolInfo({
                history: {
                   daily: sortedDailySeries,
                   hourly: sortedHourlySeries
                }
-            }, config.volatilityKey.cvi));
-   
-            dispatch(updateVolInfo({ // @TODO: update details to ethvol
-               history: {
-                  daily: sortedDailySeries,
-                  hourly: sortedHourlySeries
-               }
-            }, config.volatilityKey.ethvol));
-   
+            }, index === "CVI" ? config.volatilityKey.cvi : config.volatilityKey.ethvol));
          } catch(error) {
             console.log(error);
          }
@@ -86,7 +78,8 @@ const useCvi = () => {
 
    const fetchVolData = useCallback(async () => {
       try {
-         fetchGraphData();
+         fetchGraphData("CVI");
+         fetchGraphData("ETHVOL");
 
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
          const { data: volInfo } = await Api.GET_VOL_INFO(chainName);
@@ -98,8 +91,8 @@ const useCvi = () => {
          }
 
          if(selectedNetwork === chainNames.Ethereum) {
-            const customETHVol = await getIndexFromOracle("ETHVolOracle");
-            volData.ethVolInfo = volInfo?.data?.ETHVOL ? mappedIndexData('ethvol', customETHVol, volInfo?.data?.ETHVOL) : null
+            const customETHVOL = await getIndexFromOracle("ETHVOLOracle");
+            volData.ethVolInfo = volInfo?.data?.ETHVOL ? mappedIndexData('ethvol', customETHVOL, volInfo?.data?.ETHVOL) : null
          }
 
          dispatch(updateVolInfo(volData.cviVolInfo, config.volatilityKey.cvi));
