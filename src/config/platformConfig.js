@@ -81,6 +81,7 @@ const platformConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         type: "usdc",
+        leverage: ["1", "2"],
         rel: {
           contractKey: "USDC",
           platform: "ETHVolUSDCPlatform",
