@@ -8,7 +8,17 @@ export const markedEventsData = {
 }
 
 const ChartOptions = ({ chartInitialize, series, height, maxWidth, activeRange, onClick, activeVolIndex }) => Highcharts.stockChart(chartInitialize.id, {
-    credits: { enabled: false },
+    credits: { 
+        text: activeVolIndex?.toUpperCase() ?? "CVI",
+        position: {
+            align: "center",
+            verticalAlign: "middle"
+        },
+        style: {
+            fontSize: "42px",
+            color: "rgba(255, 255, 255, 0.1)"
+        }
+    },
     mapNavigation: {
         enableMouseWheelZoom: true,
     },
