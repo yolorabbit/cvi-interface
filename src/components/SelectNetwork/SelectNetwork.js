@@ -81,7 +81,7 @@ const SelectNetwork = ({view}) => {
 
             {isOpen && <Modal className="select-network-component__modal" closeIcon handleCloseModal={() => setIsOpen(false)}>
                 <Title className="select-network-title xs-center" color="white" text="Select a network" borderColor="#f8ba15"/>
-                <p>You are currently browsing CVI on the {activeNetwork.name} network.</p>
+                <p>You are currently browsing cvi.finance on the {activeNetwork.name} network.</p>
 
                 <div className="networks-list-component">
                 {networksList.map(({name, icon, chainName, chainId}, index) => <Button 
