@@ -170,6 +170,14 @@
     }
 
     &.index {
+        & thead {
+            & th {
+                &:last-child {
+                    text-align: left;
+                }
+            }
+        }
+
         tbody {
             tr {
                 td {
@@ -200,6 +208,11 @@
                         @media (max-width: 767px){
                             font-size: 3.333vw;
                         }
+                    }
+
+                    &:last-child {
+                        text-align: left;
+                        margin-left: unset;
                     }
                 }
             }
