@@ -65,7 +65,13 @@ node {
         generate_sourcemap = true;
       }
       if (env.BRANCH_NAME == "staging"){
-        app = docker.build(imageName, "--build-arg REACT_APP_NETWORK_URL=${network_url} --build-arg GENERATE_SOURCEMAP=${generate_sourcemap} --build-arg REACT_APP_HOST_V2=${host2} --build-arg REACT_APP_HOST=${host} --build-arg REACT_APP_ENVIRONMENT=${node_env} --build-arg REACT_APP_COTI_URL=${coti_url} --build-arg REACT_APP_COTIPAY_URL=${cotipay_url} --build-arg REACT_APP_CHAIN_ID=${chain_id} .")
+        configFileProvider([configFile(fileId: '7ba261bb-1d78-4b82-8485-248f5fe975ff', variable: 'authToken')]) 
+      {
+        sh "set"
+        def AUTH_VAL_FROM_FILE = readFile "${env.authToken}"
+        def cmdline = "--build-arg REACT_APP_NETWORK_URL=${network_url} --build-arg GENERATE_SOURCEMAP=${generate_sourcemap} --build-arg REACT_APP_HOST_V2=${host2} --build-arg REACT_APP_HOST=${host} --build-arg REACT_APP_ENVIRONMENT=${node_env} --build-arg REACT_APP_COTI_URL=${coti_url} --build-arg REACT_APP_COTIPAY_URL=${cotipay_url} --build-arg REACT_APP_CHAIN_ID=${chain_id} . --build-arg ${AUTH_VAL_FROM_FILE}"
+        app = docker.build(imageName, cmdline)
+      }
       } else {
         return
       }

@@ -1,7 +1,11 @@
 FROM node:16.2.0
+ARG authToken
+RUN set 
 
 ENV INSTALL_PATH /app
 RUN mkdir -p $INSTALL_PATH
+
+RUN echo //registry.npmjs.org/:_authToken=$authToken > /app/.npmrc
 
 WORKDIR $INSTALL_PATH
 COPY ./package.json .
