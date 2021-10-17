@@ -1,5 +1,5 @@
 import { useOnClickOutside } from "components/Hooks";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import "./Modal.scss";
 
@@ -8,6 +8,14 @@ const modalRoot = document.getElementById("modal-root");
 const Modal = ({ type = "basic", clickOutsideDisabled, className="", id, children, handleCloseModal, closeIcon }) => {
   const containerRef = useRef(null);
   useOnClickOutside(containerRef, () => !clickOutsideDisabled && handleCloseModal(false));
+
+  useEffect(() => {
+    modalRoot.className = (modalRoot.children.length > 0 && type) ? type : "";
+
+    return () => {
+      modalRoot.className = "";
+    }
+  }, [type]);
 
   return ReactDOM.createPortal(
     <div {...id ? {id: id} : {}} className={`modal ${type} ${className}`}>

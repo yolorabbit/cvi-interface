@@ -1,3 +1,10 @@
+#modal-root {
+    &.basic ~ #root {
+        position: fixed;
+        overflow: hidden;
+    }
+}
+
 .modal {
     position: fixed;
     z-index: 99999;
