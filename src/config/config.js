@@ -147,9 +147,9 @@ const config = {
       }
     },
     fundingFee: {
-      title: "Current funding fee",
+      title: "Funding fee / hour",
       tooltip: {
-        content: "A funding fee is an amount you pay every day until you sell your CVI position or until the position is liquidated. A funding fee is not constant and may change based on the CVI index value.",
+        content: "A funding fee is an amount you pay every hour until you sell your CVI position or until the position is liquidated. A funding fee is not constant and may change based on the CVI index value.",
         left: "0",
         mobileLeft: -40,
       }
