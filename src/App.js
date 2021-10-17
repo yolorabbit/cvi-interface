@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import ReactGA from 'react-ga';
 import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 import Home from 'components/pages/Home';
+import RestrictedModal from 'components/Modals/RestrictedModal';
 
 
 const App = () => {
@@ -71,6 +72,7 @@ const Routes = () => {
     return <> 
       <Router>
         <Navbar />
+        <RestrictedModal />
         <Switch>
           <Route path={config.routes.staking.path} component={Staking} />
           <Route path={config.routes['help-center'].path} component={HelpCenter} />

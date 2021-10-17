@@ -1,5 +1,6 @@
 import Button from 'components/Elements/Button';
 import Modal from 'components/Modal/Modal';
+import config from 'config/config';
 import React, { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom';
 import './RestrictedModal.scss';
@@ -9,13 +10,22 @@ const RestrictedModal = () => {
     const location = useLocation();
     const history = useHistory();
 
-    const checkRestrictedCountry = () => {
+    const checkRestrictedCountry = async () => {
         try {
-            if(location.pathname.includes('/help')) return;
-            const isRestrictedCheck = localStorage.getItem('restrictedCountryCheck');
+            const restrictedRoutesPathFiltered = Object.values(config.routes)
+                .filter(({restricted}) => restricted)
+                .map(({path}) => path.replace('/', ''));
 
-            if (isRestrictedCheck !== "true") {
+            const isRestrictedRoute = restrictedRoutesPathFiltered.some(path => location.pathname.includes(path));
+            
+            
+            await new Promise((resolve, reject) => setTimeout(() => {
+                resolve()
+            }, 500));
+
+            if(isRestrictedRoute) {
                 setShowRestrictedModal(true);
+                history.push('/');
             }
 
         } catch (error) {
@@ -24,13 +34,7 @@ const RestrictedModal = () => {
     }
 
     const confirmButton = () => {
-        localStorage.setItem('restrictedCountryCheck', true);
         setShowRestrictedModal(false);
-    }
-
-    const onIsCitizen = () => {
-        setShowRestrictedModal(false);
-        history.push('/help');
     }
 
     useEffect(() => {
@@ -42,11 +46,10 @@ const RestrictedModal = () => {
     return showRestrictedModal ? (
         <Modal className="restricted-modal" clickOutsideDisabled>
             <img src={require('../../../images/icons/notifications/notice.svg').default} alt="warning" />
-            <p>Please confirm you are not a resident in one of CVI's restricted jurisdictions detailed in the website's help center, including United Stated, Israel and Gibraltar.</p>
+            <p>Access to the CVI trading platform is restricted for users from your country. If you have any queries, please contact support team.</p>
 
             <div className="restricted-modal___actions">
-                <Button className="button" onClick={confirmButton} buttonText="Continue to CVI platform" />
-                <Button className="button" onClick={onIsCitizen} buttonText="Cancel" />
+                <Button className="button" onClick={confirmButton} buttonText="OK" />
             </div>
         </Modal>
     ) : null

@@ -31,12 +31,14 @@ const config = {
     platform: {
       label: "Platform",
       path: '/platform',
-      hide: ['/', '/help']
+      hide: ['/', '/help'],
+      restricted: true // block access by country
     },
     staking: {
       label: "Staking",
       path: '/staking',
-      hide: ['/', '/help']
+      hide: ['/', '/help'],
+      restricted: true // block access by country
     },
     analytics: {
       label: "Analytics",
