@@ -18,7 +18,8 @@ const Api = {
    GET_INDEX_HISTORY: (chainName) => axsV2.get(`/history?chain=${chainName}`),
    GET_FULL_DAILY_HISTORY: (chainName) => axsV2.get(`/fullDailyHistory?chain=${chainName}`),
    GET_INDEX_LATEST: (chainName) => axsV2.get(`/latest?chain=${chainName}`),
-   GET_FEES_COLLECTED: (queryParams = "") => axsV2.get('/fees' + queryParams)
+   GET_FEES_COLLECTED: (queryParams = "") => axsV2.get('/fees' + queryParams),
+   CHECK_RESTRICTED_COUNTRY: () => axsV2.get('/geo'),
 };
 
 export default Api;

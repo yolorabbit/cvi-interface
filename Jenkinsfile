@@ -50,6 +50,7 @@ node {
         node_env = "staging";
         cotipay_url = "https://pay.coti.io";
         coti_url = "https://coti.io";
+        host2 = "https://staging-api-v2.cvi.finance";
         generate_sourcemap = true;
         
       }

@@ -1,3 +1,4 @@
+import Api from 'Api';
 import Button from 'components/Elements/Button';
 import Modal from 'components/Modal/Modal';
 import config from 'config/config';
@@ -12,24 +13,22 @@ const RestrictedModal = () => {
 
     const checkRestrictedCountry = async () => {
         try {
+            // if(!config.isMainnet) return;
+
             const restrictedRoutesPathFiltered = Object.values(config.routes)
                 .filter(({restricted}) => restricted)
                 .map(({path}) => path.replace('/', ''));
 
             const isRestrictedRoute = restrictedRoutesPathFiltered.some(path => location.pathname.includes(path));
-            
-            
-            await new Promise((resolve, reject) => setTimeout(() => {
-                resolve()
-            }, 500));
+            if(!isRestrictedRoute) return;
 
-            if(isRestrictedRoute) {
+            await Api.CHECK_RESTRICTED_COUNTRY();
+
+        } catch (error) {
+            if(error?.response?.status === 470) {
                 setShowRestrictedModal(true);
                 history.push('/');
             }
-
-        } catch (error) {
-            console.log(error);
         }
     }
 
