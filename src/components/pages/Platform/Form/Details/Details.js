@@ -97,7 +97,7 @@ const TradeView = ({amount, leverage, selectedCurrency}) => {
                 <Stat 
                     name="fundingFee"
                     value={currentFundingFee === "N/A" ? "N/A" : currentFundingFee?.toString()} 
-                    format={customFixedTokenValue(currentFundingFee?.toString() === "0" ? "0" : currentFundingFee?.div(toBN("24"))?.toString(), activeToken.fixedDecimals, activeToken.decimals)}
+                    format={customFixed(customFixedTokenValue(currentFundingFee?.toString() === "0" ? "0" : currentFundingFee?.div(toBN("24"))?.toString(), activeToken.decimals, activeToken.decimals), activeToken.fixedDecimals)}
                     _suffix={selectedCurrency}
                 />
     

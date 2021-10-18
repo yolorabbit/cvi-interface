@@ -93,7 +93,7 @@ const platformConfig = {
       usdc: {
         key: "usdc",
         decimals: 6,
-        fixedDecimals: 2,
+        fixedDecimals: 6,
         lpTokensDecimals: 18,
         type: "usdc",
         leverage: ["1", "2"],
