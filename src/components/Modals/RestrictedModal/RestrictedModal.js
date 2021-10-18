@@ -13,8 +13,6 @@ const RestrictedModal = () => {
 
     const checkRestrictedCountry = async () => {
         try {
-            // if(!config.isMainnet) return;
-
             const restrictedRoutesPathFiltered = Object.values(config.routes)
                 .filter(({restricted}) => restricted)
                 .map(({path}) => path.replace('/', ''));
@@ -45,7 +43,7 @@ const RestrictedModal = () => {
     return showRestrictedModal ? (
         <Modal className="restricted-modal" clickOutsideDisabled>
             <img src={require('../../../images/icons/notifications/notice.svg').default} alt="warning" />
-            <p>Access to the CVI trading platform is restricted for users from your country. If you have any queries, please contact support team.</p>
+            <p>The CVI trading platform is currently restricted for users from your country. For more information, don't hesitate to get in touch with support@coti.io.</p>
 
             <div className="restricted-modal___actions">
                 <Button className="button" onClick={confirmButton} buttonText="OK" />
