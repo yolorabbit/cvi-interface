@@ -46,10 +46,9 @@ const config = {
       external: true
     },
     "help-center": {
-      label: "Help center",
-      path: ['/help', '/platform/help'],
-      enterApp: true,
-      prevLink: true
+      label: "Docs",
+      path: 'https://docs.cvi.finance',
+      external: true
     }
   },
   socialLinks: [

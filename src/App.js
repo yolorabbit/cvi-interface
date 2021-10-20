@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import Platform from './components/pages/Platform';
 import Staking from './components/pages/Staking';
-import HelpCenter from './components/pages/HelpCenter';
 import Footer from './components/Footer/Footer';
 import config from './config/config';
 import NotificationList from 'components/NotificationList';
@@ -75,7 +74,6 @@ const Routes = () => {
         <RestrictedModal />
         <Switch>
           <Route path={config.routes.staking.path} component={Staking} />
-          <Route path={config.routes['help-center'].path} component={HelpCenter} />
           <Route path={config.routes.platform.path} component={Platform} />
           <Route path={config.routes.home.path} component={Home} />
           <Redirect to="/" />
