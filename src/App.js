@@ -73,9 +73,9 @@ const Routes = () => {
         <Navbar />
         <RestrictedModal />
         <Switch>
-          <Route path={config.routes.staking.path} component={Staking} />
-          <Route path={config.routes.platform.path} component={Platform} />
-          <Route path={config.routes.home.path} component={Home} />
+          <Route exact path={config.routes.staking.path} component={Staking} />
+          <Route exact path={config.routes.platform.path} component={Platform} />
+          <Route exact path={config.routes.home.path} component={Home} />
           <Redirect to="/" />
         </Switch>
         <Footer />

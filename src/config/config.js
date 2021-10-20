@@ -25,19 +25,19 @@ const config = {
     home: {
       label: "Home",
       path: "/",
-      hide: ['/', '/platform', '/staking', '/help', '/index'],
+      hide: ['/', '/platform', '/staking', '/index'],
       enterApp: true
     },
     platform: {
       label: "Platform",
       path: '/platform',
-      hide: ['/', '/help'],
+      hide: ['/'],
       restricted: true // block access by country
     },
     staking: {
       label: "Staking",
       path: '/staking',
-      hide: ['/', '/help'],
+      hide: ['/'],
       restricted: true // block access by country
     },
     analytics: {
