@@ -370,6 +370,7 @@
 
         & a,
         & .select-network-component,
+        & .total-value-locked,
         & .connect-wallet-button__connected,
         & .connect-wallet-button.navbar {
             font-size: 2.086vw;
@@ -377,7 +378,9 @@
             border-bottom: solid 1px #182f5d;
             text-align: left;
             display: block;
-
+            &.total-value-locked.navitem {
+            display: flex;
+            }
             @media (max-width: 767px) {
                 padding: 6.111vw 7.222vw 5.556vw 7.222vw;
                 font-size: 4.444vw;

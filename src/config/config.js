@@ -85,7 +85,7 @@ const config = {
   },
   statisticsDetails: {
     totalValueLocked: {
-      title: "Total value locked",
+      title: "Platform TVL",
       className: "bold green",
       prefix: "$",
       tooltip: {

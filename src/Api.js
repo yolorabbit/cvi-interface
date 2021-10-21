@@ -20,6 +20,7 @@ const Api = {
    GET_INDEX_LATEST: (chainName) => axsV2.get(`/latest?chain=${chainName}`),
    GET_FEES_COLLECTED: (queryParams = "") => axsV2.get('/fees' + queryParams),
    CHECK_RESTRICTED_COUNTRY: () => axsV2.get('/geo'),
+   GET_TVL: () => axsV2.get('/tvl'),
 };
 
 export default Api;
