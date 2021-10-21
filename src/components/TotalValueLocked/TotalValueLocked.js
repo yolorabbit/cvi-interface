@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./TotalValueLocked.scss";
 import Tooltip from "components/Tooltip";
-import { commaFormatted } from "../../utils";
+import { commaFormatted, customFixed, toDisplayAmount } from "../../utils";
 import Api from "../../Api";
+import Spinner from "components/Spinner/Spinner";
 
 const TotalValueLocked = ({ placement }) => {
-  const [tvlValue, setTvlValue] = useState(0);
+  const [tvlValue, setTvlValue] = useState(null);
 
   useEffect(() => {
     fetchTVL();
@@ -27,7 +28,7 @@ const TotalValueLocked = ({ placement }) => {
   const tvl = {
     headline: "Total value locked",
     shortHeadline: "TVL",
-    value: tvlValue ? tvlValue : 0,
+    value: tvlValue,
     tooltip: {
       content:
         "Total value locked is the sum of open positions, liquidity, and staked GOVI and LP tokens on both Ethereum and Polygon platforms",
@@ -51,7 +52,13 @@ const TotalValueLocked = ({ placement }) => {
           />
         )}
       </h2>
-      <p className="bold green">{commaFormatted(tvl.value)}</p>
+      <p className="bold green">{
+      tvl.value === null ? 
+      <Spinner className="spinner statistics-spinner"/>
+ :
+    commaFormatted(customFixed(toDisplayAmount(tvl.value, 6), 2))
+    }
+    </p>
     </div>
   );
 };
