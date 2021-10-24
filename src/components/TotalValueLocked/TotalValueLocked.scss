@@ -2,7 +2,8 @@
   width: 100%;
   white-space: nowrap;
   position: relative;
-  h2, p {
+  h2,
+  p {
     height: fit-content;
   }
   h2 {
@@ -71,13 +72,12 @@
     p {
       text-align: center;
       font-size: 3.333vw;
-      margin: 0 auto 0.833vw auto;
       @media (max-width: 1365px) {
         font-size: 4.689vw;
         margin: 0 0 1.172vw 0;
       }
       @media (max-width: 1024px) {
-        font-size: 8.344vw;
+        font-size: 7.301vw;
         margin: 0 0 2.172vw 0;
       }
 
@@ -95,7 +95,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    h2, p {
+    h2,
+    p {
       font-size: unset;
     }
   }

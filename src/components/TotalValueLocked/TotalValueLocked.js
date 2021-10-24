@@ -3,7 +3,7 @@ import "./TotalValueLocked.scss";
 import Tooltip from "components/Tooltip";
 import { commaFormatted, customFixed, toDisplayAmount } from "../../utils";
 import Api from "../../Api";
-import Spinner from "components/Spinner/Spinner";
+import Spinner from 'components/Spinner/Spinner';
 
 const TotalValueLocked = ({ placement }) => {
   const [tvlValue, setTvlValue] = useState(null);
@@ -28,10 +28,10 @@ const TotalValueLocked = ({ placement }) => {
   const tvl = {
     headline: "Total value locked",
     shortHeadline: "TVL",
-    value: tvlValue,
+    value: tvlValue ? tvlValue : null,
     tooltip: {
       content:
-        "Total value locked is the sum of open positions, liquidity, and staked GOVI and LP tokens on both Ethereum and Polygon platforms",
+        "Total value locked is the total value of the open positions, liquidity, staked GOVI and LP tokens on both Ethereum and Polygon networks in USD",
       mobileLeft: 0,
       left: 0,
     },
@@ -52,12 +52,11 @@ const TotalValueLocked = ({ placement }) => {
           />
         )}
       </h2>
-      <p className="bold green">{
-      tvl.value === null ? 
-      <Spinner className="spinner statistics-spinner"/>
- :
-    commaFormatted(customFixed(toDisplayAmount(tvl.value, 6), 2))
-    }
+      <p className="bold green">
+      {
+        tvl.value === null ? <Spinner className="spinner statistics-spinner"/>
+            : `$${commaFormatted(customFixed(toDisplayAmount(tvl.value, 6), 2))}`
+      }
     </p>
     </div>
   );
