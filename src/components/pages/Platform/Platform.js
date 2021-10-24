@@ -9,10 +9,13 @@ import Container from 'components/Layout/Container';
 import platformConfig from 'config/platformConfig';
 import PlatformTables from './PlatformTables';
 import useHistoryEvents from 'components/Hooks/useHistoryEvents';
+import MigrationModal from 'components/Modals/MigrationModal';
 import IndexStats from './IndexStats';
 import IndexTabs from './IndexTabs';
 import './Platform.scss';
 import useCvi from 'components/Hooks/Cvi';
+
+
 
 const Platform = () => {
     const [activeView, setActiveView] = useState();
@@ -20,12 +23,14 @@ const Platform = () => {
     useHistoryEvents();
     useCvi();
 
+    const [migrationModalIsOpen, setMigrationModalIsOpen] = useState(true);
+
     return useMemo(() => {
         return (
             <div className="platform-component">
                 <SubNavbar tabs={Object.keys(platformConfig.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
-               
                 <platformViewContext.Provider value={{activeView}}>
+                {migrationModalIsOpen && <MigrationModal setModalIsOpen={setMigrationModalIsOpen}/>}
                     <Layout>
                         <Row className="statistics-row-component">
                             <Column>
@@ -54,7 +59,7 @@ const Platform = () => {
                 </platformViewContext.Provider>
             </div>
         )
-    }, [activeView]);
+    }, [activeView, migrationModalIsOpen]);
 }
 
 export default Platform;
