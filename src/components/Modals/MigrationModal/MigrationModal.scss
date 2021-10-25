@@ -1,21 +1,36 @@
-#migration-modal {
+.migration-modal {
+  .migration-welcome-wrapper, .migration-title {
+    padding-block-start: 1.758vw;
+    @media (max-width: 767px) {
+      padding-block-start: 6.667vw;
+    }
+    .migration-coin-image {
+      margin: 0 auto;
+      display: block;
+    }
+
+  }
   .migration-title {
     margin: 0;
+    font-size: 1.319vw;
   }
   .step-details {
-    margin: 3.516vw 0;
+    padding: 1.758vw 0;
+    @media (max-width: 767px) {
+      padding: 6.667vw 0;
+    }
     p {
-      margin: 1.172vw 0;
-    white-space: pre-wrap;
-    line-height: 1.71;
-    font-size: 1.026vw;
+      margin: 0.586vw 0;
+      white-space: pre-wrap;
+      line-height: 1.71;
+      font-size: 1.026vw;
       @media (max-width: 767px) {
-        margin: 4.444vw 0;
+        margin: 2.222vw 0;
         font-size: 3.889vw;
-    }
-    .wallet-address {
-      
-    }
+      }
+      .wallet-address {
+        width: fit-content;
+      }
       span {
         &.bold {
           font-weight: bold;
@@ -29,16 +44,21 @@
       margin: 0;
       float: left;
     }
-    @media (max-width: 767px) {
-      margin: 13.333vw 0;
+
+    .user-amount {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &.bold {
+        font-weight: bold;
+      }
     }
   }
   .actions-wrapper {
-    margin-block-start: 1.172vw;
     display: flex;
     justify-content: center;
     align-items: center;
-      flex-direction: row;
+    flex-direction: row;
     @media (max-width: 767px) {
       flex-direction: column;
     }
@@ -55,8 +75,8 @@
         margin-inline-end: 0;
       }
       @media (max-width: 767px) {
-      margin-inline-end: 0;
-      margin-block-end: 4.444vw;
+        margin-inline-end: 0;
+        margin-block-end: 4.444vw;
       }
     }
   }
