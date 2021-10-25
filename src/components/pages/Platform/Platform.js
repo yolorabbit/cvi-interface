@@ -16,21 +16,18 @@ import './Platform.scss';
 import useCvi from 'components/Hooks/Cvi';
 
 
-
 const Platform = () => {
     const [activeView, setActiveView] = useState();
 
     useHistoryEvents();
     useCvi();
 
-    const [migrationModalIsOpen, setMigrationModalIsOpen] = useState(true);
 
     return useMemo(() => {
         return (
             <div className="platform-component">
                 <SubNavbar tabs={Object.keys(platformConfig.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
                 <platformViewContext.Provider value={{activeView}}>
-                {migrationModalIsOpen && <MigrationModal setModalIsOpen={setMigrationModalIsOpen}/>}
                     <Layout>
                         <Row className="statistics-row-component">
                             <Column>
@@ -59,7 +56,7 @@ const Platform = () => {
                 </platformViewContext.Provider>
             </div>
         )
-    }, [activeView, migrationModalIsOpen]);
+    }, [activeView]);
 }
 
 export default Platform;

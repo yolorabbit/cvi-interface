@@ -18,6 +18,11 @@
         height: 18px;
         margin-right: 8px;
       }
+      .actions-wrapper {
+        display:flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
     }
     
   }
