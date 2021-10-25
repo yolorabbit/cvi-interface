@@ -1,17 +1,19 @@
 import React from "react";
 import Button from "components/Elements/Button";
 
-export const Migrate = ({ stepDetails, setMigrateStatus, migrateStatus }) => {
-  console.log("Unstake ", stepDetails);
-
-  const onClickHandler = (e) => {
-    console.log(e.target.id);
-    if (e.target.id === "migrate-a") {
-      setMigrateStatus("migrate-b");
-    }
-    if (e.target.id === "migrate-b") {
-      setMigrateStatus("earn");
-    }
+export const Migrate = ({
+  stepDetails,
+  setCurrentStep,
+  currentStep,
+  setIsProcessing,
+  isProcessing,
+}) => {
+  const onClickHandler = ({ target: { id } }) => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setCurrentStep(id === "migrate-a" ? "migrate-b" : "earn");
+      setIsProcessing(false);
+    }, 3000);
   };
 
   return (
@@ -24,23 +26,21 @@ export const Migrate = ({ stepDetails, setMigrateStatus, migrateStatus }) => {
       </div>
       <div className="actions-wrapper">
         <Button
-        id="migrate-a"
+          id="migrate-a"
           className={`button step-button${
-            migrateStatus === "migrate-a" ? "" : " disabled"
-          }`}
+          currentStep === "migrate-a" ? "" : " disabled" }`}
           buttonText={stepDetails.stepButton[0]}
-          disabled={migrateStatus === "migrate-a" ? false : true}
-          onClick={onClickHandler}
-        />
+          disabled={currentStep !== "migrate-a"}
+          processing={currentStep === "migrate-a" && isProcessing}
+          onClick={onClickHandler} />
         <Button
-        id="migrate-b"
+          id="migrate-b"
           className={`button step-button${
-            migrateStatus === "migrate-b" ? "" : " disabled"
-          }`}
+          currentStep === "migrate-b" ? "" : " disabled" }`}
           buttonText={stepDetails.stepButton[1]}
-          disabled={migrateStatus === "migrate-b" ? false : true}
-          onClick={onClickHandler}
-        />
+          disabled={currentStep !== "migrate-b"}
+          processing={currentStep === "migrate-b" && isProcessing}
+          onClick={onClickHandler}/>
       </div>
     </div>
   );

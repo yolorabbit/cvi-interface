@@ -1,27 +1,24 @@
 import React from "react";
 import Button from "components/Elements/Button";
 
-export const Unstake = ({ stepDetails, setCurrentStep, userStakeAmount, setIsProcessing, isProcessing }) => {
+export const MigrationWelcome = ({ stepDetails, setCurrentStep, setIsProcessing, isProcessing }) => {
 
   const onClickHandler = () => {
     setIsProcessing(true);
     setTimeout(() => {
-      setCurrentStep("migrate-a");
-      setIsProcessing(false);
+    setCurrentStep("unstake");
+    setIsProcessing(false);
     }, 3000);
   };
 
   return (
-    <div className="migration-step-wrapper">
+    <div className="migration-welcome-wrapper">
+     <img className="migration-coin-image" src={require('../../../images/coins/usdt2usdc.svg').default} alt="migration-coin" />
       <div className="step-details">
         {stepDetails.stepDesc &&
           stepDetails.stepDesc.map((stepDesc, tn) => (
             <p key={tn}>{stepDesc}</p>
           ))}
-        <div className="user-amount bold">
-          <p>Amount</p>
-          <p>{userStakeAmount} USDT LP </p>
-        </div>
       </div>
       <div className="actions-wrapper">
         <Button
@@ -34,4 +31,4 @@ export const Unstake = ({ stepDetails, setCurrentStep, userStakeAmount, setIsPro
   );
 };
 
-export default Unstake;
+export default MigrationWelcome;
