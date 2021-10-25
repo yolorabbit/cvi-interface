@@ -346,15 +346,8 @@ button {
     }
 }
 
-.unstake-component {
-    & .unstake-component__container {
-        & .unstake-component__container--button { 
-            background-color: #264fa1;
-        }
-    }
-}
 
-.sell-component, .withdraw-component, .unstake-component, .stake-component {
+.sell-component, .withdraw-component, .unstake-component, .stake-component, .migrate-component {
     height: inherit;
     vertical-align: middle;
     
@@ -408,6 +401,14 @@ button {
                 border-radius: 1.111vw;
                 font-size: 4.444vw;     
             }
+        }
+    }
+}
+
+.migrate-component, .unstake-component {
+    &__container {
+        &--button { 
+            background-color: #264fa1;
         }
     }
 }

@@ -62,8 +62,7 @@ export const MigrationModal = ({ setModalIsOpen, currentStep, setCurrentStep, us
         isProcessing={isProcessing}
         setIsProcessing={setIsProcessing}
         setCurrentStep={setCurrentStep}
-        currentStep={currentStep}
-        userStakeAmount={userStakeAmount} />
+        currentStep={currentStep} />
       ) :
       <>
          <Title className="migration-title" color="white" text="Migrate USDT liquidity to USDC platform" />

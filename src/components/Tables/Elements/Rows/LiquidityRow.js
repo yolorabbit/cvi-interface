@@ -11,6 +11,7 @@ import { useWeb3Api } from '../../../../contracts/useWeb3Api';
 import { customFixedTokenValue } from "utils";
 import { customFixed } from '../../../../utils';
 import config from "config/config";
+import MigrateButton from '../../../Actions/Migrate';
 
 const LiquidityRow = ({token, isHeader, className}) => {
     const { key: tokenName } = token;
@@ -77,7 +78,14 @@ const LiquidityRow = ({token, isHeader, className}) => {
                 />} 
             />
 
-            {(!isTablet || isMobile) && <RowItem content={withdrawController} />}
+            {(!isTablet || isMobile) &&
+                <RowItem content={
+                    <div className="actions-wrapper">
+                    {withdrawController}
+                    <MigrateButton tokenName={tokenName}/>
+                     </div>
+                } />
+            }
         </>
     ), [header, token.rel.oracle, token.key, token.fixedDecimals, token.decimals, isTablet, liquidityShareData, tokenName, liquidityPnl, poolSize, isMobile, withdrawController]);
 
