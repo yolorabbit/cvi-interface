@@ -4,7 +4,6 @@ import Step from "./Step";
 
 export const Steps = ({ steps, currentStep }) => {
 
-
   var currentStepNumber = steps.findIndex(({ stepKey }) =>
     stepKey.some((key) => key === currentStep)
   );
@@ -26,16 +25,19 @@ export const Steps = ({ steps, currentStep }) => {
       <div className="steps-line" />
       {steps.length > 0 &&
         steps.map((step, snum) => {
-          return (
-            <Step
-              key={snum}
-              stepNumber={snum}
-              stepData={step}
-              currentStep={currentStep}
-              isActive={checkActiveStep(snum)}
-              isConfirmed={confirmedStep(snum)}
-            />
-          );
+          if (step.stepVisibility) {
+            return (
+              <Step
+                key={snum}
+                stepNumber={snum}
+                stepData={step}
+                currentStep={currentStep}
+                isActive={checkActiveStep(snum)}
+                isConfirmed={confirmedStep(snum)}
+              />
+            );
+          } else return null
+          
         })}
     </div>
   );
