@@ -5,7 +5,13 @@
   justify-content: center;
   align-items: center;
   z-index: 11;
-  width: 40px;
+  width: 2.93vw;
+  @media (max-width: 1024px) {
+    width: 5.215vw;
+  }
+  @media (max-width: 767px) {
+    width: 11.111vw;
+  }
   &.active {
     .circle  {
       background: #264fa1;
@@ -16,8 +22,8 @@
     }
   }
   .circle {
-    width: 40px;
-    height: 40px;
+    width: 2.93vw;
+    height: 2.93vw;
     background: #1b1d38;
     border: solid 1px #264fa1;
     color: white;
@@ -28,29 +34,46 @@
     font-size: 1.172vw;
       font-weight: normal;
     position: relative;
+    @media (max-width: 1024px) {
+      font-size: 2.086vw;
+      width: 5.215vw;
+      height: 5.215vw;
+    }
     @media (max-width: 767px) {
       font-size: 4.444vw;
+      width: 11.111vw;
+      height: 11.111vw;
     }
     .step-confirmed-icon {
       position: absolute;
       top: 0;
-      right: -22px;
-      width: 40px;
-      height: 40px;
+      right: -1.612vw;
+      width: 2.93vw;
+      height: 2.93vw;
+      @media (max-width: 1024px) {
+        right: -2.868vw;
+        width: 5.215vw;
+        height: 5.215vw;
+      }
       @media (max-width: 767px) {
-        right: -18px;
-        padding: 8px;
+        right: -6.111vw;
+        width: 11.111vw;
+        height: 11.111vw;
       }
     }
   }
   .step-title {
+    font-size: 0.733vw;
     margin-block-start: 0.586vw;
-    font-size: 0.879vw;
     white-space: nowrap;
     opacity: 0.5;
+    @media (max-width: 1024px) {
+      font-size: 1.304vw;
+      margin-block-start: 1.043vw;
+    }
     @media (max-width: 767px) {
-      font-size: 3.333vw;
-    margin-block-start: 2.222vw;
+      font-size: 2.778vw;
+      margin-block-start: 2.222vw;
     }
   }
 }

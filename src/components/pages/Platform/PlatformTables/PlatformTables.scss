@@ -26,10 +26,23 @@
         height: 100%;
       }
     }
-    
   }
 
   .table-component tbody tr td {
     width: auto;
+  }
+}
+
+.row-actions-wrapper {
+  display:flex;
+  align-items: center;
+  justify-content: flex-end;
+  vertical-align: middle;
+  height: 100%;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    .action-controller_component, .migrate-component {
+      width: 100%;
+    }
   }
 }

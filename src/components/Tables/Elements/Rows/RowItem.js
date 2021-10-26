@@ -9,7 +9,16 @@ const RowItem = ({token, type, header, content, tooltip, hide, isTable}) => {
     {content}
   </td> : <div className={`row-item-component ${type ?? ''}`}>
     {!hide && <> 
-      {header && isTablet && <RowHeader header={header} tooltip={tooltip} />}
+      {header && isTablet && <span className="row-item-component--title">
+        {header} 
+        {tooltip && <Tooltip 
+          type="question" 
+          left={tooltip?.left ?? -30} 
+          mobileLeft={tooltip?.mobileLeft} 
+          maxWidth={400} 
+          minWidth={250} 
+          content={tooltip?.content} />}
+      </span>}
       {content}
     </>}
   </div>

@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { toBN } from "utils";
 import Rewards from './../Values/Rewards';
 import StakedAmount from "../Values/StakedAmount";
+import MigrateButton from '../../../Actions/Migrate';
 
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();
@@ -78,7 +79,12 @@ const RowData = ({isHeader, token, protocol, data}) => {
                     </>} 
                 />
                 {protocol === "platform" && <RowItem content={StakedValue} /> }
-                {!isMobile && <RowItem type="action" content={UnstakeController} /> }
+                {!isMobile && <RowItem type="action" content={
+                    <div className="row-actions-wrapper">
+                        {UnstakeController}
+                        <MigrateButton tokenName={token}/>
+                    </div>
+                } /> }
             </>
         }
         return (
@@ -108,7 +114,14 @@ const RowData = ({isHeader, token, protocol, data}) => {
                 content={<StakingClaim protocol={protocol} tokenName={token} claim={data.claim} /> } 
             />
 
-            {(!isTablet || isMobile) && <RowItem token={token} content={UnstakeController} />}
+            {(!isTablet || isMobile) &&
+                <RowItem content={
+                    <div className="row-actions-wrapper">
+                        {UnstakeController}
+                        <MigrateButton tokenName={token}/>
+                    </div>
+                } />
+            }
         </>
         //eslint-disable-next-line
     )}, [stakedData, isTablet, isMobile, amount, data]);

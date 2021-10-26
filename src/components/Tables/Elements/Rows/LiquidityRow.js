@@ -80,7 +80,7 @@ const LiquidityRow = ({token, isHeader, className}) => {
 
             {(!isTablet || isMobile) &&
                 <RowItem content={
-                    <div className="actions-wrapper">
+                    <div className="row-actions-wrapper">
                         {withdrawController}
                         <MigrateButton tokenName={tokenName}/>
                     </div>
@@ -98,7 +98,13 @@ const LiquidityRow = ({token, isHeader, className}) => {
                 format={customFixedTokenValue(liquidityShareData?.myShare, token.fixedDecimals, token.decimals)}
             /> } />
 
-            {!isMobile && <RowItem type="action" content={withdrawController} /> }
+            {!isMobile && <RowItem type="action" content={
+                    <div className="row-actions-wrapper">
+                        {withdrawController}
+                        <MigrateButton tokenName={tokenName}/>
+                    </div>
+                } />
+            }
         </>
     }
 
