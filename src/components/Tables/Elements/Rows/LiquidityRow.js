@@ -81,9 +81,9 @@ const LiquidityRow = ({token, isHeader, className}) => {
             {(!isTablet || isMobile) &&
                 <RowItem content={
                     <div className="actions-wrapper">
-                    {withdrawController}
-                    <MigrateButton tokenName={tokenName}/>
-                     </div>
+                        {withdrawController}
+                        <MigrateButton tokenName={tokenName}/>
+                    </div>
                 } />
             }
         </>
