@@ -405,6 +405,10 @@ button {
     }
 }
 
+.migrate-component {
+    height: unset;
+  }
+
 .migrate-component, .unstake-component {
     &__container {
         &--button { 
