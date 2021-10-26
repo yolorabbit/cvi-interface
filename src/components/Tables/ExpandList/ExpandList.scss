@@ -81,6 +81,29 @@
         }
     }
 
+    &.liquidity {
+        .expand-component  {
+            &.expanded {
+                .expand-component__header {
+                    .row-actions-wrapper {
+                        display:flex;
+                        align-items: flex-end;
+                        justify-content: flex-end;
+                        vertical-align: middle;
+                        height: 100%;
+                        flex-direction: column;
+                        .migrate-component {
+                            margin-top: 1.172vw;
+                            @media (max-width: 1024px) {
+                                margin-top: 2.086vw;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     &.available-to-stake {
         padding-top: 0;
         & .expand-component  { 

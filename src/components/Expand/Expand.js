@@ -6,8 +6,8 @@ const Expand = ({header, expandedView}) => {
     const [isExpanded, setIsExpanded] = useState();
 
     return (
-        <div className={`expand-component ${isExpanded ? 'expanded' : ''}`} onClick={() => setIsExpanded(!isExpanded)}>
-            <div className="expand-component__header">
+        <div className={`expand-component ${isExpanded ? 'expanded' : ''}`}>
+            <div className="expand-component__header" onClick={() => setIsExpanded(!isExpanded)}>
                 {header}
                 <Button className="expand-component__header--button" >
                     <img src={require('../../images/icons/dropdown-chevron-orange.svg').default} alt="chevron" />

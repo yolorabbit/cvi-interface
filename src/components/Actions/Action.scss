@@ -407,6 +407,13 @@ button {
 
 .migrate-component {
     height: unset;
+    &__container {
+        &--button { 
+            @media (max-width: 767px) {
+                margin-block-start: 4.444vw;
+              }
+        }
+    }
   }
 
 .migrate-component, .unstake-component {
@@ -416,6 +423,7 @@ button {
         }
     }
 }
+
 
 .buy-component, .deposit-component {
     & .button {
