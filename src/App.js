@@ -19,6 +19,7 @@ import ReactGA from 'react-ga';
 import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 import Home from 'components/pages/Home';
 import RestrictedModal from 'components/Modals/RestrictedModal';
+import Migrate from 'components/Actions/Migrate';
 
 
 const App = () => {
@@ -72,6 +73,7 @@ const Routes = () => {
       <Router>
         <Navbar />
         <RestrictedModal />
+        <Migrate />
         <Switch>
           <Route exact path={config.routes.staking.path} component={Staking} />
           <Route exact path={config.routes.platform.path} component={Platform} />
