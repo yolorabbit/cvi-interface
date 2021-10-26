@@ -6,7 +6,7 @@
 
 .expand-component {
    width: 100%;
-
+   cursor: pointer;
    & .expand-component__header {
       & .row-item-component { 
          &:first-child {
@@ -136,6 +136,7 @@
       }
 
       &--button {
+          cursor: pointer;
           background-color: transparent;
           border: 0;
           outline: 0;
