@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@coti-io/cvi-sdk": "0.0.32",
+    "@coti-io/cvi-sdk": "0.0.43",
     "@ethersproject/contracts": "^5.4.0",
     "@ethersproject/providers": "^5.4.1",
     "@ethersproject/solidity": "^5.4.0",
@@ -16,7 +16,7 @@
     "@web3-react/injected-connector": "^6.0.7",
     "@web3-react/network-connector": "^6.1.9",
     "@web3-react/walletconnect-connector": "^7.0.2-alpha.0",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "bignumber.js": "^9.0.1",
     "graphql": "^15.5.1",
     "graphql-request": "^3.4.0",
