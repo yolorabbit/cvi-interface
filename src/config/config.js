@@ -158,6 +158,14 @@ const config = {
         left: "0",
         mobileLeft: -40,
       }
+    },
+    slippageTolerance: {
+      title: "Slippage tolerance",
+      tooltip: {
+        content: "Your transaction will revert if the price changes unfavorably by more than this percentage",
+        left: "0",
+        mobileLeft: -40,
+      }
     }
   },
   faq: {
