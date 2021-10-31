@@ -10,7 +10,7 @@ const Migrate = ({ tokenName, amount }) => {
   const [userStakeAmount, setUerStakeAmount] = useState(0);
   const [isUserLiquidity, setIsUserLiquidity] = useState(null);
   const [currentStep, setCurrentStep] = useState("migration-welcome");
-  console.log("tt ", tokenName);
+  // console.log("tt ", tokenName);
   // useEffect(() => {
   //   if(!account || isLogged) return;
   //   setIsLogged(true);

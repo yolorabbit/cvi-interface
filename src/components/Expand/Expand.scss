@@ -7,6 +7,34 @@
 .expand-component {
    width: 100%;
    cursor: pointer;
+   &.advanced-expand {
+      font-size: 1.026vw;
+      line-height: 1.71;
+      background: transparent;
+      @media (max-width: 1365){    
+         font-size: 1.367vw;
+      }
+      @media (max-width: 1024px){    
+         font-size: 1.825vw;
+      }
+      @media (max-width: 767px){    
+         font-size: 3.889vw;
+      }
+      .expand-component__header{
+      color: #fea716;
+      background-color: transparent;
+         margin-top: 1.25vw;
+         padding: 0;
+      }
+         &.expanded {
+            .expand-component__header, .expand-component__expanded {
+               background-color: transparent;
+            }
+            .expand-component__expanded {
+               padding: 0;
+            }
+         }
+   }
    & .expand-component__header {
       & .row-item-component { 
          &:first-child {
@@ -15,7 +43,6 @@
          }
       }
    }
-
    & .row-item-component {
       & .row-item-component {
          @media (max-width: 1365px){    

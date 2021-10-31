@@ -115,6 +115,15 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex}) => {
                     title={platformConfig.tabs.index[selectedNetwork][activeVolIndex]} 
                     value={activeVolInfo?.index} 
                 />
+
+                <Stat 
+                    className="low-priority large-value"
+                    title={config.statisticsDetails.slippageTolerance.title} 
+                    value={10} 
+                />
+                <span>
+                    The value of your position will be at least 2.00 ETH or the transaction will revert.
+                </span>
             </>
         )
     }, [purchaseFee, tokenAmount, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeVolInfo, amount, selectedCurrency, leverage, actLowRules, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolIndex]) 

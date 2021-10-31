@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
+import Slippage from 'components/Slippage';
+import Expand from 'components/Expand';
 import { platformViewContext } from 'components/Context';
 import Action from './Action';
 
@@ -61,23 +63,22 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             setInsufficientBalance={setInsufficientBalance}
             availableBalance={balances?.tokenAmount}
             view={view}
-            protocol={protocol}
-          />
-
+            protocol={protocol} />          
           {renderActionComponent()}
         </Modal>}
 
-        {!isModal && <InputAmount 
+        {!isModal && <>
+        <InputAmount 
             label={amountLabel}
             symbol={token} 
             amount={amount} 
             setAmount={setAmount} 
             setInsufficientBalance={setInsufficientBalance}
             availableBalance={balances?.tokenAmount}
-            protocol={protocol}
-          /> 
+            protocol={protocol} />
+          <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage/>} />
+          </>
         }
-
         {renderActionComponent(isModal)}
     </div>
   // eslint-disable-next-line react-hooks/exhaustive-deps
