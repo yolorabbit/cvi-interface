@@ -91,7 +91,7 @@ const useCvi = () => {
          }
 
          if(selectedNetwork === chainNames.Ethereum) {
-            const customETHVOL = await getIndexFromOracle("ETHVOLOracle");
+            const customETHVOL = await getIndexFromOracle("ETHVolOracle");
             volData.ethVolInfo = volInfo?.data?.ETHVOL ? mappedIndexData('ethvol', customETHVOL, volInfo?.data?.ETHVOL) : null
          }
 
