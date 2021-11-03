@@ -18,7 +18,7 @@
       font-size: 3.333vw;
     }
   }
-  p {
+  .tvl-value {
     color: white;
     font-size: 0.938vw;
     margin: 0;
@@ -69,7 +69,7 @@
         font-size: 5vw;
       }
     }
-    p {
+    .tvl-value {
       text-align: center;
       font-size: 3.333vw;
       @media (max-width: 1365px) {
@@ -96,7 +96,7 @@
     justify-content: space-between;
     align-items: center;
     h2,
-    p {
+    .tvl-value {
       font-size: unset;
     }
   }

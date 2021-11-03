@@ -52,12 +52,12 @@ const TotalValueLocked = ({ placement }) => {
           />
         )}
       </h2>
-      <p className="bold green">
+      <div className="tvl-value bold green">
       {
         tvl.value === null ? <Spinner className="spinner statistics-spinner"/>
             : `$${commaFormatted(customFixed(toDisplayAmount(tvl.value, 6), 2))}`
       }
-    </p>
+    </div>
     </div>
   );
 };
