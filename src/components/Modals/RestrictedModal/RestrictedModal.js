@@ -35,7 +35,7 @@ const RestrictedModal = () => {
     }
 
     useEffect(() => {
-        if(!location?.pathname) return;
+        if(!location?.pathname || process.env.NODE_ENV === 'development') return;
         checkRestrictedCountry();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location?.pathname]);
