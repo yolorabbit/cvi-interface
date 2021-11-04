@@ -39,7 +39,7 @@ const Slippage = () => {
                 type="button"
                 className={`slippage-button ${slippageValue === slippageTolerance ? " selected" : ""}`}
                 onClick={() => slippageBtnHandler(slippageValue)}>
-                <span>{slippageValue}</span>
+                <span>{slippageValue}%</span>
               </button>
             );
           })}

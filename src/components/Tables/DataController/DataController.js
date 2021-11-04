@@ -25,7 +25,7 @@ const DataController = ({children, data = [], subHeaders = {}, activeTab, authGu
 
     if(!account && authGuard) return <ConnectWallet type="table table-component auth-guard" buttonText={`to view ${activeTabLabel}`} />
     
-    if(!data?.length) return <EmptyData isSpinner={data === null} text={`You have no ${activeTabLabel ?? 'data'}`} />
+    if(!data?.length) return <EmptyData isSpinner={data === null} text={activeTabLabel === 'index' ? 'No data found.' : `You have no ${activeTabLabel ?? 'data'}`} />
 
     if(!activeTab) return null;
     if(!activeView && !stakingConfig.headers?.[activeTab]) return null; 

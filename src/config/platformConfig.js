@@ -26,7 +26,6 @@ const tabs = {
   "index": {
     [chainNames.Ethereum]: {
       "cvi": "CVI index",
-      "ethvol": "ETHVOL index"
     },
     [chainNames.Matic]: {
       "cvi": "CVI index",
@@ -88,7 +87,7 @@ const platformConfig = {
           feesCalc: "ETHVolUSDCFeesCalculator",
           feesModel: "ETHVolUSDCPlatform",
           positionRewards: "ETHVolUSDCPositionRewards",
-          oracle: "ETHVolOracle",
+          oracle: "CVIOracle",
           stakingRewards: "ETHVolUSDCLPStakingRewards",
           liquidation: "ETHVolUSDCLiquidation"
         }

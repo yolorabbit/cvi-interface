@@ -30,10 +30,10 @@ const HomeDefaultIndex = ({type}) => {
         return  <> 
             <IndexValue type={type} />
             <Stat title="Previous hour" value={cviVolInfo?.oneHourAgo} />
-            <Stat prefix="" className="green" title="Last week high" value={cviVolInfo?.cviOneWeekHigh}/>
-            <Stat prefix="" className="red" title="Last week low" value={cviVolInfo?.cviOneWeekLow}/>
+            <Stat prefix="" className="green" title="Last week high" value={cviVolInfo?.oneWeekHigh}/>
+            <Stat prefix="" className="red" title="Last week low" value={cviVolInfo?.oneWeekLow}/>
         </>
-    }, [cviVolInfo?.cviOneWeekHigh, cviVolInfo?.cviOneWeekLow, cviVolInfo?.oneHourAgo, type])
+    }, [cviVolInfo?.oneWeekHigh, cviVolInfo?.oneWeekLow, cviVolInfo?.oneHourAgo, type])
 }
 
 const IndexsTable = () => {

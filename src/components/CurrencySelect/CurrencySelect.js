@@ -24,7 +24,7 @@ const CurrencySelect = ({selectedCurrency, setSelectedCurrency, activeVolIndex})
 
     useEffect(() => {
         if(!filteredTokens.find(token => token.key === selectedCurrency)) {
-            setSelectedCurrency(filteredTokens[0].key);
+            setSelectedCurrency(filteredTokens?.[0]?.key);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeVolIndex]);

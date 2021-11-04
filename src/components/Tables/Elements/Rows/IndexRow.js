@@ -24,16 +24,16 @@ const IndexRow = ({rowData}) => {
             <RowItem 
                 isTable
                 header={isMobile && 'Last week high'}
-                content={<Stat className="green" value={rowData?.cviOneWeekHigh} />} 
+                content={<Stat className="green" value={rowData?.oneWeekHigh} />} 
             />
 
             <RowItem 
                 isTable
                 header={isMobile && 'Last week low'}
-                content={<Stat className="red" value={rowData?.cviOneWeekLow} />} 
+                content={<Stat className="red" value={rowData?.oneWeekLow} />} 
             />
         </tr>
-    }, [isMobile, rowData?.key, rowData?.cviOneWeekHigh, rowData?.cviOneWeekLow, rowData?.oneHourAgo]);
+    }, [isMobile, rowData?.key, rowData?.oneWeekHigh, rowData?.oneWeekLow, rowData?.oneHourAgo]);
 }
 
 export default IndexRow;
