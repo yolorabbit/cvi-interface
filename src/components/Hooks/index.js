@@ -136,7 +136,7 @@ export const useW3SDK = (filters) => {
           provider, 
           env: process.env.REACT_APP_ENVIRONMENT 
         }).init({
-          platformMigrator: []
+          platformMigrator: ["USDTUSDCPlatformMigrator"]
         });
 
         setW3(w3Inst);
