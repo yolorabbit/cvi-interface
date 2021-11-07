@@ -5,6 +5,7 @@ import config from '../../config/config';
 
 const Slippage = () => {
   const [slippageTolerance, setSlippageTolerance] = useState(0.5);
+  const [costumTolerance, setCostumTolerance] = useState(0);
 
   const slippageButtons = {
     buttons: [0.5, 1, 2],
@@ -15,6 +16,18 @@ const Slippage = () => {
       setSlippageTolerance(val);
     }
   };
+
+
+  const customSlippageInput = (e) => {
+      var numbersOnly = /[^0-9][\.,]/g;
+      var val = e.target.value
+      let valNoLetters = val.replace(numbersOnly, '');
+      if (valNoLetters >= 0 && valNoLetters <= 100) {
+        let costumTolerance = valNoLetters
+        setCostumTolerance(costumTolerance)
+        slippageBtnHandler(costumTolerance)
+      }
+  }
 
   return (
     <div className="slippage-component">
@@ -35,7 +48,7 @@ const Slippage = () => {
           slippageButtons.buttons.map((slippageValue, valnum) => {
             return (
               <button
-                key-={valnum}
+                key={`${valnum}-${slippageValue}`}
                 type="button"
                 className={`slippage-button ${slippageValue === slippageTolerance ? " selected" : ""}`}
                 onClick={() => slippageBtnHandler(slippageValue)}>
@@ -45,16 +58,22 @@ const Slippage = () => {
           })}
 
         <div className="input-container">
-          <input type="number"
+          <input type="text"
             placeholder="Custom"
             name="slippage-input"
             autoComplete="off"
             className="slippage-input"
-            onChange={(e) => slippageBtnHandler(e.target.value)}/>
+            value={costumTolerance}
+            onChange={customSlippageInput}/>
           <span className="slippage-sign">%</span>
         </div>
       </div>
-      {slippageTolerance && slippageTolerance < 0.5 && <span className="slippage-error">Your transaction may fail</span>}
+      {slippageTolerance &&
+      slippageTolerance < 0.5 &&
+        <span className="slippage-error">
+          <b>Pay Attention:</b> Your transaction may fail
+          </span>
+      }
     </div>
   );
 };

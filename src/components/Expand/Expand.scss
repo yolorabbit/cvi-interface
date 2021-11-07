@@ -8,23 +8,26 @@
    width: 100%;
    cursor: pointer;
    &.advanced-expand {
-      font-size: 1.026vw;
-      line-height: 1.71;
+      font-size: 0.938vw;
+      margin: 1.25vw 0;
       background: transparent;
       @media (max-width: 1365){    
-         font-size: 1.367vw;
-      }
+      font-size: 1.367vw;
+      margin: 2.344vw 0;
+   }
       @media (max-width: 1024px){    
-         font-size: 1.825vw;
-      }
+      font-size: 1.825vw;
+      margin: 3.129vw 0;
+   }
       @media (max-width: 767px){    
-         font-size: 3.889vw;
+      font-size: 3.889vw;
+      margin: 5.556vw 0;
       }
       .expand-component__header{
       color: #fea716;
       background-color: transparent;
-         margin-top: 1.25vw;
-         padding: 0;
+      margin-top: 1.25vw;
+      padding: 0;
       }
          &.expanded {
             .expand-component__header, .expand-component__expanded {
