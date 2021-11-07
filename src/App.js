@@ -9,6 +9,7 @@ import Platform from './components/pages/Platform';
 import Staking from './components/pages/Staking';
 import HelpCenter from './components/pages/HelpCenter';
 import CVIIndex from './components/pages/CVIIndex';
+import MigrationTest from 'components/pages/MigrationTest';
 import Footer from './components/Footer/Footer';
 import config from './config/config';
 import NotificationList from 'components/NotificationList';
@@ -81,6 +82,7 @@ const Routes = () => {
           <Route path={config.routes['help-center'].path} component={HelpCenter} />
           <Route path={config.routes.platform.path} component={Platform} />
           <Route path={config.routes.cviindex.path} component={CVIIndex} />
+          <Route path={config.routes.migration.path} component={MigrationTest} />
           <Route path={config.routes.home.path} component={Home} />
           <Redirect to="/" />
         </Switch>

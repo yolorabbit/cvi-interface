@@ -54,6 +54,10 @@ const config = {
       label: "CVI Index",
       path: '/index',
       dataUrl: 'https://api-v2.cvi.finance/history'
+    },
+    migration: {
+      label: "Test Migration",
+      path: '/test-migration',
     }
   },
   socialLinks: [

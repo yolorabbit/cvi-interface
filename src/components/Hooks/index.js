@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
+import { useWeb3React } from "@web3-react/core";
 import { viewportContext } from "../Context";
 import platformConfig from '../../config/platformConfig';
 import stakingConfig from "config/stakingConfig";
+import { getW3 } from '@coti-io/cvi-sdk';
 import config from "config/config";
 
 export const useViewport = () => {
@@ -119,4 +121,22 @@ export const useActiveVolInfo = (volKeyOrOracle = "cvi") => { // use active vol 
     return volsInfo[config.volatilityKey[volKeyOrOracle] 
       || config.volatilityKey[config.volatilityOracles[volKeyOrOracle]]] 
       || null;
+}
+
+export const useW3SDK = (filters) => {
+  const [w3, setW3] = useState();
+  const { account, library: web3 } = useWeb3React();
+  const { selectedNetwork } = useSelector(({app}) => app);
+
+  useEffect(() => {
+    const getW3Instance = async (provider) => {
+      const w3Inst = await getW3(selectedNetwork === 'Matic' ? 'Polygon' : 'Ethereum', { provider, env: 'staging' }).init();
+      setW3(w3Inst);
+    }
+    if(!!web3?.currentProvider) {
+      getW3Instance(web3?.currentProvider);
+    }
+  }, [web3?.currentProvider, account, selectedNetwork, filters]);
+
+  return w3;
 }
