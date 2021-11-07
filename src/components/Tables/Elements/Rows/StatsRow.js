@@ -23,7 +23,7 @@ const StatsRow = ({rowData}) => {
                 isTable
                 header={isMobile && header['Liquidity pools'].label}
                 tooltip={isMobile && header['Liquidity pools'].tooltip}
-                content={liquidityPools?.map((pool, index) => <Value key={index} className="multiline" subText={pool[0]} />)} 
+                content={liquidityPools?.map((pool, index) => <Value key={index} prefix="$" className="multiline" subText={pool[0]} />)} 
             />
         </RowItemLoader>
 
@@ -32,7 +32,7 @@ const StatsRow = ({rowData}) => {
                 isTable
                 header={isMobile && header['Open positions'].label}
                 tooltip={isMobile && header['Open positions'].tooltip}
-                content={openPositions?.map((pool, index) => <Value key={index} className="multiline" subText={pool[0]} />)} 
+                content={openPositions?.map((pool, index) => <Value key={index} prefix="$" className="multiline" subText={pool[0]} />)} 
             />
         </RowItemLoader> 
 

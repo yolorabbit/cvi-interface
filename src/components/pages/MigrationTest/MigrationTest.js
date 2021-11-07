@@ -8,7 +8,6 @@ import Title from 'components/Elements/Title';
 import Button from 'components/Elements/Button';
 import Spinner from 'components/Spinner/Spinner';
 import { fromBN, toBN } from 'utils';
-
 import './MigrationTest.scss';
 
 const MigrationTest = () => {

@@ -7,6 +7,7 @@ import platformConfig from '../../config/platformConfig';
 import stakingConfig from "config/stakingConfig";
 import { getW3 } from '@coti-io/cvi-sdk';
 import config from "config/config";
+import { chainNames } from '../../connectors';
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);
@@ -130,8 +131,19 @@ export const useW3SDK = (filters) => {
 
   useEffect(() => {
     const getW3Instance = async (provider) => {
-      const w3Inst = await getW3(selectedNetwork === 'Matic' ? 'Polygon' : 'Ethereum', { provider, env: 'staging' }).init();
-      setW3(w3Inst);
+      try {
+        const w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
+          provider, 
+          filters: {
+            platformMigrator: []
+          },
+          env: process.env.REACT_APP_ENVIRONMENT 
+        }).init();
+
+        setW3(w3Inst);
+      } catch(error) {
+        console.log(error);
+      }
     }
     if(!!web3?.currentProvider) {
       getW3Instance(web3?.currentProvider);
