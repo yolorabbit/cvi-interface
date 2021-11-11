@@ -4099,6 +4099,20 @@
               ],
               "stateMutability": "view",
               "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },
@@ -4241,6 +4255,20 @@
               ],
               "stateMutability": "view",
               "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },
@@ -7049,6 +7077,20 @@
               "stateMutability": "nonpayable",
               "type": "function",
               "signature": "0x2e1a7d4d"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },
@@ -7237,6 +7279,20 @@
               ],
               "stateMutability": "view",
               "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },
@@ -7379,6 +7435,20 @@
               ],
               "stateMutability": "view",
               "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },
@@ -7744,6 +7814,20 @@
               "stateMutability": "nonpayable",
               "type": "function",
               "signature": "0x2e1a7d4d"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },
@@ -8109,6 +8193,20 @@
               "stateMutability": "nonpayable",
               "type": "function",
               "signature": "0x2e1a7d4d"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },
@@ -8615,6 +8713,20 @@
               ],
               "stateMutability": "view",
               "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },
@@ -12040,6 +12152,20 @@
               "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
               "stateMutability": "view",
               "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token0",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          {
+            "inputs": [],
+            "name": "token1",
+            "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+            "stateMutability": "view",
+            "type": "function"
           }
       ]
   },

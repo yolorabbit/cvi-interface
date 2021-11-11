@@ -62,7 +62,7 @@ const useAssets = (type) => {
                 filteredAssets = await Promise.all(filteredAssets);
                 if(!isActiveInDom()) return;
                 return filteredAssets.filter(({decimals, data: {staked, claim}}) => {
-                    const stakedTokenAmount = staked.stakedTokenAmount ?? 0
+                    const stakedTokenAmount = staked?.stakedTokenAmount ?? 0
                     const hasStaked = toBN(stakedTokenAmount).gt(toBN(0));
                     const canClaim = claim?.some(({amount}) => amount && toBN(toBNAmount(amount, decimals)).gt(toBN(0)));
                     const shouldFiltered = !hasStaked && !canClaim
