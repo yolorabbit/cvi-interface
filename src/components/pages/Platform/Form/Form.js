@@ -26,7 +26,7 @@ const Form = ({activeTab}) => {
     const availableBalancePayload = useMemo(() => ({account, type}), [account, type]);
     const availableBalanceOptions = useMemo(() => ({updateOn: activeView === "trade" ? 'positions' : 'liquidities', errorValue: "0"}), [activeView]);
     const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", selectedCurrency, availableBalancePayload, availableBalanceOptions);
-    const migratedMessage = selectedCurrency && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.migrated
+    const isMigrated = selectedCurrency && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.migrated
 
     const updateAvailableBalance = () => {
       getAvailableBalance();
@@ -57,25 +57,19 @@ const Form = ({activeTab}) => {
                         && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage 
                         && <SelectLeverage selectedCurrency={selectedCurrency} leverage={leverage} tokenLeverageList={tokenLeverageList} setLeverage={setLeverage} /> }
                   
-                    {migratedMessage ?
-                    <div className="migration-message">
-                        {platformConfig.migrationMsgs?.[selectedNetwork]?.trade?.map((msg, msgNum) => {
-                            return <p key={msgNum}>{msg}</p>
-                        })}
-                    </div>
-                        :
-                        <ActionController 
-                        disabled={!amount}
-                        amount={amount}
-                        setAmount={setAmount}
-                        token={selectedCurrency}
-                        leverage={leverage}
-                        type={type}
-                        balances={{ tokenAmount: availableBalance }}
-                        cb={updateAvailableBalance}/>
+                    {!isMigrated && <ActionController 
+                            disabled={!amount}
+                            amount={amount}
+                            setAmount={setAmount}
+                            token={selectedCurrency}
+                            leverage={leverage}
+                            type={type}
+                            balances={{ tokenAmount: availableBalance }}
+                            cb={updateAvailableBalance}
+                        />
                     }
 
-                    {!isTablet && <SeeMore selectedCurrency={selectedCurrency?.toUpperCase()}/>}
+                    {!isTablet && <SeeMore isMigrated={isMigrated} selectedCurrency={selectedCurrency?.toUpperCase()}/>}
                </div>
     
                <div className="platform-form-component__middle">
@@ -94,14 +88,14 @@ const Form = ({activeTab}) => {
                     />  
                 </div>
 
-                {isTablet && <SeeMore selectedCurrency={selectedCurrency?.toUpperCase()}/>}
+                {isTablet && <SeeMore isMigrated={isMigrated} selectedCurrency={selectedCurrency?.toUpperCase()}/>}
             </div>
         )
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCurrency, activeTab, activeView, selectedNetwork, leverage, tokenLeverageList, amount, type, availableBalance, isTablet]) 
 }
 
-const SeeMore = ({selectedCurrency}) => {
+const SeeMore = ({selectedCurrency, isMigrated}) => {
     const { activeView } = useContext(platformViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
     const contracts = useContext(contractsContext);
@@ -138,14 +132,21 @@ const SeeMore = ({selectedCurrency}) => {
 
     return useMemo(() => {
         return <div className="platform-form-component__bottom">
-            {selectedCurrency && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.migrated && <div>Hello</div>}
-            {activeView === activeViews.trade ? <p>
-                <b>Pay Attention: </b> 
-                GOVI tokens will become claimable starting the day after your last open position action (UTC time) and for a period not exceeding 30 days.
-                <br/>Please also note that you won't be able to sell your position within the next 6 hours.
-            </p> : <p><b>Pay Attention: </b>you won't be able to withdraw your liquidity within the next {lockup} hours.</p>}
+            {isMigrated ? 
+                <div className="migration-message">
+                  {platformConfig.migrationMsgs?.[selectedNetwork]?.trade?.map((msg, msgNum) => <p key={msgNum}>{msg}</p>)}
+                </div>
+                : activeView === activeViews.trade ? <p>
+                    <b>Pay Attention: </b> 
+                    GOVI tokens will become claimable starting the day after your last open position action (UTC time) and for a period not exceeding 30 days.
+                    <br/>Please also note that you won't be able to sell your position within the next 6 hours. 
+                </p> 
+                : <p>
+                    <b>Pay Attention: </b>you won't be able to withdraw your liquidity within the next {lockup} hours.
+                </p>
+            }
         </div>
-    }, [activeView, lockup]);
+    }, [activeView, isMigrated, lockup, selectedNetwork]);
 }
 
 export default Form;
