@@ -8,23 +8,27 @@ import Unstake from "./Unstake";
 import Migrate from "./Migrate";
 import Earn from "./Earn";
 import config from "config/config";
-import { useDispatch } from "react-redux";
-import { useW3SDK } from "components/Hooks";
+import { useDispatch, useSelector } from "react-redux";
+import { useInDOM } from "components/Hooks";
 import { fromBN } from "utils";
 import { addAlert, setMigrationModalOpen } from "store/actions";
 import { useActiveWeb3React } from "components/Hooks/wallet";
+import { actionConfirm } from "store/actions/events";
+import { chainNames } from "connectors";
 
-export const MigrationModal = () => {
+export const MigrationModal = ({w3}) => {
   const dispatch = useDispatch();
-  const w3 = useW3SDK();
+  const isActiveInDOM = useInDOM();
   const { account } = useActiveWeb3React();
+  const { selectedNetwork } = useSelector(({app}) => app);
+
+  const [isLoading, setIsLoading] = useState();
+  const usdtusdcPlatformMigrator = w3 && w3.platformMigrators["USDT-USDC-PlatformMigrator"];
   const [{
     stakedBalance = {},
     usdtLPBalance,
     status = config.migrationStepsTypes.start
   }, setData] = useState({});
-  const [isLoading, setIsLoading] = useState();
-  const usdtusdcPlatformMigrator = w3 && w3.platformMigrators["USDT-USDC-PlatformMigrator"];
  
   // Do Unstake
   const doUnStake = useCallback(async () => {
@@ -37,6 +41,9 @@ export const MigrationModal = () => {
       }
       const usdtLP = w3.tokens["USDTLP"];
       const usdtLPBalance = await usdtLP.balanceOf(account);
+
+      if(!isActiveInDOM()) return; 
+      
       setData(prev => ({
         ...prev, 
         usdtLPBalance: fromBN(usdtLPBalance, 18),
@@ -45,12 +52,11 @@ export const MigrationModal = () => {
     } catch(error) {
       console.log(error);
     }
-  }, [w3, account]);
+  }, [w3?.stakingRewards, w3?.tokens, account, isActiveInDOM]);
 
   // Do Migration
   const doMigration = useCallback(async () => {
     await usdtusdcPlatformMigrator.w3.block.refresh();
-    console.log("usdtusdcPlatformMigrator");
     const {result, reason} = await usdtusdcPlatformMigrator.canMigrate(account);
     if (result) {
       await usdtusdcPlatformMigrator.migrate(99, account);
@@ -98,9 +104,6 @@ export const MigrationModal = () => {
           return await doUnStake();
   
         case config.migrationStepsTypes.approved: {
-          if(id === config.migrationStepsTypes.migrate) {
-            return await doMigration();
-          }
           return await doMigration();
         }
   
@@ -120,16 +123,23 @@ export const MigrationModal = () => {
       console.log(error);
     } finally {
       const _currentActiveStep = await currentActiveStep();
-      console.log(_currentActiveStep);
+
+      if(!isActiveInDOM()) return; 
+
       if(_currentActiveStep) {
         setData(prev => ({
           ...prev,
           status: _currentActiveStep
         }))
       }
+
+      if(selectedNetwork === chainNames.Matic) {
+        dispatch(actionConfirm());
+      }
+
       setIsLoading(false);
     }
-  }, [currentActiveStep, doMigrationAction]);
+  }, [currentActiveStep, dispatch, doMigrationAction, isActiveInDOM, selectedNetwork]);
 
   // Set data
   useEffect(() => {
@@ -141,6 +151,8 @@ export const MigrationModal = () => {
       const usdtLPBalance = await usdtLP.balanceOf(account);
       const activeStep = await currentActiveStep();
 
+      if(!isActiveInDOM()) return; 
+
       setData({
         stakedBalance: fromBN(stakedBalance.stakedAmount, 18),
         usdtLPBalance: fromBN(usdtLPBalance, 18),
@@ -149,7 +161,7 @@ export const MigrationModal = () => {
     };
 
     fetchData();
-  }, [w3, account, currentActiveStep, usdtusdcPlatformMigrator]);
+  }, [w3, account, currentActiveStep, usdtusdcPlatformMigrator, isActiveInDOM]);
 
   useEffect(() => {
     if (status === config.migrationStepsTypes["no-need"]) return;

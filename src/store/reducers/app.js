@@ -9,6 +9,7 @@ const initialState = {
     selectedNetwork: chainNames[localStorage.getItem('selectedNetwork')] || chainNames.Ethereum,
     networkStatus: 'disconnected',
     migrationModalIsOpen: false,
+    migrationModalInitiallized: false,
     indexInfo: {
         cviVolInfo: null,
         ethVolInfo: null,
@@ -59,7 +60,8 @@ export const appReducer = (state = initialState, action) => {
         case actionTypes.SET_MIGRATION_MODAL_IS_OPEN: {
             return {
                 ...state,
-                migrationModalIsOpen: action.migrationModalIsOpen
+                migrationModalIsOpen: action.migrationModalIsOpen,
+                migrationModalInitiallized: state.migrationModalInitiallized || action.migrationModalInitiallized 
             };
         }
         default:
