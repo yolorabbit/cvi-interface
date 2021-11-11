@@ -19,8 +19,9 @@ const Slippage = () => {
 
 
   const customSlippageInput = (e) => {
+    //eslint-disable-next-line
       var numbersOnly = /[^0-9][\.,]/g;
-      var val = e.target.value
+      var val = e.target.value;
       let valNoLetters = val.replace(numbersOnly, '');
       if (valNoLetters >= 0 && valNoLetters <= 100) {
         let costumTolerance = valNoLetters

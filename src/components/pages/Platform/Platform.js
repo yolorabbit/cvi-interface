@@ -9,7 +9,6 @@ import Container from 'components/Layout/Container';
 import platformConfig from 'config/platformConfig';
 import PlatformTables from './PlatformTables';
 import useHistoryEvents from 'components/Hooks/useHistoryEvents';
-import MigrationModal from 'components/Modals/MigrationModal';
 import IndexStats from './IndexStats';
 import IndexTabs from './IndexTabs';
 import './Platform.scss';

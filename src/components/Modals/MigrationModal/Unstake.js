@@ -1,15 +1,7 @@
 import React from "react";
 import Button from "components/Elements/Button";
 
-export const Unstake = ({ stepDetails, setCurrentStep, userStakeAmount, setIsProcessing, isProcessing }) => {
-
-  const onClickHandler = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-      setCurrentStep("migrate-a");
-      setIsProcessing(false);
-    }, 3000);
-  };
+export const Unstake = ({ stepDetails, userStakeAmount, onClickHandler }) => {
 
   return (
     <div className="migration-step-wrapper">
@@ -27,7 +19,6 @@ export const Unstake = ({ stepDetails, setCurrentStep, userStakeAmount, setIsPro
         <Button
           className="button step-button"
           buttonText={stepDetails.stepButton[0]}
-          processing={isProcessing}
           onClick={onClickHandler} />
       </div>
     </div>

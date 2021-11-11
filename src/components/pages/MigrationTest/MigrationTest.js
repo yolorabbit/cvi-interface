@@ -34,7 +34,7 @@ const MigrationTest = () => {
     }
 
     const doApprove = useCallback(async () => {
-        const usdtusdcPlatformMigrator = w3.platformMigrators['USDTUSDCPlatformMigrator'];
+        const usdtusdcPlatformMigrator = w3.platformMigrators['USDT-USDC-PlatformMigrator'];
         const usdtLP = w3.tokens['USDTLP'];
         const liquidity = fromBN((await usdtLP.balanceOf(account)), 18);
         const allowance = fromBN((await getTokenAllowance(usdtLP, account, usdtusdcPlatformMigrator.address)), 18);
@@ -52,7 +52,7 @@ const MigrationTest = () => {
     }, [w3, account]);
 
     const doMigration = useCallback(async () => {       
-        const usdtusdcPlatformMigrator = w3.platformMigrators['USDTUSDCPlatformMigrator'];
+        const usdtusdcPlatformMigrator = w3.platformMigrators['USDT-USDC-PlatformMigrator'];
         const result = await usdtusdcPlatformMigrator.canMigrate(account);
         if (result.result)
             await usdtusdcPlatformMigrator.migrate(95, account); // rewards = afterGoviBalance - beforeGoviBalance
@@ -62,7 +62,7 @@ const MigrationTest = () => {
 
     const currentActiveStep = useCallback(async () => {
         const usdtLPStakingRewards = w3.stakingRewards['USDTLPStakingRewards'];
-        const usdtusdcPlatformMigrator = w3.platformMigrators['USDTUSDCPlatformMigrator'];
+        const usdtusdcPlatformMigrator = w3.platformMigrators['USDT-USDC-PlatformMigrator'];
         const bnStakedBalance = await usdtLPStakingRewards.staked(account);
         const stakedBalance = fromBN(bnStakedBalance.stakedAmount, 18);
         const usdtLP = w3.tokens['USDTLP'];

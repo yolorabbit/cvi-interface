@@ -6,12 +6,11 @@ import Value from '../Values/Value';
 import Pnl from '../Values/Pnl';
 import platformConfig, { activeViews } from "config/platformConfig";
 import ActionController from "components/Actions/ActionController";
-import { useActiveWeb3React } from '../../../Hooks/wallet';
-import { useWeb3Api } from '../../../../contracts/useWeb3Api';
-import { customFixedTokenValue } from "utils";
-import { customFixed } from '../../../../utils';
+import { customFixed, customFixedTokenValue } from "utils";
 import config from "config/config";
-import MigrateButton from '../../../Actions/Migrate';
+import { useActiveWeb3React } from "components/Hooks/wallet";
+import { useWeb3Api } from "contracts/useWeb3Api";
+import MigrateAction from "components/Actions/MigrateAction";
 
 const LiquidityRow = ({token, isHeader, className}) => {
     const { key: tokenName } = token;
@@ -82,7 +81,7 @@ const LiquidityRow = ({token, isHeader, className}) => {
                 <RowItem content={
                     <div className="row-actions-wrapper">
                         {withdrawController}
-                        <MigrateButton tokenName={tokenName}/>
+                        <MigrateAction tokenName={tokenName}/>
                     </div>
                 } />
             }
@@ -101,7 +100,7 @@ const LiquidityRow = ({token, isHeader, className}) => {
             {!isMobile && <RowItem type="action" content={
                     <div className="row-actions-wrapper">
                         {withdrawController}
-                        <MigrateButton tokenName={tokenName}/>
+                        <MigrateAction tokenName={tokenName}/>
                     </div>
                 } />
             }

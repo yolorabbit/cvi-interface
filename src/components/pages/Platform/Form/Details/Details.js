@@ -150,11 +150,10 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
                 _suffix={selectedCurrency} 
             />
 
-
             <Stat 
                 className="large-value" 
                 title="You will receive" 
-                value={lpTokenAmount} 
+                value={activeVolInfo?.key && lpTokenAmount} 
                 format={customFixedTokenValue(lpTokenAmount, 6, activeToken.lpTokensDecimals)}
                 _suffix={`${activeVolInfo?.key?.toUpperCase()}-${selectedCurrency} LP`}
             />

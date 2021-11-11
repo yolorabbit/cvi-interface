@@ -22,8 +22,6 @@ import ReactGA from 'react-ga';
 import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 import Home from 'components/pages/Home';
 import RestrictedModal from 'components/Modals/RestrictedModal';
-import Migrate from 'components/Actions/Migrate';
-
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -76,7 +74,6 @@ const Routes = () => {
       <Router>
         <Navbar />
         <RestrictedModal />
-        <Migrate />
         <Switch>
           <Route path={config.routes.staking.path} component={Staking} />
           <Route path={config.routes['help-center'].path} component={HelpCenter} />

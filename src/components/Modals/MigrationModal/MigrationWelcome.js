@@ -1,16 +1,7 @@
 import React from "react";
 import Button from "components/Elements/Button";
 
-export const MigrationWelcome = ({ stepDetails, setCurrentStep, setIsProcessing, isProcessing }) => {
-
-  const onClickHandler = () => {
-    setIsProcessing(true);
-    setTimeout(() => {
-    setCurrentStep("unstake");
-    setIsProcessing(false);
-    }, 3000);
-  };
-
+export const MigrationWelcome = ({ stepDetails, onClickHandler }) => {
   return (
     <div className="migration-welcome-wrapper">
      <img className="migration-coin-image" src={require('../../../images/coins/usdt2usdc.svg').default} alt="migration-coin" />
@@ -24,7 +15,6 @@ export const MigrationWelcome = ({ stepDetails, setCurrentStep, setIsProcessing,
         <Button
           className="button step-button"
           buttonText={stepDetails.stepButton[0]}
-          processing={isProcessing}
           onClick={onClickHandler} />
       </div>
     </div>

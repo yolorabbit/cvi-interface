@@ -130,14 +130,14 @@ export const useW3SDK = (filters) => {
   const { selectedNetwork } = useSelector(({app}) => app);
 
   useEffect(() => {
+    if(!account || !selectedNetwork || !web3?.currentProvider) return;
+
     const getW3Instance = async (provider) => {
       try {
         const w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
           provider, 
           env: process.env.REACT_APP_ENVIRONMENT 
-        }).init({
-          platformMigrator: ["USDTUSDCPlatformMigrator"]
-        });
+        }).init(filters);
 
         setW3(w3Inst);
       } catch(error) {

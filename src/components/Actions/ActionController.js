@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 import Slippage from 'components/Slippage';
@@ -26,8 +26,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
 
-
-  const renderActionComponent = (isModal = false) => {
+  const renderActionComponent = useCallback((isModal = false) => {
     return <ActionControllerContext 
         disabled={!(!disabled && !insufficientBalance)}
         type={type} 
@@ -42,7 +41,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         setIsOpen={setIsOpen}
         cb={cb}
       />
-  }
+  }, [amount, balances, cb, disabled, insufficientBalance, isOpen, leverage, protocol, setAmount, token, type])
 
   useEffect(() => {
     if(!isOpen && amount !== "") {
@@ -63,26 +62,28 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             setInsufficientBalance={setInsufficientBalance}
             availableBalance={balances?.tokenAmount}
             view={view}
-            protocol={protocol} />          
+            protocol={protocol} 
+          />          
           {renderActionComponent()}
         </Modal>}
 
         {!isModal && <>
-        <InputAmount 
-            label={amountLabel}
-            symbol={token} 
-            amount={amount} 
-            setAmount={setAmount} 
-            setInsufficientBalance={setInsufficientBalance}
-            availableBalance={balances?.tokenAmount}
-            protocol={protocol} />
-          <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage/>} />
+            <InputAmount 
+              label={amountLabel}
+              symbol={token} 
+              amount={amount} 
+              setAmount={setAmount} 
+              setInsufficientBalance={setInsufficientBalance}
+              availableBalance={balances?.tokenAmount}
+              protocol={protocol} 
+            />
+
+            <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage/>} />
           </>
         }
         {renderActionComponent(isModal)}
     </div>
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol])
+  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, renderActionComponent])
 };
 
 export default ActionController;

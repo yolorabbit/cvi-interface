@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import { toBN } from "utils";
 import Rewards from './../Values/Rewards';
 import StakedAmount from "../Values/StakedAmount";
-import MigrateButton from '../../../Actions/Migrate';
+import MigrateAction from "components/Actions/MigrateAction";
 
 const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
     const isTablet = useIsTablet();
@@ -82,7 +82,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
                 {!isMobile && <RowItem type="action" content={
                     <div className="row-actions-wrapper">
                         {UnstakeController}
-                        <MigrateButton tokenName={token}/>
+                        <MigrateAction tokenName={token}/>
                     </div>
                 } /> }
             </>
@@ -118,7 +118,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
                 <RowItem content={
                     <div className="row-actions-wrapper">
                         {UnstakeController}
-                        <MigrateButton tokenName={token}/>
+                        <MigrateAction tokenName={token}/>
                     </div>
                 } />
             }
