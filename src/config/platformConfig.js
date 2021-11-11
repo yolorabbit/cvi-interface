@@ -39,7 +39,6 @@ const platformConfig = {
     [chainNames.Ethereum]: {
       usdt: {
         key: "usdt",
-        migrated: true,
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,

@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "components/Elements/Button";
 
-export const MigrationWelcome = ({ stepDetails, onClickHandler }) => {
+export const MigrationWelcome = ({ stepDetails, onClickHandler, disabled, isLoading}) => {
   return (
     <div className="migration-welcome-wrapper">
      <img className="migration-coin-image" src={require('../../../images/coins/usdt2usdc.svg').default} alt="migration-coin" />
@@ -15,7 +15,10 @@ export const MigrationWelcome = ({ stepDetails, onClickHandler }) => {
         <Button
           className="button step-button"
           buttonText={stepDetails.stepButton[0]}
-          onClick={onClickHandler} />
+          onClick={onClickHandler} 
+          disabled={disabled}
+          processing={isLoading}
+        />
       </div>
     </div>
   );

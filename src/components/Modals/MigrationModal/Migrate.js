@@ -3,16 +3,21 @@ import Button from "components/Elements/Button";
 
 export const Migrate = ({
   stepDetails: {stepButton = [], stepDesc} = {},
-  onClickHandler
+  usdtLPBalance,
+  onClickHandler,
+  isLoading,
+  disabled,
 }) => {
 
   return (
     <div className="migration-step-wrapper">
       <div className="step-details">
-        {stepDesc &&
-          stepDesc.map((stepDesc, tn) => (
-            <p key={tn}>{stepDesc}</p>
-          ))}
+        {stepDesc?.map((stepDesc, tn) => {
+          if (stepDesc instanceof Array) {
+            return <p key={tn}>{stepDesc[0]} {usdtLPBalance} USDC</p>;
+          }
+          return <p key={tn}>{stepDesc}</p>;
+        })}
       </div>
       <div className="actions-wrapper">
         {stepButton.map(step => 
@@ -22,6 +27,8 @@ export const Migrate = ({
             className="button step-button"
             buttonText={step}
             onClick={() => onClickHandler(step.toLowerCase())} 
+            processing={isLoading}
+            disabled={disabled}
           />
         )}
       </div>

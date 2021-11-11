@@ -425,11 +425,11 @@ const config = {
         <span className="bold">
           Clicking the migrate button will perform the following actions:
         </span>,
-        "1. Withdraw USDT liquidity and recieve 100 USDT.", // @TODO: take USDT value from the state
+        ["1. Withdraw USDT liquidity and receive", "receive-value"],
         "2. Swap USDT for USDC.",
         "3. Deposit USDC to USDC liquidity pool."
       ],
-      stepButton: ["Approve", "Migrate"],
+      stepButton: ["Migrate"],
     }, {
       stepKey: "liquidity",
       stepVisibility: true,

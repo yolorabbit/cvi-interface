@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "components/Elements/Button";
 
-export const Unstake = ({ stepDetails, userStakeAmount, onClickHandler }) => {
+export const Unstake = ({ stepDetails, stakedBalance, onClickHandler, disabled, isLoading }) => {
 
   return (
     <div className="migration-step-wrapper">
@@ -12,14 +12,17 @@ export const Unstake = ({ stepDetails, userStakeAmount, onClickHandler }) => {
           ))}
         <div className="user-amount bold">
           <p>Amount</p>
-          <p>{userStakeAmount} USDT LP </p>
+          <p>{stakedBalance} USDT LP </p>
         </div>
       </div>
       <div className="actions-wrapper">
         <Button
           className="button step-button"
           buttonText={stepDetails.stepButton[0]}
-          onClick={onClickHandler} />
+          onClick={onClickHandler} 
+          processing={isLoading}
+          disabled={disabled}
+        />
       </div>
     </div>
   );

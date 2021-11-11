@@ -18,17 +18,17 @@ export const MigrationModal = ({
   setMigrationModalIsOpen
 }) => {
   const dispatch = useDispatch();
-  const w3 = useW3SDK({
-    platformMigrator: ["USDT-USDC-PlatformMigrator"]
-  });
+  const w3 = useW3SDK();
   const { account } = useActiveWeb3React();
   const [{
+    stakedBalance = {},
     usdtLPBalance,
-    userStakeAmount = 0,
     status = config.migrationStepsTypes.start
   }, setData] = useState({});
-  const usdtusdcPlatformMigrator = w3 && w3.platformMigrators["USDT-USDC-PlatformMigrator"];
+  const [isLoading, setIsLoading] = useState();
 
+  const usdtusdcPlatformMigrator = w3 && w3.platformMigrators["USDT-USDC-PlatformMigrator"];
+ 
   // Do Unstake
   const doUnStake = useCallback(async () => {
     const usdtLPStakingRewards = w3.stakingRewards["USDTLPStakingRewards"];
@@ -79,9 +79,11 @@ export const MigrationModal = ({
 
   // Do Migration
   const doMigration = useCallback(async () => {
+    await usdtusdcPlatformMigrator.w3.block.refresh();
+    console.log("usdtusdcPlatformMigrator");
     const {result, reason} = await usdtusdcPlatformMigrator.canMigrate(account);
     if (result) {
-      await usdtusdcPlatformMigrator.migrate(95, account);
+      await usdtusdcPlatformMigrator.migrate(99, account);
     } else {
       dispatch(addAlert({
         id: 'migration',
@@ -102,19 +104,11 @@ export const MigrationModal = ({
       const stakedBalance = fromBN(bnStakedBalance.stakedAmount, 18);
       const usdtLP = w3.tokens["USDTLP"];
       const liquidity = fromBN(await usdtLP.balanceOf(account), 18);
-      const allowance = fromBN(
-        await getTokenAllowance(
-          usdtLP,
-          account,
-          usdtusdcPlatformMigrator?.address
-        ),
-        18
-      );
       let status = stakedBalance > 0 && config.migrationStepsTypes.unstake;
       if (!status && liquidity > 0) {
-        status = allowance >= liquidity ? config.migrationStepsTypes.approved : config.migrationStepsTypes.liquidity
+        return config.migrationStepsTypes.approved;
       }
-      return status;
+      return config.migrationStepsTypes.liquidity;
     } catch(error) {
       console.log(error);
       return dispatch(addAlert({
@@ -124,11 +118,10 @@ export const MigrationModal = ({
         message: `Failed to get active step`
       }));
     }
-  }, [w3?.stakingRewards, w3?.tokens, account, usdtusdcPlatformMigrator?.address, dispatch]);
+  }, [w3?.stakingRewards, w3?.tokens, account, dispatch]);
 
   // Migration Actions
   const doMigrationAction = useCallback(async (id) => {
-    console.log(`doMigrationAction currentStep: ${id} : ${status}`);
     try {
       switch(status) {
         case config.migrationStepsTypes.unstake:
@@ -136,7 +129,7 @@ export const MigrationModal = ({
   
           case config.migrationStepsTypes.approved:
             if(id === config.migrationStepsTypes.migrate) {
-              await doMigration();
+              return await doMigration();
             }
             return await doApprove();
   
@@ -148,28 +141,26 @@ export const MigrationModal = ({
       }
     } catch(error) {
       console.log(error);
+    }
+  }, [status, doUnStake, doApprove, doMigration]);
+
+  const onClickHandler = useCallback(async (id) => {
+    setIsLoading(true);
+    try {
+      await doMigrationAction(id);
+   
+    } catch(error) {
+      console.log(error);
     } finally {
       const _currentActiveStep = await currentActiveStep();
+      console.log(_currentActiveStep);
       if(_currentActiveStep) {
         setData(prev => ({
           ...prev,
           status: _currentActiveStep
         }))
       }
-    }
-  }, [status, currentActiveStep, doUnStake, doApprove, doMigration]);
-
-  const onClickHandler = useCallback(async (id) => {
-    try {
-      const activeStep = await currentActiveStep();
-      if(!activeStep) return;
-      doMigrationAction(id);
-      setData(prev => ({
-        ...prev,
-        status: activeStep
-      }));    
-    } catch(error) {
-      console.log(error);
+      setIsLoading(false);
     }
   }, [currentActiveStep, doMigrationAction]);
 
@@ -184,6 +175,8 @@ export const MigrationModal = ({
       const govi = w3.tokens["GOVI"];
       const goviBalance = await govi.balanceOf(account);
       const activeStep = await currentActiveStep();
+      console.log(activeStep);
+
       setData({
         stakedBalance: fromBN(stakedBalance.stakedAmount, 18),
         usdtLPBalance: fromBN(usdtLPBalance, 18),
@@ -203,25 +196,33 @@ export const MigrationModal = ({
 
 
   const checkCurrentStep = (step) => {
+    const isDisabled = !w3 || !account || !usdtusdcPlatformMigrator;
     switch (step) {
       case config.migrationStepsTypes.start:
         return <MigrationWelcome
             stepDetails={config.migrationSteps[0]}
             onClickHandler={onClickHandler}
-            currentStep={status} />
+            disabled={isDisabled}
+            isLoading={isLoading}
+        />
 
       case config.migrationStepsTypes.unstake:
         return <Unstake
             stepDetails={config.migrationSteps[1]}
             onClickHandler={onClickHandler}
-            currentStep={status}
-            userStakeAmount={userStakeAmount} />
+            stakedBalance={stakedBalance} 
+            disabled={isDisabled}
+            isLoading={isLoading}
+          />
 
       case config.migrationStepsTypes.approved:
         return <Migrate
             stepDetails={config.migrationSteps[2]}
+            usdtLPBalance={usdtLPBalance}
             onClickHandler={onClickHandler}
-            currentStep={status}  />
+            disabled={isDisabled}
+            isLoading={isLoading}
+          />
 
       case config.migrationStepsTypes.liquidity:
         return <Earn stepDetails={config.migrationSteps[3]} />
