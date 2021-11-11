@@ -8,13 +8,10 @@ import {
 import Platform from './components/pages/Platform';
 import Staking from './components/pages/Staking';
 import HelpCenter from './components/pages/HelpCenter';
-import CVIIndex from './components/pages/CVIIndex';
-import MigrationTest from 'components/pages/MigrationTest';
 import Footer from './components/Footer/Footer';
 import config from './config/config';
 import NotificationList from 'components/NotificationList';
 import Web3ReactManager from 'components/Web3ReactManager';
-import './App.scss';
 import { useEffect, useMemo, useRef } from 'react';
 import { ContractsContext } from 'contracts/ContractContext';
 import { useSelector } from 'react-redux';
@@ -22,6 +19,7 @@ import ReactGA from 'react-ga';
 import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 import Home from 'components/pages/Home';
 import RestrictedModal from 'components/Modals/RestrictedModal';
+import './App.scss';
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -78,8 +76,6 @@ const Routes = () => {
           <Route path={config.routes.staking.path} component={Staking} />
           <Route path={config.routes['help-center'].path} component={HelpCenter} />
           <Route path={config.routes.platform.path} component={Platform} />
-          <Route path={config.routes.cviindex.path} component={CVIIndex} />
-          <Route path={config.routes.migration.path} component={MigrationTest} />
           <Route path={config.routes.home.path} component={Home} />
           <Redirect to="/" />
         </Switch>
