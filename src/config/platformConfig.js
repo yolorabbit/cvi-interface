@@ -246,17 +246,17 @@ const platformConfig = {
   },
   migrationMsgs: {
     [chainNames.Ethereum]: {
-      trade: ["Please note we have started the migration process of the USDT liquidity pool to USDC. Therefore, we have close the option to open new positions in the USDT pool.",
+      trade: ["We have started the migration process of the USDT liquidity pool to USDC. Therefore, we have close the option to open new positions in the USDT pool.",
       "The new UDSC pool will be available on Wednesday 17th of November, at 13:00 UTC"],
 
-      liquidity: ["Please note we have started the migration process of the USDT liquidity pool to USDC. Therefore, we have close the option to open new positions in the USDT pool.",
+      liquidity: ["We have started the migration process of the USDT liquidity pool to USDC. Therefore, we have close the option to provide new liquidity to the USDT pool.",
       "The new UDSC pool will be available on Wednesday 17th of November, at 13:00 UTC"]
     },
     [chainNames.Matic]: {
-      trade: ["Please note we have started the migration process of the USDT liquidity pool to USDC.",
+      trade: ["We have started the migration process of the USDT liquidity pool to USDC.",
       "Therefore, we have close the option to open new positions in the USDT pool."],
 
-      liquidity: ["Please note we have started the migration process of the USDT liquidity pool to USDC.",
+      liquidity: ["We have started the migration process of the USDT liquidity pool to USDC.",
       "Therefore, we have close the option to provide new liquidity to the USDT pool."],
     }
   },

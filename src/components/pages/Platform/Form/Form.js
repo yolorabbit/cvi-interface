@@ -1,5 +1,5 @@
 import { platformViewContext } from 'components/Context';
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState, useCallback} from 'react'
 import CurrencySelect from 'components/CurrencySelect';
 import SelectLeverage from 'components/SelectLeverage';
 import Details from './Details/Details';
@@ -41,8 +41,6 @@ const Form = ({activeTab}) => {
         //eslint-disable-next-line
     }, [selectedCurrency]);
     
-    // console.log("platformConfig.migrationMsgs ", platformConfig.migrationMsgs?.[selectedNetwork]?.trade?);
-
     return useMemo(() => {
         return (
             <div className="platform-form-component">
@@ -130,11 +128,24 @@ const SeeMore = ({selectedCurrency, isMigrated}) => {
     },[selectedCurrency, selectedNetwork, contracts]);
 
 
+    
+const migrationMsg = useCallback(() => {
+        switch(activeView) {
+            case "trade":
+                return  platformConfig.migrationMsgs?.[selectedNetwork]?.trade?.map((msg, msgNum) => <p key={msgNum}>{msg}</p>);
+            case "view-liquidity":
+                return  platformConfig.migrationMsgs?.[selectedNetwork]?.liquidity?.map((msg, msgNum) => <p key={msgNum}>{msg}</p>);
+            default:
+                return null;
+      }
+  }, [activeView, selectedNetwork]);
+
     return useMemo(() => {
         return <div className="platform-form-component__bottom">
             {isMigrated ? 
                 <div className="migration-message">
-                  {platformConfig.migrationMsgs?.[selectedNetwork]?.trade?.map((msg, msgNum) => <p key={msgNum}>{msg}</p>)}
+                  <p className="pay-attention">Pay Attention:</p>
+                  {migrationMsg()}
                 </div>
                 : activeView === activeViews.trade ? <p>
                     <b>Pay Attention: </b> 
@@ -146,7 +157,7 @@ const SeeMore = ({selectedCurrency, isMigrated}) => {
                 </p>
             }
         </div>
-    }, [activeView, isMigrated, lockup, selectedNetwork]);
+    }, [activeView, isMigrated, lockup, migrationMsg]);
 }
 
 export default Form;

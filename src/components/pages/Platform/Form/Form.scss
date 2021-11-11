@@ -116,7 +116,14 @@
             & b {
                 color: #fea716;
             }
+            &.pay-attention  {
+                color: #fea716;
+                float: left;
+                font-weight: bold;
+                padding-inline-end: 2px;
+            }
         }
+        
     }
 
     .migration-message  {
