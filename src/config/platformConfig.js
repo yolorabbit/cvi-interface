@@ -39,6 +39,7 @@ const platformConfig = {
     [chainNames.Ethereum]: {
       usdt: {
         key: "usdt",
+        migrated: true,
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,
@@ -241,6 +242,22 @@ const platformConfig = {
        text: "Please note that when the collateral ratio is above 80%, the purchase fee will increase, resulting in higher profits for the liquidity providers.",
        type: "positive",
        markedLevel: 80
+    }
+  },
+  migrationMsgs: {
+    [chainNames.Ethereum]: {
+      trade: ["Please note we have started the migration process of the USDT liquidity pool to USDC. Therefore, we have close the option to open new positions in the USDT pool.",
+      "The new UDSC pool will be available on Wednesday 17th of November, at 13:00 UTC"],
+
+      liquidity: ["Please note we have started the migration process of the USDT liquidity pool to USDC. Therefore, we have close the option to open new positions in the USDT pool.",
+      "The new UDSC pool will be available on Wednesday 17th of November, at 13:00 UTC"]
+    },
+    [chainNames.Matic]: {
+      trade: ["Please note we have started the migration process of the USDT liquidity pool to USDC.",
+      "Therefore, we have close the option to open new positions in the USDT pool."],
+
+      liquidity: ["Please note we have started the migration process of the USDT liquidity pool to USDC.",
+      "Therefore, we have close the option to provide new liquidity to the USDT pool."],
     }
   },
   sellFeeWarningDuration: (60 * 60) * 48,

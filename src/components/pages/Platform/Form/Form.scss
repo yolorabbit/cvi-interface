@@ -119,6 +119,32 @@
         }
     }
 
+    .migration-message  {
+        margin-top: 1.25vw;
+        @media (max-width: 1365px){
+            margin-top: 1.758vw;
+        }
+        @media (max-width: 676px){
+            margin-top: 6.667vw;
+        }
+        p {
+            font-size: 0.729vw;
+            margin: 0;
+            line-height: 0.938vw;
+            @media (max-width: 1365px) {
+                font-size: 1.026vw;
+                line-height: 1.319vw;
+            }
+            @media (max-width: 1024px) {
+                font-size: 1.565vw;
+                line-height: 2.347vw;
+            }
+            @media (max-width: 767px) {
+                font-size: 3.333vw;
+                line-height: 5vw;
+            }
+        }
+    }
     & .graphs-component {
         & .tabs-form-component__header {
             background-color: transparent;
