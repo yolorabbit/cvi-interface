@@ -1,29 +1,24 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Button from "components/Elements/Button";
-import MigrationModal from "components/Modals/MigrationModal";
+import { useDispatch } from "react-redux";
+import { setMigrationModalOpen } from "store/actions";
 
 const MigrateAction = ({ tokenName }) => {
-  const [migrationModalIsOpen, setMigrationModalIsOpen] = useState(false);
+  const dispatch = useDispatch();
  
   return useMemo(() => {
     return <> 
-        {migrationModalIsOpen && (
-            <MigrationModal
-              migrationModalIsOpen={migrationModalIsOpen}
-              setMigrationModalIsOpen={setMigrationModalIsOpen}
-            />
-        )}
         <div className="migrate-component">
           <div className="migrate-component__container">
             {(tokenName === "cvi-usdt-lp" || tokenName === "usdt") && <Button
               className="migrate-component__container--button"
               buttonText="Migrate"
-              onClick={() => setMigrationModalIsOpen(true)} 
+              onClick={() => dispatch(setMigrationModalOpen(true))} 
             />}
           </div>
         </div>
     </>
-  }, [migrationModalIsOpen, tokenName]);
+  }, [dispatch, tokenName]);
 };
 
 export default MigrateAction;

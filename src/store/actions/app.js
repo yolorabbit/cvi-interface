@@ -37,3 +37,9 @@ export const updateVolInfo = (data, key) => ({
   data,
   key
 });
+
+
+export const setMigrationModalOpen = (migrationModalIsOpen) => ({
+  type: actionTypes.SET_MIGRATION_MODAL_IS_OPEN,
+  migrationModalIsOpen
+});

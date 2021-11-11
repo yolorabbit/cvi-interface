@@ -10,13 +10,11 @@ import Earn from "./Earn";
 import config from "config/config";
 import { useDispatch } from "react-redux";
 import { useW3SDK } from "components/Hooks";
-import { fromBN, toBN } from "utils";
-import { addAlert } from "store/actions";
+import { fromBN } from "utils";
+import { addAlert, setMigrationModalOpen } from "store/actions";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 
-export const MigrationModal = ({
-  setMigrationModalIsOpen
-}) => {
+export const MigrationModal = () => {
   const dispatch = useDispatch();
   const w3 = useW3SDK();
   const { account } = useActiveWeb3React();
@@ -26,56 +24,28 @@ export const MigrationModal = ({
     status = config.migrationStepsTypes.start
   }, setData] = useState({});
   const [isLoading, setIsLoading] = useState();
-
   const usdtusdcPlatformMigrator = w3 && w3.platformMigrators["USDT-USDC-PlatformMigrator"];
  
   // Do Unstake
   const doUnStake = useCallback(async () => {
-    const usdtLPStakingRewards = w3.stakingRewards["USDTLPStakingRewards"];
-    const bnStakedBalance = await usdtLPStakingRewards.staked(account);
-    const stakedBalance = fromBN(bnStakedBalance.stakedAmount, 18);
-    if (stakedBalance > 0) {
-      await usdtLPStakingRewards.withdrawAll(account);
+    try {
+      const usdtLPStakingRewards = w3.stakingRewards["USDTLPStakingRewards"];
+      const bnStakedBalance = await usdtLPStakingRewards.staked(account);
+      const stakedBalance = fromBN(bnStakedBalance.stakedAmount, 18);
+      if (stakedBalance > 0) {
+        await usdtLPStakingRewards.withdrawAll(account);
+      }
+      const usdtLP = w3.tokens["USDTLP"];
+      const usdtLPBalance = await usdtLP.balanceOf(account);
+      setData(prev => ({
+        ...prev, 
+        usdtLPBalance: fromBN(usdtLPBalance, 18),
+      }));
+
+    } catch(error) {
+      console.log(error);
     }
   }, [w3, account]);
-
-  // Get Token Alowance
-  const getTokenAllowance = async (token, from, to) => {
-    return toBN(
-      await token.w3.call(token.contract.methods.allowance, [from, to])
-    );
-  };
-
-  // Do Approve
-  const doApprove = useCallback(async () => {
-    const usdtLP = w3.tokens["USDTLP"];
-    const liquidity = fromBN(await usdtLP.balanceOf(account), 18);
-    const allowance = fromBN(
-      await getTokenAllowance(
-        usdtLP,
-        account,
-        usdtusdcPlatformMigrator?.address
-      ),
-      18
-    );
-
-    if (liquidity <= 0) {
-      console.log("No Liquidity");
-      return;
-    }
-
-    if (allowance >= liquidity) {
-      console.log("Already Approved");
-      return dispatch(addAlert({
-        id: 'migration',
-        eventName: `Already approved - failed`,
-        alertType: config.alerts.types.FAILED,
-        message: "Already approved."
-      }));
-    }
-
-    await usdtLP.approve(account, usdtusdcPlatformMigrator?.address);
-  }, [w3?.tokens, account, usdtusdcPlatformMigrator?.address, dispatch]);
 
   // Do Migration
   const doMigration = useCallback(async () => {
@@ -108,7 +78,7 @@ export const MigrationModal = ({
       if (!status && liquidity > 0) {
         return config.migrationStepsTypes.approved;
       }
-      return config.migrationStepsTypes.liquidity;
+      return status || config.migrationStepsTypes.liquidity;
     } catch(error) {
       console.log(error);
       return dispatch(addAlert({
@@ -127,28 +97,25 @@ export const MigrationModal = ({
         case config.migrationStepsTypes.unstake:
           return await doUnStake();
   
-          case config.migrationStepsTypes.approved:
-            if(id === config.migrationStepsTypes.migrate) {
-              return await doMigration();
-            }
-            return await doApprove();
-  
-        case config.migrationStepsTypes.liquidity:
+        case config.migrationStepsTypes.approved: {
+          if(id === config.migrationStepsTypes.migrate) {
+            return await doMigration();
+          }
           return await doMigration();
-        
+        }
+  
         default:
             return null
       }
     } catch(error) {
       console.log(error);
     }
-  }, [status, doUnStake, doApprove, doMigration]);
+  }, [status, doUnStake, doMigration]);
 
   const onClickHandler = useCallback(async (id) => {
     setIsLoading(true);
     try {
       await doMigrationAction(id);
-   
     } catch(error) {
       console.log(error);
     } finally {
@@ -172,15 +139,11 @@ export const MigrationModal = ({
       const stakedBalance = await w3.stakingRewards["USDTLPStakingRewards"].staked(account);
       const usdtLP = w3.tokens["USDTLP"];
       const usdtLPBalance = await usdtLP.balanceOf(account);
-      const govi = w3.tokens["GOVI"];
-      const goviBalance = await govi.balanceOf(account);
       const activeStep = await currentActiveStep();
-      console.log(activeStep);
 
       setData({
         stakedBalance: fromBN(stakedBalance.stakedAmount, 18),
         usdtLPBalance: fromBN(usdtLPBalance, 18),
-        goviBalance: fromBN(goviBalance, 18),
         status: !!activeStep ? config.migrationStepsTypes.start : config.migrationStepsTypes["no-need"],
       });
     };
@@ -191,8 +154,8 @@ export const MigrationModal = ({
   useEffect(() => {
     if (status === config.migrationStepsTypes["no-need"]) return;
     setData(prev => ({...prev, userStakeAmount: usdtLPBalance}));
-    setMigrationModalIsOpen(true);
-  }, [setMigrationModalIsOpen, status, usdtLPBalance]);
+    dispatch(setMigrationModalOpen(true));
+  }, [dispatch, status, usdtLPBalance]);
 
 
   const checkCurrentStep = (step) => {
@@ -201,7 +164,7 @@ export const MigrationModal = ({
       case config.migrationStepsTypes.start:
         return <MigrationWelcome
             stepDetails={config.migrationSteps[0]}
-            onClickHandler={onClickHandler}
+            onClickHandler={() => onClickHandler(config.migrationSteps[0].stepKey)}
             disabled={isDisabled}
             isLoading={isLoading}
         />
@@ -209,7 +172,7 @@ export const MigrationModal = ({
       case config.migrationStepsTypes.unstake:
         return <Unstake
             stepDetails={config.migrationSteps[1]}
-            onClickHandler={onClickHandler}
+            onClickHandler={() => onClickHandler(config.migrationSteps[1].stepKey)}
             stakedBalance={stakedBalance} 
             disabled={isDisabled}
             isLoading={isLoading}
@@ -218,14 +181,17 @@ export const MigrationModal = ({
       case config.migrationStepsTypes.approved:
         return <Migrate
             stepDetails={config.migrationSteps[2]}
-            usdtLPBalance={usdtLPBalance}
             onClickHandler={onClickHandler}
+            usdtLPBalance={usdtLPBalance}
             disabled={isDisabled}
             isLoading={isLoading}
           />
 
       case config.migrationStepsTypes.liquidity:
-        return <Earn stepDetails={config.migrationSteps[3]} />
+        return <Earn 
+          stepDetails={config.migrationSteps[3]} 
+          onClickHandler={() => onClickHandler(config.migrationSteps[3].stepKey)}
+        />
 
       default:
         return null;
@@ -233,7 +199,7 @@ export const MigrationModal = ({
   };
 
   return (
-    <Modal className="migration-modal" closeIcon clickOutsideDisabled handleCloseModal={() => setMigrationModalIsOpen(false)}>
+    <Modal className="migration-modal" closeIcon clickOutsideDisabled handleCloseModal={() => dispatch(setMigrationModalOpen(false))}>
       {status !== config.migrationStepsTypes.start && (
         <>
           <Title
