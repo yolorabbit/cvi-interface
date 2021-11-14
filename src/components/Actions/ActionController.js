@@ -77,13 +77,14 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
               availableBalance={balances?.tokenAmount}
               protocol={protocol} 
             />
-
-            <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage/>} />
+            {activeView  === "trade" &&
+              <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage/>} />
+            }
           </>
         }
         {renderActionComponent(isModal)}
     </div>
-  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, renderActionComponent])
+  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, renderActionComponent, activeView])
 };
 
 export default ActionController;
