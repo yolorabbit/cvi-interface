@@ -217,7 +217,7 @@ export const MigrationModal = ({w3}) => {
           <Title
             className="migration-title"
             color="white"
-            text="Migrate USDT liquidity to USDC platform"
+            text="Migrate USDT to USDC liquidity pool"
           />
           <Steps steps={config.migrationSteps} currentStep={status} />
         </>

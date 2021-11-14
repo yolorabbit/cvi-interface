@@ -3,6 +3,7 @@ import Button from "components/Elements/Button";
 
 export const Unstake = ({ stepDetails, stakedBalance, onClickHandler, disabled, isLoading }) => {
 
+  // TODO : Change to EXIT function - claim GOVI after UNSTAKE
   return (
     <div className="migration-step-wrapper">
       <div className="step-details">

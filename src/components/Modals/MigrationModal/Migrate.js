@@ -14,7 +14,7 @@ export const Migrate = ({
       <div className="step-details">
         {stepDesc?.map((stepDesc, tn) => {
           if (stepDesc instanceof Array) {
-            return <p key={tn}>{stepDesc[0]} {usdtLPBalance} USDC</p>;
+            return <p key={tn}>{stepDesc[0]} {usdtLPBalance} USDT</p>; {/* TODO : CHANGE LP BALANCE */}
           }
           return <p key={tn}>{stepDesc}</p>;
         })}

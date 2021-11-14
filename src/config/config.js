@@ -410,8 +410,8 @@ const config = {
     {
       stepKey: 'unstake',
       stepVisibility: true,
-      stepTitle: "Unstake",
-      stepDesc: ["Unstake your USDT LP tokens"],
+      stepTitle: "Unstake & Claim",
+      stepDesc: ["Unstake your USDT LP tokens and claim your GOVI rewards"],
       stepButton: ["Unstake"]
     }, {
       stepKey: "approved",
@@ -421,11 +421,11 @@ const config = {
         <span className="bold">
           Clicking the migrate button will perform the following actions:
         </span>,
-        ["1. Withdraw USDT liquidity and receive", "receive-value"],
+        ["1. Withdraw", "receive-value"],
         "2. Swap USDT for USDC.",
         "3. Deposit USDC to USDC liquidity pool."
       ],
-      stepButton: ["Migrate"],
+      stepButton: ["Migrate"], // @TODO: Add approve button
     }, {
       stepKey: "liquidity",
       stepVisibility: true,
