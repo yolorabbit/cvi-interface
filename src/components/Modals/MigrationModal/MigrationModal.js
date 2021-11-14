@@ -167,8 +167,6 @@ export const MigrationModal = ({w3}) => {
   // Migration Actions
   const doMigrationAction = useCallback(async (id) => {
     try {
-      console.log(id);
-      console.log(status);
       switch(status) {
         case config.migrationStepsTypes.unstake:
           return await doUnStake();

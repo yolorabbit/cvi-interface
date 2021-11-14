@@ -126,7 +126,6 @@ const platformConfig = {
         fixedDecimals: 6,
         lpTokensDecimals: 18,
         type: "v2",
-        migrated: true,
         address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
         rel: {
           contractKey: "USDT",
@@ -134,7 +133,7 @@ const platformConfig = {
           feesCalc: "FeesCalculatorV4",
           feesModel: "USDTPlatform",
           positionRewards: "PositionRewardsV3",
-          cviOracle: "CVIOracle",
+          oracle: "CVIOracle",
           stakingRewards: "USDTLPStakingRewards",
           liquidation: "LiquidationV2"
         },
