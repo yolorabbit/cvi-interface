@@ -25,7 +25,7 @@ const InputAmount = ({
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const availableBalanceAmount = useMemo(() => customFixedTokenValue(availableBalance, activeToken.decimals, activeToken.decimals), [activeToken, availableBalance]);
     const insufficientBalance = useMemo(() => tokenAmount.gt(toBN(availableBalance)), [tokenAmount, availableBalance]);
-
+   
     useEffect(() => {
         setInsufficientBalance(insufficientBalance);
         //eslint-disable-next-line

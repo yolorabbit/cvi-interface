@@ -11,7 +11,7 @@ import platformConfig from "config/platformConfig";
 import { chainNames } from "connectors";
 import config from "config/config";
 
-const Details = ({activeVolIndex, selectedCurrency, amount, leverage}) => {
+const Details = ({activeVolIndex, selectedCurrency, amount, leverage, slippageTolerance}) => {
     const { activeView } = useContext(platformViewContext);
  
     return useMemo(() => {
@@ -23,6 +23,7 @@ const Details = ({activeVolIndex, selectedCurrency, amount, leverage}) => {
                         selectedCurrency={selectedCurrency} 
                         leverage={leverage}
                         activeVolIndex={activeVolIndex}
+                        slippageTolerance={slippageTolerance}
                     /> : <LiquidityView 
                             amount={amount} 
                             selectedCurrency={selectedCurrency} 
@@ -31,10 +32,10 @@ const Details = ({activeVolIndex, selectedCurrency, amount, leverage}) => {
                 </div>
             </div>
         )
-    }, [activeVolIndex, selectedCurrency, activeView, amount, leverage]); 
+    }, [activeVolIndex, selectedCurrency, activeView, amount, leverage, slippageTolerance]); 
 }
 
-const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex}) => {
+const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippageTolerance}) => {
     const activeVolInfo = useActiveVolInfo(activeVolIndex);
     const { selectedNetwork } = useSelector(({app}) => app);
     const { account } = useActiveWeb3React();
@@ -119,7 +120,8 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex}) => {
                 <Stat 
                     className="low-priority large-value"
                     title={config.statisticsDetails.slippageTolerance.title} 
-                    value={10} 
+                    value={slippageTolerance || "0"} 
+                    format={`${slippageTolerance || "0"}%`}
                 />
                 {/* TODO: Add Dynamic Value to comment */}
                 <div className="stat-component">
@@ -127,7 +129,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex}) => {
                 </div>
             </>
         )
-    }, [purchaseFee, tokenAmount, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeVolInfo, amount, selectedCurrency, leverage, actLowRules, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolIndex]) 
+    }, [purchaseFee, tokenAmount, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeVolInfo, amount, selectedCurrency, leverage, actLowRules, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolIndex, slippageTolerance]) 
    
 }
 

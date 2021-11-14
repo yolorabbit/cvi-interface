@@ -1,32 +1,27 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Tooltip from "components/Tooltip";
-import "./Slippage.scss";
 import config from '../../config/config';
+import "./Slippage.scss";
 
-const Slippage = () => {
-  const [slippageTolerance, setSlippageTolerance] = useState(0.5);
-  const [costumTolerance, setCostumTolerance] = useState(0);
+const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
+  const [costumTolerance, setCostumTolerance] = useState("");
 
-  const slippageButtons = {
-    buttons: [0.5, 1, 2],
-  };
+  const slippageButtons = useMemo(() => ({
+    buttons: ["0.5", "1", "2"],
+  }), []);
 
-  const slippageBtnHandler = (val) => {
-    if (slippageTolerance !== val) {
-      setSlippageTolerance(val);
-    }
-  };
+  const slippageBtnHandler = useCallback((val) => {
+    if (slippageTolerance !== val) setSlippageTolerance(val);
+  }, [setSlippageTolerance, slippageTolerance]);
 
-
-  const customSlippageInput = (e) => {
+  const customSlippageInput = ({target: { value }}) => {
     //eslint-disable-next-line
       var numbersOnly = /[^0-9][\.,]/g;
-      var val = e.target.value;
-      let valNoLetters = val.replace(numbersOnly, '');
+      let valNoLetters = value?.replace(numbersOnly, '');
       if (valNoLetters >= 0 && valNoLetters <= 100) {
         let costumTolerance = valNoLetters
-        setCostumTolerance(costumTolerance)
-        slippageBtnHandler(costumTolerance)
+        setCostumTolerance(costumTolerance);
+        slippageBtnHandler(costumTolerance);
       }
   }
 
@@ -70,7 +65,7 @@ const Slippage = () => {
         </div>
       </div>
       {slippageTolerance &&
-      slippageTolerance < 0.5 &&
+      Number(slippageTolerance) < 0.5 &&
         <span className="slippage-error">
           <b>Pay Attention:</b> Your transaction may fail
           </span>

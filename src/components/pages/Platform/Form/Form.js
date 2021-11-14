@@ -28,6 +28,7 @@ const Form = ({activeTab}) => {
     const availableBalanceOptions = useMemo(() => ({updateOn: activeView === "trade" ? 'positions' : 'liquidities', errorValue: "0"}), [activeView]);
     const [availableBalance, getAvailableBalance] = useWeb3Api("getAvailableBalance", selectedCurrency, availableBalancePayload, availableBalanceOptions);
     const isMigrated = selectedCurrency && platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.migrated
+    const [slippageTolerance, setSlippageTolerance] = useState("0.5");
 
     const updateAvailableBalance = () => {
       getAvailableBalance();
@@ -57,13 +58,15 @@ const Form = ({activeTab}) => {
                         && <SelectLeverage selectedCurrency={selectedCurrency} leverage={leverage} tokenLeverageList={tokenLeverageList} setLeverage={setLeverage} /> }
                   
                     {!isMigrated && <ActionController 
-                            disabled={!amount}
                             amount={amount}
                             setAmount={setAmount}
+                            setSlippageTolerance={setSlippageTolerance}
+                            slippageTolerance={slippageTolerance}
                             token={selectedCurrency}
                             leverage={leverage}
                             type={type}
                             balances={{ tokenAmount: availableBalance }}
+                            disabled={!amount}
                             cb={updateAvailableBalance}
                         />
                     }
@@ -77,6 +80,7 @@ const Form = ({activeTab}) => {
                         selectedCurrency={selectedCurrency?.toUpperCase()} 
                         amount={amount} 
                         leverage={leverage} 
+                        slippageTolerance={slippageTolerance}
                     />
                </div>
 
@@ -91,7 +95,7 @@ const Form = ({activeTab}) => {
             </div>
         )
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCurrency, activeTab, activeView, selectedNetwork, leverage, tokenLeverageList, amount, type, availableBalance, isTablet]) 
+    }, [selectedCurrency, activeTab, activeView, selectedNetwork, leverage, tokenLeverageList, amount, type, availableBalance, isTablet, slippageTolerance]) 
 }
 
 const SeeMore = ({selectedCurrency, isMigrated}) => {
@@ -149,7 +153,7 @@ const migrationMsg = useCallback(() => {
                   {migrationMsg()}
                 </div>
                 : activeView === activeViews.trade ? <p>
-                    <b>Pay Attention:</b> 
+                    <b>Pay Attention: </b> 
                     GOVI tokens will become claimable starting the day after your last open position action (UTC time) and for a period not exceeding 30 days.
                     <br/>Please also note that you won't be able to sell your position within the next 6 hours. 
                 </p> 

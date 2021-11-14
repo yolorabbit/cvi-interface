@@ -21,6 +21,7 @@ const TradeRow = ({token, isHeader, className}) => {
     const [positionPnlData] = useWeb3Api("getPositionsPNL", token.key, positionPnlPayload, {errorValue: "0", updateOn: "positions"});
     const header = useMemo(() => platformConfig.headers[activeViews.trade][platformConfig.tabs.trade.positions], []);
     const leverage = pos?.leverage ? `x${pos.leverage}` :  "N/A";
+    const [slippageTolerance, setSlippageTolerance] = useState("0.5");
 
     const sellController = useMemo(() => {
         return <ActionController 
@@ -31,12 +32,14 @@ const TradeRow = ({token, isHeader, className}) => {
             setAmount={setAmount}
             type={platformConfig.actionsConfig.sell.key}
             leverage={pos?.leverage ?? "1"}
+            slippageTolerance={slippageTolerance}
+            setSlippageTolerance={setSlippageTolerance}
             balances={{
                 posUnitsAmount: pos?.positionUnitsAmount ?? "0",
                 tokenAmount: positionValue
             }}
         />
-    }, [token, amount, pos, positionValue]);
+    }, [token, amount, pos, positionValue, slippageTolerance]);
 
     const RowData = useMemo(() => (
         <> 

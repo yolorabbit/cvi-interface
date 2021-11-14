@@ -5,12 +5,13 @@ import Slippage from 'components/Slippage';
 import Expand from 'components/Expand';
 import { platformViewContext } from 'components/Context';
 import Action from './Action';
+import platformConfig from 'config/platformConfig';
 
 
 const actionControllerContext = createContext({});
-export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, isModal, isOpen, setIsOpen, balances, cb }) => {
+export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
   return (
-    <actionControllerContext.Provider value={{disabled, type, token, protocol, leverage, amount, setAmount, isModal, isOpen, setIsOpen, balances, cb }}>
+    <actionControllerContext.Provider value={{disabled, type, token, protocol, leverage, amount, setAmount, isModal, slippageTolerance, isOpen, setIsOpen, balances, cb }}>
       <Action />
     </actionControllerContext.Provider>
   )
@@ -21,7 +22,7 @@ export const useActionController = () => {
   return context;
 }
 
-const ActionController = ({type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, isModal, view="platform", protocol, balances, cb}) => {
+const ActionController = ({type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, slippageTolerance, setSlippageTolerance, isModal, view="platform", protocol, balances, cb}) => {
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
@@ -39,9 +40,10 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         isModal={isModal} 
         balances={balances} 
         setIsOpen={setIsOpen}
+        slippageTolerance={slippageTolerance}
         cb={cb}
       />
-  }, [amount, balances, cb, disabled, insufficientBalance, isOpen, leverage, protocol, setAmount, token, type])
+  }, [amount, balances, cb, disabled, insufficientBalance, isOpen, leverage, protocol, setAmount, token, type, slippageTolerance])
 
   useEffect(() => {
     if(!isOpen && amount !== "") {
@@ -63,8 +65,13 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             availableBalance={balances?.tokenAmount}
             view={view}
             protocol={protocol} 
-          />          
+          />         
+          {type === platformConfig.actionsConfig.sell.key && <AdvancedOptions 
+            slippageTolerance={slippageTolerance} 
+            setSlippageTolerance={setSlippageTolerance} 
+          />}
           {renderActionComponent()}
+
         </Modal>}
 
         {!isModal && <>
@@ -77,14 +84,24 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
               availableBalance={balances?.tokenAmount}
               protocol={protocol} 
             />
-            {activeView  === "trade" &&
-              <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage/>} />
-            }
+
+            <AdvancedOptions 
+              slippageTolerance={slippageTolerance} 
+              setSlippageTolerance={setSlippageTolerance} 
+            /> 
           </>
         }
         {renderActionComponent(isModal)}
     </div>
-  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, renderActionComponent, activeView])
+    //eslint-disable-next-line
+  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, renderActionComponent, type, slippageTolerance])
 };
 
+const AdvancedOptions = ({slippageTolerance, setSlippageTolerance}) => {
+  const { activeView } = useContext(platformViewContext);
+  console.log(setSlippageTolerance);
+  if(activeView !== "trade") return null;
+  return <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage slippageTolerance={slippageTolerance} setSlippageTolerance={setSlippageTolerance} />} />
+  
+}
 export default ActionController;
