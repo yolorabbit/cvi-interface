@@ -67,10 +67,10 @@
         & thead {
             & th { 
                 vertical-align: unset;
-
+                text-align: start;
                 &:first-child {
                     padding-right: 2.135vw;
-
+                    min-width: unset;
                     @media (max-width: 1365px){
                         padding-right: 3.004vw;
                     }

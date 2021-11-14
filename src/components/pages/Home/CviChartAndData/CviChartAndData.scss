@@ -127,9 +127,9 @@
     & .cvi-stats-component {
         min-height: auto;
 
-        & .statistics-spinner {
-            margin-top: 4px;
-        }
+        // & .statistics-spinner {
+        //     margin-top: 4px;
+        // }
         
         & .index-value-component__top.index-value-spinner-container {
             align-items: flex-end;
@@ -141,7 +141,7 @@
             & .statistics-spinner {
                 height: 16px;
                 width: 16px;
-                margin-bottom: 2px;
+                margin-bottom: 1px;
                 align-items: center;
                 justify-content: center;
             }

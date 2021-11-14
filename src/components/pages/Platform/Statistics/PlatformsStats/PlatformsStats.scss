@@ -9,6 +9,18 @@
         margin-bottom: 6.667vw;               
     }
 
+    .stats tr{
+        width: 100%;
+        position: relative;
+        th  {
+            &:nth-child(1) {
+                width: 20%;
+            }
+            &:nth-child(2), &:nth-child(3) {
+                width: 40%;
+            }
+        }
+    }
     & .statistics-component {
         padding: 0;
         min-height: auto;
