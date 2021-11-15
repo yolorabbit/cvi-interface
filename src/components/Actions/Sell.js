@@ -23,8 +23,8 @@ const feesChangedWarning = "This transaction will not succeed due to the change 
 const Sell = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { isOpen, setIsOpen, isModal, disabled, leverage, token, amount, setAmount, balances, slippageTolerance } = useActionController();
-    console.log(slippageTolerance);
+    const { isOpen, setIsOpen, isModal, disabled, leverage, token, amount, setAmount, balances } = useActionController();
+    // @TODO: add slippage percentage to contract v3, add v3 type for contracts. 
     const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
@@ -50,6 +50,7 @@ const Sell = () => {
             
             const { getCVILatestRoundData } = contracts[activeToken.rel.oracle].methods;
             const { cviValue } = await getCVILatestRoundData().call();
+
             let positionUnitsAmount = false;
             
             if(!toBN(balances.tokenAmount).cmp(tokenAmount)) {

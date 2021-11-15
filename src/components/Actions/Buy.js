@@ -23,7 +23,6 @@ const Buy = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
     const { disabled, type, token, setIsOpen, amount, setAmount, leverage = 1, cb: updateAvailableBalance, slippageTolerance } = useActionController();
-    console.log(slippageTolerance);
     const { library } = useWeb3React(config.web3ProviderId);
     const { account, library: web3 } = useActiveWeb3React();
     const [modalIsOpen, setModalIsOpen] = useState();
@@ -97,17 +96,18 @@ const Buy = () => {
 
     const feesValidation = useCallback(async () => {
         let fees = await getPurchaseFees();
-        // true for valid fees
         return fees !== "N/A" && purchaseFee !== "N/A" ? toBN(fees.buyingPremiumFeePercent).cmp(toBN(purchaseFee.buyingPremiumFeePercent)) !== 1 : true;
     }, [purchaseFee, getPurchaseFees])
 
     const buy = useCallback(async () => {
         const _contract = getContract(activeToken.rel.platform);
         const _leverage = !leverage ? "1" : leverage;
+        const _feesWithSlippage =  String(Number(purchaseFee?.buyingPremiumFeePercent || 0) + Number((slippageTolerance * 100) || 0));
+
         if (activeToken.type === "eth") {
-            return await _contract.methods.openPositionETH(MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, value: tokenAmount, ...gas });
+            return await _contract.methods.openPositionETH(MAX_CVI_VALUE, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount, ...gas });
         } else if (activeToken.type === "v2" || activeToken.type === "usdc") {
-            return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE, purchaseFee.buyingPremiumFeePercent, _leverage).send({ from: account, ...gas });
+            return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE, _feesWithSlippage, _leverage).send({ from: account, ...gas });
         } else {
             return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE).send({ from: account, ...gas });
         }

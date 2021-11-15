@@ -18,7 +18,7 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
     //eslint-disable-next-line
       var numbersOnly = /[^0-9][\.,]/g;
       let valNoLetters = value?.replace(numbersOnly, '');
-      if (valNoLetters >= 0 && valNoLetters <= 100) {
+      if (valNoLetters >= 0 && valNoLetters <= 1000) {
         let costumTolerance = valNoLetters
         setCostumTolerance(costumTolerance);
         slippageBtnHandler(costumTolerance);
@@ -60,15 +60,19 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
             autoComplete="off"
             className="slippage-input"
             value={costumTolerance}
-            onChange={customSlippageInput}/>
+            onChange={customSlippageInput}
+            onClick={() => {
+              setSlippageTolerance("");
+              setCostumTolerance("");
+            }}
+          />
           <span className="slippage-sign">%</span>
         </div>
       </div>
-      {slippageTolerance &&
-      Number(slippageTolerance) < 0.5 &&
+      {slippageTolerance && ((Number(slippageTolerance) < 0.5) || (Number(slippageTolerance) > 100)) &&
         <span className="slippage-error">
           <b>Pay Attention:</b> Your transaction may fail
-          </span>
+        </span>
       }
     </div>
   );

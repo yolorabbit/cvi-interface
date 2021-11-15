@@ -1,6 +1,8 @@
 .slippage-component {
   margin-top: 1vw;
   position: relative;
+  cursor: initial;
+  
   @media (max-width: 1365px) {
     margin-block-start: 1.544vw;
   }

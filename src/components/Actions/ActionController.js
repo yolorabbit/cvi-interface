@@ -99,9 +99,8 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
 
 const AdvancedOptions = ({slippageTolerance, setSlippageTolerance}) => {
   const { activeView } = useContext(platformViewContext);
-  console.log(setSlippageTolerance);
   if(activeView !== "trade") return null;
   return <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage slippageTolerance={slippageTolerance} setSlippageTolerance={setSlippageTolerance} />} />
-  
 }
+
 export default ActionController;
