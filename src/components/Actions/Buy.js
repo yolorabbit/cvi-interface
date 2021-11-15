@@ -106,7 +106,7 @@ const Buy = () => {
 
         if (activeToken.type === "eth") {
             return await _contract.methods.openPositionETH(MAX_CVI_VALUE, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount, ...gas });
-        } else if (activeToken.type === "v2" || activeToken.type === "usdc") {
+        } else if (activeToken.type === "v2" || activeToken.type === "usdc" || activeToken.type === "v3") {
             return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE, _feesWithSlippage, _leverage).send({ from: account, ...gas });
         } else {
             return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE).send({ from: account, ...gas });

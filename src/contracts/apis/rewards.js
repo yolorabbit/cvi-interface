@@ -60,7 +60,7 @@ async function calculatePositionRewardMinMax(contracts, token, {account, tokenAm
 
 async function calculatePositionReward(contracts, token, {account, tokenAmount, leverage = 1}) {
   try {
-    const cviValue = await getCviValue(contracts[token.rel.cviOracle]);
+    const cviValue = await getCviValue(contracts[token.rel.oracle]);
     const now = await getNow();
     const beforeOpeningPositionRewardMin = await calculatePositionRewardMinMax(contracts, token, { account, leverage, openTime: now, tokenAmount, index: cviValue } );
     const beforeOpeningPositionRewardMax = await calculatePositionRewardMinMax(contracts, token, { account, leverage, openTime: 0, tokenAmount, index: cviValue });

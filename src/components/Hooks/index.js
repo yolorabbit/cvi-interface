@@ -118,7 +118,6 @@ export const useIsMount = () => {
 
 export const useActiveVolInfo = (volKeyOrOracle = "cvi") => { // use active vol info by oracle or vol key
     const volsInfo = useSelector(({app}) => app.indexInfo);
-
     return volsInfo[config.volatilityKey[volKeyOrOracle] 
       || config.volatilityKey[config.volatilityOracles[volKeyOrOracle]]] 
       || null;

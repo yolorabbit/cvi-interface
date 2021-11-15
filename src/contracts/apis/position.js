@@ -87,33 +87,34 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
 }
 
 async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, leverage = 1, tokenData, library}) {
-  let collateralRatio = await getCollateralRatio(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenData, tokenAmount, cviValue, leverage, token.type);
-  // console.log(`collateralRatio: ${collateralRatio} (${fromBN(collateralRatio, 10) * 100}%)`);
-  const turbulence = await contracts[token.rel.feesModel].methods.calculateLatestTurbulenceIndicatorPercent().call();
-  // console.log(`turbulence: ${turbulence}`);
-  // const turbulencePercent = await feesCalc.methods.turbulenceIndicatorPercent().call();
-  // console.log(`turbulencePercent: ${turbulencePercent}`);
-  let buyingPremiumFee;
-  let combinedPremiumFeePercentage = 0;
-  // console.log(type);
-  if (token.type === "v1") {
-    buyingPremiumFee = await contracts[token.rel.feesCalc].methods.calculateBuyingPremiumFeeWithTurbulence(tokenAmount, collateralRatio, turbulence).call();
-  } else if(token.type === "usdc") {
-    const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
-    // console.log(`${tokenAmount}`, leverage, collateralRatio?.toString(), lastCollateralRatio.collateralRatio?.toString(), turbulence);
-    ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
-      .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, turbulence)
-      .call());
-  } else {
-    ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
-      .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, turbulence)
-      .call());
+  try {
+    let collateralRatio = await getCollateralRatio(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenData, tokenAmount, cviValue, leverage, token.type);
+    const turbulence = await contracts[token.rel.feesModel].methods.calculateLatestTurbulenceIndicatorPercent().call();
+    let buyingPremiumFee;
+    let combinedPremiumFeePercentage = 0;
+
+    if (token.type === "v1") {
+      buyingPremiumFee = await contracts[token.rel.feesCalc].methods.calculateBuyingPremiumFeeWithTurbulence(tokenAmount, collateralRatio, turbulence).call();
+    } else if(token.type === "usdc") {
+      const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
+      ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
+        .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, turbulence)
+        .call());
+    } else if(token.type === "v3") {
+      const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
+      ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
+        .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, true, turbulence)
+        .call());
+    } else {
+      ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
+        .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, turbulence)
+        .call());
+    }
+
+    return { fee: toBN(buyingPremiumFee), percent: combinedPremiumFeePercentage, turbulence };
+  } catch(error) {
+    console.log(error);
   }
-
-  // console.log(toBN(buyingPremiumFee).toString());
-  // console.log(toBN(combinedPremiumFeePercentage).toString());
-
-  return { fee: toBN(buyingPremiumFee), percent: combinedPremiumFeePercentage, turbulence };
 }
 
 async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {

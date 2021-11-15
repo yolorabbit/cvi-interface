@@ -106,7 +106,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     className="low-priority large-value"
                     name="fundingFee"
                     value={currentFundingFee === "N/A" ? "N/A" : currentFundingFee?.toString()} 
-                    format={customFixed(customFixedTokenValue(currentFundingFee?.toString() === "0" ? "0" : currentFundingFee?.div(toBN("24"))?.toString(), activeToken.decimals, activeToken.decimals), activeToken.fixedDecimals)}
+                    format={currentFundingFee === "N/A" ? "N/A" : customFixed(customFixedTokenValue(currentFundingFee?.toString() === "0" ? "0" : currentFundingFee?.div(toBN("24"))?.toString(), activeToken.decimals, activeToken.decimals), activeToken.fixedDecimals)}
                     _suffix={selectedCurrency}
                     actEthvol={config.volatilityKey[activeVolIndex] === config.volatilityKey.ethvol}
                 />

@@ -4,13 +4,12 @@ import { useLocation } from 'react-router';
 import platformConfig from 'config/platformConfig';
 import { useSelector } from 'react-redux';
 import './CurrencySelect.scss';
-import config from 'config/config';
 
 const CurrencySelect = ({selectedCurrency, setSelectedCurrency, activeVolIndex}) => {
     const location = useLocation();
     const { selectedNetwork } = useSelector(({app}) => app);
     const tokens = platformConfig.tokens[selectedNetwork];
-    const filteredTokens = Object.values(tokens).filter(({key}) => !activeVolIndex || tokens[key]?.rel?.oracle === config.oracles[activeVolIndex])
+    const filteredTokens = Object.values(tokens).filter(({key}) => !activeVolIndex || tokens[key]?.oracleId === activeVolIndex)
     
     useEffect(() => {
         const getCurrencyQuery = new URLSearchParams(location?.search).get('currency');

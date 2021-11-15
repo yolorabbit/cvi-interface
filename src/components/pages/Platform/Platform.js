@@ -32,14 +32,14 @@ const Platform = () => {
                         <Row className="statistics-row-component">
                             <Column>
                                 <Row>
-                                    <Statistics />
+                                    {/* <Statistics /> */}
                                 </Row>
                             </Column>
     
                             <Column>
                                 <Row>
                                     <Container className="index-stats-container">
-                                        <IndexStats />
+                                        {/* <IndexStats /> */}
                                     </Container>
                                 </Row>
                             </Column>

@@ -159,9 +159,14 @@ const web3Api = {
         try {
             const USDTData = await getTokenData(contracts["USDT"]);
             
-            const promiseList = tokens.map(async ({rel: { platform, contractKey, oracle}, key}) => {
+            const promiseList = tokens.map(async ({rel: { platform, contractKey, oracle}, key, type}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
-                const value = await contracts[platform].methods.totalBalanceWithAddendum().call();
+                let value;
+                if(type === "v3") {
+                    value = toBN(await contracts[platform].methods.totalBalance(true).call());
+                } else {
+                    value = toBN(await contracts[platform].methods.totalBalanceWithAddendum().call());
+                }
                 const amountConverted = await convert(toBN(value), tokenData, USDTData);
                 const amountFormatted = commaFormatted(customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), 2))
                 return [`${amountFormatted} (${key.toUpperCase()} pool)`, amountConverted, key, oracle];
@@ -264,7 +269,13 @@ const web3Api = {
                     }
     
                     const totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
-                    const totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());
+                    let totalBalance;
+                    if(token.type === "v3") {
+                        totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalance(true).call());
+                    } else {
+                        totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());
+                    }
+       
                     const tokenAmount = totalSupply !== 0 ? lpBalance.mul(totalBalance).div(totalSupply) : toBN(0);
                     let sharePercent = totalSupply !== 0 ? toFixed((library.utils.fromWei(lpBalance, "ether") / library.utils.fromWei(totalSupply, "ether")) * 100) : 0;
                     

@@ -44,6 +44,7 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "eth",
         address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        oracleId: "cvi",
         rel: {
           contractKey: "WETH",
           platform: "ETHPlatform",
@@ -60,17 +61,18 @@ const platformConfig = {
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
-        type: "usdc",
+        type: "v3",
         leverage: ["1", "2"],
+        oracleId: "cvi",
         rel: {
           contractKey: "USDC",
-          platform: "ETHVolUSDCPlatform",
-          feesCalc: "ETHVolUSDCFeesCalculator",
-          feesModel: "ETHVolUSDCPlatform",
-          positionRewards: "ETHVolUSDCPositionRewards",
-          oracle: "CVIOracle",
-          stakingRewards: "ETHVolUSDCLPStakingRewards",
-          liquidation: "ETHVolUSDCLiquidation"
+          platform: "CVOL-USDC-Platform",
+          feesCalc: "CVOL-USDC-FeesCalculator",
+          feesModel: "CVOL-USDC-Platform",
+          positionRewards: "CVOL-USDC-PositionRewards",
+          oracle: "CVOL-Oracle",
+          stakingRewards: "CVOL-USDCLP-StakingRewards",
+          liquidation: "CVOL-USDC-Liquidation"
         }
       },
       usdt: {
@@ -80,6 +82,7 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "v1",
         address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        oracleId: "cvi",
         rel: {
           contractKey: "USDT",
           platform: "USDTPlatform",
