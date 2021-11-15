@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { viewportContext } from "components/Context";
 import { useActiveVolInfo } from "components/Hooks";
 import "./CviIndexGraph.scss";
+import Spinner from "components/Spinner/Spinner";
 
 const chartInitialize = {
     id: "vix-graph"
@@ -36,8 +37,7 @@ const CviIndexGraph = ({activeVolIndex, maxWidth = 700, maxHeight = 370}) => {
     }, [windowWidth, chart]);
 
     useEffect(()=> {
-        if(!activeVolInfo) return;
-        
+        if(!activeVolInfo || !activeVolInfo?.history?.daily ) return;
         setChart(ChartOptions({
             activeVolIndex,
             chartInitialize, 
@@ -58,7 +58,15 @@ const CviIndexGraph = ({activeVolIndex, maxWidth = 700, maxHeight = 370}) => {
     }, [chart]);
 
     return (
-        <div ref={ref} id={chartInitialize.id}></div>
+        <>
+        {activeVolInfo?.history?.daily ?
+             <div ref={ref} id={chartInitialize.id} />
+            :
+            <div className="graph-preload">
+              <Spinner className="graph-spinner" />
+            </div>
+        }
+        </>
     );
 };
 

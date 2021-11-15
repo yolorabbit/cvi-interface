@@ -16,7 +16,9 @@
         height: 3px
       }
     }
-
+    &.graph-spinner {
+      padding-block-start: 20px;
+    }
     &.statistics-spinner {
       & .spinner {
         font-size: 0.104vw;

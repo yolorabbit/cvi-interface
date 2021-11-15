@@ -20,15 +20,19 @@
  
     & .stat-component {
         min-width: 5.208vw;
+        min-height: 2.083vw;
         @media (max-width: 1365px){
             min-width: 8.208vw;
+            min-height: 2.93vw;
         }
-
         @media (max-width: 1024px){
         	width: 100%;
+            min-height: 5.215vw;
         }
-
-        min-height: 40px;
+        @media (max-width: 767px){
+        	width: 100%;
+            min-height: 11.111vw;
+        }
         &.multiline {
             & p {
                 height: 1.146vw;
