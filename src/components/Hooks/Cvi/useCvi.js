@@ -63,7 +63,6 @@ const useCvi = () => {
             const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY({chainName, index: config.volatilityLabel[index]}); 
             const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
             const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0])
-            
             dispatch(updateVolInfo({
                history: {
                   daily: sortedDailySeries,
@@ -71,6 +70,9 @@ const useCvi = () => {
                }
             }, config.volatilityKey[index]));
          } catch(error) {
+            dispatch(updateVolInfo({
+               history: "N/A"
+            }, config.volatilityKey[index]));
             console.log(error);
          }
       }, [dispatch, selectedNetwork],

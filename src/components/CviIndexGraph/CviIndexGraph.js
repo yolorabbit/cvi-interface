@@ -37,7 +37,7 @@ const CviIndexGraph = ({activeVolIndex, maxWidth = 700, maxHeight = 370}) => {
     }, [windowWidth, chart]);
 
     useEffect(()=> {
-        if(!activeVolInfo || !activeVolInfo?.history?.daily ) return;
+        if(!activeVolInfo || !activeVolInfo?.history?.daily || activeVolInfo?.history === "N/A") return;
         setChart(ChartOptions({
             activeVolIndex,
             chartInitialize, 
@@ -60,10 +60,10 @@ const CviIndexGraph = ({activeVolIndex, maxWidth = 700, maxHeight = 370}) => {
     return (
         <>
         {activeVolInfo?.history?.daily ?
-             <div ref={ref} id={chartInitialize.id} />
-            :
+            <div ref={ref} id={chartInitialize.id} />
+            : 
             <div className="graph-preload">
-              <Spinner className="graph-spinner" />
+                {activeVolInfo?.history === "N/A" ? <span>Failed to fetch data.</span> : <Spinner className="graph-spinner" />}
             </div>
         }
         </>
