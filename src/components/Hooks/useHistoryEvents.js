@@ -70,7 +70,7 @@ const useHistoryEvents = () => {
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
                     type,
-                    index: config.oracleLabel[activeToken.rel.oracle],
+                    index: activeToken.oracleId.toUpperCase(),
                     value: cviValue / 100,
                     leverage: `X${leverage ?? '1'}`,
                     amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`,
@@ -89,7 +89,7 @@ const useHistoryEvents = () => {
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
                     type,
-                    index: config.oracleLabel[activeToken.rel.oracle],
+                    index: activeToken.oracleId.toUpperCase(),
                     amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`,
                 });
             }

@@ -68,11 +68,11 @@ const useCvi = () => {
                   daily: sortedDailySeries,
                   hourly: sortedHourlySeries
                }
-            }, config.volatilityKey[index]));
+            }, index));
          } catch(error) {
             dispatch(updateVolInfo({
                history: "N/A"
-            }, config.volatilityKey[index]));
+            }, index));
             console.log(error);
          }
       }, [dispatch, selectedNetwork],
@@ -83,7 +83,7 @@ const useCvi = () => {
          const activeVols = Object.keys(platformConfig.tabs.index[selectedNetwork]); // mapped active oracles keys
 
          Object.keys(indexInfo).forEach(volKey => { // remove unlisted vols from redux state
-            if(!activeVols.some(activeVolKey => config.volatilityKey[activeVolKey] === volKey)) {
+            if(!activeVols.some(activeVolKey => activeVolKey=== volKey)) {
                dispatch(updateVolInfo(null, volKey));
             }
          })
@@ -94,7 +94,7 @@ const useCvi = () => {
 
          const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
          const { data: volInfo } = await Api.GET_VOL_INFO(chainName); // fetch vols info from backend
-
+        
          // map and filter backend data by active vols.
          (await Promise.allSettled(activeVols.map(async volKey => {
             const volIndex = await getIndexFromOracle(config.oracles[volKey]);
@@ -103,11 +103,10 @@ const useCvi = () => {
          .filter(({status}) => status === "fulfilled")
          .map(({value}) => value)
          .forEach(volInfo => {
-            dispatch(updateVolInfo(volInfo, config.volatilityKey[volInfo.key]));
+            dispatch(updateVolInfo(volInfo, volInfo.key));
          });
-          
       } catch (error) {
-            console.log(error);
+         console.log(error);
       }
    }, [dispatch, fetchGraphData, getIndexFromOracle, indexInfo, selectedNetwork]);
 

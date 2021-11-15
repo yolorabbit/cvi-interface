@@ -76,7 +76,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     _suffix={selectedCurrency}
                     className="large-value"
                     format={toDisplayAmount(purchaseFee === "0" ? "0" : purchaseFee?.openFee?.toString(), activeToken.decimals)}
-                    actEthvol={config.volatilityKey[activeVolIndex] === config.volatilityKey.ethvol}
+                    actEthvol={activeVolIndex === config.volatilityKey.ethvol}
                 />
 
                 <Stat 
@@ -99,7 +99,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     name="collateralRatio" 
                     value={collateralRatioData === "N/A" ? "N/A" : collateralRatioData?.collateralRatio} 
                     format={`${customFixedTokenValue(collateralRatioData?.collateralRatio, 0, 8)}%`}
-                    actEthvol={config.volatilityKey[activeVolIndex] === config.volatilityKey.ethvol}
+                    actEthvol={activeVolIndex === config.volatilityKey.ethvol}
                 />
     
                 <Stat 
@@ -108,7 +108,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     value={currentFundingFee === "N/A" ? "N/A" : currentFundingFee?.toString()} 
                     format={currentFundingFee === "N/A" ? "N/A" : customFixed(customFixedTokenValue(currentFundingFee?.toString() === "0" ? "0" : currentFundingFee?.div(toBN("24"))?.toString(), activeToken.decimals, activeToken.decimals), activeToken.fixedDecimals)}
                     _suffix={selectedCurrency}
-                    actEthvol={config.volatilityKey[activeVolIndex] === config.volatilityKey.ethvol}
+                    actEthvol={activeVolIndex === config.volatilityKey.ethvol}
                 />
                 
                 <Stat 
@@ -165,7 +165,7 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
                 name="collateralRatio" 
                 value={collateralRatioData?.collateralRatio} 
                 format={`${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0)}%`}
-                actEthvol={config.volatilityKey[activeVolIndex] === config.volatilityKey.ethvol}
+                actEthvol={activeVolIndex === config.volatilityKey.ethvol}
             />
 
             <Stat 

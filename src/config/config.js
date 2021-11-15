@@ -85,7 +85,7 @@ const config = {
     "ethvol": "ETHVOL",
   },
   oracles: {
-    "cvi": "CVIOracle",
+    "cvi": "CVOL-Oracle",
     "ethvol": "ETHVolOracle"
   },
   oracleLabel: {

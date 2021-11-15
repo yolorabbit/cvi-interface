@@ -11,8 +11,8 @@ const initialState = {
     migrationModalIsOpen: false,
     migrationModalInitiallized: false,
     indexInfo: {
-        cviVolInfo: null,
-        ethVolInfo: null,
+        cvi: null,
+        ethvol: null,
     },
 };
 
