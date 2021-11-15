@@ -401,9 +401,9 @@ const config = {
       stepVisibility: false,
       stepDesc: [
         <b>Dear user,</b>, 
-        "We have noticed that you are currently a liquidity provider in the USDT pool.",
-        "Please click the Migrate button below in order to start your migration process to the USDC pool. Once the migration is complete, you will be rewarded with additional GOVI rewards.", 
-        "Also, please note that you will need to manually stake your new CVI-USDC LP Tokens in order to continue receiving your GOVI rewards."
+        "We have started the migration process of the USDT liquidity to USDC pool.",
+        "Therefore, we have closed the option to open new positions in USDT, active USDT positions will continue to receive their GOVI rewards.",
+        "Users will be able to complete the migration of their liquidity starting Wednesday, November 17th, at 11:00 AM UTC"
       ],
       stepButton: ["Migrate"]
     },
