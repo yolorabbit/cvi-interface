@@ -73,8 +73,8 @@ const config = {
     ETH: 3
   },
   volatilityKey: {
-    "cvi": "cviVolInfo",
-    "ethvol": "ethVolInfo",
+    "cvi": "cvi",
+    "ethvol": "ethvol",
   },
   volatilityOracles: {
     "CVIOracle": "cvi",

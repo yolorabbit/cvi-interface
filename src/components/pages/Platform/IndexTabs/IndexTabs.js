@@ -8,7 +8,6 @@ import './IndexTabs.scss';
 const IndexTabs = () => {
     const [activeTab, setActiveTab] = useState();
     const { selectedNetwork } = useSelector(({app}) => app);
-    
     return (
         <TabsForm
             id="index"

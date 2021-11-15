@@ -37,25 +37,6 @@ const platformConfig = {
   tabs,
   tokens: {
     [chainNames.Ethereum]: {
-      eth: {
-        key: "eth",
-        decimals: 18,
-        fixedDecimals: 8,
-        lpTokensDecimals: 18,
-        type: "eth",
-        address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-        oracleId: "cvi",
-        rel: {
-          contractKey: "WETH",
-          platform: "ETHPlatform",
-          feesCalc: "FeesCalculatorV3",
-          feesModel: "ETHPlatform",
-          oracle: "CVIOracle",
-          positionRewards: "PositionRewardsV2",
-          stakingRewards: "ETHLPStakingRewards",
-          liquidation: "Liquidation"
-        },
-      },
       usdc: {
         key: "usdc",
         decimals: 6,
@@ -74,6 +55,25 @@ const platformConfig = {
           stakingRewards: "CVOL-USDCLP-StakingRewards",
           liquidation: "CVOL-USDC-Liquidation"
         }
+      },
+      eth: {
+        key: "eth",
+        decimals: 18,
+        fixedDecimals: 8,
+        lpTokensDecimals: 18,
+        type: "eth",
+        address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+        oracleId: "cvi",
+        rel: {
+          contractKey: "WETH",
+          platform: "ETHPlatform",
+          feesCalc: "FeesCalculatorV3",
+          feesModel: "ETHPlatform",
+          oracle: "CVIOracle",
+          positionRewards: "PositionRewardsV2",
+          stakingRewards: "ETHLPStakingRewards",
+          liquidation: "Liquidation"
+        },
       },
       usdt: {
         key: "usdt",

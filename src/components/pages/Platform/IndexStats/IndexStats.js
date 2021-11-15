@@ -25,15 +25,15 @@ const IndexStats = ({type}) => {
 }
 
 const HomeDefaultIndex = ({type}) => {
-    const { cviVolInfo } = useSelector(({app}) => app.indexInfo);
+    const { cvi } = useSelector(({app}) => app.indexInfo);
     return useMemo(() => {
         return  <> 
             <IndexValue type={type} />
-            <Stat title="Previous hour" value={cviVolInfo?.oneHourAgo} />
-            <Stat prefix="" className="green" title="Last week high" value={cviVolInfo?.oneWeekHigh}/>
-            <Stat prefix="" className="red" title="Last week low" value={cviVolInfo?.oneWeekLow}/>
+            <Stat title="Previous hour" value={cvi?.oneHourAgo} />
+            <Stat prefix="" className="green" title="Last week high" value={cvi?.oneWeekHigh}/>
+            <Stat prefix="" className="red" title="Last week low" value={cvi?.oneWeekLow}/>
         </>
-    }, [cviVolInfo?.oneWeekHigh, cviVolInfo?.oneWeekLow, cviVolInfo?.oneHourAgo, type])
+    }, [cvi?.oneWeekHigh, cvi?.oneWeekLow, cvi?.oneHourAgo, type])
 }
 
 const IndexsTable = () => {
@@ -42,7 +42,7 @@ const IndexsTable = () => {
 
     return useMemo(() => {
         const loadIndexsInfo = () => {
-            return Object.values(config.volatilityKey).map(key => indexsInfo[key]);
+            return Object.keys(config.volatilityKey).map(key => indexsInfo[key]);
         }
 
         const indexsList = loadIndexsInfo();
@@ -54,7 +54,7 @@ const IndexsTable = () => {
             data={hasSomeVolInfo ? indexsList.filter(vol => vol?.index) : indexsList}
         >
            <Table />
-           {indexsInfo?.cviVolInfo?.time && <span className="last-update-date">{indexsInfo?.cviVolInfo?.time}</span> }
+           {indexsInfo?.cvi?.time && <span className="last-update-date">{indexsInfo?.cvi?.time}</span> }
         </DataController>
     }, [indexsInfo, isMobile])
 }

@@ -6,7 +6,6 @@ import { viewportContext } from "../Context";
 import platformConfig from '../../config/platformConfig';
 import stakingConfig from "config/stakingConfig";
 import { getW3 } from '@coti-io/cvi-sdk';
-import config from "config/config";
 import { chainNames } from '../../connectors';
 
 export const useViewport = () => {

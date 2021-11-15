@@ -40,7 +40,7 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
   let tokenContract = tokenData ? tokenData.contract : undefined;
   let balance;
 
-  if(type === "usdc") {
+  if(type === "usdc" || type === "v3" || type === "v2") {
     balance = toBN(await platform.methods.totalLeveragedTokensAmount().call());
   } else {
     balance = toBN(await getBalance(platform._address, tokenContract && type !== "eth" ? tokenContract._address : undefined));

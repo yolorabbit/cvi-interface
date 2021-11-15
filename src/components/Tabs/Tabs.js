@@ -34,7 +34,7 @@ const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, acti
     return useMemo(() => {
         const renderTabs = () => {
             return tabs.map((tab, index) => {
-                const oracleLabel = config.oracles[tab] ? `${config.oracleLabel[config.oracles[tab]]} index` : undefined;
+                const oracleLabel = config.volatilityKey[tab] ? `${tab.toUpperCase()} index` : undefined;
                 const tabLabel = formattedTabs[tab] ?? oracleLabel ?? tab;
                 return <Button
                     key={uniqueId(tab)} 

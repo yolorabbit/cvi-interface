@@ -133,7 +133,7 @@ const web3Api = {
 
                 let totalBalance = toBN(
                     key === 'eth' ? await library.eth.getBalance(contracts[platform]._address) : 
-                    key === "usdc" ? await toBN(await contracts[platform].methods.totalLeveragedTokensAmount().call()) :
+                    key === "usdc" || key === "v2" || key === "v3" ? await toBN(await contracts[platform].methods.totalLeveragedTokensAmount().call()) :
                     await contracts[contractKey].methods.balanceOf(contracts[platform]._address).call()
                 )
 
@@ -159,7 +159,7 @@ const web3Api = {
         try {
             const USDTData = await getTokenData(contracts["USDT"]);
             
-            const promiseList = tokens.map(async ({rel: { platform, contractKey, oracle}, key, type}) => {
+            const promiseList = tokens.map(async ({rel: { platform, contractKey}, key, type, oracleId}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
                 let value;
                 if(type === "v3") {
@@ -169,7 +169,7 @@ const web3Api = {
                 }
                 const amountConverted = await convert(toBN(value), tokenData, USDTData);
                 const amountFormatted = commaFormatted(customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), 2))
-                return [`${amountFormatted} (${key.toUpperCase()} pool)`, amountConverted, key, oracle];
+                return [`${amountFormatted} (${key.toUpperCase()} pool)`, amountConverted, key, oracleId];
             });
 
             const result = await (await Promise.allSettled(promiseList))

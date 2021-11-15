@@ -8,7 +8,6 @@ import { arrayIsLoaded, commaFormatted } from '../../../../../utils';
 import commonApi from '../../../../../contracts/commonApi';
 import { isEmpty } from 'lodash';
 import { useIsMobile } from 'components/Hooks';
-import config from 'config/config';
 import platformConfig from 'config/platformConfig';
 
 
@@ -33,9 +32,9 @@ const PlatformsStats = ({liquidityPools, platformBalance}) => {
         const liquidityPoolsLoaded = arrayIsLoaded(liquidityPools);
         const openPositionsLoaded = arrayIsLoaded(openPositions);
         const activeOracles = liquidityPoolsLoaded.reduce((current, item) => ({...current, [item[3]]: item[3]}), {});
-        
+     
         const rowData = Object.values(activeOracles).map(oracle => ({ // map row data by oracle.
-            index: config.oracleLabel[oracle], // oracle to index display name
+            index: oracle.toUpperCase(), // oracle to index display name
             liquidityPools: liquidityPoolsLoaded.filter(pool => pool !== "N/A" && pool[3] === oracle), // filter by oracle
             openPositions: openPositionsLoaded.filter(pool => pool !== "N/A" && pool[1] === oracle), // filter by oracle
         }));
