@@ -118,12 +118,18 @@
             }
             &.pay-attention  {
                 color: #fea716;
-                float: left;
                 font-weight: bold;
                 padding-inline-end: 2px;
+                padding-block-end: 4px;
             }
         }
         
+    }
+    .migration-message {
+        background: #0f112d;
+        padding: 16px 12px;
+        border-radius: 0.833vw;
+        border: 2px solid #fea716;
     }
 
     .migration-message  {

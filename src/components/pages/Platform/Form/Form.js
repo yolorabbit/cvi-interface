@@ -10,6 +10,7 @@ import { contractsContext } from 'contracts/ContractContext';
 import { useInDOM, useIsTablet } from 'components/Hooks';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
+import { chainNames } from 'connectors';
 import Graphs from '../Graphs';
 import './Form.scss';
 
@@ -18,7 +19,7 @@ const Form = ({activeTab}) => {
     const { account } = useActiveWeb3React();
     const { activeView } = useContext(platformViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
-    const [selectedCurrency, setSelectedCurrency] = useState("usdt");
+    const [selectedCurrency, setSelectedCurrency] = useState(selectedNetwork  === chainNames.Ethereum ? 'eth' : 'usdc');
     const tokenLeverageList = platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage;
     const [leverage, setLeverage] = useState(tokenLeverageList?.[0]);
     const [amount, setAmount] = useState("");
@@ -132,23 +133,23 @@ const SeeMore = ({selectedCurrency, isMigrated}) => {
 const migrationMsg = useCallback(() => {
         switch(activeView) {
             case "trade":
-                return  platformConfig.migrationMsgs?.[selectedNetwork]?.trade?.map((msg, msgNum) => <p key={msgNum}>{msg}</p>);
+                return  platformConfig.migrationMsgs?.trade?.map((msg, msgNum) => <p key={msgNum}>{msg}</p>);
             case "view-liquidity":
-                return  platformConfig.migrationMsgs?.[selectedNetwork]?.liquidity?.map((msg, msgNum) => <p key={msgNum}>{msg}</p>);
+                return  platformConfig.migrationMsgs?.liquidity?.map((msg, msgNum) => <p key={msgNum}>{msg}</p>);
             default:
                 return null;
-      }
-  }, [activeView, selectedNetwork]);
+        }
+    }, [activeView]);
 
     return useMemo(() => {
         return <div className="platform-form-component__bottom">
             {isMigrated ? 
                 <div className="migration-message">
-                  <p className="pay-attention">Pay Attention:</p>
+                  <p className="pay-attention">Please note:&nbsp;</p>
                   {migrationMsg()}
                 </div>
                 : activeView === activeViews.trade ? <p>
-                    <b>Pay Attention: </b> 
+                    <b>Pay Attention:</b> 
                     GOVI tokens will become claimable starting the day after your last open position action (UTC time) and for a period not exceeding 30 days.
                     <br/>Please also note that you won't be able to sell your position within the next 6 hours. 
                 </p> 

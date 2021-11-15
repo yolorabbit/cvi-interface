@@ -51,7 +51,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
         const stakedTokenAmount = data.staked.stakedTokenAmount ?? 0
         const UnstakeController =
         <ActionController 
-            amountLabel="Select amount to unstake*"
+            amountLabel="Enter amount to unstake*"
             isModal 
             token={token}
             amount={amount}

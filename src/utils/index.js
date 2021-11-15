@@ -146,4 +146,4 @@ export const actionConfirmEvent = async (dispatch) => {
     }
 }
 
-export const arrayIsLoaded = (value) => value && value?.length > 0 ? value : [];
+export const arrayIsLoaded = (value) => value === "N/A" ? [] : value && value?.length > 0 ? value : [];

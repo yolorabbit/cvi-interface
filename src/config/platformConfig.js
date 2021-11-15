@@ -37,25 +37,6 @@ const platformConfig = {
   tabs,
   tokens: {
     [chainNames.Ethereum]: {
-      usdt: {
-        key: "usdt",
-        decimals: 6,
-        fixedDecimals: 6,
-        lpTokensDecimals: 18,
-        type: "v1",
-        address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-        rel: {
-          contractKey: "USDT",
-          platform: "USDTPlatform",
-          feesCalc: "FeesCalculatorV2",
-          feesModel: "FeesModelV2",
-          oracle: "CVIOracle",
-          positionRewards: "PositionRewards",
-          stakingRewards: "USDTLPStakingRewards",
-          liquidation: "Liquidation",
-          rewards: "Rewards",
-        },
-      },
       eth: {
         key: "eth",
         decimals: 18,
@@ -92,6 +73,25 @@ const platformConfig = {
           liquidation: "ETHVolUSDCLiquidation"
         }
       },
+      usdt: {
+        key: "usdt",
+        decimals: 6,
+        fixedDecimals: 6,
+        lpTokensDecimals: 18,
+        type: "v1",
+        address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        rel: {
+          contractKey: "USDT",
+          platform: "USDTPlatform",
+          feesCalc: "FeesCalculatorV2",
+          feesModel: "FeesModelV2",
+          oracle: "CVIOracle",
+          positionRewards: "PositionRewards",
+          stakingRewards: "USDTLPStakingRewards",
+          liquidation: "Liquidation",
+          rewards: "Rewards",
+        },
+      },
       coti: {
         key: "coti",
         soon: true,
@@ -101,24 +101,6 @@ const platformConfig = {
       },
     },
     [chainNames.Matic]: {
-      usdt: {
-        key: "usdt",
-        decimals: 6,
-        fixedDecimals: 6,
-        lpTokensDecimals: 18,
-        type: "v2",
-        address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
-        rel: {
-          contractKey: "USDT",
-          platform: "USDTPlatform",
-          feesCalc: "FeesCalculatorV4",
-          feesModel: "USDTPlatform",
-          positionRewards: "PositionRewardsV3",
-          oracle: "CVIOracle",
-          stakingRewards: "USDTLPStakingRewards",
-          liquidation: "LiquidationV2"
-        },
-      },
       usdc: {
         key: "usdc",
         decimals: 6,
@@ -137,6 +119,24 @@ const platformConfig = {
           stakingRewards: "USDCLPStakingRewards",
           liquidation: "LiquidationV2"
         }
+      },
+      usdt: {
+        key: "usdt",
+        decimals: 6,
+        fixedDecimals: 6,
+        lpTokensDecimals: 18,
+        type: "v2",
+        address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        rel: {
+          contractKey: "USDT",
+          platform: "USDTPlatform",
+          feesCalc: "FeesCalculatorV4",
+          feesModel: "USDTPlatform",
+          positionRewards: "PositionRewardsV3",
+          oracle: "CVIOracle",
+          stakingRewards: "USDTLPStakingRewards",
+          liquidation: "LiquidationV2"
+        },
       },
     }
   },
@@ -244,20 +244,20 @@ const platformConfig = {
     }
   },
   migrationMsgs: {
-    [chainNames.Ethereum]: {
-      trade: ["We have started the migration process of the USDT liquidity pool to USDC. Therefore, we have close the option to open new positions in the USDT pool.",
-      "The new UDSC pool will be available on Wednesday 17th of November, at 13:00 UTC"],
-
-      liquidity: ["We have started the migration process of the USDT liquidity pool to USDC. Therefore, we have close the option to provide new liquidity to the USDT pool.",
-      "The new UDSC pool will be available on Wednesday 17th of November, at 13:00 UTC"]
-    },
-    [chainNames.Matic]: {
-      trade: ["We have started the migration process of the USDT liquidity pool to USDC.",
-      "Therefore, we have close the option to open new positions in the USDT pool."],
-
-      liquidity: ["We have started the migration process of the USDT liquidity pool to USDC.",
-      "Therefore, we have close the option to provide new liquidity to the USDT pool."],
-    }
+      trade: [
+        "We have started the migration process of the USDT liquidity to USDC pool. Therefore, we have closed the option to open new positions in USDT.",
+        "Active USDT positions will continue to receive their GOVI rewards.",
+        <br/>,
+        "Users will be able to complete the migration starting",
+        "Wednesday, November 17th, at 11:00 AM UTC"
+      ],
+      liquidity: [
+        "We have started the migration process of the USDT liquidity to USDC pool. Therefore, we have closed the option to provide new liquidity in USDT.",
+        "Active USDT liquidity providers who have staked their CVI-USDT LP tokens will continue to receive their GOVI rewards.",
+        <br/>,
+        "Users will be able to complete the migration starting",
+        "Wednesday, November 17th, at 11:00 AM UTC"
+      ],
   },
   sellFeeWarningDuration: (60 * 60) * 48,
   sellFeeWarningText: "Sell fee will be considerably higher than usual until 48 hours pass from your last purchase",

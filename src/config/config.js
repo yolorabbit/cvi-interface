@@ -425,15 +425,15 @@ const config = {
         "2. Swap USDT for USDC.",
         "3. Deposit USDC to USDC liquidity pool."
       ],
-      stepButton: ["Migrate"], // @TODO: Add approve button
+      stepButton: ["Approve", "Migrate"], 
     }, {
       stepKey: "liquidity",
       stepVisibility: true,
-      stepTitle: "Receive 200 GOVI", // @TODO: take receive value from the state
+      stepTitle: "Receive",
       stepDesc: [
         <span className="bold float-left">Congratulations!</span>,
         " You have successfully completed the migration.",
-        <span className="green bold float-left">200 GOVI</span>,
+        'rewards-id',
         " will be sent to the following address shortly:",
       ]
     }

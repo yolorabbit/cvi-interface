@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "./MigrationModal.scss";
 import Modal from "components/Modal/Modal";
 import Title from "components/Elements/Title";
 import Steps from "./Steps";
@@ -10,11 +9,12 @@ import Earn from "./Earn";
 import config from "config/config";
 import { useDispatch, useSelector } from "react-redux";
 import { useInDOM } from "components/Hooks";
-import { fromBN } from "utils";
+import { commaFormatted, fromBN, toBN } from "utils";
 import { addAlert, setMigrationModalOpen } from "store/actions";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { actionConfirm } from "store/actions/events";
 import { chainNames } from "connectors";
+import "./MigrationModal.scss";
 
 export const MigrationModal = ({w3}) => {
   const dispatch = useDispatch();
@@ -27,9 +27,53 @@ export const MigrationModal = ({w3}) => {
   const [{
     stakedBalance = {},
     usdtLPBalance,
-    status = config.migrationStepsTypes.start
+    liquidityBalance,
+    status = config.migrationStepsTypes.start,
+    isApproved
   }, setData] = useState({});
- 
+
+  // Get Token Alowance
+  const getTokenAllowance = async (token, from, to) => {
+    return toBN(
+      await token.w3.call(token.contract.methods.allowance, [from, to])
+    );
+  };
+
+  // Do Approve
+  const doApprove = useCallback(async () => {
+    try {
+      const usdtLP = w3.tokens["USDTLP"];
+      const liquidity = fromBN(await usdtLP.balanceOf(account), 18);
+      const allowance = fromBN(
+        await getTokenAllowance(
+          usdtLP,
+          account,
+          usdtusdcPlatformMigrator?.address
+        ),
+        18
+      );
+  
+      if (liquidity <= 0 || allowance >= liquidity) return;
+          
+      await usdtLP.approve(account, usdtusdcPlatformMigrator?.address);
+
+      dispatch(addAlert({
+        id: 'migration',
+        eventName: `Migration approved - success`,
+        alertType: config.alerts.types.CONFIRMED,
+        message: "Transaction success."
+      }));
+    } catch(error) {
+      console.log(error);
+      dispatch(addAlert({
+        id: 'migration',
+        eventName: `Migration approved - success`,
+        alertType: config.alerts.types.CONFIRMED,
+        message: "Transaction rejected."
+      }));
+    }
+  }, [account, dispatch, usdtusdcPlatformMigrator, w3?.tokens]);
+
   // Do Unstake
   const doUnStake = useCallback(async () => {
     try {
@@ -37,7 +81,7 @@ export const MigrationModal = ({w3}) => {
       const bnStakedBalance = await usdtLPStakingRewards.staked(account);
       const stakedBalance = fromBN(bnStakedBalance.stakedAmount, 18);
       if (stakedBalance > 0) {
-        await usdtLPStakingRewards.withdrawAll(account);
+        await usdtLPStakingRewards.exit(account);
       }
       const usdtLP = w3.tokens["USDTLP"];
       const usdtLPBalance = await usdtLP.balanceOf(account);
@@ -56,16 +100,26 @@ export const MigrationModal = ({w3}) => {
 
   // Do Migration
   const doMigration = useCallback(async () => {
-    await usdtusdcPlatformMigrator.w3.block.refresh();
-    const {result, reason} = await usdtusdcPlatformMigrator.canMigrate(account);
-    if (result) {
-      await usdtusdcPlatformMigrator.migrate(99, account);
-    } else {
+    try {
+      await usdtusdcPlatformMigrator.w3.block.refresh();
+      const {result, reason} = await usdtusdcPlatformMigrator.canMigrate(account);
+ 
+      if (result) {
+        await usdtusdcPlatformMigrator.migrate(99, account);
+      } else {
+        dispatch(addAlert({
+          id: 'migration',
+          eventName: `${reason} - failed`,
+          alertType: config.alerts.types.FAILED,
+          message: reason
+        }));
+      }
+    } catch(error) {
       dispatch(addAlert({
         id: 'migration',
-        eventName: `${reason} - failed`,
+        eventName: `Migration - transaction failed`,
         alertType: config.alerts.types.FAILED,
-        message: reason
+        message: 'Transaction failed'
       }));
     }
   }, [usdtusdcPlatformMigrator, account, dispatch]);
@@ -80,11 +134,25 @@ export const MigrationModal = ({w3}) => {
       const stakedBalance = fromBN(bnStakedBalance.stakedAmount, 18);
       const usdtLP = w3.tokens["USDTLP"];
       const liquidity = fromBN(await usdtLP.balanceOf(account), 18);
+      
+      const allowance = fromBN(await getTokenAllowance(
+        usdtLP,
+        account,
+        usdtusdcPlatformMigrator?.address
+      ), 18);
+
       let status = stakedBalance > 0 && config.migrationStepsTypes.unstake;
+
       if (!status && liquidity > 0) {
-        return config.migrationStepsTypes.approved;
+        return {
+          status: config.migrationStepsTypes.approved,
+          isApproved: allowance >= liquidity
+        };
       }
-      return status || config.migrationStepsTypes.liquidity;
+
+      return {
+        status: status || config.migrationStepsTypes.liquidity,
+      };
     } catch(error) {
       console.log(error);
       return dispatch(addAlert({
@@ -94,7 +162,7 @@ export const MigrationModal = ({w3}) => {
         message: `Failed to get active step`
       }));
     }
-  }, [w3?.stakingRewards, w3?.tokens, account, dispatch]);
+  }, [w3?.stakingRewards, w3?.tokens, account, usdtusdcPlatformMigrator?.address, dispatch]);
 
   // Migration Actions
   const doMigrationAction = useCallback(async (id) => {
@@ -102,8 +170,11 @@ export const MigrationModal = ({w3}) => {
       switch(status) {
         case config.migrationStepsTypes.unstake:
           return await doUnStake();
-  
+        
         case config.migrationStepsTypes.approved: {
+          if(id === "approve") {
+            return await doApprove();
+          }
           return await doMigration();
         }
   
@@ -113,23 +184,24 @@ export const MigrationModal = ({w3}) => {
     } catch(error) {
       console.log(error);
     }
-  }, [status, doUnStake, doMigration]);
+  }, [status, doUnStake, doMigration, doApprove]);
 
   const onClickHandler = useCallback(async (id) => {
-    setIsLoading(true);
+    setIsLoading(id);
     try {
       await doMigrationAction(id);
     } catch(error) {
       console.log(error);
     } finally {
-      const _currentActiveStep = await currentActiveStep();
+      const {status: _currentActiveStep, isApproved: _isApproved} = await currentActiveStep();
 
       if(!isActiveInDOM()) return; 
 
       if(_currentActiveStep) {
         setData(prev => ({
           ...prev,
-          status: _currentActiveStep
+          status: _currentActiveStep,
+          isApproved: _isApproved
         }))
       }
 
@@ -147,16 +219,19 @@ export const MigrationModal = ({w3}) => {
    
     const fetchData = async () => {
       const stakedBalance = await w3.stakingRewards["USDTLPStakingRewards"].staked(account);
-      const usdtLP = w3.tokens["USDTLP"];
-      const usdtLPBalance = await usdtLP.balanceOf(account);
-      const activeStep = await currentActiveStep();
+      const { total } = (await w3.platforms["USDTPlatform"].liquidityBalance(account));
+      const liquidityBalance = w3.platforms["USDTPlatform"].fromLP(total)
+      const usdtLPBalance = await w3.tokens["USDTLP"].balanceOf(account);
+      const {status: activeStep, isApproved: _isApproved} = await currentActiveStep();
 
       if(!isActiveInDOM()) return; 
 
       setData({
-        stakedBalance: fromBN(stakedBalance.stakedAmount, 18),
-        usdtLPBalance: fromBN(usdtLPBalance, 18),
+        stakedBalance: commaFormatted(fromBN(stakedBalance.stakedAmount, 18)),
+        usdtLPBalance: commaFormatted(fromBN(usdtLPBalance, 18)),
+        liquidityBalance: commaFormatted(fromBN(liquidityBalance, 6)),
         status: !!activeStep ? config.migrationStepsTypes.start : config.migrationStepsTypes["no-need"],
+        isApproved: _isApproved
       });
     };
 
@@ -172,6 +247,7 @@ export const MigrationModal = ({w3}) => {
 
   const checkCurrentStep = (step) => {
     const isDisabled = !w3 || !account || !usdtusdcPlatformMigrator;
+
     switch (step) {
       case config.migrationStepsTypes.start:
         return <MigrationWelcome
@@ -192,12 +268,13 @@ export const MigrationModal = ({w3}) => {
 
       case config.migrationStepsTypes.approved:
         return <Migrate
-            stepDetails={config.migrationSteps[2]}
-            onClickHandler={onClickHandler}
-            usdtLPBalance={usdtLPBalance}
-            disabled={isDisabled}
-            isLoading={isLoading}
-          />
+          stepDetails={config.migrationSteps[2]}
+          onClickHandler={onClickHandler}
+          liquidityBalance={liquidityBalance}
+          disabled={isDisabled}
+          isLoading={isLoading}
+          isApproved={isApproved}
+        />
 
       case config.migrationStepsTypes.liquidity:
         return <Earn 

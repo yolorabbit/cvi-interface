@@ -36,8 +36,8 @@ const PlatformsStats = ({liquidityPools, platformBalance}) => {
         
         const rowData = Object.values(activeOracles).map(oracle => ({ // map row data by oracle.
             index: config.oracleLabel[oracle], // oracle to index display name
-            liquidityPools: liquidityPoolsLoaded.filter(pool => pool[3] === oracle), // filter by oracle
-            openPositions: openPositionsLoaded.filter(pool => pool[1] === oracle), // filter by oracle
+            liquidityPools: liquidityPoolsLoaded.filter(pool => pool !== "N/A" && pool[3] === oracle), // filter by oracle
+            openPositions: openPositionsLoaded.filter(pool => pool !== "N/A" && pool[1] === oracle), // filter by oracle
         }));
 
         return <Container className="platform-stats-container">

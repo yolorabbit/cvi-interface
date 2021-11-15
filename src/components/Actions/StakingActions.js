@@ -16,19 +16,19 @@ import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
     const isActiveInDom = useInDOM();
-    const {disabled, type, token: tokenName, isModal, isOpen, setIsOpen, amount, setAmount, protocol } = useActionController();
+    const {disabled, type, token: tokenName, isModal, isOpen, setIsOpen, amount, setAmount, protocol, balances: { tokenAmount } = {} } = useActionController();
     const dispatch = useDispatch();
     const contracts = useContext(contractsContext);
     const { account, library } = useActiveWeb3React();
     const approvalValidation = useApproveToken();
+    const [processing, setProcessing] = useState(false);
+    const [lockup, setLockup] = useState(24);
     const lockedTime = useIsLockedTime(type === stakingConfig.actionsConfig.unstake.key && tokenName === "govi");
     const { selectedNetwork } = useSelector(({app})=>app);
-    const token = stakingConfig.tokens[selectedNetwork]?.[protocol]?.[tokenName]
-    const [processing, setProcessing] = useState(false);
+    const token = stakingConfig.tokens[selectedNetwork]?.[protocol]?.[tokenName];
     const unstakeModalButtonDisabled = ((isOpen && !isModal && (disabled || !(Number(amount ?? "0") > 0))));
-    const unstakeTableButtonDisabled = (token?.key === 'govi' && (lockedTime > 0 || lockedTime === null));
+    const unstakeTableButtonDisabled = (!isOpen && (Number(tokenAmount ?? 0) <= 0)) || (token?.key === 'govi' && (lockedTime > 0 || lockedTime === null));
     const stakeModalDisabled = (isOpen && !isModal) && !(Number(amount ?? "0") > 0);
-    const [lockup, setLockup] = useState(24);
     const platfromName = stakingConfig.tokens[selectedNetwork].platform[tokenName]?.rel?.contractKey;
     
     useEffect(()=>{
