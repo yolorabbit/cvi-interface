@@ -161,7 +161,7 @@ const web3Api = {
             const promiseList = tokens.map(async ({rel: { platform, contractKey}, key, type, oracleId}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
                 let value;
-                if(type === "v3") {
+                if(type === "v3" || type === "usdc") {
                     value = await contracts[platform].methods.totalBalance(true).call();
                 } else {
                     value = await contracts[platform].methods.totalBalanceWithAddendum().call();
@@ -268,7 +268,7 @@ const web3Api = {
     
                     const totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
                     let totalBalance;
-                    if(token.type === "v3") {
+                    if(token.type === "v3" || token.type === "usdc") {
                         totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalance(true).call());
                     } else {
                         totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());

@@ -60,8 +60,8 @@ const Sell = () => {
             const _amount = !positionUnitsAmount ? tokenAmount.mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue)) : toBN(positionUnitsAmount);
             const _contract = getContract(activeToken.rel.platform);
             
-            if(token.type === "v3") {
-                const tokenData = await getTokenData(contracts[token.rel.contractKey]);
+            if(activeToken.type === "v3") {
+                const tokenData = await getTokenData(contracts[activeToken.rel.contractKey]);
                 const closingPremiumFeeData = await getClosingPremiumFee(contracts, activeToken, { tokenAmount, cviValue, leverage, tokenData, library})
                 console.log(closingPremiumFeeData);
                 await _contract.methods.closePosition(_amount, toBN('1'), closingPremiumFeeData).send({from: account, ...gas});

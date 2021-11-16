@@ -123,7 +123,7 @@ export async function getClosingPremiumFee(contracts, token, { tokenAmount, cviV
     const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
 
     let _closingPremiumFee = await contracts[token.rel.feesCalc].methods
-      .calculateClosingPremiumFeeWithAddendum(collateralRatio, lastCollateralRatio, true)
+      .calculateClosingPremiumFeeWithAddendum(collateralRatio, lastCollateralRatio.collateralRatio, true)
       .call();
 
     console.log(`_closingPremiumFee ${_closingPremiumFee}`, _closingPremiumFee);
