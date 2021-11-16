@@ -89,7 +89,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     name="openPositionReward" 
                     value={positionRewards === "N/A" ? "N/A" : positionRewards?.toString()}
                     _suffix="GOVI"
-                    format={`${customFixedTokenValue(positionRewards?.[0]?.toString() ?? 0, 8, activeToken.lpTokensDecimals)} - ${customFixedTokenValue(positionRewards?.[1]?.toString() ?? 0, 8, activeToken.lpTokensDecimals)}`}
+                    format={`${customFixedTokenValue(positionRewards?.[0]?.toString() ?? 0, 8, activeToken.lpTokensDecimals)} ${positionRewards !== "N/A" ? '-' :''} ${customFixedTokenValue(positionRewards?.[1]?.toString() ?? 0, 8, activeToken.lpTokensDecimals)}`}
                 />
     
                 <Stat 
