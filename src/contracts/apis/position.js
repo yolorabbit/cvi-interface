@@ -36,7 +36,7 @@ export async function approve(contract, from, to, amount = maxUint256) {
   console.log(`approve ${res.status ? "success" : "failed"}: allowance ${allowance}`);
 }
 
-async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount, cviValue, leverage, type) {
+async function getBuyCollateralRatio(platform, feesCalc, tokenData, openTokenAmount, cviValue, leverage, type) {
   let tokenContract = tokenData ? tokenData.contract : undefined;
   let balance;
 
@@ -88,7 +88,7 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
 
 async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, leverage = 1, tokenData, library}) {
   try {
-    let collateralRatio = await getCollateralRatio(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenData, tokenAmount, cviValue, leverage, token.type);
+    let collateralRatio = await getBuyCollateralRatio(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenData, tokenAmount, cviValue, leverage, token.type);
     const turbulence = await contracts[token.rel.feesModel].methods.calculateLatestTurbulenceIndicatorPercent().call();
     let buyingPremiumFee;
     let combinedPremiumFeePercentage = 0;
@@ -114,7 +114,7 @@ async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, le
 
 export async function getClosingPremiumFee(contracts, token, { tokenAmount, cviValue, leverage = 1, tokenData, library}) {
   try {
-    let collateralRatio = await getCollateralRatio(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenData, tokenAmount, cviValue, leverage, token.type);
+    let collateralRatio = await getBuyCollateralRatio(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenData, tokenAmount, cviValue, leverage, token.type);
     const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
 
     let _closingPremiumFee = await contracts[token.rel.feesCalc].methods

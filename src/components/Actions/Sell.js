@@ -63,8 +63,8 @@ const Sell = () => {
             if(activeToken.type === "v3" || activeToken.type === "usdc") {
                 const tokenData = await getTokenData(contracts[activeToken.rel.contractKey]);
                 const closingPremiumFeeData = await getClosingPremiumFee(contracts, activeToken, { tokenAmount, cviValue, leverage, tokenData, library})
-                console.log(closingPremiumFeeData);
-                await _contract.methods.closePosition(_amount, toBN('1'), closingPremiumFeeData).send({from: account, ...gas});
+   
+                await _contract.methods.closePosition(_amount, toBN('1'), toBN('20000')).send({from: account, ...gas});
             } else {
                 await _contract.methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
             }
