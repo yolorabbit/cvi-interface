@@ -5,15 +5,11 @@ import { useActiveToken } from 'components/Hooks';
 import { DataState } from 'components/Tables/Elements/Values/DataState';
 import HighSellFee from './HighSellFee';
 import './SellInfo.scss';
-import { useWeb3Api } from 'contracts/useWeb3Api';
 
 const SellInfo = ({sellFee = null}) => {
-    const { token, amount, leverage } = useActionController();
+    const { token, amount } = useActionController();
     const activeToken = useActiveToken(token);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
-    const closingFeePayload = useMemo(() => ({ tokenAmount, leverage } ), [tokenAmount, leverage]);
-    const [closingFee] = useWeb3Api("getClosingPremiumFee", activeToken.key, closingFeePayload, { validAmount: true });
-    console.log(`${closingFee}`, closingFee);
 
     return useMemo(() => {
         const sellFeeAmount = sellFee !== null && sellFee !== "N/A" && customFixedTokenValue(sellFee?.toString(), activeToken.decimals, activeToken.decimals);

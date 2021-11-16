@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import Tooltip from "components/Tooltip";
 import config from '../../config/config';
 import "./Slippage.scss";
+import { customFixed } from 'utils';
 
 const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
   const [costumTolerance, setCostumTolerance] = useState("");
@@ -18,10 +19,10 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
     //eslint-disable-next-line
       var numbersOnly = /[^0-9][\.,]/g;
       let valNoLetters = value?.replace(numbersOnly, '');
-      if (valNoLetters >= 0 && valNoLetters <= 1000) {
+      if (valNoLetters >= 0 && valNoLetters < 100) {
         let costumTolerance = valNoLetters
-        setCostumTolerance(costumTolerance);
-        slippageBtnHandler(costumTolerance);
+        setCostumTolerance(customFixed(costumTolerance, 2));
+        slippageBtnHandler(customFixed(costumTolerance, 2));
       }
   }
 

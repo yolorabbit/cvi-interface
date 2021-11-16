@@ -23,8 +23,7 @@ const feesChangedWarning = "This transaction will not succeed due to the change 
 const Sell = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { isOpen, setIsOpen, isModal, disabled, leverage, token, amount, setAmount, balances } = useActionController();
-    // @TODO: add slippage percentage to contract v3, add v3 type for contracts. 
+    const { isOpen, setIsOpen, isModal, disabled, leverage, token, amount, setAmount, balances, slippageTolerance} = useActionController(); 
     const { account, library } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
     const activeToken = useActiveToken(token);
@@ -47,11 +46,10 @@ const Sell = () => {
     
     const sell = async () => {
         try {
-            
             const { getCVILatestRoundData } = contracts[activeToken.rel.oracle].methods;
             const { cviValue } = await getCVILatestRoundData().call();
 
-            let positionUnitsAmount = false;
+            let positionUnitsAmount;
             
             if(!toBN(balances.tokenAmount).cmp(tokenAmount)) {
                 positionUnitsAmount = toBN(balances.posUnitsAmount);
@@ -62,13 +60,13 @@ const Sell = () => {
             
             if(activeToken.type === "v3" || activeToken.type === "usdc") {
                 const tokenData = await getTokenData(contracts[activeToken.rel.contractKey]);
-                const closingPremiumFeeData = await getClosingPremiumFee(contracts, activeToken, { tokenAmount, cviValue, leverage, tokenData, library})
-   
-                await _contract.methods.closePosition(_amount, toBN('1'), toBN('20000')).send({from: account, ...gas});
+                const closingPremiumFee = await getClosingPremiumFee(contracts, activeToken, { tokenAmount, cviValue, leverage, tokenData, library});
+                const _feesWithSlippage =  String(Number(closingPremiumFee || 0) + Number((slippageTolerance * 100) || 0));
+                await _contract.methods.closePosition(_amount, toBN('1'), toBN(_feesWithSlippage)).send({from: account, ...gas});
             } else {
                 await _contract.methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
             }
-
+ 
             dispatch(addAlert({
                 id: 'closePositionSuccess',
                 eventName: "Sell position - success",
