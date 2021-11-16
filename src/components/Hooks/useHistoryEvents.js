@@ -128,8 +128,8 @@ const useHistoryEvents = () => {
 
     const getContract = (contractKey) => {
         const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
-        const { abi, address } = contractsJSON[contractKey];
-        const _contract = new Contract(abi, address);
+        const { abi, abiRef, address } = contractsJSON[contractKey];
+        const _contract = new Contract(abi || contractsJSON[abiRef].abi, address);
         _contract.setProvider(web3?.currentProvider);
         return _contract
     }
