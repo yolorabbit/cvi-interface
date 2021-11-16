@@ -210,9 +210,9 @@ const stakingConfig = {
           tokenAddress: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
           type: "lp-v2",
           rel: {
-            contractKey: "CVOL-USDT-Platform",
-            platform: "CVOL-USDT-Platform",
-            stakingRewards: "CVOL-USDTLP-StakingRewards",
+            contractKey: "CVOL-USDC-Platform",
+            platform: "CVOL-USDC-Platform",
+            stakingRewards: "CVOL-USDCLP-StakingRewards",
             token: "USDC",
             tokenDecimals: [18]
           }
