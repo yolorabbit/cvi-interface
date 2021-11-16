@@ -10,7 +10,7 @@ import { DEFAULT_STEPS } from '../../components/Hooks/useEvents';
 export async function toLPTokens(contracts, token, { tokenAmount }) {
   let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
   let totalBalance;
-  if(token.type === "v3") {
+  if(token.type === "v3" || token.type === "usdc") {
     totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalance(true).call());
   } else {
     totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());
@@ -100,7 +100,7 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}
 
       let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
       let totalBalance;
-      if(token.type === "v3") {
+      if(token.type === "v3" || token.type === "usdc") {
         totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalance(true).call());
       } else {
         totalBalance = toBN(await contracts[token.rel.platform].methods.totalBalanceWithAddendum().call());
@@ -125,7 +125,7 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}
 }
 
 async function getPoolSize(contracts, token) {
-  if(token.type === "v3") {
+  if(token.type === "v3" || token.type === "usdc") {
     return await contracts[token.rel.platform].methods.totalBalance(true).call();
   }
   return await contracts[token.rel.platform].methods.totalBalance().call();

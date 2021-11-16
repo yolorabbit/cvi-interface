@@ -95,12 +95,7 @@ async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, le
 
     if (token.type === "v1") {
       buyingPremiumFee = await contracts[token.rel.feesCalc].methods.calculateBuyingPremiumFeeWithTurbulence(tokenAmount, collateralRatio, turbulence).call();
-    } else if(token.type === "usdc") {
-      const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
-      ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
-        .calculateBuyingPremiumFeeWithAddendum(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, true, turbulence)
-        .call());
-    } else if(token.type === "v3") {
+    } else if(token.type === "v3" || token.type === "usdc") {
       const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
       ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
         .calculateBuyingPremiumFeeWithAddendum(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, true, turbulence)
