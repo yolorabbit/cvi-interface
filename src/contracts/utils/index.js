@@ -236,9 +236,14 @@ export const aprToAPY = (apr, period = 365 * 24 * 60, rate = 365 * 24 * 60) => {
   return apy === Infinity || apy > 1000000 ? 1000000 : apy;
 };
 
-export async function fromLPTokens(platform, lpTokenAmount) {
+export async function fromLPTokens(platform, lpTokenAmount, token) {
   let totalSupply = toBN(await platform.methods.totalSupply().call());
-  let totalBalance = toBN(await platform.methods.totalBalanceWithAddendum().call());
+  let totalBalance;
+  if(token?.type === "v3" || token?.type === "lp-v2") {
+    totalBalance = toBN(await platform.methods.totalBalance(true).call());
+  } else {
+    totalBalance = toBN(await platform.methods.totalBalanceWithAddendum().call());
+  }
   return totalSupply.isZero() ? toBN(0)  : lpTokenAmount.mul(totalBalance).div(totalSupply);
 }
 

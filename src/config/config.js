@@ -88,10 +88,6 @@ const config = {
     "cvi": "CVOL-Oracle",
     "ethvol": "ETHVolOracle"
   },
-  oracleLabel: {
-    "CVIOracle": "CVI",
-    "ETHVolOracle": "ETHVOL",
-  },
   web3ProviderId: "NETWORK",
   networkStatuses: {
      pending: 'pending',

@@ -41,9 +41,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
     const { account } = useActiveWeb3React();
     const activeToken = useActiveToken(selectedCurrency);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
-
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", selectedCurrency);
-
     const purchaseFeePayload = useMemo(() => ({ tokenAmount, leverage } ), [tokenAmount, leverage]);
 
     const [purchaseFee] = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload, { validAmount: true });

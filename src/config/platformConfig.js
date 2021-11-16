@@ -112,15 +112,16 @@ const platformConfig = {
         type: "usdc",
         leverage: ["1", "2"],
         address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+        oracleId: "cvi",
         rel: {
           contractKey: "USDC",
-          platform: "USDCPlatform",
-          feesCalc: "USDCFeesCalculator",
-          feesModel: "USDCPlatform",
-          positionRewards: "USDCPositionRewards",
-          oracle: "CVIOracle",
-          stakingRewards: "USDCLPStakingRewards",
-          liquidation: "LiquidationV2"
+          platform: "CVOL-USDC-Platform",
+          feesCalc: "CVOL-USDC-FeesCalculator",
+          feesModel: "CVOL-USDC-Platform",
+          positionRewards: "CVOL-USDC-PositionRewards",
+          oracle: "CVOL-Oracle",
+          stakingRewards: "CVOL-USDCLP-StakingRewards",
+          liquidation: "CVOL-USDC-Liquidation"
         }
       },
       usdt: {
@@ -130,15 +131,16 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "v2",
         address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        oracleId: "cvi",
         rel: {
           contractKey: "USDT",
-          platform: "USDTPlatform",
-          feesCalc: "FeesCalculatorV4",
-          feesModel: "USDTPlatform",
-          positionRewards: "PositionRewardsV3",
-          oracle: "CVIOracle",
-          stakingRewards: "USDTLPStakingRewards",
-          liquidation: "LiquidationV2"
+          platform: "CVOL-USDT-Platform",
+          feesCalc: "CVOL-USDT-FeesCalculator",
+          feesModel: "CVOL-USDT-Platform",
+          positionRewards: "CVOL-USDT-PositionRewards",
+          oracle: "CVOL-Oracle",
+          stakingRewards: "CVOL-USDTLP-StakingRewards",
+          liquidation: "CVOL-USDT-Liquidation"
         },
       },
     }

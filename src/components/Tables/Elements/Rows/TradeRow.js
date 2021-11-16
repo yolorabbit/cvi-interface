@@ -8,7 +8,6 @@ import PlatformClaim from "components/Actions/PlatformClaim";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { customFixedTokenValue } from "utils";
-import config from "config/config";
 
 const TradeRow = ({token, isHeader, className}) => {
     const { account } = useActiveWeb3React();
@@ -45,7 +44,7 @@ const TradeRow = ({token, isHeader, className}) => {
         <> 
             <RowItem 
                 header={header.index.label}
-                content={<Value text={config.oracleLabel[token.rel.oracle]} />} 
+                content={<Value text={token.oracleId.toUpperCase()} />} 
             />
 
             

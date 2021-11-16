@@ -31,7 +31,7 @@ const Buy = () => {
     const activeToken = useActiveToken(token);
     const [isProcessing, setProcessing] = useState();
     const { selectedNetwork } = useSelector(({app}) => app);
-    const activeVolInfo = useActiveVolInfo(activeToken.rel.oracle);
+    const activeVolInfo = useActiveVolInfo(activeToken.oracleId);
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const purchaseFeePayload = useMemo(() => ({ tokenAmount,leverage } ), [tokenAmount, leverage]);
     const [purchaseFee, getPurchaseFees] = useWeb3Api("getOpenPositionFee", token, purchaseFeePayload, { validAmount: true});
@@ -77,7 +77,7 @@ const Buy = () => {
     const getMaxAmount = useCallback(async (index) => {
         let totalBalance = toBN(
             token === 'eth' ? await library.eth.getBalance(contracts[activeToken.rel.platform]._address) : 
-            token === "usdc" ? await toBN(await contracts[activeToken.rel.platform].methods.totalLeveragedTokensAmount().call()) :
+            (token === "usdc" || activeToken.type === 'v3') ? await toBN(await contracts[activeToken.rel.platform].methods.totalLeveragedTokensAmount().call()) :
             await contracts[activeToken.rel.contractKey].methods.balanceOf(contracts[activeToken.rel.platform]._address).call()
         )
         let totalUnits = await contracts[activeToken.rel.platform].methods.totalPositionUnitsAmount().call();

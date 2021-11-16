@@ -128,12 +128,12 @@ const web3Api = {
         try {
             const USDTData = await getTokenData(contracts["USDT"]);
             
-            const promiseList = tokens.map(async ({rel: { platform, contractKey}, key, fixedDecimals}) => {
+            const promiseList = tokens.map(async ({rel: { platform, contractKey}, key, type, fixedDecimals}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
 
                 let totalBalance = toBN(
                     key === 'eth' ? await library.eth.getBalance(contracts[platform]._address) : 
-                    key === "usdc" || key === "v2" || key === "v3" ? await toBN(await contracts[platform].methods.totalLeveragedTokensAmount().call()) :
+                    key === "usdc" || type === "v3" ? await toBN(await contracts[platform].methods.totalLeveragedTokensAmount().call()) :
                     await contracts[contractKey].methods.balanceOf(contracts[platform]._address).call()
                 )
 
@@ -148,7 +148,6 @@ const web3Api = {
             const result = await (await Promise.allSettled(promiseList))
                             .filter(({status}) => status === "fulfilled")
                             .map(({value}) => value)
-
             return result;
         } catch(error) {
             console.log(error);
@@ -163,9 +162,9 @@ const web3Api = {
                 const tokenData = await getTokenData(contracts[contractKey]);
                 let value;
                 if(type === "v3") {
-                    value = toBN(await contracts[platform].methods.totalBalance(true).call());
+                    value = await contracts[platform].methods.totalBalance(true).call();
                 } else {
-                    value = toBN(await contracts[platform].methods.totalBalanceWithAddendum().call());
+                    value = await contracts[platform].methods.totalBalanceWithAddendum().call();
                 }
                 const amountConverted = await convert(toBN(value), tokenData, USDTData);
                 const amountFormatted = commaFormatted(customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), 2))
@@ -231,7 +230,7 @@ const web3Api = {
             let platformBalance;
             if(token.key === "eth") {
                 platformBalance = toBN(await library.eth.getBalance(contracts[token.rel.platform].options.address));
-            } else if(token.key === "usdc") {
+            } else if(token.key === "usdc" || token.type === "v3") {
                 platformBalance = toBN(await contracts[token.rel.platform].methods.totalLeveragedTokensAmount().call());
             } else {
                 platformBalance = toBN(await contracts[token.rel.contractKey].methods.balanceOf(contracts[token.rel.platform].options.address).call());
@@ -240,7 +239,6 @@ const web3Api = {
             let totalPositionUnitsAmount = toBN(await contracts[token.rel.platform].methods.totalPositionUnitsAmount().call());
             let decimals = toBN(await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call());
             let collateralRatio = platformBalance.toString() !== "0" ? totalPositionUnitsAmount.mul(decimals).div(platformBalance) : toBN("0");
-            
             return {
                 collateralRatio,
                 currentRatioValue: totalPositionUnitsAmount,
@@ -262,7 +260,7 @@ const web3Api = {
                 if(withStakeAmount) {
                     const stakedAmount = toBN(await contracts[token.rel.stakingRewards].methods.balanceOf(account).call())
                     let lpBalance = toBN(await contracts[token.rel.platform].methods.balanceOf(account).call());
-                    const maxTokenBalance = await fromLPTokens(contracts[token.rel.platform], lpBalance);
+                    const maxTokenBalance = await fromLPTokens(contracts[token.rel.platform], lpBalance, token);
 
                     if(stakedAmount) {
                         lpBalance = lpBalance.add(stakedAmount);
@@ -283,7 +281,7 @@ const web3Api = {
                 }
 
                 const lpBalance = toBN(await contracts[token.rel.platform].methods.balanceOf(account).call());
-                const lpTokensBalance = await fromLPTokens(contracts[token.rel.platform], lpBalance);
+                const lpTokensBalance = await fromLPTokens(contracts[token.rel.platform], lpBalance, token);
 
                 return lpTokensBalance;
             }
@@ -292,7 +290,7 @@ const web3Api = {
             const balance = await getBalance(account, token.key !== "eth" && tokenData.address);
             return balance;
         } catch(error) {
-            console.log(error);
+            console.log(error, token);
             return type !== "withdraw" ? "0" : {myShare: "0", poolShare: "0"}
         }
     },

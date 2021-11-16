@@ -104,7 +104,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
         }
         default: {
           const tokenData = await getTokenData(contracts[tokenRel.token], protocol === stakingProtocols.platform ? '' : protocol);
-          return await web3Api.getAPYPerToken(platform, stakingRewards, USDTData, GOVIData, tokenData, period);
+          return await web3Api.getAPYPerToken(platform, stakingRewards, USDTData, GOVIData, tokenData, token);
         }
       }
     }
@@ -143,7 +143,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       if(tokenName === "govi") return getGoviValueStaked(cb);
       const [platform, stakingRewards] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards]];
       const stakedAmount = await stakingRewards.methods.totalSupply().call();
-      const stakedAmountToken = await fromLPTokens(platform, toBN(stakedAmount));
+      const stakedAmountToken = await fromLPTokens(platform, toBN(stakedAmount), token);
       const USDTData = await getTokenData(contracts.USDT);
       const tokenData = await getTokenData(contracts[tokenRel.token], protocol);
       const totalBalanceWithAddendumUSDT = await convert(stakedAmountToken, tokenData, USDTData);
@@ -248,7 +248,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
             tokenData = await getTokenData(contracts[tokenName === "govi" ? "GOVI" : tokenRel.platform], protocol);
             const tokenData2 = await getTokenData(contracts[tokenName === "govi" ? "GOVI" : tokenRel.token], protocol);
             balance = await tokenData.contract.methods.balanceOf(account).call();
-            const amountToConvert = async () => tokenName === "govi" ? toBN(balance) : await fromLPTokens(tokenData.contract, toBN(balance));
+            const amountToConvert = async () => tokenName === "govi" ? toBN(balance) : await fromLPTokens(tokenData.contract, toBN(balance), token);
             const usdBalance = await convert(await amountToConvert(), tokenData2, USDTData);
             return "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance, USDTData.decimals)), 2))
           }

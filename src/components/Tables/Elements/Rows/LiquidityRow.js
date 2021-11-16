@@ -7,7 +7,6 @@ import Pnl from '../Values/Pnl';
 import platformConfig, { activeViews } from "config/platformConfig";
 import ActionController from "components/Actions/ActionController";
 import { customFixed, customFixedTokenValue } from "utils";
-import config from "config/config";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import MigrateAction from "components/Actions/MigrateAction";
@@ -45,7 +44,7 @@ const LiquidityRow = ({token, isHeader, className}) => {
         <> 
             <RowItem 
                 header={header.index.label}
-                content={<Value text={config.oracleLabel[token.rel.oracle]} />} 
+                content={<Value text={token.oracleId.toUpperCase()} />} 
             />
 
             {!isTablet && <> 
@@ -86,7 +85,7 @@ const LiquidityRow = ({token, isHeader, className}) => {
                 } />
             }
         </>
-    ), [header, token.rel.oracle, token.key, token.fixedDecimals, token.decimals, isTablet, liquidityShareData, tokenName, liquidityPnl, poolSize, isMobile, withdrawController]);
+    ), [header, token.oracleId, token.key, token.fixedDecimals, token.decimals, isTablet, liquidityShareData, tokenName, liquidityPnl, poolSize, isMobile, withdrawController]);
 
     if(isHeader) {
         return <>

@@ -32,6 +32,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           tokenAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+          type: "lp-v1",
           rel: {
             contractKey: "USDTPlatform",
             platform: "USDTPlatform",
@@ -49,6 +50,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+          type: "lp-v1",
           rel: {
             contractKey: "ETHPlatform",
             platform: "ETHPlatform",
@@ -57,19 +59,20 @@ const stakingConfig = {
             tokenDecimals: [18]
           }
         },
-        "ethvol-usdc-lp": {
-          key: "ethvol-usdc-lp",
-          label: "ETHVOL-USDC LP",
-          address: "0x0E0DA40101D8f6eB1b1d6b0215327e8452e0Bc60",
+        "cvi-usdc-lp": {
+          key: "cvi-usdc-lp",
+          label: "CVI-USDC LP",
+          address: "0x50Ab55dAD894503C2fDdd9B3a4130Dbfb926D472",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           tokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          type: "lp-v2",
           rel: {
-            contractKey: "ETHVolUSDCPlatform",
-            platform: "ETHVolUSDCPlatform",
-            stakingRewards: "ETHVolUSDCLPStakingRewards",
+            contractKey: "CVOL-USDC-Platform",
+            platform: "CVOL-USDC-Platform",
+            stakingRewards: "CVOL-USDCLP-StakingRewards",
             token: "USDC",
             tokenDecimals: [18]
           }
@@ -82,6 +85,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["USDT", "WETH", "USDC"],
+          type: "lp-v1",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "Staking",
@@ -186,10 +190,11 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           tokenAddress: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+          type: "lp-v1",
           rel: {
-            contractKey: "USDTPlatform",
-            platform: "USDTPlatform",
-            stakingRewards: "USDTLPStakingRewards",
+            contractKey: "CVOL-USDT-Platform",
+            platform: "CVOL-USDT-Platform",
+            stakingRewards: "CVOL-USDTLP-StakingRewards",
             token: "USDT",
             tokenDecimals: [18]
           },
@@ -203,10 +208,11 @@ const stakingConfig = {
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
           tokenAddress: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+          type: "lp-v2",
           rel: {
-            contractKey: "USDCPlatform",
-            platform: "USDCPlatform",
-            stakingRewards: "USDCLPStakingRewards",
+            contractKey: "CVOL-USDT-Platform",
+            platform: "CVOL-USDT-Platform",
+            stakingRewards: "CVOL-USDTLP-StakingRewards",
             token: "USDC",
             tokenDecimals: [18]
           }
@@ -219,6 +225,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["USDT","USDC"],
+          type: "lp-v1",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "Staking",
@@ -235,6 +242,7 @@ const stakingConfig = {
           rewardsTokens: ["GOVI"],
           poolLink: "https://info.quickswap.exchange/pair/0x1dab41a0e410c25857f0f49b2244cd089ab88de6",
           address: "0x1dAb41a0E410C25857F0f49B2244Cd089AB88DE6",
+          type: "lp-v1",
           rel: {
             stakingRewards: "GOVIETHStakingRewards",
             token: "UNIV2GOVIETH",

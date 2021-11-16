@@ -19,9 +19,9 @@ export const useContracts = () => {
             let contractsObject = {};
             const provider = selectedNetwork === "Matic" ? library?.currentProvider : web3?.currentProvider
             Contract.setProvider(provider);
-
+         
             contractsKeys.forEach((key) => {
-                contractsObject[key] = new Contract(contractsJSON[key].abi, contractsJSON[key].address, {
+                contractsObject[key] = new Contract(contractsJSON[key]?.abi || contractsJSON[contractsJSON[key]?.abiRef]?.abi, contractsJSON[key].address, {
                     network: selectedNetwork,
                 });
             });

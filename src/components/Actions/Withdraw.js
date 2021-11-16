@@ -28,7 +28,7 @@ const Withdraw = () => {
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lockedTime = useIsLockedTime();
     const [errorMessage, setErrorMessage] = useState();
-    const activeVolInfo = useActiveVolInfo(activeToken.rel.oracle);
+    const activeVolInfo = useActiveVolInfo(activeToken.oracleId);
     const { selectedNetwork } = useSelector(({app}) => app);
     
     const getContract = (contractKey) => {

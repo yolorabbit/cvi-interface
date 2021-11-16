@@ -10,7 +10,6 @@ import { contractsContext } from 'contracts/ContractContext';
 import { useInDOM, useIsTablet } from 'components/Hooks';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { chainNames } from 'connectors';
 import Graphs from '../Graphs';
 import './Form.scss';
 
@@ -19,7 +18,7 @@ const Form = ({activeTab}) => {
     const { account } = useActiveWeb3React();
     const { activeView } = useContext(platformViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
-    const [selectedCurrency, setSelectedCurrency] = useState(selectedNetwork  === chainNames.Ethereum ? 'eth' : 'usdc');
+    const [selectedCurrency, setSelectedCurrency] = useState('usdc');
     const tokenLeverageList = platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage;
     const [leverage, setLeverage] = useState(tokenLeverageList?.[0]);
     const [amount, setAmount] = useState("");

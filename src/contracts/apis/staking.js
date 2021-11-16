@@ -31,7 +31,7 @@ const stakingApi = {
             const data = await getDataByTokenName();
             const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC":"USDT"]);
             
-            const getAmount = async () => tokenName === "govi" ? data.stakedTokenAmount : await fromLPTokens(contracts[rel.platform], toBN(data.stakedTokenAmount));
+            const getAmount = async () => tokenName === "govi" ? data.stakedTokenAmount : await fromLPTokens(contracts[rel.platform], toBN(data.stakedTokenAmount), token);
             const stakedAmountUSD = await convert(await getAmount(), tokenData, USDTData);
 
             return {
@@ -116,13 +116,13 @@ const stakingApi = {
             lastStakedAmount: {...lastStakedAmount}
         }
     },
-    getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData) => {
+    getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData, token) => {
         try {
           let rate = await stakingRewards.methods.rewardRate().call();
           let total = await stakingRewards.methods.totalSupply().call();
           let dailyReward = toBN(DAY).mul(toBN(rate));
           let USDDailyReward = toDisplayAmount(await convert(dailyReward, GOVIData, USDTData), USDTData.decimals);
-          let stakedTokens = await fromLPTokens(platform, toBN(total));
+          let stakedTokens = await fromLPTokens(platform, toBN(total), token);
           let USDStakedTokens = toDisplayAmount(await convert(stakedTokens, tokenData, USDTData), USDTData.decimals);
 
           const dailyApr = (USDDailyReward / USDStakedTokens) * 100;

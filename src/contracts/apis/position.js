@@ -40,7 +40,7 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
   let tokenContract = tokenData ? tokenData.contract : undefined;
   let balance;
 
-  if(type === "usdc" || type === "v3" || type === "v2") {
+  if(type === "usdc" || type === "v3") {
     balance = toBN(await platform.methods.totalLeveragedTokensAmount().call());
   } else {
     balance = toBN(await getBalance(platform._address, tokenContract && type !== "eth" ? tokenContract._address : undefined));
@@ -54,7 +54,7 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
 
   let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());
   let openFeePrecent;
-  if (type === "eth" || type === "v2" || type === "usdc") {
+  if (type === "eth" || type === "v2" || type === "usdc" || type === "v3") {
     const fees = await feesCalc.methods.openPositionFees().call();
     openFeePrecent = fees.openPositionFeePercentResult;
   } else {
@@ -69,7 +69,7 @@ async function getCollateralRatio(platform, feesCalc, tokenData, openTokenAmount
   let maxPositionUnitsAmount = amountWithoutFee.mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue));
   // console.log(`maxPositionUnitsAmount: ${maxPositionUnitsAmount}`);
 
-  let minPositionUnitsAmount = type === "usdc" ? maxPositionUnitsAmount : maxPositionUnitsAmount.mul(toBN(90)).div(toBN(100));
+  let minPositionUnitsAmount = (type === "usdc" || type === "v3") ? maxPositionUnitsAmount : maxPositionUnitsAmount.mul(toBN(90)).div(toBN(100));
   // console.log(`minPositionUnitsAmount: ${minPositionUnitsAmount}`);
 
   let totalPositionUnitsAmount = toBN(await platform.methods.totalPositionUnitsAmount().call());
@@ -98,12 +98,12 @@ async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, le
     } else if(token.type === "usdc") {
       const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
       ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
-        .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, turbulence)
+        .calculateBuyingPremiumFeeWithAddendum(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, true, turbulence)
         .call());
     } else if(token.type === "v3") {
       const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
       ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
-        .calculateBuyingPremiumFeeWithTurbulence(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, true, turbulence)
+        .calculateBuyingPremiumFeeWithAddendum(tokenAmount, leverage, collateralRatio, lastCollateralRatio.collateralRatio, true, turbulence)
         .call());
     } else {
       ({ buyingPremiumFee, combinedPremiumFeePercentage } = await contracts[token.rel.feesCalc].methods
