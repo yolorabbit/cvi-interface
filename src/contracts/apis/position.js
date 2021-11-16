@@ -117,6 +117,23 @@ async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, le
   }
 }
 
+export async function getClosingPremiumFee(contracts, token, { tokenAmount, cviValue, leverage = 1, tokenData, library}) {
+  try {
+    let collateralRatio = await getCollateralRatio(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenData, tokenAmount, cviValue, leverage, token.type);
+    const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
+
+    let _closingPremiumFee = await contracts[token.rel.feesCalc].methods
+      .calculateClosingPremiumFeeWithAddendum(collateralRatio, lastCollateralRatio, true)
+      .call();
+
+    console.log(`_closingPremiumFee ${_closingPremiumFee}`, _closingPremiumFee);
+
+    return { fee: toBN(_closingPremiumFee) };
+  } catch(error) {
+    console.log(error);
+  }
+}
+
 async function getOpenPositionFeePercent(platform, feesCalc, tokenAmount) {
   let openFeePrecent = toBN(await feesCalc.methods.openPositionFeePercent().call());
   let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());

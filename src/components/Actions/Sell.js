@@ -10,9 +10,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import SellInfo from 'components/pages/Platform/Info/SellInfo';
-import { MAX_CVI_VALUE } from 'contracts/apis/position';
+import { getClosingPremiumFee, MAX_CVI_VALUE } from 'contracts/apis/position';
 import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
-import web3Api from 'contracts/web3Api';
+import web3Api, { getTokenData } from 'contracts/web3Api';
 import SellAllModal from './SellAllModal.js';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import ErrorModal from 'components/Modals/ErrorModal';
@@ -59,7 +59,15 @@ const Sell = () => {
             
             const _amount = !positionUnitsAmount ? tokenAmount.mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue)) : toBN(positionUnitsAmount);
             const _contract = getContract(activeToken.rel.platform);
-            await _contract.methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
+            
+            if(token.type === "v3") {
+                const tokenData = await getTokenData(contracts[token.rel.contractKey]);
+                const closingPremiumFeeData = await getClosingPremiumFee(contracts, activeToken, { tokenAmount, cviValue, leverage, tokenData, library})
+                console.log(closingPremiumFeeData);
+                await _contract.methods.closePosition(_amount, toBN('1'), closingPremiumFeeData).send({from: account, ...gas});
+            } else {
+                await _contract.methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
+            }
 
             dispatch(addAlert({
                 id: 'closePositionSuccess',
