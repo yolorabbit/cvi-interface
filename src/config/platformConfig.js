@@ -87,7 +87,7 @@ const platformConfig = {
           contractKey: "USDT",
           platform: "CVOL-USDT-Platform",
           feesCalc: "CVOL-USDT-FeesCalculator",
-          feesModel: "CVOL-USDT-Platform",
+          feesModel: "CVOL-USDT-FeesModel",
           oracle: "CVOL-Oracle-ETH", // same oracle for eth and usdt
           positionRewards: "CVOL-USDT-PositionRewards",
           stakingRewards: "CVOL-USDTLP-StakingRewards",

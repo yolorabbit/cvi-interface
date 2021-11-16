@@ -46,8 +46,6 @@ async function getBuyCollateralRatio(platform, feesCalc, tokenData, openTokenAmo
     balance = toBN(await getBalance(platform._address, tokenContract && type !== "eth" ? tokenContract._address : undefined));
   }
 
-  // if (type == "eth") balance = balance.sub(openTokenAmount);
-  // console.log(`balance: ${balance}`);
   if (!balance.gt(toBN(0))) {
     return toBN(0);
   }

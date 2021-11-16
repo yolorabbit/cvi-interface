@@ -7,19 +7,31 @@ import { DAY } from '../../components/Hooks/useEvents';
 
 var BN = Web3.utils.BN;
 
-async function getClaimablePositionUnits(platform, rewards, account) {
-  let { positionUnitsAmount, creationTimestamp, leverage } = await platform.methods.positions(account).call();
+
+async function getUnClaimedPositionUnits(rewards, account, token, {timestamp, positionUnitsAmount}) { 
+  try {
+    if(token.type === "v3") {
+      const claimedPositionUnits = await rewards.methods.claimedPositionUnits(account, toBN(String(timestamp)).div(toBN(String(DAY)))).call();
+      return toBN(positionUnitsAmount).sub(toBN(claimedPositionUnits));
+    }
+    return await rewards.methods.unclaimedPositionUnits(account).call();
+  } catch(error) {
+    console.log(error);
+  }
+}
+
+
+async function getClaimablePositionUnits(platform, rewards, account, token) {
+  let { positionUnitsAmount, creationTimestamp, originalCreationTimestamp, leverage } = await platform.methods.positions(account).call();
   positionUnitsAmount = leverage ? toBN(positionUnitsAmount).div(toBN(leverage)).toString() : positionUnitsAmount;
-  const unclaimedPositionUnits = await rewards.methods.unclaimedPositionUnits(account).call();
-  // positionUnitsAmount = positionUnitsAmount < unclaimedPositionUnits ? positionUnitsAmount : unclaimedPositionUnits;
-  positionUnitsAmount = Math.min(positionUnitsAmount, unclaimedPositionUnits);
-  // console.log(`getClaimablePositionUnits ${positionUnitsAmount} -- ${creationTimestamp}`);
-  return { positionUnitsAmount, creationTimestamp };
+  const timestamp = token.type === "v3" ? originalCreationTimestamp : creationTimestamp;
+  const unClaimedPositionUnitsAmount = await getUnClaimedPositionUnits(rewards, account, token, {timestamp, positionUnitsAmount});
+  return { positionUnitsAmount: unClaimedPositionUnitsAmount, creationTimestamp };
 }
 
 export async function getClaimableReward(contracts, token, { account }) {
   const PositionRewardsHelper = await getPositionRewardsContract(token);
-  const { positionUnitsAmount, creationTimestamp } = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account);
+  let { positionUnitsAmount, creationTimestamp } = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account, token);
   const units = toBN(toFixed(positionUnitsAmount.toString()));
 
   const currentClaimableRewards = units.gt(toBN(0)) ? 
@@ -47,8 +59,9 @@ async function calculatePositionRewardMinMax(contracts, token, {account, tokenAm
   let currentReward = 0;
   try {
     let pos = await contracts[token.rel.platform].methods.positions(account).call();
-    let unclaimed = await contracts[token.rel.positionRewards].methods.unclaimedPositionUnits(account).call();
-    let min = BN.min(toBN(unclaimed), toBN(pos.positionUnitsAmount));
+    const timestamp = token.type === "v3" ? pos.originalCreationTimestamp : pos.creationTimestamp;
+    const unclaimedPositionUnits = await getUnClaimedPositionUnits(contracts[token.rel.positionRewards], account, token, {timestamp, positionUnitsAmount: pos.positionUnitsAmount});
+    let min = BN.min(toBN(unclaimedPositionUnits), toBN(pos.positionUnitsAmount));
     currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, 0).call();
     positionUnits = positionUnits.add(min);
   } catch (error) {
@@ -113,7 +126,7 @@ async function getClaimableRewardsSum(contracts, token, { account, library, even
 const getClaimableRewards = async (contracts, token, { account, library, eventsUtils }) => { // old position rewards
   if(token.type === 'eth') return [0, toBN(0), token.decimals];
   try {
-      if(token.type === "v2" || token.type === "usdc") return [0, toBN(0), token.decimals];
+      if(token.type === "v2" || token.type === "usdc" || token.type === "v3") return [0, toBN(0), token.decimals];
       const res = await getClaimableRewardsSum(contracts, token, { account, library, eventsUtils });
       return [commaFormatted(customFixed(toDisplayAmount(res, token.lpTokensDecimals), 8)), res, token.lpTokensDecimals];
   } catch (error) {
@@ -170,7 +183,7 @@ const getClaimData = async (contracts, token, { account, library, eventsUtils}) 
       const lastEndOfDay = moment.utc(creationTimestamp * 1000).endOf('day').add('2', 'seconds');
 
       const _canClaim = await canClaim(contracts, token, { account, eventsUtils });
-      let [claimableRewards, maxClaimableRewards] = await getClaimableReward(contracts, token, { account });;
+      let [claimableRewards, maxClaimableRewards] = await getClaimableReward(contracts, token, { account });
 
       const maxDailyReward = await getMaxDailyReward(contracts[token.rel.positionRewards]);
       const todayClaimedReward = await getTodayClaimedReward(contracts[token.rel.positionRewards], eventsUtils);
