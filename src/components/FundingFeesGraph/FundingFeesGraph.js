@@ -13,7 +13,7 @@ const chartInitialize = {
 
 // @TODO: switch between ethvol and cvi funding fee data
 const FundingFeesGraph = ({ maxWidth = 350, maxHeight = 338 }) => {
-    const { cviVolInfo } = useSelector(({ app }) => app.indexInfo);
+    const cviVolInfo = useSelector(({ app }) => app.indexInfo.cvi);
     const cviValue = Math.floor(cviVolInfo?.index ?? 0);
     const ref = useRef();
     const [chart, setChart] = useState();
