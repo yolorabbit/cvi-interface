@@ -7,7 +7,6 @@ import { platformViewContext } from 'components/Context';
 import Action from './Action';
 import platformConfig from 'config/platformConfig';
 
-
 const actionControllerContext = createContext({});
 export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
   return (
@@ -26,7 +25,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
-
+  
   const renderActionComponent = useCallback((isModal = false) => {
     return <ActionControllerContext 
         disabled={!(!disabled && !insufficientBalance)}
@@ -52,7 +51,6 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
     //eslint-disable-next-line
   }, [isOpen, activeView]);
 
-  
   return useMemo(() => {
     return <div className="action-controller_component">
         {(isModal && isOpen) && <Modal clickOutsideDisabled closeIcon handleCloseModal={() => setIsOpen(false)}>
@@ -66,10 +64,11 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             view={view}
             protocol={protocol} 
           />         
-          {type === platformConfig.actionsConfig.sell.key && <AdvancedOptions 
+          {(type === platformConfig.actionsConfig.sell.key && token === 'usdc') ? <AdvancedOptions 
             slippageTolerance={slippageTolerance} 
             setSlippageTolerance={setSlippageTolerance} 
-          />}
+          /> : <br/>}
+
           {renderActionComponent()}
 
         </Modal>}
