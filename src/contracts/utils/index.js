@@ -249,14 +249,14 @@ export async function fromLPTokens(platform, lpTokenAmount, token) {
 
 export const getPositionRewardsContract = async (token) => { 
   try {
-    if(token.type === "v2" || token.type === "usdc") return;
+    if(token.type === "v2" || token.type === "usdc" || token.type === "v3") return;
     const chainName = await getChainName();
     const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
     if(!contractsJSON) return;
 
     const HELPER_ADDRESS = "0xd5A222B80788E36F707adDc74c3Cb5de7e43F1B0";
     const HELPER_V2_ADDRESS = "0x1C746415D73D4cBc995E5eB80dDD07E698a32C8c";
-    const [address, abi] = token.key === "eth" ? [HELPER_V2_ADDRESS, contractsJSON["PositionRewardsV2"].abi] : [HELPER_ADDRESS, contractsJSON["PositionRewards"].abi];
+    const [address, abi] = token.key === "eth" ? [HELPER_V2_ADDRESS, contractsJSON["CVOL-ETH-PositionRewards"].abi] : [HELPER_ADDRESS, contractsJSON["CVOL-USDT-PositionRewards"].abi];
     return new Contract(abi, address);
   } catch(error) {
     console.log(error);

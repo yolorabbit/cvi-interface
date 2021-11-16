@@ -66,13 +66,13 @@ const platformConfig = {
         oracleId: "cvi",
         rel: {
           contractKey: "WETH",
-          platform: "ETHPlatform",
-          feesCalc: "FeesCalculatorV3",
-          feesModel: "ETHPlatform",
-          oracle: "CVIOracle",
-          positionRewards: "PositionRewardsV2",
-          stakingRewards: "ETHLPStakingRewards",
-          liquidation: "Liquidation"
+          platform: "CVOL-ETH-Platform",
+          feesCalc: "CVOL-ETH-FeesCalculator",
+          feesModel: "CVOL-ETH-Platform",
+          positionRewards: "CVOL-ETH-PositionRewards",
+          oracle: "CVOL-Oracle-ETH", // same oracle for eth and usdt
+          stakingRewards: "CVOL-ETHLP-StakingRewards",
+          liquidation: "CVOL-USDT-Liquidation" // there is only one liquidation contract for both eth and usdt.
         },
       },
       usdt: {
@@ -85,13 +85,13 @@ const platformConfig = {
         oracleId: "cvi",
         rel: {
           contractKey: "USDT",
-          platform: "USDTPlatform",
-          feesCalc: "FeesCalculatorV2",
-          feesModel: "FeesModelV2",
-          oracle: "CVIOracle",
-          positionRewards: "PositionRewards",
-          stakingRewards: "USDTLPStakingRewards",
-          liquidation: "Liquidation",
+          platform: "CVOL-USDT-Platform",
+          feesCalc: "CVOL-USDT-FeesCalculator",
+          feesModel: "CVOL-USDT-Platform",
+          oracle: "CVOL-Oracle-ETH", // same oracle for eth and usdt
+          positionRewards: "CVOL-USDT-PositionRewards",
+          stakingRewards: "CVOL-USDTLP-StakingRewards",
+          liquidation: "CVOL-USDT-Liquidation",
           rewards: "Rewards",
         },
       },
@@ -99,7 +99,7 @@ const platformConfig = {
         key: "coti",
         soon: true,
         rel: {
-          oracle: "CVIOracle"
+          oracle: "CVOL-Oracle"
         }
       },
     },
