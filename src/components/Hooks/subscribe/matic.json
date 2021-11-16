@@ -46,7 +46,7 @@
         ]
     },
     {
-        "name": "USDTPlatform",
+        "name": "CVOL-USDT-Platform",
         "events": [
             "Approval",
             "ClosePosition",
@@ -57,13 +57,13 @@
         ]
     },
     {
-        "name": "PositionRewardsV3",
+        "name": "CVOL-USDT-PositionRewards",
         "events": [
             "Claimed"
         ]
     },
     {
-        "name": "GOVIETHStakingRewards",
+        "name": "GOVIETH-StakingRewards",
         "events": [
             "RewardAdded",
             "RewardPaid",
@@ -72,7 +72,7 @@
         ]
     },
     {
-        "name": "USDTLPStakingRewards",
+        "name": "USDTLP-StakingRewards",
         "events": [
             "RewardAdded",
             "RewardPaid",
@@ -81,7 +81,7 @@
         ]
     },
     {
-        "name": "USDCPlatform",
+        "name": "CVOL-USDC-Platform",
         "events": [
             "Approval",
             "ClosePosition",
@@ -92,13 +92,13 @@
         ]
     },
     {
-        "name": "USDCPositionRewards",
+        "name": "CVOL-USDC-PositionRewards",
         "events": [
             "Claimed"
         ]
     },
     {
-        "name": "USDCLPStakingRewards",
+        "name": "CVOL-USDCLP-StakingRewards",
         "events": [
             "RewardAdded",
             "RewardPaid",

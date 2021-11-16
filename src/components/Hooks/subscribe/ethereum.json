@@ -14,7 +14,7 @@
         ]
     },
     {
-        "name": "USDTPlatform",
+        "name": "CVOL-USDT-Platform",
         "events": [
             "Approval",
             "ClosePosition",
@@ -25,7 +25,7 @@
         ]
     },
     {
-        "name": "USDTLPStakingRewards",
+        "name": "CVOL-USDTLP-StakingReward",
         "events": [
             "RewardAdded",
             "RewardPaid",
@@ -34,7 +34,25 @@
         ]
     },
     {
-        "name": "COTIETHStakingRewards",
+        "name": "USDC",
+        "events": [
+            "Approval",
+            "Transfer"
+        ]
+    },
+    {
+        "name": "CVOL-USDC-Platform",
+        "events": [
+            "Approval",
+            "ClosePosition",
+            "Deposit",
+            "OpenPosition",
+            "Transfer",
+            "Withdraw"
+        ]
+    },
+    {
+        "name": "CVOL-USDCLP-StakingReward",
         "events": [
             "RewardAdded",
             "RewardPaid",
@@ -43,7 +61,16 @@
         ]
     },
     {
-        "name": "GOVIETHStakingRewards",
+        "name": "COTIETH-StakingRewards",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
+        "name": "GOVIETH-StakingRewards",
         "events": [
             "RewardAdded",
             "RewardPaid",
@@ -75,13 +102,13 @@
         ]
     },
     {
-        "name": "PositionRewardsV2",
+        "name": "CVOL-ETH-PositionRewards",
         "events": [
             "Claimed"
         ]
     },
     {
-        "name": "ETHPlatform",
+        "name": "CVOL-ETH-Platform",
         "events": [
             "Approval",
             "ClosePosition",
@@ -92,7 +119,7 @@
         ]
     },
     {
-        "name": "ETHLPStakingRewards",
+        "name": "CVOL-ETHLP-StakingRewards",
         "events": [
             "RewardAdded",
             "RewardPaid",
@@ -115,7 +142,7 @@
         ]
     },
     {
-        "name": "COTIETHSLPStakingRewards",
+        "name": "COTIETHSLP-StakingRewards",
         "events": [
             "RewardAdded",
             "RewardPaid",
@@ -124,7 +151,7 @@
         ]
     },
     {
-        "name": "GOVIETHSLPStakingRewards",
+        "name": "GOVIETHSLP-StakingRewards",
         "events": [
             "RewardAdded",
             "RewardPaid",
@@ -133,7 +160,7 @@
         ]
     },
     {
-        "name": "RHEGIC2ETHStakingRewards",
+        "name": "RHEGIC2ETH-StakingRewards",
         "events": [
             "RewardAdded",
             "RewardPaid",
