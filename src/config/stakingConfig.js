@@ -34,9 +34,9 @@ const stakingConfig = {
           tokenAddress: "0xdac17f958d2ee523a2206206994597c13d831ec7",
           type: "lp-v1",
           rel: {
-            contractKey: "USDTPlatform",
-            platform: "USDTPlatform",
-            stakingRewards: "USDTLPStakingRewards",
+            contractKey: "CVOL-USDT-Platform",
+            platform: "CVOL-USDT-Platform",
+            stakingRewards: "CVOL-USDTLP-StakingRewards",
             token: "USDT",
             tokenDecimals: [18]
           }
@@ -52,9 +52,9 @@ const stakingConfig = {
           tokenAddress: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
           type: "lp-v1",
           rel: {
-            contractKey: "ETHPlatform",
-            platform: "ETHPlatform",
-            stakingRewards: "ETHLPStakingRewards",
+            contractKey: "CVOL-ETH-Platform",
+            platform: "CVOL-ETH-Platform",
+            stakingRewards: "CVOL-ETHLP-StakingRewards",
             token: "WETH",
             tokenDecimals: [18]
           }
@@ -104,7 +104,7 @@ const stakingConfig = {
           rewardsTokens: ["GOVI"],
           poolLink: "https://v2.info.uniswap.org/pair/0xa2b04f8133fc25887a436812eae384e32a8a84f2",
           rel: {
-            stakingRewards: "COTIETHStakingRewards",
+            stakingRewards: "COTIETH-StakingRewards",
             tokenDecimals: [18],
             contractKey: "UNIV2COTIETH",
             token: "UNIV2COTIETH"
@@ -120,7 +120,7 @@ const stakingConfig = {
           rewardsTokens: ["GOVI"],
           poolLink: "https://v2.info.uniswap.org/pair/0x1ee312a6d5fe7b4b8c25f0a32fca6391209ebebf",
           rel: {
-            stakingRewards: "GOVIETHStakingRewards",
+            stakingRewards: "GOVIETH-StakingRewards",
             tokenDecimals: [18],
             contractKey: "UNIV2GOVIETH",
             token: "UNIV2GOVIETH"
@@ -137,7 +137,7 @@ const stakingConfig = {
           rewardsTokens: ["GOVI"],
           poolLink: "https://v2.info.uniswap.org/pair/0x51996fc38c8d839abd6c2db9a4c221df1cb487a0",
           rel: {
-            stakingRewards: "RHEGIC2ETHStakingRewards",
+            stakingRewards: "RHEGIC2ETH-StakingRewards",
             tokenDecimals: [18],
             contractKey: "UNIV2RHEGIC2ETH",
             token: "UNIV2RHEGIC2ETH"
@@ -155,7 +155,7 @@ const stakingConfig = {
           rewardsTokens: ["GOVI"],
           poolLink: "https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0xDDB3422497E61e13543BeA06989C0789117555c5",
           rel: {
-            stakingRewards: "COTIETHSLPStakingRewards",
+            stakingRewards: "COTIETHSLP-StakingRewards",
             tokenDecimals: [18],
             contractKey: "SLPCOTIETH",
             token: "SLPCOTIETH"
@@ -171,7 +171,7 @@ const stakingConfig = {
           fixedDecimals: 8,
           poolLink: "https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0xeEAA40B28A2d1b0B08f6f97bB1DD4B75316c6107",
           rel: {
-            stakingRewards: "GOVIETHSLPStakingRewards",
+            stakingRewards: "GOVIETHSLP-StakingRewards",
             tokenDecimals: [18],
             contractKey: "SLPGOVIETH",
             token: "SLPGOVIETH"
@@ -244,7 +244,7 @@ const stakingConfig = {
           address: "0x1dAb41a0E410C25857F0f49B2244Cd089AB88DE6",
           type: "lp-v1",
           rel: {
-            stakingRewards: "GOVIETHStakingRewards",
+            stakingRewards: "GOVIETH-StakingRewards",
             token: "UNIV2GOVIETH",
             contractKey: "UNIV2GOVIETH",
             tokenDecimals: [18]

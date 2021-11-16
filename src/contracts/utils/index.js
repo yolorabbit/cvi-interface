@@ -84,7 +84,7 @@ export async function getWeb3Contract(contractName, chainName) {
     if (contracts[chainName][contractName] === undefined) {
       const contractsJSON = require(`../files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${chainName}.json`);
       if (contractsJSON[contractName]) {
-          contracts[chainName][contractName] = new Contract(contractsJSON[contractName].abi, contractsJSON[contractName].address);
+          contracts[chainName][contractName] = new Contract(contractsJSON[contractName]?.abi || contractsJSON[contractsJSON[contractName]?.abiRef]?.abi, contractsJSON[contractName].address);
           contracts[chainName][contractName].setProvider(await getRpcUrl());
         }
         else return undefined;
