@@ -6,13 +6,17 @@ import { customFixed } from 'utils';
 
 const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
   const [costumTolerance, setCostumTolerance] = useState("");
-
+  
   const slippageButtons = useMemo(() => ({
     buttons: ["0.5", "1", "2"],
   }), []);
 
   const slippageBtnHandler = useCallback((val) => {
-    if (slippageTolerance !== val) setSlippageTolerance(val);
+    if (slippageTolerance !== val) {
+      setSlippageTolerance(val);
+    } else {
+      setCostumTolerance("")
+    }
   }, [setSlippageTolerance, slippageTolerance]);
 
   const customSlippageInput = ({target: { value }}) => {
@@ -25,6 +29,9 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
         slippageBtnHandler(customFixed(costumTolerance, 2));
       }
   }
+
+  const isOtherOption = slippageButtons.buttons.includes(slippageTolerance);
+  const isCustomSelected = !!costumTolerance && !isOtherOption;
 
   return (
     <div className="slippage-component">
@@ -54,7 +61,7 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
             );
           })}
 
-        <div className="input-container">
+        <div className={`input-container${isCustomSelected ? " selected" : ""}`}>
           <input type="text"
             placeholder="Custom"
             name="slippage-input"

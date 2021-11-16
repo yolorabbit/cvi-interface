@@ -89,6 +89,20 @@
 
     .input-container {
       position: relative;
+      border-radius: 0.293vw;
+      border: solid 2px transparent;
+      @media (max-width: 1365px) {
+        border-radius: 0.391vw;
+      }
+      @media (max-width: 1024px) {
+        border-radius: 0.522vw;
+      }
+      @media (max-width: 767px) {
+        border-radius: 1.111vw;
+      }
+      &.selected {
+        border: solid 2px #f8ba15;
+        }
       .slippage-input {
         padding: 0.586vw 1.172vw;
         height: 2.344vw;
@@ -113,7 +127,6 @@
           font-size: 1.564vw;
           border-radius: 0.522vw;
         }
-
         @media (max-width: 767px) {
           padding: 2.222vw 4.444vw;
           height: 8.889vw;

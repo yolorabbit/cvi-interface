@@ -13,7 +13,18 @@
     @media (max-width: 767px){
         margin-top: 6.667vw;
     }
-
+    .amount-component__group__balance {
+        margin-top: 0.3125vw;
+        @media (max-width: 1365px){
+            margin-top: 0.4395vw;
+        }
+        @media (max-width: 1024px){
+            margin-top: 0.782vw;
+        }
+        @media (max-width: 767px){
+            margin-top: 1.666vw;
+        }
+    }
     &.error {
         & .amount-component__group__amount {
             border: 1px solid #bb1e52;

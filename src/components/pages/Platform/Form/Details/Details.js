@@ -122,9 +122,6 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     format={`${slippageTolerance || "0"}%`}
                 />
                 {/* TODO: Add Dynamic Value to comment */}
-                <div className="stat-component">
-                    <h2>The value of your position will be at least 2.00 ETH or the transaction will revert.</h2>
-                </div>
             </>
         )
     }, [purchaseFee, tokenAmount, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeVolInfo, amount, selectedCurrency, leverage, actLowRules, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolIndex, slippageTolerance]) 
