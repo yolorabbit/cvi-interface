@@ -46,7 +46,6 @@ const TradeRow = ({token, isHeader, className}) => {
                 header={header.index.label}
                 content={<Value text={token.oracleId.toUpperCase()} />} 
             />
-
             
             {!isTablet && <> 
                 <RowItem content={<Value 

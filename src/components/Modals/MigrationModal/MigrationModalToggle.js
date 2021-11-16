@@ -17,8 +17,8 @@ const MigrationModalToggle = () => {
 
     const isLiquidityProvider = useCallback(async () => {
         try {
-            const usdtLP = w3.tokens["USDTLP"];
-            const stakedBalance = await w3.stakingRewards["USDTLPStakingRewards"].staked(account);
+            const usdtLP = w3.tokens["CVOL-USDTLP"];
+            const stakedBalance = await w3.stakingRewards["CVOL-USDTLP-StakingRewards"].staked(account);
             const usdtLPBalance = await usdtLP.balanceOf(account);
        
             if(!isActiveInDOM()) return; 

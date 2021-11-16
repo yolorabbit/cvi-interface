@@ -23,7 +23,7 @@ export const MigrationModal = ({w3}) => {
   const { selectedNetwork } = useSelector(({app}) => app);
 
   const [isLoading, setIsLoading] = useState();
-  const usdtusdcPlatformMigrator = w3 && w3.platformMigrators["USDT-USDC-PlatformMigrator"];
+  const usdtusdcPlatformMigrator = w3 && w3.platformMigrators["CVOL-USDT-USDC-PlatformMigrator"];
   const [{
     stakedBalance = {},
     usdtLPBalance,
@@ -42,7 +42,7 @@ export const MigrationModal = ({w3}) => {
   // Do Approve
   const doApprove = useCallback(async () => {
     try {
-      const usdtLP = w3.tokens["USDTLP"];
+      const usdtLP = w3.tokens["CVOL-USDTLP"];
       const liquidity = fromBN(await usdtLP.balanceOf(account), 18);
       const allowance = fromBN(
         await getTokenAllowance(
@@ -77,13 +77,13 @@ export const MigrationModal = ({w3}) => {
   // Do Unstake
   const doUnStake = useCallback(async () => {
     try {
-      const usdtLPStakingRewards = w3.stakingRewards["USDTLPStakingRewards"];
+      const usdtLPStakingRewards = w3.stakingRewards["CVOL-USDTLP-StakingRewards"];
       const bnStakedBalance = await usdtLPStakingRewards.staked(account);
       const stakedBalance = fromBN(bnStakedBalance.stakedAmount, 18);
       if (stakedBalance > 0) {
         await usdtLPStakingRewards.exit(account);
       }
-      const usdtLP = w3.tokens["USDTLP"];
+      const usdtLP = w3.tokens["CVOL-USDTLP"];
       const usdtLPBalance = await usdtLP.balanceOf(account);
 
       if(!isActiveInDOM()) return; 
@@ -129,10 +129,10 @@ export const MigrationModal = ({w3}) => {
     if(!w3?.stakingRewards || !w3?.tokens  || !account) return;
 
     try {
-      const usdtLPStakingRewards = w3.stakingRewards["USDTLPStakingRewards"];
+      const usdtLPStakingRewards = w3.stakingRewards["CVOL-USDTLP-StakingRewards"];
       const bnStakedBalance = await usdtLPStakingRewards.staked(account);
       const stakedBalance = fromBN(bnStakedBalance.stakedAmount, 18);
-      const usdtLP = w3.tokens["USDTLP"];
+      const usdtLP = w3.tokens["CVOL-USDTLP"];
       const liquidity = fromBN(await usdtLP.balanceOf(account), 18);
       
       const allowance = fromBN(await getTokenAllowance(
@@ -218,10 +218,10 @@ export const MigrationModal = ({w3}) => {
     if (!w3 || !account || !usdtusdcPlatformMigrator) return;
    
     const fetchData = async () => {
-      const stakedBalance = await w3.stakingRewards["USDTLPStakingRewards"].staked(account);
-      const { total } = (await w3.platforms["USDTPlatform"].liquidityBalance(account));
-      const liquidityBalance = w3.platforms["USDTPlatform"].fromLP(total)
-      const usdtLPBalance = await w3.tokens["USDTLP"].balanceOf(account);
+      const stakedBalance = await w3.stakingRewards["CVOL-USDTLP-StakingRewards"].staked(account);
+      const { total } = (await w3.platforms["CVOL-USDT-Platform"].liquidityBalance(account));
+      const liquidityBalance = w3.platforms["CVOL-USDT-Platform"].fromLP(total)
+      const usdtLPBalance = await w3.tokens["CVOL-USDTLP"].balanceOf(account);
       const {status: activeStep, isApproved: _isApproved} = await currentActiveStep();
 
       if(!isActiveInDOM()) return; 
