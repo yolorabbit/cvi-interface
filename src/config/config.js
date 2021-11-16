@@ -401,7 +401,7 @@ const config = {
         "Therefore, we have closed the option to open new positions in USDT, active USDT positions will continue to receive their GOVI rewards.",
         "Users will be able to complete the migration of their liquidity starting Wednesday, November 17th, at 11:00 AM UTC"
       ],
-      stepButton: ["Migrate"]
+      stepButton: ["Proceed"]
     },
     {
       stepKey: 'unstake',
