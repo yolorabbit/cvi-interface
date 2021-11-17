@@ -397,9 +397,10 @@ const config = {
       stepVisibility: false,
       stepDesc: [
         <b>Dear user,</b>, 
-        "We have started the migration process of the USDT liquidity to USDC pool.",
-        "Therefore, we have closed the option to open new positions in USDT, active USDT positions will continue to receive their GOVI rewards.",
-        "Users will be able to complete the migration of their liquidity starting Wednesday, November 17th, at 11:00 AM UTC"
+        "We are migrating the CVI Platform from the USDT to USDC pools on both Ethereum and Polygon networks.",
+        "Once the migration is complete, you will be rewarded with additional GOVI tokens. Kindly note that you will need to manually stake your new CVI-USDC LP tokens in order to continue receiving your GOVI rewards.",
+        "We have also ceased the distribution of GOVI rewards for traders and liquidity providers of the USDT pool.",
+        "To proceed with the migration, please click the button below."
       ],
       stepButton: ["Proceed"]
     },
