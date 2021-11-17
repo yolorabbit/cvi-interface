@@ -1,4 +1,5 @@
 import { chainNames } from "connectors";
+import config from "./config";
 
 export const stakingViews = {
   "staked": "staked",
@@ -24,7 +25,7 @@ const stakingConfig = {
     [chainNames.Ethereum]: {
       [stakingProtocols.platform]: {
         "cvi-usdt-lp": {
-          disable: true,
+          disable: config.isMainnet,
           key: "cvi-usdt-lp",
           label: "CVI-USDT LP",
           address: "0xe0437BeB5bb7Cf980e90983f6029033d710bd1da",
@@ -183,7 +184,7 @@ const stakingConfig = {
     [chainNames.Matic]: {
       [stakingProtocols.platform]: {
         "cvi-usdt-lp": {
-          disable: true,
+          disable: config.isMainnet,
           key: "cvi-usdt-lp",
           label: "CVI-USDT LP",
           address: "0x88D01eF3a4D586D5e4ce30357ec57B073D45ff9d",
