@@ -1,4 +1,5 @@
 import { chainNames } from "connectors";
+import config from "./config";
 
 export const activeViews = {
   "trade": "trade",
@@ -76,6 +77,7 @@ const platformConfig = {
         },
       },
       usdt: {
+        migrated: config.isMainnet,
         key: "usdt",
         decimals: 6,
         fixedDecimals: 6,
@@ -125,6 +127,7 @@ const platformConfig = {
         }
       },
       usdt: {
+        migrated: config.isMainnet,
         key: "usdt",
         decimals: 6,
         fixedDecimals: 6,
