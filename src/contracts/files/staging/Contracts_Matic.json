@@ -4204,7 +4204,7 @@
     ]
   },
   "CVOL-USDC-FeesCalculator": {
-    "address": "0x1436D9f3AE200F28e5A72b9e73893648C4355673",
+    "address": "0xed982E24697C7bceA182ba8dd1a190aB66A16384",
     "abi": [
       {
         "inputs": [
