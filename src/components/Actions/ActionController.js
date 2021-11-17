@@ -84,10 +84,10 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
               protocol={protocol} 
             />
 
-            <AdvancedOptions 
+          { token === 'usdc' && <AdvancedOptions 
               slippageTolerance={slippageTolerance} 
               setSlippageTolerance={setSlippageTolerance} 
-            /> 
+        /> }
           </>
         }
         {renderActionComponent(isModal)}
