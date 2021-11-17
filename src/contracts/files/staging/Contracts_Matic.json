@@ -4066,14 +4066,9 @@
     ]
   },
   "CVOL-USDC-Liquidation": {
-    "address": "0x02DEb6E484c12916ABf245d5518f5315e1291555",
+    "address": "0x58DDDDB80F5cdFe3687a42136eAa13E4d52E4833",
     "abi": [
-      {
-        "inputs": [{ "internalType": "uint16", "name": "_maxCVIValue", "type": "uint16" }],
-        "stateMutability": "nonpayable",
-        "type": "constructor",
-        "signature": "constructor"
-      },
+      { "inputs": [{ "internalType": "uint16", "name": "_maxCVIValue", "type": "uint16" }], "stateMutability": "nonpayable", "type": "constructor" },
       {
         "anonymous": false,
         "inputs": [
@@ -4081,110 +4076,14 @@
           { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
         ],
         "name": "OwnershipTransferred",
-        "type": "event",
-        "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        "type": "event"
       },
       {
         "inputs": [],
         "name": "LIQUIDATION_MAX_FEE_PERCENTAGE",
         "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xc9dc2450"
-      },
-      {
-        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "name": "liquidationMaxRewardPercents",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x07b6ef92"
-      },
-      {
-        "inputs": [],
-        "name": "liquidationMinRewardPercent",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xc5e686bc"
-      },
-      {
-        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-        "name": "liquidationMinThresholdPercents",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x98d3bc64"
-      },
-      {
-        "inputs": [],
-        "name": "maxCVIValue",
-        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0xd934c20b"
-      },
-      {
-        "inputs": [],
-        "name": "owner",
-        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x8da5cb5b"
-      },
-      { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function", "signature": "0x715018a6" },
-      {
-        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
-        "name": "transferOwnership",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xf2fde38b"
-      },
-      {
-        "inputs": [{ "internalType": "uint16[8]", "name": "_newMinThresholdPercents", "type": "uint16[8]" }],
-        "name": "setMinLiquidationThresholdPercents",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xaf168130"
-      },
-      {
-        "inputs": [{ "internalType": "uint16", "name": "_newMinRewardPercent", "type": "uint16" }],
-        "name": "setMinLiquidationRewardPercent",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xe19cc3a7"
-      },
-      {
-        "inputs": [{ "internalType": "uint16[8]", "name": "_newMaxRewardPercents", "type": "uint16[8]" }],
-        "name": "setMaxLiquidationRewardPercents",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xb76f61c7"
-      },
-      {
-        "inputs": [
-          { "internalType": "uint256", "name": "_positionBalance", "type": "uint256" },
-          { "internalType": "bool", "name": "_isPositive", "type": "bool" },
-          { "internalType": "uint168", "name": "_positionUnitsAmount", "type": "uint168" },
-          { "internalType": "uint16", "name": "_openCVIValue", "type": "uint16" },
-          { "internalType": "uint8", "name": "_leverage", "type": "uint8" }
-        ],
-        "name": "isLiquidationCandidate",
-        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
-        "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x9f65eea0"
+        "type": "function"
       },
       {
         "inputs": [
@@ -4197,14 +4096,94 @@
         "name": "getLiquidationReward",
         "outputs": [{ "internalType": "uint256", "name": "finderFeeAmount", "type": "uint256" }],
         "stateMutability": "view",
-        "type": "function",
-        "constant": true,
-        "signature": "0x1a10def4"
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "uint256", "name": "_positionBalance", "type": "uint256" },
+          { "internalType": "bool", "name": "_isPositive", "type": "bool" },
+          { "internalType": "uint168", "name": "_positionUnitsAmount", "type": "uint168" },
+          { "internalType": "uint16", "name": "_openCVIValue", "type": "uint16" },
+          { "internalType": "uint8", "name": "_leverage", "type": "uint8" }
+        ],
+        "name": "isLiquidationCandidate",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "liquidationMaxRewardPercents",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "liquidationMinRewardPercent",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "liquidationMinThresholdPercents",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "maxCVIValue",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+      {
+        "inputs": [{ "internalType": "uint16[8]", "name": "_newMaxRewardPercents", "type": "uint16[8]" }],
+        "name": "setMaxLiquidationRewardPercents",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint16", "name": "_newMinRewardPercent", "type": "uint16" }],
+        "name": "setMinLiquidationRewardPercent",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint16[8]", "name": "_newMinThresholdPercents", "type": "uint16[8]" }],
+        "name": "setMinLiquidationThresholdPercents",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
       }
-    ]
+    ],
+    "creation": {
+      "block": 21474665,
+      "timestamp": 1637148120,
+      "transactionHash": "0x440d541068d8e0280867d9f553b18d9974f7205b8d95e6be253a7b2cc4893411"
+    }
   },
   "CVOL-USDC-FeesCalculator": {
-    "address": "0xed982E24697C7bceA182ba8dd1a190aB66A16384",
+    "address": "0x68E8be77f3EB29074A83aE01007fA71cB5Cc5926",
     "abi": [
       {
         "inputs": [
@@ -4863,9 +4842,9 @@
       }
     ],
     "creation": {
-      "block": 21400254,
-      "timestamp": 1637622254,
-      "transactionHash": "0x46d70cb9264d767ea98d98bed5e609e7c532370209b04a5583ca2fb6cab5c931"
+      "block": 21474688,
+      "timestamp": 1637148170,
+      "transactionHash": "0x1374872810677f5db3b8b50ebd03e9da8f43c11545e288523e2b18970f41e5c5"
     }
   },
   "CVOL-USDC-Platform": {
@@ -5518,7 +5497,12 @@
         "stateMutability": "nonpayable",
         "type": "function"
       }
-    ]
+    ],
+    "creation": {
+      "block": 21474649,
+      "timestamp": 1637148088,
+      "transactionHash": "0xcd49e382aff4f029f0c5a32df2f83d364c7d5343155a5b61922d3071f2fba494"
+    }
   },
   "CVOL-USDC-PositionRewards": {
     "address": "0xf293873CA668Ef7F1412C46c2C2c682Fd3441c02",
