@@ -20,6 +20,7 @@ import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 import Home from 'components/pages/Home';
 import RestrictedModal from 'components/Modals/RestrictedModal';
 import './App.scss';
+import MaintenanceModal from 'components/Modals/MaintenanceModal';
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -52,6 +53,7 @@ const App = () => {
         <NotificationList />
         <Web3ReactManager key={selectedNetwork}>
           <ContractsContext>
+            <MaintenanceModal selectedNetwork={selectedNetwork} />
             <Routes />
           </ContractsContext>
         </Web3ReactManager>
