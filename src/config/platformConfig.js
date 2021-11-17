@@ -267,6 +267,10 @@ const platformConfig = {
         "Wednesday, November 17th, at 11:00 AM UTC"
       ],
   },
+  maintenanceNetworks: {
+    [chainNames.Ethereum]: false,
+    [chainNames.Matic]: true,
+  },
   sellFeeWarningDuration: (60 * 60) * 48,
   sellFeeWarningText: "Sell fee will be considerably higher than usual until 48 hours pass from your last purchase",
 }
