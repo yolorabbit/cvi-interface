@@ -6,6 +6,7 @@ import { customFixed } from 'utils';
 
 const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
   const [costumTolerance, setCostumTolerance] = useState("");
+  const [inputSlippageFocus, setInputSlippageFocus] = useState(false);
   
   const slippageButtons = useMemo(() => ({
     buttons: ["0.5", "1", "2"],
@@ -30,9 +31,6 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
       }
   }
 
-  const isOtherOption = slippageButtons.buttons.includes(slippageTolerance);
-  const isCustomSelected = !!costumTolerance && !isOtherOption;
-
   return (
     <div className="slippage-component">
       <span className="slippage-title">
@@ -54,14 +52,14 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
               <button
                 key={`${valnum}-${slippageValue}`}
                 type="button"
-                className={`slippage-button ${slippageValue === slippageTolerance ? " selected" : ""}`}
+                className={`slippage-button${!costumTolerance && slippageValue === slippageTolerance ? " selected" : ""}`}
                 onClick={() => slippageBtnHandler(slippageValue)}>
                 <span>{slippageValue}%</span>
               </button>
             );
           })}
 
-        <div className={`input-container${isCustomSelected ? " selected" : ""}`}>
+        <div className={`input-container${(costumTolerance || inputSlippageFocus) ? " selected" : ""}`}>
           <input type="text"
             placeholder="Custom"
             name="slippage-input"
@@ -69,6 +67,8 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
             className="slippage-input"
             value={costumTolerance}
             onChange={customSlippageInput}
+            onFocus={() => setInputSlippageFocus(true)}
+            onBlur={() => setInputSlippageFocus(false)}
             onClick={() => {
               setSlippageTolerance("");
               setCostumTolerance("");
