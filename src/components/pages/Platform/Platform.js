@@ -12,6 +12,7 @@ import useHistoryEvents from 'components/Hooks/useHistoryEvents';
 import IndexStats from './IndexStats';
 import IndexTabs from './IndexTabs';
 import useCvi from 'components/Hooks/Cvi';
+import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
 import './Platform.scss';
 
 
@@ -25,6 +26,7 @@ const Platform = () => {
         return (
             <div className="platform-component">
                 <SubNavbar tabs={Object.keys(platformConfig.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
+                <MigrationModalToggle />
                 <platformViewContext.Provider value={{activeView}}>
                     <Layout>
                         <Row className="statistics-row-component">

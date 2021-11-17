@@ -5,13 +5,13 @@ import Row from 'components/Layout/Row';
 import { stakingViews } from 'config/stakingConfig';
 import React from 'react'
 import StakingAssets from './StakingAssets';
+import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
 import './Staking.scss';
-// import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
 
 const Staking = () => {
     return (
         <Layout className="staking-component">
-            {/* <MigrationModalToggle /> */}
+            <MigrationModalToggle />
             <Column>
                 <Row>
                     <Container title="Your staked assets">
