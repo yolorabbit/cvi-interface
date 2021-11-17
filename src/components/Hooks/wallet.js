@@ -83,7 +83,7 @@ export function useInactiveListener() {
       ethereum.on('connect', handleConnect)
       ethereum.on('chainChanged', handleChainChanged)
       ethereum.on('accountsChanged', handleAccountsChanged)
-      ethereum.on('networkChanged', handleNetworkChanged)
+      ethereum.on('chainChanged', handleNetworkChanged)
       ethereum.on('disconnect', handleDisconnect)
 
       return () => {
@@ -91,7 +91,7 @@ export function useInactiveListener() {
           ethereum.removeListener('connect', handleConnect)
           ethereum.removeListener('chainChanged', handleChainChanged)
           ethereum.removeListener('accountsChanged', handleAccountsChanged)
-          ethereum.removeListener('networkChanged', handleNetworkChanged)
+          ethereum.removeListener('chainChanged', handleNetworkChanged)
           ethereum.removeListener('disconnect', handleDisconnect)
         }
       }
