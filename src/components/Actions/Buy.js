@@ -94,18 +94,13 @@ const Buy = () => {
         }
     }, [activeVolInfo, activeToken, amount, getMaxAmount]);
 
-    const feesValidation = useCallback(async () => {
+    const openFeeWithSlippageIsValid = useCallback(async () => {
         let fees = await getPurchaseFees();
         if(fees === "N/A" || purchaseFee === "N/A") return;
-  
         const currentFeeWithSlippage = toBN(purchaseFee.openFee)
             .add(toBN(toBNAmount(slippageTolerance, 7)));
-
-        console.log(currentFeeWithSlippage);
         const newFee = toBN(fees.openFee);
-        console.log(newFee);
-
-        return currentFeeWithSlippage.gte(newFee);
+        return currentFeeWithSlippage.gt(newFee)
         
     }, [getPurchaseFees, purchaseFee, slippageTolerance]);
 
@@ -134,15 +129,16 @@ const Buy = () => {
             return;
         }
 
-        const feeIsValid = await feesValidation();
+        const openFeeIsValid = await openFeeWithSlippageIsValid();
 
-        if(!feeIsValid) {
+        if(!openFeeIsValid) {
             setModalIsOpen(true);
             setErrorMessage(feesHighWarningMessage);
             return;
         }
 
         setProcessing(true);
+
         try {
             const isApprove = await approvalValidation();
             if(!isApprove) {
@@ -198,7 +194,7 @@ const Buy = () => {
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [approvalValidation, buy, dispatch, feesValidation, getMaxAvailableToOpen, isActiveInDOM, setAmount, token, updateAvailableBalance])
+    }, [approvalValidation, buy, dispatch, openFeeWithSlippageIsValid, getMaxAvailableToOpen, isActiveInDOM, setAmount, token, updateAvailableBalance])
 
     return useMemo(() => {
         return  (
