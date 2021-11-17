@@ -140,7 +140,7 @@ async function getCloseCollateralRatio(contracts, token, { tokenAmount, leverage
       .mul(precisionDecimals)
       .div(platformBalance.sub(amountWithoutFee));
       
-    return collateralRatio.lt(toBN("0")) ? toBN("0") : "0";
+    return collateralRatio.lt(toBN("0")) ? toBN("0") : collateralRatio;
   } catch(error) {
     console.log(error);
     return toBN("0");
