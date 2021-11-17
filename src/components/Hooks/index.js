@@ -132,7 +132,7 @@ export const useW3SDK = (filters) => {
       try {
         const w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
           provider, 
-          env: process.env.REACT_APP_ENVIRONMENT 
+          env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
         }).init(filters);
 
         setW3(w3Inst);
