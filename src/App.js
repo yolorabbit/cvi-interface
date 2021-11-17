@@ -20,7 +20,6 @@ import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 import Home from 'components/pages/Home';
 import RestrictedModal from 'components/Modals/RestrictedModal';
 import './App.scss';
-import MaintenanceModal from 'components/Modals/MaintenanceModal';
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -53,7 +52,7 @@ const App = () => {
         <NotificationList />
         <Web3ReactManager key={selectedNetwork}>
           <ContractsContext>
-            <Routes selectedNetwork={selectedNetwork} />
+            <Routes />
           </ContractsContext>
         </Web3ReactManager>
       </div>
@@ -65,15 +64,12 @@ const App = () => {
 export default App;
 
 
-const Routes = ({ selectedNetwork }
-) => {
+const Routes = () => {
   useSubscribe();
- 
   return useMemo(() => {
     return <> 
       <Router>
         <Navbar />
-        <MaintenanceModal selectedNetwork={selectedNetwork} />
         <RestrictedModal />
         <Switch>
           <Route path={config.routes.staking.path} component={Staking} />
