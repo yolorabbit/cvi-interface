@@ -301,18 +301,6 @@ const stakingConfig = {
       action: ""
     },
   },
-  tableSubHeaders: {
-    [stakingViews["available-to-stake"]]: {
-      [chainNames.Ethereum]: {
-        0: "Platform tokens", // 0 - index to add the sub header
-        4: "Liquidity mining"
-      },
-      [chainNames.Matic]: {
-        0: "Platform tokens", // 0 - index to add the sub header
-        3: "Liquidity mining"
-      }
-    }
-  },
   actionsConfig: {
     "unstake": {
         key: "unstake",

@@ -3,7 +3,7 @@ import useAssets from 'components/Hooks/useAssets';
 import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
-import stakingConfig, { stakingViews } from 'config/stakingConfig';
+import { stakingProtocols, stakingViews } from 'config/stakingConfig';
 import { delay } from 'lodash';
 import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux';
@@ -15,6 +15,12 @@ const StakingAssets = ({type}) => {
     const { selectedNetwork } = useSelector(({app}) => app);
 
     return useMemo(() => {
+        const tableLpTokensSubHeaderPosition = filteredAssets?.filter(({protocol}) => protocol === stakingProtocols.platform)?.length;
+        const tableSubHeaders = {
+            0: "Platform tokens",
+            [tableLpTokensSubHeaderPosition]: "Liquidity mining"
+        }
+
         return (
             <div className="staked-assets-component">
                 <DataController
@@ -22,7 +28,7 @@ const StakingAssets = ({type}) => {
                     data={filteredAssets} 
                     showPaginator={type === stakingViews.staked} 
                     authGuard={type === stakingViews.staked}
-                    subHeaders={stakingConfig.tableSubHeaders?.[type]?.[selectedNetwork]}
+                    subHeaders={tableLpTokensSubHeaderPosition && tableSubHeaders}
                     cb={()=>delay(()=>forceUpdate(!update),5000)}
                 >
                     <DataView />
