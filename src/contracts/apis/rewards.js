@@ -12,7 +12,7 @@ async function getUnClaimedPositionUnits(rewards, account, token, {timestamp, po
   try {
     if(token.type === "v3") {
       const claimedPositionUnits = await rewards.methods.claimedPositionUnits(account, toBN(String(timestamp)).div(toBN(String(DAY)))).call();
-      return toBN(positionUnitsAmount).sub(toBN(claimedPositionUnits));
+      return BN.min(toBN(positionUnitsAmount), toBN(positionUnitsAmount).sub(toBN(claimedPositionUnits)));
     }
     return await rewards.methods.unclaimedPositionUnits(account).call();
   } catch(error) {
@@ -20,18 +20,34 @@ async function getUnClaimedPositionUnits(rewards, account, token, {timestamp, po
   }
 }
 
+async function getClaimablePositionUnitsV3(platform, rewards, account, token) {
+  let { positionUnitsAmount, originalCreationTimestamp, leverage } = await platform.methods.positions(account).call();
+  positionUnitsAmount = leverage ? toBN(positionUnitsAmount).div(toBN(leverage)).toString() : positionUnitsAmount;
+  let unClaimedPositionUnitsAmount = await getUnClaimedPositionUnits(rewards, account, token, {timestamp: originalCreationTimestamp, positionUnitsAmount});
+  return { positionUnitsAmount: unClaimedPositionUnitsAmount, creationTimestamp: originalCreationTimestamp };
+}
+
+async function getClaimablePositionUnitsV1(platform, rewards, account) {
+  let { positionUnitsAmount, creationTimestamp, leverage } = await platform.methods.positions(account).call();
+  positionUnitsAmount = leverage ? toBN(positionUnitsAmount).div(toBN(leverage)).toString() : positionUnitsAmount;
+  const unclaimedPositionUnits = await rewards.methods.unclaimedPositionUnits(account).call();
+  positionUnitsAmount = Math.min(positionUnitsAmount, unclaimedPositionUnits);
+  return { positionUnitsAmount, creationTimestamp };
+}
 
 async function getClaimablePositionUnits(platform, rewards, account, token) {
-  let { positionUnitsAmount, creationTimestamp, originalCreationTimestamp, leverage } = await platform.methods.positions(account).call();
-  positionUnitsAmount = leverage ? toBN(positionUnitsAmount).div(toBN(leverage)).toString() : positionUnitsAmount;
-  const timestamp = token.type === "v3" ? originalCreationTimestamp : creationTimestamp;
-  const unClaimedPositionUnitsAmount = await getUnClaimedPositionUnits(rewards, account, token, {timestamp, positionUnitsAmount});
-  return { positionUnitsAmount: unClaimedPositionUnitsAmount, creationTimestamp };
+  if(token.type === "v3") {
+    const {positionUnitsAmount, creationTimestamp} = await getClaimablePositionUnitsV3(platform, rewards, account, token);
+    return {positionUnitsAmount, creationTimestamp}
+  }
+  const {positionUnitsAmount, creationTimestamp} = await getClaimablePositionUnitsV1(platform, rewards, account, token);
+  return {positionUnitsAmount, creationTimestamp}
 }
+
 
 export async function getClaimableReward(contracts, token, { account }) {
   const PositionRewardsHelper = await getPositionRewardsContract(token);
-  let { positionUnitsAmount, creationTimestamp } = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account, token);
+  let {positionUnitsAmount, creationTimestamp} = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account, token);
   const units = toBN(toFixed(positionUnitsAmount.toString()));
 
   const currentClaimableRewards = units.gt(toBN(0)) ? 
@@ -50,7 +66,7 @@ export async function getClaimableReward(contracts, token, { account }) {
 
 }
 
-async function calculatePositionRewardMinMax(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0, index = 0}) {
+async function calculatePositionRewardMinMax(contracts, token, {account, tokenAmount, leverage = 1, openTime = 0 }) {
   // const PositionRewardsHelper = getPositionRewardsContract("PositionRewardsHelper", isEth);
   let fees = await getOpenPositionFee(contracts, token, {tokenAmount, leverage});
   const { getCVILatestRoundData  } = contracts[token.rel.oracle].methods || {};
@@ -59,15 +75,15 @@ async function calculatePositionRewardMinMax(contracts, token, {account, tokenAm
   let currentReward = 0;
   try {
     let pos = await contracts[token.rel.platform].methods.positions(account).call();
-    const timestamp = token.type === "v3" ? pos.originalCreationTimestamp : pos.creationTimestamp;
-    const unclaimedPositionUnits = await getUnClaimedPositionUnits(contracts[token.rel.positionRewards], account, token, {timestamp, positionUnitsAmount: pos.positionUnitsAmount});
+    const unclaimedPositionUnits = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account, token);
     let min = BN.min(toBN(unclaimedPositionUnits), toBN(pos.positionUnitsAmount));
-    currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, 0).call();
+    currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, (token.type === "v3" || token.type === "usdc") ? openTime : 0).call();
     positionUnits = positionUnits.add(min);
   } catch (error) {
     console.log(error);
   }
   const reward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, openTime).call();
+
   return toBN(reward).sub(toBN(currentReward));
 }
 
