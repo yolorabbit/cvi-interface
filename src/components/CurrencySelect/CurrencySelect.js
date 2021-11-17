@@ -9,7 +9,10 @@ const CurrencySelect = ({selectedCurrency, setSelectedCurrency, activeVolIndex})
     const location = useLocation();
     const { selectedNetwork } = useSelector(({app}) => app);
     const tokens = platformConfig.tokens[selectedNetwork];
-    const filteredTokens = Object.values(tokens).filter(({key}) => !activeVolIndex || tokens[key]?.oracleId === activeVolIndex)
+    const filteredTokens = Object.values(tokens).filter(({key}) => {
+        if(tokens[key]?.migrated) return false;
+        return !activeVolIndex || tokens[key]?.oracleId === activeVolIndex;
+    })
     
     useEffect(() => {
         const getCurrencyQuery = new URLSearchParams(location?.search).get('currency');
