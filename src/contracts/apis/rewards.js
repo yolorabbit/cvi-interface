@@ -75,15 +75,16 @@ async function calculatePositionRewardMinMax(contracts, token, {account, tokenAm
   let currentReward = 0;
   try {
     let pos = await contracts[token.rel.platform].methods.positions(account).call();
-    const unclaimedPositionUnits = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account, token);
-    let min = BN.min(toBN(unclaimedPositionUnits), toBN(pos.positionUnitsAmount));
-    currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, (token.type === "v3" || token.type === "usdc") ? openTime : 0).call();
-    positionUnits = positionUnits.add(min);
+    if(pos.creationTimestamp !== "0" || pos.originalCreationTimestamp !== "0") {
+      const unclaimedPositionUnits = await getClaimablePositionUnits(contracts[token.rel.platform], contracts[token.rel.positionRewards], account, token);
+      let min = BN.min(toBN(unclaimedPositionUnits), toBN(pos.positionUnitsAmount));
+      currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, (token.type === "v3" || token.type === "usdc") ? openTime : 0).call();
+      positionUnits = positionUnits.add(min);
+    }
   } catch (error) {
     console.log(error);
   }
   const reward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, openTime).call();
-
   return toBN(reward).sub(toBN(currentReward));
 }
 
