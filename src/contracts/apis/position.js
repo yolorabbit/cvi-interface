@@ -119,21 +119,13 @@ async function getCloseCollateralRatio(contracts, token, { tokenAmount, leverage
     }
 
     const maxFeePercent = toBN(await contracts[token.rel.platform].methods.MAX_FEE_PERCENTAGE().call());
-    // console.log(`maxFeePercent ${maxFeePercent}`);
     const closeFeePercent = await contracts[token.rel.feesCalc].methods.closePositionFeePercent().call();
-    // console.log(`closeFeePercent ${closeFeePercent}`);
     const closePositionFee = tokenAmount.mul(toBN(leverage)).mul(toBN(closeFeePercent)).div(maxFeePercent);
-    // console.log(`closePositionFee ${closePositionFee}`);
     const amountWithoutFee = tokenAmount.sub(closePositionFee);
-    // console.log(`amountWithoutFee: ${amountWithoutFee}`);
     let maxPositionUnitsAmount = amountWithoutFee.mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue));
-    // console.log(`maxPositionUnitsAmount: ${maxPositionUnitsAmount}`);
     let minPositionUnitsAmount = (token.type === "usdc" || token.type === "v3") ? maxPositionUnitsAmount : maxPositionUnitsAmount.mul(toBN(90)).div(toBN(100));
-    // console.log(`minPositionUnitsAmount: ${minPositionUnitsAmount}`);
     let totalPositionUnitsAmount = toBN(await contracts[token.rel.platform].methods.totalPositionUnitsAmount().call());
-    // console.log(`totalPositionUnitsAmount: ${totalPositionUnitsAmount}`);
     let precisionDecimals = toBN(await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call());
-    // console.log(`${precisionDecimals} precisionDecimals`);
 
     let collateralRatio = toBN(totalPositionUnitsAmount
       .sub(minPositionUnitsAmount))
