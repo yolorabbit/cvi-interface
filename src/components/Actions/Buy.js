@@ -96,13 +96,23 @@ const Buy = () => {
 
     const feesValidation = useCallback(async () => {
         let fees = await getPurchaseFees();
-        return fees !== "N/A" && purchaseFee !== "N/A" ? toBN(fees.buyingPremiumFeePercent).cmp(toBN(purchaseFee.buyingPremiumFeePercent)) !== 1 : true;
-    }, [purchaseFee, getPurchaseFees])
+        if(fees === "N/A" || purchaseFee === "N/A") return;
+  
+        const currentFeeWithSlippage = toBN(purchaseFee.openFee)
+            .add(toBN(toBNAmount(slippageTolerance, 7)));
+
+        console.log(currentFeeWithSlippage);
+        const newFee = toBN(fees.openFee);
+        console.log(newFee);
+
+        return currentFeeWithSlippage.gte(newFee);
+        
+    }, [getPurchaseFees, purchaseFee, slippageTolerance]);
 
     const buy = useCallback(async () => {
         const _contract = getContract(activeToken.rel.platform);
         const _leverage = !leverage ? "1" : leverage;
-        const _feesWithSlippage =  String(Number(purchaseFee?.buyingPremiumFeePercent || 0) + Number((slippageTolerance * 100) || 0));
+        const _feesWithSlippage = String(Number(purchaseFee?.buyingPremiumFeePercent || 0) + Number((slippageTolerance * 100) || 0));
 
         if (activeToken.type === "eth") {
             return await _contract.methods.openPositionETH(MAX_CVI_VALUE, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount, ...gas });
