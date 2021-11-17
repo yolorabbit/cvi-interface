@@ -53,8 +53,7 @@ const App = () => {
         <NotificationList />
         <Web3ReactManager key={selectedNetwork}>
           <ContractsContext>
-            <MaintenanceModal selectedNetwork={selectedNetwork} />
-            <Routes />
+            <Routes selectedNetwork={selectedNetwork} />
           </ContractsContext>
         </Web3ReactManager>
       </div>
@@ -66,13 +65,15 @@ const App = () => {
 export default App;
 
 
-const Routes = () => {
+const Routes = ({ selectedNetwork }
+) => {
   useSubscribe();
  
   return useMemo(() => {
     return <> 
       <Router>
         <Navbar />
+        <MaintenanceModal selectedNetwork={selectedNetwork} />
         <RestrictedModal />
         <Switch>
           <Route path={config.routes.staking.path} component={Staking} />

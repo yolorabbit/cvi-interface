@@ -1,13 +1,22 @@
 import Modal from 'components/Modal/Modal';
 import React, { useEffect, useState } from 'react'
+import config from 'config/config';
 import './MaintenanceModal.scss';
+import { useLocation } from 'react-router-dom';
 
 const MaintenanceModal = ({ selectedNetwork }) => {
     const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
+    const location = useLocation();
+
+    const restrictedRoutesPathFiltered = Object.values(config.routes)
+    .filter(({restricted}) => restricted)
+    .map(({path}) => path.replace('/', ''));
+
+    const isRestrictedRoute = () => restrictedRoutesPathFiltered.some(path => location.pathname.includes(path));
 
     useEffect(() => {
-        setShowMaintenanceModal(selectedNetwork.toLowerCase() === 'matic')
-    }, [selectedNetwork])
+        setShowMaintenanceModal(isRestrictedRoute() && selectedNetwork.toLowerCase() === 'matic')
+    }, [selectedNetwork, location?.pathname])
 
     return showMaintenanceModal ? (
         <Modal className="maintenance-modal" clickOutsideDisabled>
