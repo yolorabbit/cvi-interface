@@ -161,7 +161,7 @@ const useHistoryEvents = () => {
     }, [mapper, opt, subs])
 
     useEffect(() => {
-        if(isMount) return;
+        // if(isMount) return;
         if(!selectedNetwork || !contracts || !account || typeof getEventsFast !== 'function') return;
         historyRef.current = setTimeout(() => {
             Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon).forEach(token => {
