@@ -118,7 +118,7 @@ export const getGraphEndpoint = async (type = "platform", token = "usdt") => {
         if(chainId === 137 || chainId === 31338) { // use ony for matic 
           return graphEndpoints[process.env.REACT_APP_ENVIRONMENT][chainId][token][type];
         }
-
+        if(token === 'usdc') return 'https://api.thegraph.com/subgraphs/name/vladi-coti/cvol-ethereum-usdc';
         return graphEndpoints[process.env.REACT_APP_ENVIRONMENT][chainId]; // in ethereum the graph endpoint fetch both usdt and eth data, instead of matic that there is a graph instance for each token seperated.
     } catch(error) {
         console.log(error);
