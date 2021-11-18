@@ -10,7 +10,6 @@ import { contractsContext } from 'contracts/ContractContext';
 import { setData } from 'store/actions/wallet';
 import config from 'config/config';
 import { chainNames } from 'connectors';
-import { useIsMount } from '.';
 import Contract from 'web3-eth-contract';
 import { useWeb3React } from '@web3-react/core';
 
@@ -47,7 +46,6 @@ const useHistoryEvents = () => {
     let fromWei = library?.utils?.fromWei;
     let getBlock = library?.eth?.getBlock;
     const historyRef = useRef();
-    const isMount = useIsMount();
 
     const opt = useMemo(() => ({
         filter: { account },
