@@ -201,7 +201,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       // console.log(tokenName, protocol+" apy: ", apy);
       cb(() => setStakedData((prev)=> ({
         ...prev,
-        apy: apy.map((value)=>value ? `${customFixed(value, 2)}%` : "N/A")
+        apy: apy.map((value)=> value ? `${customFixed(value, 2)}%` : "N/A")
       })));
     }catch(error) {
       console.log("geyAPYLM: ", error)

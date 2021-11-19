@@ -118,6 +118,7 @@ const stakingApi = {
     },
     getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData, token) => {
         try {
+          if(token.migrated) return ["0", "0", "0"]; // 
           let rate = await stakingRewards.methods.rewardRate().call();
           let total = await stakingRewards.methods.totalSupply().call();
           let dailyReward = toBN(DAY).mul(toBN(rate));

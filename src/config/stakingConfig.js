@@ -26,6 +26,7 @@ const stakingConfig = {
       [stakingProtocols.platform]: {
         "cvi-usdt-lp": {
           disable: config.isMainnet,
+          migrated: true,
           key: "cvi-usdt-lp",
           label: "CVI-USDT LP",
           address: "0xe0437BeB5bb7Cf980e90983f6029033d710bd1da",
@@ -185,6 +186,7 @@ const stakingConfig = {
       [stakingProtocols.platform]: {
         "cvi-usdt-lp": {
           disable: config.isMainnet,
+          migrated: true,
           key: "cvi-usdt-lp",
           label: "CVI-USDT LP",
           address: "0x88D01eF3a4D586D5e4ce30357ec57B073D45ff9d",
