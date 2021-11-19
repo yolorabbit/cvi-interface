@@ -115,13 +115,12 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     value={activeVolInfo?.index} 
                 />
 
-                <Stat 
+                {(activeToken.type === "v3" || activeToken.type === "usdc") && <Stat 
                     className="low-priority large-value"
                     title={config.statisticsDetails.slippageTolerance.title} 
                     value={slippageTolerance || "0"} 
                     format={`${slippageTolerance || "0"}%`}
-                />
-                {/* TODO: Add Dynamic Value to comment */}
+                />}
             </>
         )
     }, [purchaseFee, tokenAmount, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeVolInfo, amount, selectedCurrency, leverage, actLowRules, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolIndex, slippageTolerance]) 
