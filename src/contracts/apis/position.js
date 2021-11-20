@@ -138,12 +138,12 @@ async function getCloseCollateralRatio(contracts, token, { tokenAmount, leverage
   }
 }
 
-export async function getClosingPremiumFee(contracts, token, { tokenAmount, cviValue, library }) {
+export async function getClosingPremiumFee(contracts, token, { tokenAmount, cviValue, leverage, library }) {
   try {
     if(!cviValue) {
       cviValue =  await getCviValue(contracts[token.rel.oracle]);
     }
-    const closeCollateralRatio = await getCloseCollateralRatio(contracts, token, { tokenAmount, cviValue, library });
+    const closeCollateralRatio = await getCloseCollateralRatio(contracts, token, { tokenAmount, cviValue, leverage, library });
     const lastCollateralRatio = await web3Api.getCollateralRatio(contracts, token, { library });
 
     let _closingPremiumFee = await contracts[token.rel.feesCalc].methods
@@ -176,7 +176,7 @@ export async function getOpenPositionFee(contracts, token, { leverage = 1, token
   }
 }
 
-export async function getClosePositionFee(contracts, token, { tokenAmount, account, cviValue }) {
+export async function getClosePositionFee(contracts, token, { tokenAmount, leverage = 1, account, cviValue }) {
   let pos = await contracts[token.rel.platform].methods.positions(account).call();
   if (toBN(pos.positionUnitsAmount).isZero()) {
     return toBN(0);
@@ -186,10 +186,9 @@ export async function getClosePositionFee(contracts, token, { tokenAmount, accou
   let closeFeePrecent = toBN(await contracts[token.rel.feesCalc].methods.calculateClosePositionFeePercent(...params).call());
   let maxFeePercent = toBN(await contracts[token.rel.platform].methods.MAX_FEE_PERCENTAGE().call());
 
-  const closePremiumFee = await getClosingPremiumFee(contracts, token, { tokenAmount, cviValue });
-  const closeFeePrecentAmount = closeFeePrecent?.isZero() ? toBN("0") : toBN(tokenAmount).mul(closeFeePrecent).div(maxFeePercent);
+  const closePremiumFee = await getClosingPremiumFee(contracts, token, { tokenAmount, leverage, cviValue });
   const closePremiumFeeAmount = closePremiumFee?.isZero() ? toBN("0") : toBN(tokenAmount).mul(closePremiumFee).div(maxFeePercent);
-  
+  const closeFeePrecentAmount = closeFeePrecent?.isZero() ? toBN("0") : toBN(tokenAmount).mul(closeFeePrecent).div(maxFeePercent);
   return closeFeePrecentAmount.add(closePremiumFeeAmount);
 }
 

@@ -31,7 +31,7 @@ const Sell = () => {
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lockedTime = useIsLockedTime();
     const [sellAllModal, setSellAllModal] = useState(false);
-    const sellFeePayload = useMemo(() => ({ tokenAmount, account } ), [tokenAmount, account]);
+    const sellFeePayload = useMemo(() => ({ tokenAmount, account, leverage } ), [tokenAmount, account, leverage]);
     const [sellFee, updateSellFee] = useWeb3Api("getClosePositionFee", token, sellFeePayload, { validAmount: true});
     const [modalIsOpen, setModalIsOpen] = useState();
     const { selectedNetwork } = useSelector(({app}) => app);
