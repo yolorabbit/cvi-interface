@@ -123,7 +123,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                 />}
             </>
         )
-    }, [purchaseFee, tokenAmount, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeVolInfo, amount, selectedCurrency, leverage, actLowRules, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolIndex, slippageTolerance]) 
+    }, [purchaseFee, tokenAmount, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeToken.type, amount, selectedCurrency, leverage, actLowRules, activeVolIndex, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolInfo?.index, slippageTolerance]) 
    
 }
 

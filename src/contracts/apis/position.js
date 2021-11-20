@@ -46,9 +46,8 @@ async function getBuyCollateralRatio(platform, feesCalc, tokenData, openTokenAmo
     balance = toBN(await getBalance(platform._address, tokenContract && type !== "eth" ? tokenContract._address : undefined));
   }
 
-  if (!balance.gt(toBN(0))) {
-    return toBN(0);
-  }
+  if (!balance.gt(toBN(0))) return toBN(0);
+  
 
   let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());
   let openFeePrecent;
@@ -74,7 +73,7 @@ async function getBuyCollateralRatio(platform, feesCalc, tokenData, openTokenAmo
   let collateralRatio = toBN(totalPositionUnitsAmount
     .add(minPositionUnitsAmount))
     .mul(precisionDecimals)
-    .div(balance.add(amountWithoutFee));
+    .div(balance.add(amountWithoutFee.mul(toBN(leverage))))
 
   // console.log("collateral ratio", collateralRatio.toString());
   return collateralRatio;
@@ -130,7 +129,7 @@ async function getCloseCollateralRatio(contracts, token, { tokenAmount, leverage
     let collateralRatio = toBN(totalPositionUnitsAmount
       .sub(minPositionUnitsAmount))
       .mul(precisionDecimals)
-      .div(platformBalance.sub(amountWithoutFee));
+      .div(platformBalance.sub(amountWithoutFee.mul(toBN(leverage))));
       
     return collateralRatio.lt(toBN("0")) ? toBN("0") : collateralRatio;
   } catch(error) {
