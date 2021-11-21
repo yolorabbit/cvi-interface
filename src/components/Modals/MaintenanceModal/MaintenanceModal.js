@@ -2,7 +2,6 @@ import Modal from 'components/Modal/Modal';
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import config from 'config/config';
-import platformConfig from 'config/platformConfig';
 import './MaintenanceModal.scss';
 import { useLocation } from 'react-router-dom';
 
@@ -16,7 +15,7 @@ const MaintenanceModal = () => {
     .map(({path}) => path.replace('/', ''));
 
     const isRestrictedRoute = restrictedRoutesPathFiltered.some(path => location.pathname.includes(path));
-    const isMaintenanceNetwork = platformConfig.maintenanceNetworks[selectedNetwork]
+    const isMaintenanceNetwork = config.maintenanceNetworks[selectedNetwork]
 
     useEffect(() => {
         setShowMaintenanceModal(isRestrictedRoute && isMaintenanceNetwork)

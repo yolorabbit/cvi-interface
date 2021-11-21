@@ -6,6 +6,10 @@ const config = {
     withdraw: 'lpsLockupPeriod',
     unstake: 'stakeLockupTime'
   },
+  maintenanceNetworks: {
+    [chainNames.Ethereum]: false,
+    [chainNames.Matic]: false,
+  },
   contractsMapped: {
     [chainNames.Matic]: { 
       "PositionRewards": "PositionRewardsV3",
