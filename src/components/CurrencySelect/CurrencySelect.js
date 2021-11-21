@@ -41,7 +41,7 @@ const CurrencySelect = ({selectedCurrency, setSelectedCurrency, activeVolIndex})
                         key={token.key} 
                         state={selectedCurrency === token.key ? 'selected' : ''} 
                         soon={token.soon} 
-                        name={token.key?.toUpperCase()} 
+                        name={token.name?.toUpperCase()} 
                         symbol={token.key} 
                         setSelectedCurrency={setSelectedCurrency}
                 />)}

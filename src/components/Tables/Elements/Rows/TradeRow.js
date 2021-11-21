@@ -51,7 +51,7 @@ const TradeRow = ({token, isHeader, className}) => {
                 <RowItem content={<Value 
                     coin={token.key}
                     text={positionValue} 
-                    subText={`${token.key.toUpperCase()}`} 
+                    subText={`${token.name.toUpperCase()}`} 
                     format={customFixedTokenValue(positionValue?.toString(), token.fixedDecimals, token.decimals)}
                 /> } />
             </>}
@@ -66,7 +66,7 @@ const TradeRow = ({token, isHeader, className}) => {
                 tooltip={header["P&L"].tooltip}
                 content={<Pnl 
                     value={positionPnlData} 
-                    token={`${token.key.toUpperCase()}`} 
+                    token={`${token.name.toUpperCase()}`} 
                     format={customFixedTokenValue(!Number(positionPnlData?.amount) ? "0" :  positionPnlData?.amount, token.fixedDecimals, token.decimals)}
                     /> } 
             />
@@ -86,7 +86,7 @@ const TradeRow = ({token, isHeader, className}) => {
             <RowItem content={<Coin token={token.key} />} />
             <RowItem content={<Value 
                 text={positionValue} 
-                subText={`${token.key.toUpperCase()}`} 
+                subText={`${token.name.toUpperCase()}`} 
                 format={customFixedTokenValue(positionValue?.toString(), token.fixedDecimals, token.decimals)}
             />}/>
 

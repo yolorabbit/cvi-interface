@@ -27,8 +27,8 @@ export const getTokenData = async (contract, protocol) => {
     let tokenData = findTokenByAddress(tokensJsonConfig, address); 
 
     if(tokenData) {
-        const { decimals, key, address} = tokenData;
-        return { address, symbol: key === "eth" ? "WETH" : key?.toUpperCase(), decimals, contract };
+        const { decimals, key, name, address} = tokenData;
+        return { address, symbol: name === "eth" ? "WETH" : name?.toUpperCase() || key?.toUpperCase(), decimals, contract };
     }
     
     const symbol = await contract.methods.symbol().call();
@@ -117,7 +117,7 @@ const getFeesCollectedFromApi = async (USDTData, tokensData, chainName) => {
 export async function getFeesCollected(USDTData, tokensData) {
     const chainName = await getChainName();
     if(chainName === chainNames.Matic) {
-        return await getFeesCollectedFromApi(USDTData, tokensData, chainName)
+        return await getFeesCollectedFromApi(USDTData, tokensData, chainName);
     } else {
         return await getFeesCollectedFromGraph(USDTData, tokensData);
     }
@@ -128,20 +128,20 @@ const web3Api = {
         try {
             const USDTData = await getTokenData(contracts["USDT"]);
             
-            const promiseList = tokens.map(async ({rel: { platform, contractKey}, key, type, fixedDecimals}) => {
+            const promiseList = tokens.map(async ({rel: { platform, contractKey}, name, type, fixedDecimals}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
 
                 let totalBalance = toBN(
-                    key === 'eth' ? await library.eth.getBalance(contracts[platform]._address) : 
-                    key === "usdc" || type === "v3" ? await toBN(await contracts[platform].methods.totalLeveragedTokensAmount().call()) :
+                    name === 'eth' ? await library.eth.getBalance(contracts[platform]._address) : 
+                    name === "usdc" || type === "v3" ? await toBN(await contracts[platform].methods.totalLeveragedTokensAmount().call()) :
                     await contracts[contractKey].methods.balanceOf(contracts[platform]._address).call()
                 )
 
                 const amountConverted = await convert(totalBalance, tokenData, USDTData)
                 return [
-                    `${customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), fixedDecimals)} (${key.toUpperCase()} pool)`, 
+                    `${customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), fixedDecimals)} (${name.toUpperCase()} pool)`, 
                     amountConverted,
-                    key
+                    name
                 ]
             });
 
@@ -158,7 +158,7 @@ const web3Api = {
         try {
             const USDTData = await getTokenData(contracts["USDT"]);
             
-            const promiseList = tokens.map(async ({rel: { platform, contractKey}, key, type, oracleId}) => {
+            const promiseList = tokens.map(async ({rel: { platform, contractKey}, name, type, oracleId}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
                 let value;
                 if(type === "v3" || type === "usdc") {
@@ -168,7 +168,7 @@ const web3Api = {
                 }
                 const amountConverted = await convert(toBN(value), tokenData, USDTData);
                 const amountFormatted = commaFormatted(customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), 2))
-                return [`${amountFormatted} (${key.toUpperCase()} pool)`, amountConverted, key, oracleId];
+                return [`${amountFormatted} (${name.toUpperCase()} pool)`, amountConverted, name, oracleId];
             });
 
             const result = await (await Promise.allSettled(promiseList))
@@ -230,7 +230,7 @@ const web3Api = {
             let platformBalance;
             if(token.key === "eth") {
                 platformBalance = toBN(await library.eth.getBalance(contracts[token.rel.platform].options.address));
-            } else if(token.key === "usdc" || token.type === "v3") {
+            } else if(token.type === "usdc" || token.type === "v3") {
                 platformBalance = toBN(await contracts[token.rel.platform].methods.totalLeveragedTokensAmount().call());
             } else {
                 platformBalance = toBN(await contracts[token.rel.contractKey].methods.balanceOf(contracts[token.rel.platform].options.address).call());

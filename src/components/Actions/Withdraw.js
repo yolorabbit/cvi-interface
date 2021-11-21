@@ -41,8 +41,8 @@ const Withdraw = () => {
 
     const getMaxAmount = async (index) => {
         let totalBalance = toBN(
-            token === 'eth' ? await library.eth.getBalance(contracts[activeToken.rel.platform]._address) : 
-            token === "usdc" ? await toBN(await contracts[activeToken.rel.platform].methods.totalLeveragedTokensAmount().call()) :
+            activeToken.key === 'eth' ? await library.eth.getBalance(contracts[activeToken.rel.platform]._address) : 
+            activeToken.type === "v3" ? await toBN(await contracts[activeToken.rel.platform].methods.totalLeveragedTokensAmount().call()) :
             await contracts[activeToken.rel.contractKey].methods.balanceOf(contracts[activeToken.rel.platform]._address).call()
         )
         let totalUnits = await contracts[activeToken.rel.platform].methods.totalPositionUnitsAmount().call();
@@ -79,7 +79,7 @@ const Withdraw = () => {
             const [allowToWithdraw, max_amount] = await getMaxAvailableToWithdraw();
             
             if(!allowToWithdraw) {
-                setErrorMessage(`Part of the liquidity you've provided is used as collateral and can't be currently withdrawn. Please select an amount less than ${commaFormatted(max_amount)} ${token.toUpperCase()} or try again later.`)
+                setErrorMessage(`Part of the liquidity you've provided is used as collateral and can't be currently withdrawn. Please select an amount less than ${commaFormatted(max_amount)} ${activeToken.name.toUpperCase()} or try again later.`)
                 return;
             }
 

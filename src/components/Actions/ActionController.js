@@ -64,7 +64,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             view={view}
             protocol={protocol} 
           />         
-          {(type === platformConfig.actionsConfig.sell.key && token === 'usdc') ? <AdvancedOptions 
+          {(type === platformConfig.actionsConfig.sell.key) ? <AdvancedOptions 
             slippageTolerance={slippageTolerance} 
             setSlippageTolerance={setSlippageTolerance} 
           /> : <br/>}

@@ -62,7 +62,7 @@ export const HighSellFee = ({sellFee, sellFeeAmount}) => {
             <div className={`sell-info-component__row ${sellFeeWarning ? 'low' : ''}`}>
                 <span>Sell fee</span>
                 <DataState value={sellFee}>
-                    <span>{commaFormatted(sellFeeAmount)} {activeToken?.key?.toUpperCase()}</span>
+                    <span>{commaFormatted(sellFeeAmount)} {activeToken?.name?.toUpperCase()}</span>
                 </DataState>
             </div>
             {sellFeeWarning && <p className="sell-info-component__warning">{platformConfig.sellFeeWarningText}</p> }

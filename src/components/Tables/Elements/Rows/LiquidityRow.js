@@ -12,25 +12,25 @@ import { useWeb3Api } from "contracts/useWeb3Api";
 import MigrateAction from "components/Actions/MigrateAction";
 
 const LiquidityRow = ({token, isHeader, className}) => {
-    const { key: tokenName } = token;
+    const { key: tokenKey, name: tokenName } = token;
     const { account } = useActiveWeb3React();
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const [amount, setAmount] = useState("");
     const header = useMemo(() => platformConfig.headers[activeViews["view-liquidity"]][platformConfig.tabs["view-liquidity"].liquidity], []);
     //const availableBalancePayload = useMemo(() => ({account, type: "withdraw", withStakeAmount: true}), [account]);
-    const liquidityShareData = token.data; //useWeb3Api("getAvailableBalance", tokenName, availableBalancePayload, {errorValue: "0", updateOn: "liquidities"});
+    const liquidityShareData = token.data; //useWeb3Api("getAvailableBalance", tokenKey, availableBalancePayload, {errorValue: "0", updateOn: "liquidities"});
 
     const liquidityPnlPayload = useMemo(() => ({account}), [account]);
-    const [liquidityPnl] = useWeb3Api("getLiquidityPNL", tokenName, liquidityPnlPayload, {errorValue: "0", updateOn: "liquidities"});
+    const [liquidityPnl] = useWeb3Api("getLiquidityPNL", tokenKey, liquidityPnlPayload, {errorValue: "0", updateOn: "liquidities"});
     
-    const [poolSize] = useWeb3Api("getPoolSize", tokenName, undefined, {updateOn: "liquidities"});
+    const [poolSize] = useWeb3Api("getPoolSize", tokenKey, undefined, {updateOn: "liquidities"});
 
     const withdrawController = useMemo(() => {
         return <ActionController 
             amountLabel="Select amount to withdraw"
             isModal 
-            token={tokenName}
+            token={tokenKey}
             amount={amount}
             setAmount={setAmount}
             type={platformConfig.actionsConfig.withdraw.key}
@@ -38,7 +38,7 @@ const LiquidityRow = ({token, isHeader, className}) => {
                 tokenAmount: liquidityShareData?.maxTokenBalance ?? "0"
             }}
         />
-    }, [tokenName, amount, liquidityShareData]);
+    }, [tokenKey, amount, liquidityShareData]);
 
     const RowData = useMemo(() => (
         <> 
@@ -89,7 +89,7 @@ const LiquidityRow = ({token, isHeader, className}) => {
 
     if(isHeader) {
         return <>
-            <RowItem content={<Coin token={tokenName} />} />
+            <RowItem content={<Coin token={tokenKey} />} />
             <RowItem content={<Value 
                 text={liquidityShareData} 
                 subText={`${tokenName.toUpperCase()} (${customFixed(liquidityShareData?.poolShare, 2) ?? '0'}%)`} 

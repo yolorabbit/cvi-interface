@@ -18,7 +18,7 @@ const Form = ({activeTab}) => {
     const { account } = useActiveWeb3React();
     const { activeView } = useContext(platformViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
-    const [selectedCurrency, setSelectedCurrency] = useState(platformConfig.tokens[selectedNetwork]?.['usdc-cvi'].key);
+    const [selectedCurrency, setSelectedCurrency] = useState(platformConfig.tokens[selectedNetwork]?.['usdc-cvol'].key);
     const tokenLeverageList = platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage;
     const [leverage, setLeverage] = useState(tokenLeverageList?.[0]);
     const [amount, setAmount] = useState("");

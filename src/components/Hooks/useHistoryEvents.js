@@ -71,9 +71,9 @@ const useHistoryEvents = () => {
                     index: activeToken.oracleId.toUpperCase(),
                     value: cviValue / 100,
                     leverage: `X${leverage ?? '1'}`,
-                    amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`,
-                    fees: `${commaFormatted(customFixed(fees, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`,
-                    netAmount: `${commaFormatted(customFixed(netAmount, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`
+                    amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.name.toUpperCase()}`,
+                    fees: `${commaFormatted(customFixed(fees, activeToken.fixedDecimals))} ${activeToken.name.toUpperCase()}`,
+                    netAmount: `${commaFormatted(customFixed(netAmount, activeToken.fixedDecimals))} ${activeToken.name.toUpperCase()}`
                 });
             },
             liquidities: async function(event, type, activeToken) {
@@ -88,7 +88,7 @@ const useHistoryEvents = () => {
                     timestamp: actionDate,
                     type,
                     index: activeToken.oracleId.toUpperCase(),
-                    amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.key.toUpperCase()}`,
+                    amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.name.toUpperCase()}`,
                 });
             }
         }

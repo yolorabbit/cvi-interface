@@ -43,17 +43,19 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", selectedCurrency);
     const purchaseFeePayload = useMemo(() => ({ tokenAmount, leverage } ), [tokenAmount, leverage]);
-
+    
     const [purchaseFee] = useWeb3Api("getOpenPositionFee", selectedCurrency, purchaseFeePayload, { validAmount: true });
-
+    
     const positionRewardsPayload = useMemo(() => ({ tokenAmount, account, leverage} ), [leverage, tokenAmount, account]);
     const [positionRewards] = useWeb3Api("calculatePositionReward", selectedCurrency, positionRewardsPayload, { validAmount: true });
-
+    
     const currentFundingFeePayload = useMemo(() => ({account, tokenAmount, leverage, purchaseFee}), [account, leverage, tokenAmount, purchaseFee]);
     const [currentFundingFee] = useWeb3Api("getFundingFeePerTimePeriod", selectedCurrency, currentFundingFeePayload, { validAmount: true });
     const actLowRules = !(activeToken.key === "usdt" && selectedNetwork === chainNames.Ethereum);
-
+    
+    
     return useMemo(() => {
+        const tokenName = activeToken?.name?.toUpperCase();
         const receiveAmount = purchaseFee === "N/A" ? "N/A" : purchaseFee && toDisplayAmount(tokenAmount.sub(toBN(purchaseFee?.openFee?.toString())), activeToken.decimals);
 
         return  (
@@ -62,7 +64,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     className="bold amount"
                     title="Buy amount" 
                     value={!amount ? "0" : amount} 
-                    _suffix={selectedCurrency} 
+                    _suffix={tokenName} 
                 />
 
                 {leverage && <Stat className="large-value" title="Leverage" value={leverage} prefix="x" /> }
@@ -71,7 +73,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     name="purchaseFee"
                     actLowRules={actLowRules}
                     value={purchaseFee === "N/A" || purchaseFee === "0" ? purchaseFee : purchaseFee?.openFee?.toString()} 
-                    _suffix={selectedCurrency}
+                    _suffix={tokenName}
                     className="large-value"
                     format={toDisplayAmount(purchaseFee === "0" ? "0" : purchaseFee?.openFee?.toString(), activeToken.decimals)}
                     actEthvol={activeVolIndex === config.volatilityKey.ethvol}
@@ -81,7 +83,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     className="large-value"
                     title="Position value" 
                     value={receiveAmount === "N/A" ? "N/A" : receiveAmount} 
-                    _suffix={selectedCurrency} 
+                    _suffix={tokenName} 
                 />
 
                 <Stat 
@@ -105,7 +107,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     name="fundingFee"
                     value={currentFundingFee === "N/A" ? "N/A" : currentFundingFee?.toString()} 
                     format={currentFundingFee === "N/A" ? "N/A" : customFixed(customFixedTokenValue(currentFundingFee?.toString() === "0" ? "0" : currentFundingFee?.div(toBN("24"))?.toString(), activeToken.decimals, activeToken.decimals), activeToken.fixedDecimals)}
-                    _suffix={selectedCurrency}
+                    _suffix={tokenName}
                     actEthvol={activeVolIndex === config.volatilityKey.ethvol}
                 />
                 
@@ -123,7 +125,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                 />}
             </>
         )
-    }, [purchaseFee, tokenAmount, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeToken.type, amount, selectedCurrency, leverage, actLowRules, activeVolIndex, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolInfo?.index, slippageTolerance]) 
+    }, [activeToken?.name, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeToken.type, purchaseFee, tokenAmount, amount, leverage, actLowRules, activeVolIndex, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolInfo?.index, slippageTolerance]) 
    
 }
 
@@ -137,13 +139,14 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
     const [lpTokenAmount] = useWeb3Api("toLPTokens", selectedCurrency, lpTokenPayload, { validAmount: true })
 
     return useMemo(() => {
+        const tokenName = activeToken?.name?.toUpperCase();
 
         return  <> 
             <Stat 
                 className="bold amount"
                 title="Deposit amount" 
                 value={!amount ? "0" : amount} 
-                _suffix={selectedCurrency} 
+                _suffix={tokenName} 
             />
 
             <Stat 
@@ -151,7 +154,7 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
                 title="You will receive" 
                 value={activeVolInfo?.key && lpTokenAmount} 
                 format={customFixedTokenValue(lpTokenAmount, 6, activeToken.lpTokensDecimals)}
-                _suffix={`${activeVolInfo?.key?.toUpperCase()}-${selectedCurrency} LP`}
+                _suffix={`${activeVolInfo?.key?.toUpperCase()}-${tokenName} LP`}
             />
 
            <Stat 
@@ -168,7 +171,7 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
                 value={activeVolInfo?.index} 
             />
         </>
-    }, [amount, selectedCurrency, lpTokenAmount, activeToken.lpTokensDecimals, activeVolInfo?.key, activeVolInfo?.index, collateralRatioData?.collateralRatio, activeVolIndex, selectedNetwork])
+    }, [activeToken?.name, activeToken.lpTokensDecimals, amount, activeVolInfo?.key, activeVolInfo?.index, lpTokenAmount, collateralRatioData?.collateralRatio, activeVolIndex, selectedNetwork])
 }
 
 export default Details;

@@ -38,8 +38,8 @@ const platformConfig = {
   tabs,
   tokens: {
     [chainNames.Ethereum]: {
-      "usdc-cvi": {
-        key: "usdc-cvi",
+      "usdc-cvol": {
+        key: "usdc-cvol",
         name: "usdc",
         decimals: 6,
         fixedDecimals: 2,
@@ -106,7 +106,7 @@ const platformConfig = {
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
-        type: "usdc",
+        type: "v3",
         leverage: ["1", "2"],
         oracleId: config.volatilityKey.ethvol,
         rel: {

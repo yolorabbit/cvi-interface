@@ -24,7 +24,7 @@ const SellInfo = ({sellFee = null}) => {
             <div className="sell-info-component">
                 <div className="sell-info-component__row">
                     <span>Sell amount</span>
-                    <span>{commaFormatted(amount) || "0"} {activeToken?.key?.toUpperCase()}</span>
+                    <span>{commaFormatted(amount) || "0"} {activeToken?.name?.toUpperCase()}</span>
                 </div>
 
                 <HighSellFee sellFee={sellFee} sellFeeAmount={sellFeeAmount} />
@@ -32,7 +32,7 @@ const SellInfo = ({sellFee = null}) => {
                 <div className="sell-info-component__row">
                     <b>You receive</b>
                     <DataState value={sellFee}>
-                        <b>{commaFormatted(receiveAmount?.toString())} {activeToken?.key?.toUpperCase()}</b>
+                        <b>{commaFormatted(receiveAmount?.toString())} {activeToken?.name?.toUpperCase()}</b>
                     </DataState>
                 </div>
             </div>

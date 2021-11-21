@@ -50,9 +50,15 @@ const InputAmount = ({
     }
 
     const mapSymbol = () => {
-        if(!breakLine) return symbol;
+        if(!breakLine) return activeToken?.name || symbol;
         const [from, to] = symbol.split('-');
-        return from && to ? <><span>{from === config.pages.home.sections.getCviTokens.info.rhegic2.toLowerCase() ? config.pages.home.sections.getCviTokens.info.rhegic2 : from}</span><span>{to.toUpperCase()}</span></> : <span>{symbol}</span>;
+        return from && to ? <>
+            <span>{
+                from === config.pages.home.sections.getCviTokens.info.rhegic2.toLowerCase() ? 
+                    config.pages.home.sections.getCviTokens.info.rhegic2 
+                    : from}</span><span>{to.toUpperCase()}
+            </span>
+            </> : <span>{symbol}</span>
     }
 
     return (
@@ -60,20 +66,22 @@ const InputAmount = ({
             <div className="amount-component__group__input-container">
                 <Input 
                     className="amount-component__group__amount" 
-                    type="text" placeholder="Enter amount"
-                    value={amount} onChange={({target: { value }}) => _onChangeNumber(value)}
+                    type="text" 
+                    placeholder="Enter amount"
+                    value={amount} 
+                    onChange={({target: { value }}) => _onChangeNumber(value)}
                 />
                 
                 <div className="amount-component__group__container">
                     <Button className="amount-component__group__container--max" buttonText="Max" onClick={() => _onChangeNumber(String(availableBalanceAmount))}/>
-                    <span className={`amount-component__group__container--currency ${symbol}`}>{mapSymbol()}</span>
+                    <span className={`amount-component__group__container--currency ${activeToken.name || symbol}`}>{mapSymbol()}</span>
                 </div>
             </div>
             {availableBalance !== "N/A" && <>
                 <span className="amount-component__group__balance">
                     <span>{availableText} {availableBalance === null ? <>&nbsp; <Spinner className="statistics-spinner" /></> : <b>
                         &nbsp;<span> {commaFormatted(availableBalanceAmount ? customFixed(availableBalanceAmount, activeToken.fixedDecimals) : "0")} </span>
-                        &nbsp;{symbol === 'rhegic2-eth' ? <span style={{textTransform: 'none'}}>rHEGIC2-ETH</span> : symbol}
+                        &nbsp;{symbol === 'rhegic2-eth' ? <span style={{textTransform: 'none'}}>rHEGIC2-ETH</span> : activeToken.name || symbol}
                     </b> }</span> 
                 </span>
             </> }
