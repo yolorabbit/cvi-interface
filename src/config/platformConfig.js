@@ -40,6 +40,7 @@ const platformConfig = {
     [chainNames.Ethereum]: {
       "usdc-cvi": {
         key: "usdc-cvi",
+        name: "usdc",
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
@@ -59,6 +60,7 @@ const platformConfig = {
       },
       eth: {
         key: "eth",
+        name: "eth",
         decimals: 18,
         fixedDecimals: 8,
         lpTokensDecimals: 18,
@@ -79,6 +81,7 @@ const platformConfig = {
       usdt: {
         migrated: config.isMainnet,
         key: "usdt",
+        name: "usdt",
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,
@@ -99,6 +102,7 @@ const platformConfig = {
       },
       "usdc-ethvol": {
         key: "usdc-ethvol",
+        name: "usdc",
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
@@ -118,6 +122,7 @@ const platformConfig = {
       },
       coti: {
         key: "coti",
+        name: "coti",
         soon: true,
         rel: {
           oracle: "CVOL-Oracle"
@@ -125,8 +130,9 @@ const platformConfig = {
       },
     },
     [chainNames.Matic]: {
-      usdc: {
-        key: "usdc",
+      "usdc-cvol": {
+        key: "usdc-cvol",
+        name: "usdc",
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,
@@ -148,6 +154,7 @@ const platformConfig = {
       usdt: {
         migrated: config.isMainnet,
         key: "usdt",
+        name: "usdt",
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,
