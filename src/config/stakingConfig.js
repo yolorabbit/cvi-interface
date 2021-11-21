@@ -65,7 +65,7 @@ const stakingConfig = {
         "cvi-usdc-lp": {
           key: "cvi-usdc-lp",
           label: "CVI-USDC LP",
-          address: "0x50Ab55dAD894503C2fDdd9B3a4130Dbfb926D472",
+          address: "0x2167EEFB9ECB52fB6fCf1ff8f7dAe6F0121F4fBC",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
@@ -76,6 +76,24 @@ const stakingConfig = {
             contractKey: "CVOL-USDC-Platform",
             platform: "CVOL-USDC-Platform",
             stakingRewards: "CVOL-USDCLP-StakingRewards",
+            token: "USDC",
+            tokenDecimals: [18]
+          }
+        },
+        "ethvol-usdc-lp": {
+          key: "ethvol-usdc-lp",
+          label: "ETHVOL-USDC LP",
+          address: "0x0E0DA40101D8f6eB1b1d6b0215327e8452e0Bc60",
+          protocol: stakingProtocols.platform,
+          decimals: 18,
+          fixedDecimals: 8,
+          rewardsTokens: ["GOVI"],
+          tokenAddress: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          type: "lp-v2",
+          rel: {
+            contractKey: "ETHVOL-USDC-Platform",
+            platform: "ETHVOL-USDC-Platform",
+            stakingRewards: "ETHVOL-USDCLP-StakingRewards",
             token: "USDC",
             tokenDecimals: [18]
           }
@@ -273,7 +291,7 @@ const stakingConfig = {
         "cvi-eth-lp": "CVI-ETH LP",
         "coti-eth-lp": "COTI-ETH LP",
         "govi-eth-lp": "GOVI-ETH LP",
-        "ethvol-usdc-lp": "ETHVOL-ETH LP",
+        "ethvol-usdc-lp": "ETHVOL-USDC LP",
         "rhegic2-eth-lp": "RHEGIC2-ETH LP",
         "govi": "GOVI",
       },
