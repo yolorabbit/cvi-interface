@@ -35,7 +35,7 @@ export const MigrationModal = ({w3}) => {
   // Get Token Alowance
   const getTokenAllowance = async (token, from, to) => {
     return toBN(
-      await token.w3.call(token.contract.methods.allowance, [from, to])
+      await token.w3.call(token.contract, 'allowance', [from, to])
     );
   };
 
