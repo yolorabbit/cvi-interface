@@ -19,13 +19,22 @@ export async function toLPTokens(contracts, token, { tokenAmount }) {
 }
 
 async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}) {
+
   try {
     let events = [];
+    const isUSDC = token.key === "usdc"
     if(config.isMainnet) {
-      events = await TheGraph[`account_liquidities${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
+      events = await TheGraph[`account_liquidities${isUSDC ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
+      const migrationsTokens = ['usdc','usdt'];
+      if(migrationsTokens.includes(token.key.toLowerCase())) {
+        const migrationEvents = await eventsUtils.getMigrationEvents(account, token.key);
+        console.log(migrationEvents);
+        const actionType =  isUSDC ? "deposits" : "withdraws";
+        events[actionType] = events[actionType].concat(migrationEvents);
+      }
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({...event, event: Object.keys(contractState.liquidities)[idx]}))).flat();
     } else {
-      events = await TheGraph[`account_liquidities${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
+      events = await TheGraph[`account_liquidities${isUSDC ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({...event, event: ["deposits", "withdraws"][idx]}))).flat();
       const chainName = await getChainName();
       let options = {};
