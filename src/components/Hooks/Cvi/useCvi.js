@@ -3,13 +3,12 @@ import moment from 'moment';
 import Api from "Api";
 import { useDispatch, useSelector } from "react-redux";
 import { updateVolInfo } from "store/actions";
-import { customFixed, toDisplayAmount } from "utils";
+import { activeVolsSet, customFixed, toDisplayAmount } from "utils";
 import { chainNames } from "connectors";
 import { debounce } from "lodash";
 import config from "config/config";
 import { contractsContext } from "contracts/ContractContext";
 import { getCviValue } from "contracts/utils";
-import platformConfig from "config/platformConfig";
 
 export const getPercentageChange = (oldNumber, newNumber) => {
    const decreaseValue = oldNumber - newNumber;
@@ -80,14 +79,9 @@ const useCvi = () => {
 
    const fetchVolData = useCallback(async () => {
       try {
-         const tokens = platformConfig.tokens[selectedNetwork];
-         const tokensKeys = Object.keys(tokens);
-         const activeVolsObject = tokensKeys
-            .filter(tokenKey => tokens[tokenKey].oracleId && !tokens[tokenKey].soon)
-            .reduce((prev, current) => ({...prev, [tokens[current].oracleId]: tokens[current].oracleId}), {})
-
-         const activeVolsList = Object.values(activeVolsObject);
-
+         const _activeVolsSet = activeVolsSet(selectedNetwork);
+         const activeVolsList = Object.values(_activeVolsSet);
+         
          Object.keys(indexInfo).forEach(volKey => { // remove unlisted vols from redux state
             if(!activeVolsList.some(activeVolKey => activeVolKey === volKey)) {
                dispatch(updateVolInfo(null, volKey));

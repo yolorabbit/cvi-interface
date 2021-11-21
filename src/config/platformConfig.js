@@ -102,7 +102,7 @@ const platformConfig = {
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
-        type: "v3",
+        type: "usdc",
         leverage: ["1", "2"],
         oracleId: config.volatilityKey.ethvol,
         rel: {

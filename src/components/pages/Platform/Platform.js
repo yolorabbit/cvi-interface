@@ -32,7 +32,7 @@ const Platform = () => {
                         <Row className="statistics-row-component">
                             <Column>
                                 <Row>
-                                    {/* <Statistics /> */}
+                                    <Statistics />
                                 </Row>
                             </Column>
     
@@ -46,11 +46,11 @@ const Platform = () => {
                         </Row>
 
                         <Row flex="100%">
-                            {/* <IndexTabs /> */}
+                            <IndexTabs />
                         </Row>
 
                         <Row>
-                            {/* <PlatformTables /> */}
+                            <PlatformTables />
                         </Row>
                     </Layout>
                 </platformViewContext.Provider>

@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
 import config from "config/config";
+import platformConfig from "config/platformConfig";
 import { chainNames, ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
 import { getChainName } from "contracts/utils";
 import moment from "moment";
@@ -147,3 +148,16 @@ export const actionConfirmEvent = async (dispatch) => {
 }
 
 export const arrayIsLoaded = (value) => value === "N/A" ? [] : value && value?.length > 0 ? value : [];
+
+
+export const activeVolsSet = (selectedNetwork) => {
+    if(!selectedNetwork) return {};
+
+    const tokens = platformConfig.tokens[selectedNetwork];
+    const tokensKeys = Object.keys(tokens);
+    const activeVolsObject = tokensKeys
+        .filter(tokenKey => tokens[tokenKey].oracleId && !tokens[tokenKey].soon)
+        .reduce((prev, current) => ({...prev, [tokens[current].oracleId]: tokens[current].oracleId}), {});
+
+    return activeVolsObject;
+}

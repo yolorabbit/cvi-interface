@@ -35,7 +35,7 @@ export const useIsLaptop = () => {
 
 export const useActiveToken = (selectedCurrency, view, protocol) => {
   const { selectedNetwork } = useSelector(({app}) => app);
-  if(view === "staking") return stakingConfig.tokens[selectedNetwork][protocol][selectedCurrency?.toLowerCase()]
+  if(view === "staking") return stakingConfig.tokens[selectedNetwork][protocol][selectedCurrency?.toLowerCase()];
   return platformConfig.tokens[selectedNetwork][selectedCurrency?.toLowerCase()];
 }
 
