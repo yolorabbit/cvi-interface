@@ -38,8 +38,8 @@ const platformConfig = {
   tabs,
   tokens: {
     [chainNames.Ethereum]: {
-      usdc: {
-        key: "usdc",
+      "usdc-cvi": {
+        key: "usdc-cvi",
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
@@ -96,6 +96,25 @@ const platformConfig = {
           liquidation: "CVOL-USDT-Liquidation",
           rewards: "Rewards",
         },
+      },
+      "usdc-ethvol": {
+        key: "usdc-ethvol",
+        decimals: 6,
+        fixedDecimals: 2,
+        lpTokensDecimals: 18,
+        type: "v3",
+        leverage: ["1", "2"],
+        oracleId: config.volatilityKey.ethvol,
+        rel: {
+          contractKey: "USDC",
+          platform: "ETHVOL-USDC-Platform",
+          feesCalc: "ETHVOL-USDC-FeesCalculator",
+          feesModel: "ETHVOL-USDC-Platform",
+          positionRewards: "ETHVOL-USDC-PositionRewards",
+          oracle: "ETHVOL-Oracle",
+          stakingRewards: "ETHVOL-USDCLP-StakingRewards",
+          liquidation: "ETHVOL-USDC-Liquidation"
+        }
       },
       coti: {
         key: "coti",

@@ -80,15 +80,21 @@ const useCvi = () => {
 
    const fetchVolData = useCallback(async () => {
       try {
-         const activeVols = Object.keys(platformConfig.tabs.index[selectedNetwork]); // mapped active oracles keys
+         const tokens = platformConfig.tokens[selectedNetwork];
+         const tokensKeys = Object.keys(tokens);
+         const activeVolsObject = tokensKeys
+            .filter(tokenKey => tokens[tokenKey].oracleId && !tokens[tokenKey].soon)
+            .reduce((prev, current) => ({...prev, [tokens[current].oracleId]: tokens[current].oracleId}), {})
+
+         const activeVolsList = Object.values(activeVolsObject);
 
          Object.keys(indexInfo).forEach(volKey => { // remove unlisted vols from redux state
-            if(!activeVols.some(activeVolKey => activeVolKey=== volKey)) {
+            if(!activeVolsList.some(activeVolKey => activeVolKey === volKey)) {
                dispatch(updateVolInfo(null, volKey));
             }
          })
          
-         activeVols.forEach(volKey => {
+         activeVolsList.forEach(volKey => {
             fetchGraphData(volKey);
          });
 
@@ -96,7 +102,7 @@ const useCvi = () => {
          const { data: volInfo } = await Api.GET_VOL_INFO(chainName); // fetch vols info from backend
         
          // map and filter backend data by active vols.
-         (await Promise.allSettled(activeVols.map(async volKey => {
+         (await Promise.allSettled(activeVolsList.map(async volKey => {
             const volIndex = await getIndexFromOracle(config.oracles[volKey]);
             return mappedIndexData(volKey, volIndex, volInfo?.data?.[config.volatilityLabel[volKey]])
          })))
