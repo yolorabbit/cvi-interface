@@ -116,6 +116,7 @@ export const getGraphEndpoint = async (type = "platform", token = "usdt") => {
     try {
         const chainId = await getChainId();
         if(chainId === 137 || chainId === 31338) { // use ony for matic 
+          if(type === 'migration') return 'https://api.thegraph.com/subgraphs/name/vladi-coti/polygon-platforms'; //'https://api.thegraph.com/subgraphs/name/vladi-coti/cvol-ethereum-usdc';
           return graphEndpoints[process.env.REACT_APP_ENVIRONMENT][chainId][token][type];
         }
         if(token === 'usdc') return 'https://api.thegraph.com/subgraphs/name/vladi-coti/ethereum-platforms'; //'https://api.thegraph.com/subgraphs/name/vladi-coti/cvol-ethereum-usdc';

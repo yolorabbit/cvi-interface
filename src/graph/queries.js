@@ -199,6 +199,24 @@ const collectedFeesAggregationsQuery = gql`
   }
 `;
 
+const accountMigrationsQuery = gql`
+  query getMigrations($account: String!, $fromTimestamp: BigInt! = 0, $toTimestamp: BigInt! = 0) {
+    migrations(where: { account: $account, timestamp_gte: $fromTimestamp, timestamp_lte: $toTimestamp }, orderBy: timestamp, orderDirection: desc) {
+      id
+      account
+      oldPlatformAddress
+      newPlatformAddress
+      oldLPTokensAmount
+      newLPTokensAmount
+      oldTokensAmount
+      newTokensAmount
+      rewardAmount
+      blockNumber
+      timestamp
+    }
+  }
+`;
+
 export async function account_liquidities(account, platformAddress, fromTimestamp) {
   return await request(await getGraphEndpoint(), accountLiquidityQuery, { account, platformAddress, fromTimestamp });
 }
@@ -239,6 +257,10 @@ export async function collectedFeesSum() {
   return await request(await getGraphEndpoint("fees", "usdt"), collectedFeesAggregationsQuery);
 }
 
-export async function collectedFeesSumUSDC(endpoint) {
+export async function collectedFeesSumUSDC() {
   return await request(await getGraphEndpoint("fees", "usdc"), collectedFeesAggregationsQuery);
+}
+
+export async function migrations(account, fromTimestamp=1637013600, toTimestamp=(new Date().getTime()/1000).toFixed(0)) { // fromTimestamp === migration publish time - 1 day
+  return await request(await getGraphEndpoint("migration", "usdc"), accountMigrationsQuery, { account, fromTimestamp, toTimestamp});
 }

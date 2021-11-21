@@ -164,6 +164,29 @@ export const useEvents = () => {
         return Math.floor(moment.utc().valueOf() / 1000);
     };
 
+    async function getMigrationEvents(account, tokenSymbol) {
+        const isUSDC = tokenSymbol.toLowerCase() === 'usdc';
+        const migrationEvents = (await TheGraph.migrations(account)).migrations;
+        return !!migrationEvents?.length ? migrationEvents.map(({
+          blockNumber,
+          id,
+          oldLPTokensAmount,
+          newLPTokensAmount,
+          timestamp,
+          oldTokensAmount,
+          newTokensAmount })=>({
+            account,
+            blockNumber,
+            feeAmount: "0",
+            id,
+            lpTokensAmount: isUSDC ? newLPTokensAmount : oldLPTokensAmount,
+            platform: tokenSymbol.toUpperCase(),
+            timestamp,
+            tokenAmount: isUSDC ? newTokensAmount : oldTokensAmount
+          })) 
+        : [];
+    }
+
     async function getNow(forceSync = true) {
         let diff;
         if (forceSync || !diff) {
@@ -183,7 +206,8 @@ export const useEvents = () => {
             getPastEvents, 
             getNow, 
             getLatestBlockTimestamp,
-            getLastOpenEvent
+            getLastOpenEvent,
+            getMigrationEvents
         }
       // eslint-disable-next-line
     }, [library]);
