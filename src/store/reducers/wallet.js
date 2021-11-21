@@ -1,4 +1,4 @@
-import { unionBy } from 'lodash';
+import {uniqWith, isEqual} from 'lodash';
 import * as actionTypes from '../actions/types';
 
 const initialState = {
@@ -18,7 +18,7 @@ const setData = (state, {view, data, isUpdate}) => {
     if(state[view]) {
         return { 
             ...state,
-            [view]: unionBy(state[view], data, 'transactionHash').sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1)
+            [view]: uniqWith(state[view].concat(data), isEqual).sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1)
         }
     }
 

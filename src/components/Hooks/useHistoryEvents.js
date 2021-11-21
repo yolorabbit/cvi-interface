@@ -46,7 +46,7 @@ const useHistoryEvents = () => {
     let fromWei = library?.utils?.fromWei;
     let getBlock = library?.eth?.getBlock;
     const historyRef = useRef();
-
+    const eventsUtils = useEvents();
     const opt = useMemo(() => ({
         filter: { account },
         fromBlock: bottomBlockByNetwork[selectedNetwork],
@@ -99,9 +99,18 @@ const useHistoryEvents = () => {
         if(wallet[view] !== null && selectedNetwork !== chainNames.Matic) return;
 
         let events = [];
+        const isUSDC = activeToken.key === "usdc";
         if(config.isMainnet) {
-            events = await TheGraph[`account_${view}${activeToken.key === "usdc" ? "USDC" : ""}`](account, contracts[activeToken.rel.platform]._address, 0)
+            events = await TheGraph[`account_${view}${isUSDC ? "USDC" : ""}`](account, contracts[activeToken.rel.platform]._address, 0)
+            const migrationsTokens = ['usdc','usdt'];
+            if(view === "liquidities" && migrationsTokens.includes(activeToken.key.toLowerCase())) {
+              const migrationEvents = await eventsUtils.getMigrationEvents(account, activeToken.key);
+            //   console.log('migrationEvents: ', migrationEvents);
+              const actionType =  isUSDC ? "deposits" : "withdraws";
+              events[actionType] = events[actionType].concat(migrationEvents);
+            }
             events = Object.values(events).map((_events, idx) => _events.map((event)=> ({...event, transactionHash: event.id, timestamp: Number(event.timestamp), event: contractState[view][Object.keys(events)[idx]] }))).flat();
+            
         } else {
             let events2 = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0);
             const theGraphLatest = Object.values(events2).flat().sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
