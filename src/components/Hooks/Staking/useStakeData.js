@@ -73,6 +73,10 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
           })
         }
         default: 
+          if(token.migrated) return [{
+            amount: '0',
+            symbol: 'GOVI'
+          }];
           return [await web3Api.getDailyReward(contracts[tokenRel.stakingRewards], account, token.decimals)]
       }
     }
