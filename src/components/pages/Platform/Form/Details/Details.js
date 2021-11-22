@@ -6,10 +6,9 @@ import { useSelector } from "react-redux";
 import { useWeb3Api } from "contracts/useWeb3Api";
 import { useActiveToken, useActiveVolInfo } from '../../../../Hooks';
 import { useActiveWeb3React } from "components/Hooks/wallet";
-import './Details.scss';
-import platformConfig from "config/platformConfig";
 import { chainNames } from "connectors";
 import config from "config/config";
+import './Details.scss';
 
 const Details = ({activeVolIndex, selectedCurrency, amount, leverage, slippageTolerance}) => {
     const { activeView } = useContext(platformViewContext);
@@ -113,7 +112,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                 
                 <Stat 
                     className="low-priority large-value"
-                    title={platformConfig.tabs.index[selectedNetwork][activeVolIndex]} 
+                    title={`${activeVolIndex?.toUpperCase()} index`} 
                     value={activeVolInfo?.index} 
                 />
 
@@ -125,12 +124,11 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                 />}
             </>
         )
-    }, [activeToken?.name, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeToken.type, purchaseFee, tokenAmount, amount, leverage, actLowRules, activeVolIndex, positionRewards, collateralRatioData, currentFundingFee, selectedNetwork, activeVolInfo?.index, slippageTolerance]) 
+    }, [activeToken?.name, activeToken.decimals, activeToken.lpTokensDecimals, activeToken.fixedDecimals, activeToken.type, purchaseFee, tokenAmount, amount, leverage, actLowRules, activeVolIndex, positionRewards, collateralRatioData, currentFundingFee, activeVolInfo?.index, slippageTolerance]) 
    
 }
 
 const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
-    const { selectedNetwork } = useSelector(({app}) => app);
     const [collateralRatioData] = useWeb3Api("getCollateralRatio", selectedCurrency);
     const activeVolInfo = useActiveVolInfo(activeVolIndex);
     const activeToken = useActiveToken(selectedCurrency);
@@ -167,11 +165,11 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
 
             <Stat 
                 className="low-priority"
-                title={platformConfig.tabs.index[selectedNetwork][activeVolIndex]} 
+                title={`${activeVolIndex?.toUpperCase()} index`}  
                 value={activeVolInfo?.index} 
             />
         </>
-    }, [activeToken?.name, activeToken.lpTokensDecimals, amount, activeVolInfo?.key, activeVolInfo?.index, lpTokenAmount, collateralRatioData?.collateralRatio, activeVolIndex, selectedNetwork])
+    }, [activeToken?.name, activeToken.lpTokensDecimals, amount, activeVolInfo?.key, activeVolInfo?.index, lpTokenAmount, collateralRatioData?.collateralRatio, activeVolIndex])
 }
 
 export default Details;
