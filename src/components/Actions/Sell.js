@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import SellInfo from 'components/pages/Platform/Info/SellInfo';
-import { getClosingPremiumFee, MAX_CVI_VALUE } from 'contracts/apis/position';
+import { getClosingPremiumFee } from 'contracts/apis/position';
 import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
 import web3Api, { getTokenData } from 'contracts/web3Api';
 import SellAllModal from './SellAllModal.js';
@@ -46,25 +46,24 @@ const Sell = () => {
     
     const sell = async () => {
         try {
+            const {currentPositionBalance, positionUnitsAmount, leverage} = await contracts[activeToken.rel.platform].methods.calculatePositionBalance(account).call();
             const { getCVILatestRoundData } = contracts[activeToken.rel.oracle].methods;
             const { cviValue } = await getCVILatestRoundData().call();
+            let positionUnitsToClose = toBN(positionUnitsAmount).mul(tokenAmount).div(toBN(currentPositionBalance));
 
-            let positionUnitsAmount;
-            
             if(!toBN(balances.tokenAmount).cmp(tokenAmount)) {
-                positionUnitsAmount = toBN(balances.posUnitsAmount);
+                positionUnitsToClose = toBN(balances.posUnitsAmount);
             };
             
-            const _amount = !positionUnitsAmount ? tokenAmount.mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue)) : toBN(positionUnitsAmount);
             const _contract = getContract(activeToken.rel.platform);
             
             if(activeToken.type === "v3" || activeToken.type === "usdc") {
                 const tokenData = await getTokenData(contracts[activeToken.rel.contractKey]);
                 const closingPremiumFee = await getClosingPremiumFee(contracts, activeToken, { tokenAmount, cviValue, leverage, tokenData, library});
                 const _feesWithSlippage =  String(Number(closingPremiumFee || 0) + Number((slippageTolerance * 100) || 0));
-                await _contract.methods.closePosition(_amount, toBN('1'), toBN(_feesWithSlippage)).send({from: account, ...gas});
+                await _contract.methods.closePosition(positionUnitsToClose, toBN('1'), toBN(_feesWithSlippage)).send({from: account, ...gas});
             } else {
-                await _contract.methods.closePosition(_amount, toBN('1')).send({from: account, ...gas});
+                await _contract.methods.closePosition(positionUnitsToClose, toBN('1')).send({from: account, ...gas});
             }
  
             dispatch(addAlert({
