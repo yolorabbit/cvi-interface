@@ -100,15 +100,15 @@ const platformConfig = {
           rewards: "Rewards",
         },
       },
-      "usdc-ethvol": {
-        key: "usdc-ethvol",
+      "usdc-ethvi": {
+        key: "usdc-ethvi",
         name: "usdc",
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         type: "v3",
         leverage: ["1", "2"],
-        oracleId: config.volatilityKey.ethvol,
+        oracleId: config.volatilityKey.ethvi,
         rel: {
           contractKey: "USDC",
           platform: "ETHVOL-USDC-Platform",
@@ -182,14 +182,14 @@ const platformConfig = {
       "Liquidity pools": {
         label: "Liquidity pools",
         tooltip: {
-          content: "The total value locked in all liquidity pools of CVI and ETHVOL platforms in USD.",
+          content: "The total value locked in all liquidity pools of CVI and ETHVI platforms in USD.",
           left: -30
         }
       }, 
       "Open positions": {
         label: "Open positions",
         tooltip: {
-          content: "The total value of open positions in CVI and ETHVOL platforms in USD.",
+          content: "The total value of open positions in CVI and ETHVI platforms in USD.",
           left: -30
         }
       }, 

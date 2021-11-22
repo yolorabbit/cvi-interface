@@ -111,7 +111,7 @@ async function getCloseCollateralRatio(contracts, token, { tokenAmount, leverage
     let platformBalance;
     if(token.key === "eth") {
         platformBalance = toBN(await library.eth.getBalance(contracts[token.rel.platform].options.address));
-    } else if(token.key === "usdc" || token.type === "v3") {
+    } else if(token.type === "usdc" || token.type === "v3") {
         platformBalance = toBN(await contracts[token.rel.platform].methods.totalLeveragedTokensAmount().call());
     } else {
         platformBalance = toBN(await contracts[token.rel.contractKey].methods.balanceOf(contracts[token.rel.platform].options.address).call());
@@ -182,7 +182,7 @@ export async function getClosePositionFee(contracts, token, { tokenAmount, lever
     return toBN(0);
   }
   let posTimestamp = pos.creationTimestamp;
-  const params = (token.key === "usdc" || token.type === "v3") ? [posTimestamp, false] : [posTimestamp]
+  const params = (token.type === "usdc" || token.type === "v3") ? [posTimestamp, false] : [posTimestamp]
   let closeFeePrecent = toBN(await contracts[token.rel.feesCalc].methods.calculateClosePositionFeePercent(...params).call());
   let maxFeePercent = toBN(await contracts[token.rel.platform].methods.MAX_FEE_PERCENTAGE().call());
 

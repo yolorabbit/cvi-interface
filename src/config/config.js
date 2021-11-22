@@ -78,19 +78,19 @@ const config = {
   },
   volatilityKey: {
     "cvi": "cvi",
-    "ethvol": "ethvol",
+    "ethvi": "ethvi",
   },
   volatilityOracles: {
     "CVIOracle": "cvi",
-    "ETHVOL-Oracle": "ethvol",
+    "ETHVOL-Oracle": "ethvi",
   },
   volatilityLabel: {
     "cvi": "CVI",
-    "ethvol": "ETHVOL",
+    "ethvi": "ETHVI",
   },
   oracles: {
     "cvi": "CVOL-Oracle",
-    "ethvol": "ETHVOL-Oracle"
+    "ethvi": "ETHVOL-Oracle"
   },
   web3ProviderId: "NETWORK",
   networkStatuses: {
@@ -113,7 +113,7 @@ const config = {
       className: "bold green",
       prefix: "$",
       tooltip: {
-        content: "The total value locked(TVL) in both CVI and ETHVOL platforms in USD",
+        content: "The total value locked(TVL) in both CVI and ETHVI platforms in USD",
         left: -30,
       }
     },

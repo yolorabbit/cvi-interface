@@ -12,7 +12,7 @@ const initialState = {
     migrationModalInitiallized: false,
     indexInfo: {
         cvi: null,
-        ethvol: null,
+        ethvi: null,
     },
 };
 

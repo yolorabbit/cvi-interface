@@ -8,7 +8,7 @@ import './Stat.scss';
 const Stat = ({actEthvol, actLowRules, name, hideTooltip, prefix = "", _suffix, title, format, className, formats, value, values, hideNa }) => {
     let { prefix: _prefix = prefix, suffix = _suffix, title: configTitle = "", className: _className, tooltip: { left, content, mobileLeft} = {} } = config?.statisticsDetails?.[name] ?? {};
     content = actLowRules ? content.replace("80","65") : content;
-    content = actEthvol ? content.replace("CVI", "ETHVOL") : content;
+    content = actEthvol ? content.replace("CVI", "ETHVI") : content;
 
     return (
         <div className={`stat-component ${(format && format?.length >= 14) || (!format && value?.length >= 14) ? 'large-value' : ''} ${className ?? ''} ${_className ?? ''} ${values !== "N/A" && values?.length > 0 ? 'multiline' : ''}`}>

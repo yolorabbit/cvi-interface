@@ -80,9 +80,9 @@ const stakingConfig = {
             tokenDecimals: [18]
           }
         },
-        "ethvol-usdc-lp": {
-          key: "ethvol-usdc-lp",
-          label: "ETHVOL-USDC LP",
+        "ethvi-usdc-lp": {
+          key: "ethvi-usdc-lp",
+          label: "ETHVI-USDC LP",
           address: "0x0E0DA40101D8f6eB1b1d6b0215327e8452e0Bc60",
           protocol: stakingProtocols.platform,
           decimals: 18,
@@ -291,7 +291,7 @@ const stakingConfig = {
         "cvi-eth-lp": "CVI-ETH LP",
         "coti-eth-lp": "COTI-ETH LP",
         "govi-eth-lp": "GOVI-ETH LP",
-        "ethvol-usdc-lp": "ETHVOL-USDC LP",
+        "ethvi-usdc-lp": "ETHVI-USDC LP",
         "rhegic2-eth-lp": "RHEGIC2-ETH LP",
         "govi": "GOVI",
       },
