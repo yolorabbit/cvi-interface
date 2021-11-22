@@ -9,7 +9,7 @@ import moment from "moment";
 import { getLatestBlockTimestamp } from './../web3Api';
 import { chainNames } from "connectors";
 
-export const MAX_CVI_VALUE = 20000;
+export const MAX_CVI_VALUE = '20000';
 
 export const getPositionValue = async (platform, account) => {
   try {
@@ -20,7 +20,7 @@ export const getPositionValue = async (platform, account) => {
 }
 
 export function fromUnitsToTokenAmount(units, index) {
-  return units.mul(toBN(index)).div(toBN('20000'));
+  return units.mul(toBN(index)).div(toBN(MAX_CVI_VALUE));
 }
 
 export function fromTokenAmountToUnits(tokenAmount, index) {
