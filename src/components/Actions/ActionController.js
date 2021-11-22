@@ -6,6 +6,7 @@ import Expand from 'components/Expand';
 import { platformViewContext } from 'components/Context';
 import Action from './Action';
 import platformConfig from 'config/platformConfig';
+import { useActiveToken } from '../Hooks';
 
 const actionControllerContext = createContext({});
 export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
@@ -25,7 +26,8 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(platformViewContext);
-  
+  const activeToken = useActiveToken(token);
+
   const renderActionComponent = useCallback((isModal = false) => {
     return <ActionControllerContext 
         disabled={!(!disabled && !insufficientBalance)}
@@ -84,7 +86,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
               protocol={protocol} 
             />
 
-            {token === 'usdc' && <AdvancedOptions 
+            {activeToken.name === 'usdc' && <AdvancedOptions 
                 slippageTolerance={slippageTolerance} 
                 setSlippageTolerance={setSlippageTolerance} 
             />}
