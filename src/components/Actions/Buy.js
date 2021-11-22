@@ -9,13 +9,13 @@ import { useWeb3Api } from './../../contracts/useWeb3Api';
 import { actionConfirmEvent, commaFormatted, gas, maxUint256, toBN, toBNAmount, toDisplayAmount } from './../../utils/index';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { fromUnitsToTokenAmount, MAX_CVI_VALUE } from 'contracts/apis/position';
 import { addAlert } from 'store/actions';
-import config from './../../config/config';
+import config, { oraclesData } from './../../config/config';
 import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
 import Contract from 'web3-eth-contract';
 import { useWeb3React } from '@web3-react/core';
+import { fromUnitsToTokenAmount } from 'contracts/utils';
 
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
 
@@ -81,7 +81,7 @@ const Buy = () => {
             await contracts[activeToken.rel.contractKey].methods.balanceOf(contracts[activeToken.rel.platform]._address).call()
         )
         let totalUnits = await contracts[activeToken.rel.platform].methods.totalPositionUnitsAmount().call();
-        return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index).div(toBN(leverage));
+        return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index, oraclesData[activeToken.oracleId].maxIndex).div(toBN(leverage));
     }, [library?.eth, activeToken, contracts, token, leverage]);
 
     const getMaxAvailableToOpen = useCallback(async () => {
@@ -108,13 +108,13 @@ const Buy = () => {
         const _contract = getContract(activeToken.rel.platform);
         const _leverage = !leverage ? "1" : leverage;
         const _feesWithSlippage = String(Number(purchaseFee?.buyingPremiumFeePercent || 0) + Number((slippageTolerance * 100) || 0));
-
+        const maxIndexValue = oraclesData[activeToken.oracleId].maxIndex;
         if (activeToken.type === "eth") {
-            return await _contract.methods.openPositionETH(MAX_CVI_VALUE, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount, ...gas });
+            return await _contract.methods.openPositionETH(maxIndexValue, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount, ...gas });
         } else if (activeToken.type === "v2" || activeToken.type === "usdc" || activeToken.type === "v3") {
-            return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE, _feesWithSlippage, _leverage).send({ from: account, ...gas });
+            return await _contract.methods.openPosition(tokenAmount, maxIndexValue, _feesWithSlippage, _leverage).send({ from: account, ...gas });
         } else {
-            return await _contract.methods.openPosition(tokenAmount, MAX_CVI_VALUE).send({ from: account, ...gas });
+            return await _contract.methods.openPosition(tokenAmount, maxIndexValue).send({ from: account, ...gas });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeToken, leverage, purchaseFee, account, tokenAmount])

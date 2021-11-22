@@ -1,5 +1,16 @@
 import { chainNames } from "connectors";
 
+export const oraclesData = {
+  "cvi": {
+    oracleId: "cvi",
+    maxIndex: "20000"
+  },
+  "ethvi": {
+    oracleId: 'ethvi',
+    maxIndex: "22000"
+  }
+}
+
 const config = {
   lockupPeriod: {
     sell: 'buyersLockupPeriod',
@@ -9,20 +20,6 @@ const config = {
   maintenanceNetworks: {
     [chainNames.Ethereum]: false,
     [chainNames.Matic]: false,
-  },
-  contractsMapped: {
-    [chainNames.Matic]: { 
-      "PositionRewards": "PositionRewardsV3",
-      "Staking": "StakingV2",
-      "FeesCalculatorV3": "FeesCalculatorV4",
-      "CVIOracle": "CVIOracle"
-    }, 
-    [chainNames.Ethereum]: { 
-      "PositionRewards": "PositionRewards",
-      "Staking": "Staking",
-      "FeesCalculatorV3": "FeesCalculatorV3",
-      "CVIOracle": "CVIOracle"
-    }, 
   },
   isMainnet: process.env.REACT_APP_ENVIRONMENT === "mainnet",
   routes: {
@@ -76,7 +73,7 @@ const config = {
     BTC: 2,
     ETH: 3
   },
-  volatilityKey: {
+  volatilityKey: { // @TODO: refactor this config
     "cvi": "cvi",
     "ethvi": "ethvi",
   },

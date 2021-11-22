@@ -273,3 +273,11 @@ export const getCviValue = async (oracle) => {
     return "N/A";
   }
 }
+
+export function fromUnitsToTokenAmount(units, index, maxIndex) {
+  return units.mul(toBN(index)).div(toBN(maxIndex));
+}
+
+export function fromTokenAmountToUnits(tokenAmount, index, maxIndex) {
+  return toBN(tokenAmount).mul(toBN(maxIndex)).div(toBN(index));
+}

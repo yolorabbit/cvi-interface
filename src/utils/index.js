@@ -6,7 +6,6 @@ import { chainNames, ConnectorNames, defaultChainId, supportedNetworksConfigByEn
 import { getChainName } from "contracts/utils";
 import moment from "moment";
 import { actionConfirm } from "store/actions/events";
-import { MAX_CVI_VALUE } from '../contracts/apis/position';
 
 export const gas = config.isMainnet ? { } : { };
 
@@ -73,10 +72,6 @@ export const toFixed = (x) => {
     mag -= str.length;  
     while(mag--) z += '0';
     return str + z;
-}
-
-export function fromTokenAmountToUnits(tokenAmount, index) {
-    return tokenAmount.mul(toBN(MAX_CVI_VALUE)).div(toBN(index));
 }
 
 export const toDisplayAmount = (amount, magnitude = 0) => {

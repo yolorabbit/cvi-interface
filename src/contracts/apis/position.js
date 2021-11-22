@@ -1,15 +1,13 @@
-import { getBalance, getChainName, getCviValue } from "contracts/utils";
+import { fromTokenAmountToUnits, getBalance, getChainName, getCviValue } from "contracts/utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { gas, maxUint256, toBN, toDisplayAmount } from "utils";
 import * as TheGraph from 'graph/queries';
 import { contractState } from "components/Hooks/useHistoryEvents";
-import config from "config/config";
+import config, { oraclesData } from "config/config";
 import { DEFAULT_STEPS } from "components/Hooks/useEvents";
 import moment from "moment";
 import { getLatestBlockTimestamp } from './../web3Api';
 import { chainNames } from "connectors";
-
-export const MAX_CVI_VALUE = '20000';
 
 export const getPositionValue = async (platform, account) => {
   try {
@@ -17,14 +15,6 @@ export const getPositionValue = async (platform, account) => {
   } catch (error) {
     return "N/A";
   }
-}
-
-export function fromUnitsToTokenAmount(units, index) {
-  return units.mul(toBN(index)).div(toBN(MAX_CVI_VALUE));
-}
-
-export function fromTokenAmountToUnits(tokenAmount, index) {
-  return toBN(tokenAmount).mul(toBN(MAX_CVI_VALUE)).div(toBN(index));
 }
 
 export async function approve(contract, from, to, amount = maxUint256) {
@@ -36,40 +26,40 @@ export async function approve(contract, from, to, amount = maxUint256) {
   console.log(`approve ${res.status ? "success" : "failed"}: allowance ${allowance}`);
 }
 
-async function getBuyCollateralRatio(platform, feesCalc, tokenData, openTokenAmount, cviValue, leverage, type) {
+async function getBuyCollateralRatio(contracts, token, tokenData, openTokenAmount, cviValue, leverage) {
   let tokenContract = tokenData ? tokenData.contract : undefined;
   let balance;
 
-  if(type === "usdc" || type === "v3") {
-    balance = toBN(await platform.methods.totalLeveragedTokensAmount().call());
+  if(token.type === "usdc" || token.type === "v3") {
+    balance = toBN(await contracts[token.rel.platform].methods.totalLeveragedTokensAmount().call());
   } else {
-    balance = toBN(await getBalance(platform._address, tokenContract && type !== "eth" ? tokenContract._address : undefined));
+    balance = toBN(await getBalance(contracts[token.rel.platform]._address, tokenContract && token.type !== "eth" ? tokenContract._address : undefined));
   }
 
   if (!balance.gt(toBN(0))) return toBN(0);
   
 
-  let maxFeePercent = toBN(await platform.methods.MAX_FEE_PERCENTAGE().call());
+  let maxFeePercent = toBN(await contracts[token.rel.platform].methods.MAX_FEE_PERCENTAGE().call());
   let openFeePrecent;
-  if (type === "eth" || type === "v2" || type === "usdc" || type === "v3") {
-    const fees = await feesCalc.methods.openPositionFees().call();
+  if (token.type === "eth" || token.type === "v2" || token.type === "usdc" || token.type === "v3") {
+    const fees = await contracts[token.rel.feesCalc].methods.openPositionFees().call();
     openFeePrecent = fees.openPositionFeePercentResult;
   } else {
-    openFeePrecent = await feesCalc.methods.openPositionFeePercent().call();
+    openFeePrecent = await contracts[token.rel.feesCalc].methods.openPositionFeePercent().call();
   }
   // console.log(`openFeePrecent: ${openFeePrecent?.toString()}`);
   let openPositionFee = openTokenAmount.mul(toBN(leverage)).mul(toBN(openFeePrecent)).div(maxFeePercent);
   // console.log(`openPositionFee: ${openPositionFee}`);
   const amountWithoutFee = openTokenAmount.sub(openPositionFee);
   // console.log(`amountWithoutFee: ${amountWithoutFee}`);
-  let maxPositionUnitsAmount = amountWithoutFee.mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue));
+  let maxPositionUnitsAmount = amountWithoutFee.mul(toBN(leverage)).mul(toBN(oraclesData[token.oracleId].maxIndex)).div(toBN(cviValue));
   // console.log(`maxPositionUnitsAmount: ${maxPositionUnitsAmount}`);
-  let minPositionUnitsAmount = (type === "usdc" || type === "v3") ? maxPositionUnitsAmount : maxPositionUnitsAmount.mul(toBN(90)).div(toBN(100));
+  let minPositionUnitsAmount = (token.type === "usdc" || token.type === "v3") ? maxPositionUnitsAmount : maxPositionUnitsAmount.mul(toBN(90)).div(toBN(100));
   // console.log(`minPositionUnitsAmount: ${minPositionUnitsAmount}`);
-  let totalPositionUnitsAmount = toBN(await platform.methods.totalPositionUnitsAmount().call());
+  let totalPositionUnitsAmount = toBN(await contracts[token.rel.platform].methods.totalPositionUnitsAmount().call());
   // console.log(`totalPositionUnitsAmount: ${totalPositionUnitsAmount}`);
   
-  let precisionDecimals = toBN(await platform.methods.PRECISION_DECIMALS().call());
+  let precisionDecimals = toBN(await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call());
   let collateralRatio = toBN(totalPositionUnitsAmount
     .add(minPositionUnitsAmount))
     .mul(precisionDecimals)
@@ -81,7 +71,7 @@ async function getBuyCollateralRatio(platform, feesCalc, tokenData, openTokenAmo
 
 async function getBuyingPremiumFee(contracts, token, { tokenAmount, cviValue, leverage = 1, tokenData, library}) {
   try {
-    let collateralRatio = await getBuyCollateralRatio(contracts[token.rel.platform], contracts[token.rel.feesCalc], tokenData, tokenAmount, cviValue, leverage, token.type);
+    let collateralRatio = await getBuyCollateralRatio(contracts, token, tokenData, tokenAmount, cviValue, leverage);
     const turbulence = await contracts[token.rel.feesModel].methods.calculateLatestTurbulenceIndicatorPercent().call();
     let buyingPremiumFee;
     let combinedPremiumFeePercentage = 0;
@@ -121,7 +111,7 @@ async function getCloseCollateralRatio(contracts, token, { tokenAmount, leverage
     const closeFeePercent = await contracts[token.rel.feesCalc].methods.closePositionFeePercent().call();
     const closePositionFee = tokenAmount.mul(toBN(leverage)).mul(toBN(closeFeePercent)).div(maxFeePercent);
     const amountWithoutFee = tokenAmount.sub(closePositionFee);
-    let maxPositionUnitsAmount = amountWithoutFee.mul(toBN(leverage)).mul(toBN(MAX_CVI_VALUE)).div(toBN(cviValue));
+    let maxPositionUnitsAmount = amountWithoutFee.mul(toBN(leverage)).mul(toBN(oraclesData[token.oracleId].maxIndex)).div(toBN(cviValue));
     let minPositionUnitsAmount = (token.type === "usdc" || token.type === "v3") ? maxPositionUnitsAmount : maxPositionUnitsAmount.mul(toBN(90)).div(toBN(100));
     let totalPositionUnitsAmount = toBN(await contracts[token.rel.platform].methods.totalPositionUnitsAmount().call());
     let precisionDecimals = toBN(await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call());
@@ -214,7 +204,7 @@ async function getFundingFeePerTimePeriod(contracts, token, { tokenAmount, purch
   const cviValue = await getCviValue(contracts[token.rel.oracle]);
   let decimals = await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call();
   let fee = toBN(await contracts[token.rel.feesCalc].methods.calculateSingleUnitFundingFee([{ period, cviValue }]).call());
-  let positionUnitsAmount = fromTokenAmountToUnits(toBN(tokenAmount.sub(purchaseFee.openFee)).mul(toBN(leverage)), toBN(cviValue));
+  let positionUnitsAmount = fromTokenAmountToUnits(toBN(tokenAmount.sub(purchaseFee.openFee)).mul(toBN(leverage)), toBN(cviValue), oraclesData[token.oracleId].maxIndex);
   return fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
 }
 
@@ -321,26 +311,26 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils 
 }
 
 
-async function getEstimatedLiquidationV2 (platform, feesCalc, liquidationContract, index, account) {
-  const pos = await getPositionValue(platform, account)
-  let decimals = await platform.methods.PRECISION_DECIMALS().call();
+async function getEstimatedLiquidationV2 (contracts, token, index, account) {
+  const pos = await getPositionValue(contracts[token.rel.platform], account)
+  let decimals = await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call();
   let minThreshold = 50; //await liquidationContract.methods.liquidationMinThreshold().call()
-  let maxPercentage = await liquidationContract.methods.LIQUIDATION_MAX_FEE_PERCENTAGE().call();
+  let maxPercentage = await contracts[token.rel.liquidation].methods.LIQUIDATION_MAX_FEE_PERCENTAGE().call();
   let liquidationThreshold = toBN(pos.positionUnitsAmount).mul(toBN(minThreshold)).div(toBN(maxPercentage));
-  let fee = toBN(await feesCalc.methods.calculateSingleUnitFundingFee([{ period: 86400, cviValue: index }]).call());
+  let fee = toBN(await contracts[token.rel.feesCalc].methods.calculateSingleUnitFundingFee([{ period: 86400, cviValue: index }]).call());
   let feePerDay = fee.mul(toBN(pos.positionUnitsAmount)).div(toBN(decimals));
   let liquidation = toBN(pos.currentPositionBalance).sub(liquidationThreshold).mul(toBN(100)).div(feePerDay);
   return parseFloat(liquidation.toString()) / 100;
 }
 
-async function getEstimatedLiquidationV1(platform, feeCalc, index, tokenAmount, account) {
-  let {positionUnitsAmount, currentPositionBalance} = await platform.methods.calculatePositionBalance(account).call();
+async function getEstimatedLiquidationV1(contracts, token, index, tokenAmount, account) {
+  let {positionUnitsAmount, currentPositionBalance} = await contracts[token.rel.platform].methods.calculatePositionBalance(account).call();
   currentPositionBalance = toBN(currentPositionBalance)
   if(tokenAmount) {
-    currentPositionBalance = currentPositionBalance.add(fromTokenAmountToUnits(toBN(tokenAmount), index));
+    currentPositionBalance = currentPositionBalance.add(fromTokenAmountToUnits(toBN(tokenAmount), index, oraclesData[token.oracleId].maxIndex));
   }
-  let decimals = await platform.methods.PRECISION_DECIMALS().call();
-  let fee = toBN(await feeCalc.methods.calculateSingleUnitFundingFee([{ period: 86400, cviValue: index }]).call());
+  let decimals = await contracts[token.rel.platform].methods.PRECISION_DECIMALS().call();
+  let fee = toBN(await contracts[token.rel.feesCalc].methods.calculateSingleUnitFundingFee([{ period: 86400, cviValue: index }]).call());
   let feePerDay = fee.mul(toBN(positionUnitsAmount)).div(toBN(decimals));
   let liquidation = toBN(currentPositionBalance).mul(toBN(100)).div(feePerDay);
   return parseFloat(liquidation.toString()) / 100;
@@ -352,9 +342,9 @@ async function getEstimatedLiquidation(contracts, token, { tokenAmount, account,
     const { cviValue } = await getCVILatestRoundData().call();
     let _estimatedLiquidation;
     if(token.type === "eth" || token.type === "v1") {
-      _estimatedLiquidation = await getEstimatedLiquidationV1(contracts[token.rel.platform], contracts[token.rel.feesCalc], cviValue, tokenAmount ?? undefined, account);
+      _estimatedLiquidation = await getEstimatedLiquidationV1(contracts, token, cviValue, tokenAmount ?? undefined, account);
     } else if(token.type === 'v2') {
-      _estimatedLiquidation = await getEstimatedLiquidationV2(contracts[token.rel.platform], contracts[token.rel.feesCalc], contracts[token.rel.liquidation], cviValue, account);
+      _estimatedLiquidation = await getEstimatedLiquidationV2(contracts, token, cviValue, account);
     }
 
     const latestBlockTimestamp = await getLatestBlockTimestamp(library.eth.getBlock);

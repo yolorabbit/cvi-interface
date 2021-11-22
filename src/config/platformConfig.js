@@ -1,5 +1,5 @@
 import { chainNames } from "connectors";
-import config from "./config";
+import config, { oraclesData } from "./config";
 
 export const activeViews = {
   "trade": "trade",
@@ -46,7 +46,7 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "v3",
         leverage: ["1", "2"],
-        oracleId: "cvi",
+        oracleId: oraclesData.cvi.oracleId,
         rel: {
           contractKey: "USDC",
           platform: "CVOL-USDC-Platform",
@@ -66,7 +66,7 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "eth",
         address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-        oracleId: "cvi",
+        oracleId: oraclesData.cvi.oracleId,
         rel: {
           contractKey: "WETH",
           platform: "CVOL-ETH-Platform",
@@ -87,7 +87,7 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "v1",
         address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
-        oracleId: "cvi",
+        oracleId: oraclesData.cvi.oracleId,
         rel: {
           contractKey: "USDT",
           platform: "CVOL-USDT-Platform",
@@ -108,7 +108,7 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "v3",
         leverage: ["1", "2"],
-        oracleId: config.volatilityKey.ethvi,
+        oracleId: oraclesData.ethvi.oracleId,
         rel: {
           contractKey: "USDC",
           platform: "ETHVOL-USDC-Platform",
@@ -139,7 +139,7 @@ const platformConfig = {
         type: "usdc",
         leverage: ["1", "2"],
         address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
-        oracleId: "cvi",
+        oracleId: oraclesData.cvi.oracleId,
         rel: {
           contractKey: "USDC",
           platform: "CVOL-USDC-Platform",
@@ -160,7 +160,7 @@ const platformConfig = {
         lpTokensDecimals: 18,
         type: "v2",
         address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
-        oracleId: "cvi",
+        oracleId: oraclesData.cvi.oracleId,
         rel: {
           contractKey: "USDT",
           platform: "CVOL-USDT-Platform",

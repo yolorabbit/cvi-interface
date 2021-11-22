@@ -1,6 +1,6 @@
-import { commaFormatted, customFixed, fromTokenAmountToUnits, toBN, toDisplayAmount, toFixed } from '../../utils';
+import { commaFormatted, customFixed, toBN, toDisplayAmount, toFixed } from '../../utils';
 import { getOpenPositionFee } from './position';
-import { getPositionRewardsContract, getNow, getCviValue } from 'contracts/utils';
+import { getPositionRewardsContract, getNow, getCviValue, fromTokenAmountToUnits } from 'contracts/utils';
 import moment from 'moment';
 import { DAY } from '../../components/Hooks/useEvents';
 
