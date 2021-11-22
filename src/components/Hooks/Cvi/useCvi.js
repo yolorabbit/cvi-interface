@@ -58,8 +58,8 @@ const useCvi = () => {
    const fetchGraphData = useCallback(async (index = "cvi") => {
          try {
             const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
-            const { data: hourlySeries } = await Api.GET_INDEX_HISTORY({chainName, index: config.volatilityLabel[index]}); 
-            const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY({chainName, index: config.volatilityLabel[index]}); 
+            const { data: hourlySeries } = await Api.GET_INDEX_HISTORY({chainName, index: config.volatilityApiKey[index]}); 
+            const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY({chainName, index: config.volatilityApiKey[index]}); 
             const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
             const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0])
             dispatch(updateVolInfo({
@@ -98,7 +98,7 @@ const useCvi = () => {
          // map and filter backend data by active vols.
          (await Promise.allSettled(activeVolsList.map(async volKey => {
             const volIndex = await getIndexFromOracle(config.oracles[volKey]);
-            return mappedIndexData(volKey, volIndex, volInfo?.data?.[config.volatilityLabel[volKey]])
+            return mappedIndexData(volKey, volIndex, volInfo?.data?.[config.volatilityApiKey[volKey]])
          })))
          .filter(({status}) => status === "fulfilled")
          .map(({value}) => value)

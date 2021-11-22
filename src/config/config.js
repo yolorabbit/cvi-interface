@@ -88,6 +88,10 @@ const config = {
     "cvi": "CVI",
     "ethvi": "ETHVI",
   },
+  volatilityApiKey: {
+    "cvi": "CVI",
+    "ethvi": "ETHVOL",
+  },
   oracles: {
     "cvi": "CVOL-Oracle",
     "ethvi": "ETHVOL-Oracle"
