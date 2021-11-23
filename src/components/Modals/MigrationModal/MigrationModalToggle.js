@@ -15,7 +15,8 @@ const MigrationModalToggle = () => {
     const [isProvidedLiquidity, setIsProvidedLiquidity] = useState();
   
     const w3 = useW3SDK({
-        platformMigrator: ['CVOL-USDT-USDC-PlatformMigrator']
+        platform: ['CVOL-USDC-Platform', 'CVOL-USDT-Platform'],
+        platformMigrator: ["CVOL-USDT-USDC-PlatformMigrator"]
     });
 
     const isLiquidityProvider = useCallback(async () => {
