@@ -25,7 +25,7 @@ async function getClaimablePositionUnitsV3(contracts, token, {account, accountPo
   let { positionUnitsAmount, originalCreationTimestamp, leverage } = accountPosition;
   positionUnitsAmount = leverage ? toBN(positionUnitsAmount).div(toBN(leverage)).toString() : positionUnitsAmount;
   let unClaimedPositionUnitsAmount = await getUnClaimedPositionUnits(contracts[token.rel.positionRewards], account, token, {timestamp: originalCreationTimestamp, positionUnitsAmount});
-  return { positionUnitsAmount: unClaimedPositionUnitsAmount, creationTimestamp: originalCreationTimestamp };
+  return { positionUnitsAmount: String(unClaimedPositionUnitsAmount), creationTimestamp: originalCreationTimestamp };
 }
 
 async function getClaimablePositionUnitsV1(contracts, token, {account, accountPosition}) {
@@ -33,7 +33,7 @@ async function getClaimablePositionUnitsV1(contracts, token, {account, accountPo
   positionUnitsAmount = leverage ? toBN(positionUnitsAmount).div(toBN(leverage)).toString() : positionUnitsAmount;
   const unclaimedPositionUnits = await contracts[token.rel.positionRewards].methods.unclaimedPositionUnits(account).call();
   positionUnitsAmount = Math.min(positionUnitsAmount, unclaimedPositionUnits);
-  return { positionUnitsAmount, creationTimestamp };
+  return { positionUnitsAmount: String(positionUnitsAmount), creationTimestamp };
 }
 
 async function getClaimablePositionUnits(contracts, token, {account, accountPosition}) {
@@ -46,7 +46,7 @@ async function getClaimablePositionUnits(contracts, token, {account, accountPosi
 }
 
 export async function getClaimableReward(contracts, token, { account, accountPosition }) {
-  if(!accountPosition) {
+  if(!accountPosition?.creationTimestamp !== "0") {
     accountPosition = await contracts[token.rel.platform].methods.positions(account).call();
   }
 
@@ -77,14 +77,19 @@ async function calculatePositionRewardMinMax(contracts, token, {account, tokenAm
     const { cviValue } = getCVILatestRoundData ? await getCVILatestRoundData().call() : {};
     let positionUnits = fromTokenAmountToUnits(tokenAmount.sub(toBN(fees.openFee)), cviValue, config.oraclesData[token.oracleId].maxIndex);
     let currentReward = 0;
-    if(accountPosition) { 
-      const unclaimedPositionUnits = await getClaimablePositionUnits(contracts, token, {account, accountPosition});
-      let min = BN.min(toBN(unclaimedPositionUnits), toBN(accountPosition.positionUnitsAmount));
-      currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, (token.type === "v3" || token.type === "usdc") ? openTime : 0).call();
-      positionUnits = positionUnits.add(min);
+    if(accountPosition?.creationTimestamp !== "0") { 
+      try {
+        const unclaimedPositionUnits = await getClaimablePositionUnits(contracts, token, {account, accountPosition});
+        let min = BN.min(toBN(unclaimedPositionUnits.positionUnitsAmount), toBN(accountPosition.positionUnitsAmount));
+        currentReward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(min, (token.type === "v3" || token.type === "usdc") ? openTime : 0).call();
+        positionUnits = positionUnits.add(min);
+      } catch(error) {
+        console.log(error);
+      }
     }
     const reward = await contracts[token.rel.positionRewards].methods.calculatePositionReward(positionUnits, openTime).call();
-    return toBN(reward).sub(toBN(currentReward));
+    const totalReward = toBN(reward).sub(toBN(currentReward));
+    return totalReward.lt(toBN("0")) ? toBN("0") : toBN(reward).sub(toBN(currentReward));
   } catch(error) {
     console.log(error);
     return toBN("0");
