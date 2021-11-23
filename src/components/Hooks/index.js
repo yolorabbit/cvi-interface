@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { useWeb3React } from "@web3-react/core";
@@ -125,6 +125,9 @@ export const useW3SDK = (filters) => {
   const { account, library: web3 } = useWeb3React();
   const { selectedNetwork } = useSelector(({app}) => app);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const filtersMemoized = useMemo(() => filters, []);
+
   useEffect(() => {
     if(!account || !selectedNetwork || !web3?.currentProvider) return;
 
@@ -133,7 +136,7 @@ export const useW3SDK = (filters) => {
         const w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
           provider, 
           env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
-        }).init(filters);
+        }).init(filtersMemoized);
 
         setW3(w3Inst);
       } catch(error) {
@@ -143,7 +146,7 @@ export const useW3SDK = (filters) => {
     if(!!web3?.currentProvider) {
       getW3Instance(web3?.currentProvider);
     }
-  }, [web3?.currentProvider, account, selectedNetwork, filters]);
+  }, [web3?.currentProvider, account, selectedNetwork, filtersMemoized]);
 
   return w3;
 }

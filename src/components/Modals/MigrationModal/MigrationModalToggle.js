@@ -13,7 +13,10 @@ const MigrationModalToggle = () => {
     const { account } = useActiveWeb3React();
     const { migrationModalIsOpen, migrationModalInitiallized } = useSelector(({app}) => app);
     const [isProvidedLiquidity, setIsProvidedLiquidity] = useState();
-    const w3 = useW3SDK();
+  
+    const w3 = useW3SDK({
+        platformMigrator: ['CVOL-USDT-USDC-PlatformMigrator']
+    });
 
     const isLiquidityProvider = useCallback(async () => {
         try {
