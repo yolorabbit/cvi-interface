@@ -13,7 +13,7 @@ const SelectLeverage = ({selectedCurrency, leverage, tokenLeverageList = [], set
     const [lastPositionLeverage, setLastPositionLeverage] = useState(null);
     const actionConfirmedCounter = useSelector(({events}) => events.actionConfirmed);
     useEffect(()=>{
-        if(!account) return
+        if(!account || !selectedCurrency || !selectedNetwork) return
         
         const getLastPositionLeverage = async (cb) => {
             const platform = platformConfig.tokens[selectedNetwork][selectedCurrency].rel.platform;
