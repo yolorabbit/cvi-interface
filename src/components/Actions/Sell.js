@@ -46,15 +46,17 @@ const Sell = () => {
     
     const sell = async () => {
         try {
-            const {currentPositionBalance, positionUnitsAmount, leverage} = await contracts[activeToken.rel.platform].methods.calculatePositionBalance(account).call();
+            const { positionUnitsAmount } = await contracts[activeToken.rel.platform].methods.positions(account).call();
             const { getCVILatestRoundData } = contracts[activeToken.rel.oracle].methods;
             const { cviValue } = await getCVILatestRoundData().call();
-            let positionUnitsToClose = toBN(positionUnitsAmount).mul(tokenAmount).div(toBN(currentPositionBalance));
-
+            let positionUnitsToClose;
+            
             if(!toBN(balances.tokenAmount).cmp(tokenAmount)) {
                 positionUnitsToClose = toBN(balances.posUnitsAmount);
             };
             
+            positionUnitsToClose = !positionUnitsToClose ? tokenAmount.mul(toBN(leverage)).mul(toBN(config.oraclesData[activeToken.oracleId].maxIndex)).div(toBN(cviValue)) : toBN(positionUnitsAmount);
+
             const _contract = getContract(activeToken.rel.platform);
             
             if(activeToken.type === "v3" || activeToken.type === "usdc") {
