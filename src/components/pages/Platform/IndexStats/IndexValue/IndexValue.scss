@@ -119,20 +119,24 @@
         &--value {
             margin-right: 1.25vw;
             font-size: 1.25vw;
+            width: 2.604vw;
 
             @media (max-width: 1365px){
                 margin-right: 1vw;
                 font-size: 1.758vw;
+                width: 3vw;
             }
     
             @media (max-width: 1024px){
                 font-size: 3.129vw;
                 margin-right: 2.608vw;
+                width: 7.823vw;
             }
     
             @media (max-width: 767px){
                 font-size: 5.667vw;
                 margin-right: 2.222vw;
+                width: auto;
             }
         }
 

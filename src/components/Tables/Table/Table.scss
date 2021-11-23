@@ -221,12 +221,12 @@
         & + .last-update-date {
             opacity: 0.8;
             font-size: 0.625vw;
-            margin-top: 0.208vw;
+            margin-top: auto;
             width: 100%;
 
             @media (max-width: 1365px){
                 font-size: 0.879vw;
-                margin-top: 0.293vw;
+                margin-top: auto;
             }
         
             @media (max-width: 1024px){
