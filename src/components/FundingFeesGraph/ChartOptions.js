@@ -1,6 +1,6 @@
 import Highcharts from "highcharts/highstock";
 
-const Chart = ({ chartInitialize, series, cviValue }) => new Highcharts.stockChart(chartInitialize.id, {
+const Chart = ({ chartInitialize, series, activeVolInfo, indexValue }) => new Highcharts.stockChart(chartInitialize.id, {
     credits: { enabled: false },
     chart: {
         backgroundColor: 'transparent',
@@ -9,18 +9,18 @@ const Chart = ({ chartInitialize, series, cviValue }) => new Highcharts.stockCha
         events: {
             render: function() {
                 this.pointer.reset = () => {
-                    if(series && cviValue !== 0 && this.xAxis[0].series[0].points[cviValue]) {
-                        this.xAxis[0].series[0].points[cviValue].setState('select');
-                        this.xAxis[0].drawCrosshair(null, this.xAxis[0].series[0].points[cviValue]);
-                        this.tooltip.refresh([this.xAxis[0].series[0].points[cviValue]]);
+                    if(series && indexValue !== 0 && this.xAxis[0].series[0].points[indexValue]) {
+                        this.xAxis[0].series[0].points[indexValue].setState('select');
+                        this.xAxis[0].drawCrosshair(null, this.xAxis[0].series[0].points[indexValue]);
+                        this.tooltip.refresh([this.xAxis[0].series[0].points[indexValue]]);
                     }
                     return undefined;
                 };
 
-                if(series && cviValue !== 0 && this.xAxis[0].series[0].points[cviValue]) {
-                    this.xAxis[0].series[0].points[cviValue].setState('hover');
-                    this.xAxis[0].drawCrosshair(null, this.xAxis[0].series[0].points[cviValue]);
-                    this.tooltip.refresh([this.xAxis[0].series[0].points[cviValue]]);
+                if(series && indexValue !== 0 && this.xAxis[0].series[0].points[indexValue]) {
+                    this.xAxis[0].series[0].points[indexValue].setState('hover');
+                    this.xAxis[0].drawCrosshair(null, this.xAxis[0].series[0].points[indexValue]);
+                    this.tooltip.refresh([this.xAxis[0].series[0].points[indexValue]]);
                 }
             },
         }
@@ -46,7 +46,8 @@ const Chart = ({ chartInitialize, series, cviValue }) => new Highcharts.stockCha
             color: '#fff',
         },
         formatter: function() {
-            return [ `CVI: ${this.x}`, `Funding fee: ${this.y}%`]
+            const volName = activeVolInfo?.key?.toUpperCase() || 'Unkown'
+            return [ `${volName}: ${this.x}`, `Funding fee: ${this.y}%`]
         },
         valueDecimals: 4,
     },

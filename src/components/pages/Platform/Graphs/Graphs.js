@@ -56,13 +56,14 @@ const ActiveGraph = ({activeTab = "", activeVolIndex, tabsFormHeight, tabsFormWi
     return useMemo(() => {
         return activeTab.toLowerCase() === platformConfig.tabs.graphs['index']?.toLowerCase() ? 
             <CviIndexGraph    
-                activeVolIndex={activeVolIndex}
                 key={width}  
+                activeVolIndex={activeVolIndex}
                 maxWidth={tabsFormWidth ?? 400} 
                 maxHeight={tabsFormHeight ?? 400}  
             /> :  
             <FundingFeesGraph 
                 key={width} 
+                activeVolIndex={activeVolIndex}
                 maxWidth={tabsFormWidth ?? 400} 
                 maxHeight={tabsFormHeight ?? 400} 
             />
