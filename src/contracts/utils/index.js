@@ -275,9 +275,11 @@ export const getCviValue = async (oracle) => {
 }
 
 export function fromUnitsToTokenAmount(units, index, maxIndex) {
+  if(!maxIndex) console.warn("Warning: maxIndex is not provided as a param.");
   return units.mul(toBN(index)).div(toBN(maxIndex));
 }
 
 export function fromTokenAmountToUnits(tokenAmount, index, maxIndex) {
+  if(!maxIndex) console.warn("Warning: maxIndex is not provided as a param.");
   return toBN(tokenAmount).mul(toBN(maxIndex)).div(toBN(index));
 }
