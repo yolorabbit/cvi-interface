@@ -61,6 +61,26 @@
         ]
     },
     {
+        "name": "ETHVOL-USDC-Platform",
+        "events": [
+            "Approval",
+            "ClosePosition",
+            "Deposit",
+            "OpenPosition",
+            "Transfer",
+            "Withdraw"
+        ]
+    },
+    {
+        "name": "ETHVOL-USDCLP-StakingReward",
+        "events": [
+            "RewardAdded",
+            "RewardPaid",
+            "Staked",
+            "Withdrawn"
+        ]
+    },
+    {
         "name": "COTIETH-StakingRewards",
         "events": [
             "RewardAdded",
