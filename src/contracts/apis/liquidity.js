@@ -22,7 +22,7 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}
 
   try {
     let events = [];
-    const isUSDC = token.key === "usdc"
+    const isUSDC = token.name === "usdc";
     if(config.isMainnet) {
       events = await TheGraph[`account_liquidities${isUSDC ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
       const migrationsTokens = ['usdc','usdt'];

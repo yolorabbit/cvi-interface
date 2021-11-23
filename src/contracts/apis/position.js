@@ -214,11 +214,11 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils 
     let events = [];
     if(config.isMainnet) {
       const pos = await contracts[token.rel.platform].methods.positions(account).call();
-      events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) || 0);
+      events = await TheGraph[`account_positions${token.name === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) || 0);
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: Object.keys(contractState.positions)[idx] }))).flat();
     } else {
       const pos = await contracts[token.rel.platform].methods.positions(account).call();
-      events = await TheGraph[`account_positions${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) || 0);
+      events = await TheGraph[`account_positions${token.name === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address, (pos?.originalCreationTimestamp-1) || 0);
       events = Object.values(events).map((_events, idx) => _events.map((event) => ({ ...event, event: ["closePositions", "openPositions"][idx] }))).flat();
       // console.log("events: ", events);
       const chainName = await getChainName();

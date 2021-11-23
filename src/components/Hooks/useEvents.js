@@ -145,7 +145,7 @@ export const useEvents = () => {
     async function getLastOpenEvent(account, token) {
         try {
             if(config.isMainnet) {
-                let _lastOpenEvent = await TheGraph[`lastOpen${token.key === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
+                let _lastOpenEvent = await TheGraph[`lastOpen${token.name === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
                 return !!_lastOpenEvent.openPositions?.length ? _lastOpenEvent.openPositions[0] : null;
             }
             const options = {eventsCount: 1, days: 30 };

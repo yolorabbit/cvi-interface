@@ -99,7 +99,7 @@ const useHistoryEvents = () => {
         if(wallet[view] !== null && selectedNetwork !== chainNames.Matic) return;
 
         let events = [];
-        const isUSDC = activeToken.key === "usdc";
+        const isUSDC = activeToken.name === "usdc";
         if(config.isMainnet) {
             events = await TheGraph[`account_${view}${isUSDC ? "USDC" : ""}`](account, contracts[activeToken.rel.platform]._address, 0)
             const migrationsTokens = ['usdc','usdt'];
