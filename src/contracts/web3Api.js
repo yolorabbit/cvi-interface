@@ -128,7 +128,7 @@ const web3Api = {
         try {
             const USDTData = await getTokenData(contracts["USDT"]);
             
-            const promiseList = tokens.map(async ({rel: { platform, contractKey}, name, type, fixedDecimals}) => {
+            const promiseList = tokens.map(async ({rel: { platform, contractKey}, name, type, fixedDecimals, oracleId}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
 
                 let totalBalance = toBN(
@@ -141,7 +141,8 @@ const web3Api = {
                 return [
                     `${customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), fixedDecimals)} (${name.toUpperCase()} pool)`, 
                     amountConverted,
-                    name
+                    name,
+                    oracleId
                 ]
             });
 
@@ -175,7 +176,7 @@ const web3Api = {
                             .filter(({status}) => status === "fulfilled")
                             .map(({value}) => value);
 
-            return result
+            return result;
         } catch(error) {
             console.log(error);
             return "N/A";

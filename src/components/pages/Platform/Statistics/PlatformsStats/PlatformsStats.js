@@ -24,9 +24,17 @@ const PlatformsStats = ({liquidityPools, platformBalance}) => {
         
         const _openPositions = () => {
             if(!liquidityPools || !platformBalance) return null;
-            if(liquidityPools?.length !== platformBalance?.length) return "N/A";
             if(liquidityPools === "N/A" || platformBalance === "N/A") return "N/A";
-            return platformBalance?.map((item, index) => [`${commaFormatted(commonApi.getTradersPoolSize(item[1], liquidityPools[index][1]))} (${item[2]?.toUpperCase()} pool)`, liquidityPools[index][3]])
+            const liquidityPoolsMapped = liquidityPools.map(pool => [pool[2], pool[3]]) // example: ['usdc', 'cvi'];
+            const findPlatform = (tokenName, oracleId) => platformBalance.find(platformData => platformData[2] === tokenName && platformData[3] === oracleId) /* example for platformData ['pool size', BN, 'usdc', 'cvi']*/
+            return liquidityPoolsMapped?.map((item, index) => {
+                const platformData = findPlatform(item[0], item[1]);
+                if(!platformData) return ["N/A", "N/A"]
+                return [
+                    `${commaFormatted(commonApi.getTradersPoolSize(platformData[1], liquidityPools[index][1]))} (${platformData[2]?.toUpperCase()} pool)`,
+                    liquidityPools[index][3]
+                ];
+            })
         }
         const openPositions = _openPositions(); // calculate open positions for active tokens
         const liquidityPoolsLoaded = arrayIsLoaded(liquidityPools);
