@@ -1,17 +1,16 @@
 import { chainNames } from "connectors";
 
-export const oraclesData = {
-  "cvi": {
-    oracleId: "cvi",
-    maxIndex: "20000"
-  },
-  "ethvi": {
-    oracleId: 'ethvi',
-    maxIndex: "22000"
-  }
-}
-
 const config = {
+  oraclesData: {
+    "cvi": {
+      oracleId: "cvi",
+      maxIndex: "20000"
+    },
+    "ethvi": {
+      oracleId: 'ethvi',
+      maxIndex: "22000"
+    }
+  },
   lockupPeriod: {
     sell: 'buyersLockupPeriod',
     withdraw: 'lpsLockupPeriod',

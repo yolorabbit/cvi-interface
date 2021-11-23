@@ -10,7 +10,7 @@ import { actionConfirmEvent, commaFormatted, gas, maxUint256, toBN, toBNAmount, 
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
-import config, { oraclesData } from './../../config/config';
+import config from './../../config/config';
 import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
 import Contract from 'web3-eth-contract';
@@ -81,7 +81,7 @@ const Buy = () => {
             await contracts[activeToken.rel.contractKey].methods.balanceOf(contracts[activeToken.rel.platform]._address).call()
         )
         let totalUnits = await contracts[activeToken.rel.platform].methods.totalPositionUnitsAmount().call();
-        return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index, oraclesData[activeToken.oracleId].maxIndex).div(toBN(leverage));
+        return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index, config.oraclesData[activeToken.oracleId].maxIndex).div(toBN(leverage));
     }, [library?.eth, activeToken, contracts, token, leverage]);
 
     const getMaxAvailableToOpen = useCallback(async () => {
@@ -108,7 +108,7 @@ const Buy = () => {
         const _contract = getContract(activeToken.rel.platform);
         const _leverage = !leverage ? "1" : leverage;
         const _feesWithSlippage = String(Number(purchaseFee?.buyingPremiumFeePercent || 0) + Number((slippageTolerance * 100) || 0));
-        const maxIndexValue = oraclesData[activeToken.oracleId].maxIndex;
+        const maxIndexValue = config.oraclesData[activeToken.oracleId].maxIndex;
         if (activeToken.type === "eth") {
             return await _contract.methods.openPositionETH(maxIndexValue, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount, ...gas });
         } else if (activeToken.type === "v2" || activeToken.type === "usdc" || activeToken.type === "v3") {

@@ -8,7 +8,7 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { actionConfirmEvent, commaFormatted, gas, maxUint256, toBN, toBNAmount, toDisplayAmount } from '../../utils/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
-import config, { oraclesData } from '../../config/config';
+import config from '../../config/config';
 import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
 import ErrorModal from 'components/Modals/ErrorModal';
 import WithdrawInfo from 'components/pages/Platform/Info/WithdrawInfo';
@@ -46,7 +46,7 @@ const Withdraw = () => {
             await contracts[activeToken.rel.contractKey].methods.balanceOf(contracts[activeToken.rel.platform]._address).call()
         )
         let totalUnits = await contracts[activeToken.rel.platform].methods.totalPositionUnitsAmount().call();
-        return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index, oraclesData[activeToken.oracleId].maxIndex);
+        return fromUnitsToTokenAmount(totalBalance.sub(toBN(totalUnits)), index, config.oraclesData[activeToken.oracleId].maxIndex);
     }
 
     const getMaxAvailableToWithdraw = async () => {
