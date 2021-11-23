@@ -222,7 +222,7 @@ const platformConfig = {
         },
         action: ""
       },
-      "History": ["Action date", "Action type", "Index", "Value", "Leverage", "Amount", "Fees", "Net amount"],
+      "History": ["Action date", "Index", "Action type", "Value", "Leverage", "Amount", "Fees", "Net amount"],
     },
     [activeViews["view-liquidity"]]:  {
       [tabs['view-liquidity'].liquidity]: {
@@ -244,7 +244,7 @@ const platformConfig = {
         },
         action: ""
       },
-      "History":  ["Action date", "Action type", "Index", "Amount"],
+      "History":  ["Action date", "Index", "Action type", "Amount"],
     }, 
   },
   actionsConfig: {

@@ -38,7 +38,7 @@ const AddMetamaskAsset = ({token, protocol}) => {
                 type: 'ERC20',
                 options: {
                     address: activeToken.address,
-                    symbol: activeToken.label,
+                    symbol: activeToken.label.substring(0, 11),
                     decimals: activeToken.decimals,
                 },
               },

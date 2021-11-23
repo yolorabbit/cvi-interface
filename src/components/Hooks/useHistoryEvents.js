@@ -67,8 +67,8 @@ const useHistoryEvents = () => {
                     transactionHash: event.transactionHash,
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
-                    type,
                     index: activeToken.oracleId.toUpperCase(),
+                    type,
                     value: cviValue / 100,
                     leverage: `X${leverage ?? '1'}`,
                     amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.name.toUpperCase()}`,
@@ -86,8 +86,8 @@ const useHistoryEvents = () => {
                     transactionHash: event.transactionHash,
                     date: moment(actionDate).format('DD/MM/YYYY'),
                     timestamp: actionDate,
-                    type,
                     index: activeToken.oracleId.toUpperCase(),
+                    type,
                     amount: `${commaFormatted(customFixed(amount, activeToken.fixedDecimals))} ${activeToken.name.toUpperCase()}`,
                 });
             }

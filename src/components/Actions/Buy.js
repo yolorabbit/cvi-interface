@@ -124,7 +124,7 @@ const Buy = () => {
         if(!allowToBuy) {
             if(isActiveInDOM()) {
                 setModalIsOpen(true);
-                setErrorMessage(`There is not enough available liquidity to cover your position. Please select an amount lower than ${commaFormatted(totalToOpen)} ${token.toUpperCase()} or try again later.`)
+                setErrorMessage(`There is not enough available liquidity to cover your position. Please select an amount lower than ${commaFormatted(totalToOpen)} ${activeToken.name.toUpperCase()} or try again later.`)
             }
             return;
         }
