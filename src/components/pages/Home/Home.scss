@@ -1,6 +1,10 @@
 .home-component {
     background-color: #0f112d;
     flex: 1;
+
+    & .index-stats-component { 
+        height: auto;
+    }
 }
 
 .graph-section {
