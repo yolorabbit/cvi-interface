@@ -6,6 +6,11 @@ export const activeViews = {
   "history": "history"
 }
 
+export const activeViews = {
+  "pending": "pending",
+  "history": "history"
+}
+
 const tabs = {
   "sub-navbar": {
       "mint": "Mint",
