@@ -40,6 +40,12 @@ const config = {
       hide: ['/'],
       restricted: true // block access by country
     },
+    arbitrage: {
+      label: "Arbitrage",
+      path: '/arbitrage',
+      hide: ['/'],
+      restricted: true // block access by country
+    },
     analytics: {
       label: "Analytics",
       path: 'https://dune.xyz/govidev/CVI',

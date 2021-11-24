@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import Platform from './components/pages/Platform';
 import Staking from './components/pages/Staking';
+import Arbitrage from './components/pages/Arbitrage';
 import HelpCenter from './components/pages/HelpCenter';
 import Footer from './components/Footer/Footer';
 import config from './config/config';
@@ -74,6 +75,7 @@ const Routes = () => {
         <RestrictedModal />
         <MaintenanceModal />
         <Switch>
+          <Route path={config.routes.arbitrage.path} component={Arbitrage} />
           <Route path={config.routes.staking.path} component={Staking} />
           <Route path={config.routes['help-center'].path} component={HelpCenter} />
           <Route path={config.routes.platform.path} component={Platform} />
