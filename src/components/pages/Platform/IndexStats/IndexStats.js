@@ -47,7 +47,9 @@ const IndexsTable = () => {
 
         const indexsList = loadIndexsInfo();
         const hasSomeVolInfo = indexsList.some(vol => vol !== null);
-   
+        console.log(indexsList);
+        console.log(hasSomeVolInfo);
+        
         return <DataController 
             customTableHeaders={isMobile ? [] : platformConfig.headers.index}
             activeTab="index" 

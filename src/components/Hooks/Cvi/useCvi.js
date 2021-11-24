@@ -79,6 +79,7 @@ const useCvi = () => {
 
    const fetchVolData = useCallback(async () => {
       try {
+
          const _activeVolsSet = activeVolsSet(selectedNetwork);
          const activeVolsList = Object.values(_activeVolsSet);
          

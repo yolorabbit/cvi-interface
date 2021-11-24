@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { appViewContext } from 'components/Context';
 import SubNavbar from "components/SubNavbar";
-import Column from 'components/Layout/Column';
 import Layout from 'components/Layout/Layout';
 import Row from 'components/Layout/Row';
 import arbitrageConfig from "config/arbitrageConfig";
+import Container from "components/Layout/Container";
+import ArbitrageTables from './ArbitrageTables/ArbitrageTables';
 import "./Arbitrage.scss";
 
 const Arbitrage = () => {
@@ -22,15 +23,19 @@ const Arbitrage = () => {
             <appViewContext.Provider value={{activeView}}>
                 <Layout>
                     <Row className="statistics-row-component">
-                        Index , Platform Value, Uniswap Value
+                        <Container>
+
+                        </Container>
                     </Row>
 
                     <Row flex="100%">
-                        {/* Arbitrage tabs */}
+                        <Container>
+                            
+                        </Container>
                     </Row>
 
                     <Row>
-                        {/* Arbitrage Tables */}
+                        <ArbitrageTables />
                     </Row>
                 </Layout>
             </appViewContext.Provider>
