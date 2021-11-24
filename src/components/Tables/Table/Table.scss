@@ -213,6 +213,19 @@
                     &:last-child {
                         text-align: left;
                         margin-left: unset;
+                        margin-top: 0.313vw;
+                        @media (max-width: 1365px){
+                            margin-top: 0.44vw;
+                        }
+
+                        @media (max-width: 1024px){
+                            margin-top: 0.882vw;
+                        }
+
+                        @media (max-width: 767px){
+                            margin-top: 0;
+                        }
+
                     }
                 }
             }
