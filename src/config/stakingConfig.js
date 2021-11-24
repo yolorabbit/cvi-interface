@@ -295,9 +295,6 @@ const stakingConfig = {
         "rhegic2-eth-lp": "RHEGIC2-ETH LP",
         "govi": "GOVI",
       },
-      "Estimated rewards per day": {
-        label: "Estimated rewards per day",
-      },
       "Claimable rewards": {
         label: "Claimable rewards"
       },

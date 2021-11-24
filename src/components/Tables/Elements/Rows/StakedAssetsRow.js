@@ -10,7 +10,6 @@ import { Pairs } from "../Values";
 import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
 import { toBN } from "utils";
-import Rewards from './../Values/Rewards';
 import StakedAmount from "../Values/StakedAmount";
 import MigrateAction from "components/Actions/MigrateAction";
 
@@ -104,11 +103,6 @@ const RowData = ({isHeader, token, protocol, data}) => {
                 /> } 
             />
     
-            <RowItem 
-                 header={header["Estimated rewards per day"].label} 
-                 content={<Rewards rewards={stakedData.dailyReward} />}
-            />
-
             <RowItem 
                 header={header["Claimable rewards"].label} 
                 content={<StakingClaim protocol={protocol} tokenName={token} claim={data.claim} /> } 

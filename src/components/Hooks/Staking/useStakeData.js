@@ -5,14 +5,11 @@ import { commaFormatted, customFixed, toBN, toDisplayAmount, toFixed } from "uti
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { convert, fromLPTokens, getPrice } from "contracts/utils";
 import { DAY, useEvents } from "../useEvents";
-import BigNumber from "bignumber.js";
 import { useActiveWeb3React } from "../wallet";
 import { useSelector } from "react-redux";
 import { chainNames } from "connectors";
 import { useWeb3React } from "@web3-react/core";
 import config from "config/config";
-import Api from "Api";
-import moment from 'moment';
 
 const initialState = {
   stakedTokenAmount: null,
@@ -23,10 +20,6 @@ const initialState = {
     value: null
   },
   poolSize: null,
-  dailyReward: [{
-    amount: null,
-    symbol: null
-  }],
   apy: [null,null,null],
   claim: [{
     amount: null,
@@ -59,37 +52,6 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const decimalsCountDisplay = 8;
   const events = useSelector(({events})=> events);
   
-  const getDailyReward = async (cb) => {
-    const getDailyRewardsByTokenName = async () => {
-      switch (tokenName) {
-        case 'govi': {
-          const response = await Api.GET_FEES_COLLECTED(`?chain=${chainName === chainNames.Matic ? 'Polygon' : chainName}&from=${Math.floor(moment().subtract(90, "days").valueOf() / 1000) }`);
-          const feesCollected = response.data;
-        
-          return await token.rewardsTokens.map(async (t,idx) => {
-            const feesSum = feesCollected[t.toUpperCase()];
-            const now = await eventsUtils.getNow();
-            return await web3Api.getDailyRewardPerToken(contracts[tokenRel.stakingRewards], account, feesSum, now, t.replace("W",""), tokenRel.tokenDecimals[idx]);
-          })
-        }
-        default: 
-          if(token.migrated) return [{
-            amount: '0',
-            symbol: 'GOVI'
-          }];
-          return [await web3Api.getDailyReward(contracts[tokenRel.stakingRewards], account, token.decimals)]
-      }
-    }
-    const dailyReward = await (await Promise.allSettled(await getDailyRewardsByTokenName()))
-    .filter(({status}) => status === "fulfilled")
-    .map(({value}) => value);
-
-    cb(() => setStakedData((prev)=> ({
-      ...prev,
-      dailyReward
-    })));
-  }
-
   const getAPY = async (cb) => {
     const [platform, stakingRewards] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards]];
     const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
@@ -212,25 +174,6 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       console.log(tokenName+" protocol: ", protocol)
     }
   };
-
-  const getDailyRewardLM = async (cb) => {
-    const poolSize = await contracts[tokenRel.stakingRewards].methods.totalSupply().call();
-    const totalStaked = !!account ? await contracts[tokenRel.stakingRewards].methods.balanceOf(account).call() : 0;
-    
-    const mySharePercentage = toBN(totalStaked).isZero() ? "0" : BigNumber(totalStaked).dividedBy(BigNumber(poolSize)).multipliedBy(BigNumber(100));
-
-    const rate = await contracts[tokenRel.stakingRewards].methods.rewardRate().call();
-
-    const dailyReward = [{
-      amount: commaFormatted(customFixed(toDisplayAmount(rate, 18) * 86400 * mySharePercentage / 100, 2)),
-      symbol: token.rewardsTokens[0]
-    }];
-    
-    cb(() => setStakedData((prev)=> ({
-      ...prev,
-      dailyReward
-    })));
-  };
       
   const getTokenBalance = async (cb) => {
     if(!account) return cb(()=> setStakedData((prev)=>({
@@ -285,7 +228,6 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
 
   const fetchLiquidityMiningData = async (cb) => {
     getAPYLM(cb)
-    isStaked && getDailyRewardLM(cb);
     getTVLLM(cb);
   }
 
@@ -294,7 +236,6 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     if(protocol !== "platform") return fetchLiquidityMiningData(cb);
     getAPY(cb);
     getStakedTVL(cb);
-    isStaked && getDailyReward(cb);
   }
 
   useEffect(()=>{
