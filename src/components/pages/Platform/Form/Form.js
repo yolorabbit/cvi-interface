@@ -1,4 +1,4 @@
-import { platformViewContext } from 'components/Context';
+import { appViewContext } from 'components/Context';
 import React, { useContext, useEffect, useMemo, useState, useCallback} from 'react'
 import CurrencySelect from 'components/CurrencySelect';
 import SelectLeverage from 'components/SelectLeverage';
@@ -16,7 +16,7 @@ import './Form.scss';
 const Form = ({activeTab}) => {
     const isTablet = useIsTablet();
     const { account } = useActiveWeb3React();
-    const { activeView } = useContext(platformViewContext);
+    const { activeView } = useContext(appViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
     const [selectedCurrency, setSelectedCurrency] = useState(platformConfig.tokens[selectedNetwork]?.['usdc-cvol'].key);
     const tokenLeverageList = platformConfig.tokens?.[selectedNetwork]?.[selectedCurrency]?.leverage;
@@ -98,7 +98,7 @@ const Form = ({activeTab}) => {
 }
 
 const SeeMore = ({selectedCurrency, isMigrated}) => {
-    const { activeView } = useContext(platformViewContext);
+    const { activeView } = useContext(appViewContext);
     const { selectedNetwork } = useSelector(({app}) => app);
     const contracts = useContext(contractsContext);
     const [lockup, setLockup] = useState(48);

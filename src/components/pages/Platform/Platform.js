@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { platformViewContext } from 'components/Context';
+import { appViewContext } from 'components/Context';
 import SubNavbar from 'components/SubNavbar';
 import Statistics from './Statistics';
 import Column from 'components/Layout/Column';
@@ -27,7 +27,7 @@ const Platform = () => {
             <div className="platform-component">
                 <SubNavbar tabs={Object.keys(platformConfig.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
                 <MigrationModalToggle />
-                <platformViewContext.Provider value={{activeView}}>
+                <appViewContext.Provider value={{activeView}}>
                     <Layout>
                         <Row className="statistics-row-component">
                             <Column>
@@ -53,7 +53,7 @@ const Platform = () => {
                             <PlatformTables />
                         </Row>
                     </Layout>
-                </platformViewContext.Provider>
+                </appViewContext.Provider>
             </div>
         )
     }, [activeView]);

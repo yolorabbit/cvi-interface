@@ -3,7 +3,7 @@ import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 import Slippage from 'components/Slippage';
 import Expand from 'components/Expand';
-import { platformViewContext } from 'components/Context';
+import { appViewContext } from 'components/Context';
 import Action from './Action';
 import platformConfig from 'config/platformConfig';
 import { useActiveToken } from '../Hooks';
@@ -25,7 +25,7 @@ export const useActionController = () => {
 const ActionController = ({type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, slippageTolerance, setSlippageTolerance, isModal, view="platform", protocol, balances, cb}) => {
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
-  const { activeView } = useContext(platformViewContext);
+  const { activeView } = useContext(appViewContext);
   const activeToken = useActiveToken(token);
 
   const renderActionComponent = useCallback((isModal = false) => {
@@ -99,7 +99,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
 };
 
 const AdvancedOptions = ({slippageTolerance, setSlippageTolerance}) => {
-  const { activeView } = useContext(platformViewContext);
+  const { activeView } = useContext(appViewContext);
   if(activeView !== "trade") return null;
   return <Expand header="Advanced" classNames="advanced-expand" expandedView={<Slippage slippageTolerance={slippageTolerance} setSlippageTolerance={setSlippageTolerance} />} />
 }

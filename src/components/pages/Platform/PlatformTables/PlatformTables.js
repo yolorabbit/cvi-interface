@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useState } from 'react';
-import { platformViewContext } from '../../../Context';
+import { appViewContext } from '../../../Context';
 import { useIsTablet } from 'components/Hooks';
 import Container from '../../../Layout/Container';
 import TabsForm from '../../../TabsForm';
@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import useAssets from 'components/Hooks/useAssets';
 
 const PlatformTables = () => {
-    const { activeView } = useContext(platformViewContext);
+    const { activeView } = useContext(appViewContext);
     const [activeTab, setActiveTab] = useState();
 
     const renderView = () => {
@@ -61,7 +61,7 @@ const DefaultTable = ({activeTab}) => {
 }
 
 const HistoryTable = ({activeTab}) => {
-    const { activeView } = useContext(platformViewContext);
+    const { activeView } = useContext(appViewContext);
     const wallet = useSelector(({wallet}) => wallet);
     
     const historyData = useMemo(() => {

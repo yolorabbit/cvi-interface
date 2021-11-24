@@ -1,7 +1,7 @@
 import { createContext, useEffect, useRef, useState } from "react";
 
 export const viewportContext = createContext({});
-export const platformViewContext = createContext("");
+export const appViewContext = createContext("");
 
 export const ViewportProvider = ({ children }) => {
   // This is the exact same logic that we previously had in our hook

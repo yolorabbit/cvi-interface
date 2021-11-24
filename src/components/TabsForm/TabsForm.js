@@ -3,11 +3,11 @@ import { useHistory } from 'react-router-dom';
 import Tabs from 'components/Tabs';
 import { useInDOM } from 'components/Hooks';
 import './TabsForm.scss';
-import { platformViewContext } from 'components/Context';
+import { appViewContext } from 'components/Context';
 
 const TabsForm = React.forwardRef(({id = "view", tabs = [], isDropdown, dontChangeQuery, activeTab, setActiveTab, className, rightContent, children}, ref) => {
     const history = useHistory();
-    const { activeView } = useContext(platformViewContext);
+    const { activeView } = useContext(appViewContext);
     const isActiveInDOM = useInDOM();
     
     useEffect(() => {

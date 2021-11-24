@@ -1,14 +1,14 @@
 import { useIsTablet } from "components/Hooks";
 import { useContext, useMemo } from "react";
 import RowItem from './RowItem';
-import { platformViewContext } from "components/Context";
+import { appViewContext } from "components/Context";
 import platformConfig from "config/platformConfig";
 import { Value } from "../Values";
 import { omit } from "lodash";
 
 const HistoryRow = ({rowData, isHeader}) => {
     const isTablet = useIsTablet();
-    const { activeView } = useContext(platformViewContext); 
+    const { activeView } = useContext(appViewContext); 
     const headers = useMemo(() => Object.values(platformConfig.headers?.[activeView]?.History), [activeView]);
     
   

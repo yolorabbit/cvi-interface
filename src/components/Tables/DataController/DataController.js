@@ -1,5 +1,5 @@
 import ConnectWallet from 'components/ConnectWallet/ConnectWallet';
-import { platformViewContext } from 'components/Context';
+import { appViewContext } from 'components/Context';
 import EmptyData from 'components/EmptyData/EmptyData';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import platformConfig from 'config/platformConfig';
@@ -14,7 +14,7 @@ export const useDataController = () => {
 }
 
 const DataController = ({children, data = [], subHeaders = {}, activeTab, authGuard, pageSize = 5, showPaginator, customTableHeaders, cb}) => {
-    const { activeView } = useContext(platformViewContext);
+    const { activeView } = useContext(appViewContext);
     const [currentPage, setCurrentPage] = useState(1);
     const { account } = useActiveWeb3React();
     const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? activeTab?.toLowerCase();

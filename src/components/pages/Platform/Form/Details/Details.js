@@ -1,4 +1,4 @@
-import { platformViewContext } from "components/Context";
+import { appViewContext } from "components/Context";
 import { useContext, useMemo} from "react";
 import { customFixed, customFixedTokenValue, toBN, toBNAmount, toDisplayAmount } from "utils";
 import Stat from "components/Stat";
@@ -11,7 +11,7 @@ import config from "config/config";
 import './Details.scss';
 
 const Details = ({activeVolIndex, selectedCurrency, amount, leverage, slippageTolerance}) => {
-    const { activeView } = useContext(platformViewContext);
+    const { activeView } = useContext(appViewContext);
  
     return useMemo(() => {
         return (
