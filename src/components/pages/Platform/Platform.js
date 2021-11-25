@@ -12,6 +12,9 @@ import useHistoryEvents from 'components/Hooks/useHistoryEvents';
 import IndexStats from './IndexStats';
 import useCvi from 'components/Hooks/Cvi';
 import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
+import MainSection from 'components/MainSection';
+import config from 'config/config';
+import ActiveSection from './ActiveSection';
 import './Platform.scss';
 import Form from './Form';
 import MainTabsContainer from 'components/MainTabsContainer';
@@ -48,9 +51,9 @@ const Platform = () => {
                         </Row>
 
                         <Row flex="100%">
-                            <MainTabsContainer path={config.routes.platform.path}>
-                                <Form />
-                            </MainTabsContainer>
+                            <MainSection path={config.routes.platform.path}>
+                                <ActiveSection />
+                            </MainSection>
                         </Row>
 
                         <Row>

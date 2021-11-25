@@ -6,43 +6,40 @@ import Row from "components/Layout/Row";
 import arbitrageConfig from "config/arbitrageConfig";
 import Container from "components/Layout/Container";
 import ArbitrageTables from "./ArbitrageTables/ArbitrageTables";
-import "./Arbitrage.scss";
-import MainTabsContainer from "components/MainTabsContainer";
-import Form from "./Form";
+import MainSection from "components/MainSection";
 import config from "config/config";
+import ActiveSection from "./ActiveSection";
+import "./Arbitrage.scss";
 
 const Arbitrage = () => {
   const [activeView, setActiveView] = useState();
   
-  return useMemo(() => {
-    return (
-      <div className="arbitrage-component">
-        <SubNavbar
-          tabs={Object.keys(arbitrageConfig.tabs["sub-navbar"])}
-          activeView={activeView}
-          setActiveView={setActiveView}
-        />
+  return useMemo(() => (
+    <div className="arbitrage-component">
+      <SubNavbar
+        tabs={Object.keys(arbitrageConfig.tabs["sub-navbar"])}
+        activeView={activeView}
+        setActiveView={setActiveView} />
 
-        <appViewContext.Provider value={{ activeView }}>
-          <Layout>
-            <Row className="statistics-row-component">
-              <Container></Container>
-            </Row>
+      <appViewContext.Provider value={{ activeView }}>
+        <Layout>
+          <Row className="statistics-row-component">
+            <Container></Container>
+          </Row>
 
-                    <Row flex="100%">
-                        <MainTabsContainer path={config.routes.arbitrage.path}>
-                            <Form />
-                        </MainTabsContainer>
-                    </Row>
-                    
-                    <Row>
-                        <ArbitrageTables />
-                    </Row>
-                </Layout>
-            </appViewContext.Provider>
-        </div>
-      );
-  }, [activeView]);
+          <Row flex="100%">
+            <MainSection path={config.routes.arbitrage.path}>
+              <ActiveSection />
+            </MainSection>
+          </Row>
+
+          <Row>
+            <ArbitrageTables />
+          </Row>
+        </Layout>
+      </appViewContext.Provider>
+    </div>
+  ), [activeView]);
 };
 
 export default Arbitrage;

@@ -18,7 +18,7 @@ const MainTabsContainer = ({children, path = config.routes.platform.path}) => {
             activeTab={activeTab}
             setActiveTab={(tab) => setActiveTab(tab)}
         >
-            {React.cloneElement(children, {activeTab: activeTab})}
+            {children && React.cloneElement(children, {activeTab: activeTab})}
         </TabsForm>
     )
 }

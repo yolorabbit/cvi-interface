@@ -11,9 +11,9 @@ import { useInDOM, useIsTablet } from 'components/Hooks';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Graphs from '../Graphs';
-import './Form.scss';
+import './ActiveSection.scss';
 
-const Form = ({activeTab}) => {
+const ActiveSection = ({activeTab}) => {
     const isTablet = useIsTablet();
     const { account } = useActiveWeb3React();
     const { activeView } = useContext(appViewContext);
@@ -164,4 +164,4 @@ const migrationMsg = useCallback(() => {
     }, [activeView, isMigrated, lockup, migrationMsg]);
 }
 
-export default Form;
+export default ActiveSection;
