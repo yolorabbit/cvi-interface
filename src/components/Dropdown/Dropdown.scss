@@ -4,7 +4,28 @@
   width: 100%;
   padding: 0;
   background: #182f5d;
-  border-radius: 0.293vw;
+  border-radius: 0.417vw;
+  overflow: hidden;
+  border: 0.052vw solid transparent;
+  margin-top: 0.833vw;
+  &.error {
+    border-color: #bb1e52;
+  }
+  @media (max-width: 1365px) {
+    border-radius: 0.586vw;
+    border: 0.073vw solid transparent;
+    margin-top: 1.172vw;
+  }
+  @media (max-width: 1024px) {
+    border-radius: 1.043vw;
+    border: 0.13vw solid transparent;
+    margin-top: 2.086vw;
+  }
+  @media (max-width: 767px) {
+    margin-top: 4.444vw;
+    border-radius: 2.222vw;
+  }
+
   &.open {
     .dropdown-group {
       .input-group {
@@ -34,17 +55,26 @@
     align-items: center;
     .input-group {
       width: 100%;
-      border-radius: 0.293vw;
       line-height: 1;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.586vw 1.172vw;
+      padding: 0;
       width: 100%;
       background: #222540;
       transition: all 0.2s ease-out;
       .open-icon {
         cursor: pointer;
+        margin-inline-end: 0.417vw;
+        @media (max-width: 767px) {
+          margin-inline-end: 2.222vw;
+        }
+        @media (max-width: 1024px) {
+          margin-inline-end: 1.043vw;
+        }
+        @media (max-width: 1365px) {
+          margin-inline-end: 0.586vw;
+        }
       }
       .dropdown-input {
         transition: all 0.2s ease-out;
@@ -54,37 +84,36 @@
         background: #222540;
         font-size: 0.938vw;
         height: 2.5vw;
-        padding-right: 6.458vw;
         font-weight: bold;
         font-stretch: normal;
         font-style: normal;
         letter-spacing: normal;
         color: white;
+        width: 100%;
+        padding: 0.625vw 0.833vw;
         @media (max-width: 1365px) {
           height: 3.516vw;
-          padding-right: 9.084vw;
-          border: 0.073vw solid transparent;
           font-size: 1.319vw;
+          padding: 1.172vw 1.563vw;
         }
 
         @media (max-width: 1024px) {
           height: 6.258vw;
           font-size: 2.347vw;
-          border: 0.13vw solid transparent;
-          padding-right: 16.167vw;
+          padding: 1.565vw 2.086vw;
         }
 
         @media (max-width: 767px) {
           height: 13.333vw;
           font-size: 3.889vw;
+          padding: 3.333vw 4.444vw;
         }
       }
     }
     .dropdown-label {
-      min-width: 3.906vw;
       border-top-right-radius: 0.417vw;
       border-bottom-right-radius: 0.417vw;
-      padding: 0 0.417vw;
+      padding: 0;
       font-size: 0.625vw;
       height: inherit;
       background: #182f5d;
@@ -92,26 +121,19 @@
       align-items: center;
       justify-content: center;
       color: white;
-      text-transform: uppercase;
       @media (max-width: 1365px) {
         min-width: 5.495vw;
-        border-top-right-radius: 0.586vw;
-        border-bottom-right-radius: 0.586vw;
         padding: 0 0.586vw;
         font-size: 0.879vw;
         line-height: 1;
       }
       @media (max-width: 1024px) {
         min-width: 9.779vw;
-        border-top-right-radius: 1.043vw;
-        border-bottom-right-radius: 1.043vw;
         padding: 0 1.043vw;
         font-size: 1.564vw;
       }
       @media (max-width: 767px) {
         min-width: 20.835vw;
-        border-top-right-radius: 2.222vw;
-        border-bottom-right-radius: 2.222vw;
         padding: 0 2.222vw;
         font-size: 3.333vw;
       }
@@ -125,15 +147,33 @@
     padding: 0;
     position: relative;
     background: #222540;
+    border-radius: 0 0 0.293vw 0.293vw;
     .dropdown-option {
       list-style: none;
-      padding: 0.586vw 1.172vw;
       width: 100%;
       height: inherit;
       font-size: 0.938vw;
       height: 2.5vw;
       color: white;
       cursor: pointer;
+      padding: 0.625vw 0.833vw;
+      @media (max-width: 1365px) {
+        height: 3.516vw;
+        font-size: 1.319vw;
+        padding: 1.172vw 1.563vw;
+      }
+
+      @media (max-width: 1024px) {
+        height: 6.258vw;
+        font-size: 2.347vw;
+        padding: 1.565vw 2.086vw;
+      }
+
+      @media (max-width: 767px) {
+        height: 13.333vw;
+        font-size: 3.889vw;
+        padding: 3.333vw 4.444vw;
+      }
       &.selected {
         background: rgba(248, 186, 21, 0.1);
         color: #f8ba15;
