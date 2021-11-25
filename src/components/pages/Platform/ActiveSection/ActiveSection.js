@@ -2,7 +2,6 @@ import { appViewContext } from 'components/Context';
 import React, { useContext, useEffect, useMemo, useState, useCallback} from 'react'
 import CurrencySelect from 'components/CurrencySelect';
 import SelectLeverage from 'components/SelectLeverage';
-import Details from './Details/Details';
 import platformConfig, { activeViews } from 'config/platformConfig';
 import ActionController from 'components/Actions/ActionController';
 import { useSelector } from 'react-redux';
@@ -12,6 +11,7 @@ import { useWeb3Api } from 'contracts/useWeb3Api';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Graphs from '../Graphs';
 import './ActiveSection.scss';
+import Details from 'components/Details/Details';
 
 const ActiveSection = ({activeTab}) => {
     const isTablet = useIsTablet();

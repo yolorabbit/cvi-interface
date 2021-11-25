@@ -6,12 +6,17 @@ export const activeViews = {
   "history": "history"
 }
 
-const tabs = {
+export const activeTabs = {
+  "mint": "mint",
+  "burn": "burn"
+}
+
+export const tabs = {
   "sub-navbar": {
-      "mint": "Mint",
-      "burn": "Burn"
+    "mint": "Mint",
+    "burn": "Burn"
   }
-};
+}
 
 const arbitrageConfig = {
   tabs,
