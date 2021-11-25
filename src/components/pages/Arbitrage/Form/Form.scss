@@ -1,0 +1,21 @@
+.arbitrage-form-component {
+    height: 100%;
+    padding: 2.917vw 0.833vw 2.917vw 2.917vw;
+    display: flex;
+    flex-wrap: wrap;
+    background-color:#1b1d38;
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+    
+    @media (max-width: 1365px){
+        padding: 4.103vw;
+    }
+
+    @media (max-width: 1024px){ 
+        padding: 3.129vw;
+    }
+
+    @media (max-width: 767px){ 
+        padding: 4.444vw;
+    }
+}

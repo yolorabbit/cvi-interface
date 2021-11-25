@@ -1,5 +1,6 @@
 import BigNumber from "bignumber.js";
 import { BN } from "bn.js";
+import arbitrageConfig from "config/arbitrageConfig";
 import config from "config/config";
 import platformConfig from "config/platformConfig";
 import { chainNames, ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
@@ -146,10 +147,18 @@ export const actionConfirmEvent = async (dispatch) => {
 export const arrayIsLoaded = (value) => value === "N/A" ? [] : value && value?.length > 0 ? value : [];
 
 
-export const activeVolsSet = (selectedNetwork) => {
+export const activeVolsSet = (selectedNetwork, path = "/platform") => {
     if(!selectedNetwork) return {};
-
-    const tokens = platformConfig.tokens[selectedNetwork];
+    const getConfig = () => {
+        switch(path) {
+            case config.routes.arbitrage.path:
+                return arbitrageConfig;
+            default:
+                return platformConfig;
+        }
+    }
+    const _config = getConfig();
+    const tokens = _config.tokens[selectedNetwork];
     const tokensKeys = Object.keys(tokens);
     const activeVolsObject = tokensKeys
         .filter(tokenKey => tokens[tokenKey].oracleId && !tokens[tokenKey].soon)

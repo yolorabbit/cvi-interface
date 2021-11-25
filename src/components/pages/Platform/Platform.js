@@ -10,10 +10,12 @@ import platformConfig from 'config/platformConfig';
 import PlatformTables from './PlatformTables';
 import useHistoryEvents from 'components/Hooks/useHistoryEvents';
 import IndexStats from './IndexStats';
-import IndexTabs from './IndexTabs';
 import useCvi from 'components/Hooks/Cvi';
 import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
 import './Platform.scss';
+import Form from './Form';
+import MainTabsContainer from 'components/MainTabsContainer';
+import config from 'config/config';
 
 
 const Platform = () => {
@@ -46,7 +48,9 @@ const Platform = () => {
                         </Row>
 
                         <Row flex="100%">
-                            <IndexTabs />
+                            <MainTabsContainer path={config.routes.platform.path}>
+                                <Form />
+                            </MainTabsContainer>
                         </Row>
 
                         <Row>

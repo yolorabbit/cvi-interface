@@ -1,14 +1,14 @@
 import TabsForm from 'components/TabsForm'
+import config from 'config/config';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { activeVolsSet } from 'utils';
-import Form from '../Form';
-import './IndexTabs.scss';
+import './MainTabsContainer.scss';
 
-const IndexTabs = () => {
+const MainTabsContainer = ({children, path = config.routes.platform.path}) => {
     const [activeTab, setActiveTab] = useState();
     const { selectedNetwork } = useSelector(({app}) => app);
-    const activeVolsList = Object.keys(activeVolsSet(selectedNetwork));
+    const activeVolsList = Object.keys(activeVolsSet(selectedNetwork, path));
 
     return (
         <TabsForm
@@ -18,9 +18,9 @@ const IndexTabs = () => {
             activeTab={activeTab}
             setActiveTab={(tab) => setActiveTab(tab)}
         >
-            <Form activeTab={activeTab} />
+            {React.cloneElement(children, {activeTab: activeTab})}
         </TabsForm>
     )
 }
 
-export default IndexTabs;
+export default MainTabsContainer;
