@@ -10,7 +10,6 @@ import "./Arbitrage.scss";
 import MainTabsContainer from "components/MainTabsContainer";
 import Form from "./Form";
 import config from "config/config";
-import TimeToFullfill from "./TimeToFullfill";
 
 const Arbitrage = () => {
   const [activeView, setActiveView] = useState();
