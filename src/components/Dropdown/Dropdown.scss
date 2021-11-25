@@ -5,28 +5,38 @@
   padding: 0;
   background: #182f5d;
   border-radius: 0.417vw;
-  overflow: hidden;
-  border: 0.052vw solid transparent;
+  border: 0.052vw solid #222540;
   margin-top: 0.833vw;
+  z-index: 15;
   &.error {
     border-color: #bb1e52;
   }
   @media (max-width: 1365px) {
     border-radius: 0.586vw;
-    border: 0.073vw solid transparent;
+    border: 0.073vw solid #222540;
     margin-top: 1.172vw;
   }
   @media (max-width: 1024px) {
     border-radius: 1.043vw;
-    border: 0.13vw solid transparent;
+    border: 0.13vw solid #222540;
     margin-top: 2.086vw;
   }
   @media (max-width: 767px) {
     margin-top: 4.444vw;
     border-radius: 2.222vw;
   }
-
   &.open {
+    z-index: 25;
+    border-radius: 0.417vw 0.417vw 0 0;
+    @media (max-width: 1365px) {
+      border-radius: 0.586vw 0.586vw 0 0;
+    }
+    @media (max-width: 1024px) {
+      border-radius: 1.043vw 1.043vw 0 0;
+    }
+    @media (max-width: 767px) {
+      border-radius: 2.222vw 2.222vw 0 0;
+    }
     .dropdown-group {
       .input-group {
         transition: all 0.2s ease-in;
@@ -37,14 +47,29 @@
         }
         .dropdown-input {
           transition: all 0.2s ease-in;
-          background: #182f5d;
         }
       }
     }
     .dropdown-component-open {
       opacity: 1;
-      height: fit-content;
       transition: all 0.2s ease-in;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      min-height: 2.5vw;
+      height: fit-content;
+      max-height: 9.583vw;
+      overflow-y: scroll;
+      @media (max-width: 1365px) {
+        max-height: 17.969vw;
+      }
+      @media (max-width: 1024px) {
+        max-height: 23.99vw;
+      }
+      @media (max-width: 767px) {
+        max-height: 51.111vw;
+      }
     }
   }
 
@@ -63,17 +88,29 @@
       width: 100%;
       background: #222540;
       transition: all 0.2s ease-out;
+      position: relative;
+      border-radius: 0.417vw 0 0 0.417vw;
+      @media (max-width: 1365px) {
+        border-radius: 0.586vw 0 0 0.586vw;
+      }
+      @media (max-width: 1024px) {
+        border-radius: 1.043vw 0 0 1.043vw;
+      }
+      @media (max-width: 767px) {
+        border-radius: 2.222vw 0 0 2.222vw;
+      }
       .open-icon {
+        z-index: 9;
         cursor: pointer;
         margin-inline-end: 0.417vw;
-        @media (max-width: 767px) {
-          margin-inline-end: 2.222vw;
+        @media (max-width: 1365px) {
+          margin-inline-end: 0.586vw;
         }
         @media (max-width: 1024px) {
           margin-inline-end: 1.043vw;
         }
-        @media (max-width: 1365px) {
-          margin-inline-end: 0.586vw;
+        @media (max-width: 767px) {
+          margin-inline-end: 2.222vw;
         }
       }
       .dropdown-input {
@@ -81,35 +118,31 @@
         border: none;
         outline: none;
         box-shadow: none;
-        background: #222540;
-        font-size: 0.938vw;
+        background: transparent;
         height: 2.5vw;
         font-weight: bold;
-        font-stretch: normal;
-        font-style: normal;
-        letter-spacing: normal;
         color: white;
         width: 100%;
-        padding: 0.625vw 0.833vw;
+        font-size: 0.938vw;
+        padding: 0.625vw 0 0.625vw 0.833vw;
         @media (max-width: 1365px) {
           height: 3.516vw;
           font-size: 1.319vw;
-          padding: 1.172vw 1.563vw;
+          padding: 1.172vw 0 1.172vw 1.563vw;
         }
-
         @media (max-width: 1024px) {
           height: 6.258vw;
           font-size: 2.347vw;
-          padding: 1.565vw 2.086vw;
+          padding: 1.565vw 0 1.565vw 2.086vw;
         }
-
         @media (max-width: 767px) {
           height: 13.333vw;
           font-size: 3.889vw;
-          padding: 3.333vw 4.444vw;
+          padding: 3.333vw 0 3.333vw 4.444vw;
         }
       }
     }
+
     .dropdown-label {
       border-top-right-radius: 0.417vw;
       border-bottom-right-radius: 0.417vw;
@@ -121,6 +154,8 @@
       align-items: center;
       justify-content: center;
       color: white;
+      min-width: 3.906vw;
+      z-index: 20;
       @media (max-width: 1365px) {
         min-width: 5.495vw;
         padding: 0 0.586vw;
@@ -157,6 +192,7 @@
       color: white;
       cursor: pointer;
       padding: 0.625vw 0.833vw;
+      font-weight: bold;
       @media (max-width: 1365px) {
         height: 3.516vw;
         font-size: 1.319vw;
@@ -179,5 +215,24 @@
         color: #f8ba15;
       }
     }
+  }
+
+  /* Scroll Bar */
+  ::-webkit-scrollbar {
+    width: 16px;
+    scroll-behavior: smooth !important;
+  }
+  ::-webkit-scrollbar-track {
+    background: #2f3250;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(248, 186, 21, 0.3);
+    border: 2px solid #2f3250 !important;
+    width: 8px !important;
+    height: 36px !important;
+    border-radius: 0 !important;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(248, 186, 21, 0.6);
   }
 }
