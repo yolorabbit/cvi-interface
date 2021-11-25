@@ -9130,7 +9130,7 @@
     ]
   },
   "UNIV2USDCETHVOL-USDC-LONG": { "address": "0x197e99bD87F98DFde461afE3F706dE36c9635a5D", "abiRef": "UNIV2" },
-  "ETHVOL-USDCLP-StakingRewards": { "address": "0x967440F87132008184C25b9c385860E908DF1a6D", "abiRef": "StakingRewards" },
+  "ETHVOL-USDCLP-StakingRewards": { "address": "0x55Ab074cFB5d07Bbb5D1561969A079914DF5053a", "abiRef": "StakingRewards" },
   "CVOL-Oracle": {
     "address": "0x44F671C28454d8f490088fa77F564A06a8CAEba2",
     "abi": [
