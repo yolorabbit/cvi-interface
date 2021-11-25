@@ -9,6 +9,7 @@ export const markedEventsData = {
 
 const ChartOptions = ({ chartInitialize, series, height, maxWidth, activeRange, onClick, activeVolIndex }) => Highcharts.stockChart(chartInitialize.id, {
     credits: { 
+        enabled: false,
         text: activeVolIndex?.toUpperCase() ?? "CVI",
         position: {
             align: "center",
