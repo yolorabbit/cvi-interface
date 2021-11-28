@@ -3,6 +3,8 @@ import { activeViews as platformActiveViews } from "config/platformConfig";
 import { activeTabs as arbitrageActiveViews } from "config/arbitrageConfig";
 import { lazy, Suspense, useCallback, useContext, useMemo } from "react";
 import './Details.scss';
+import MintView from "./Views/MintView";
+import BurnView from "./Views/BurnView";
 
 const LiquidityView = lazy(() => import('./Views/LiquidityView'));
 const TradeView = lazy(() => import('./Views/TradeView'));
@@ -29,14 +31,18 @@ const Details = ({activeVolIndex, selectedCurrency, amount, leverage, slippageTo
                 />
 
             case arbitrageActiveViews.mint: 
-                return <div>
-                    Mint
-                </div>
+                return <MintView 
+                    amount={amount} 
+                    selectedCurrency={selectedCurrency} 
+                    activeVolIndex={activeVolIndex}
+                />
 
             case arbitrageActiveViews.burn: 
-                return <div>
-                    Burn
-                </div>
+                return <BurnView 
+                    amount={amount} 
+                    selectedCurrency={selectedCurrency} 
+                    activeVolIndex={activeVolIndex}
+                />
 
             default:
                 return null; 

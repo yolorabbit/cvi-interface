@@ -8,7 +8,11 @@ const ActiveSection = ({activeTab}) => {
     return (
         <div className="arbitrage-section-component">
             <Form activeTab={activeTab} />
-            <Details />
+            <Details 
+                activeVolIndex={activeTab} 
+                selectedCurrency={"ETHVOL"}
+                amount="100"
+            />
             <GraphsThumbnail />
         </div>
     )

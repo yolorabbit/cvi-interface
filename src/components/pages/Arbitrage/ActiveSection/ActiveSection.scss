@@ -18,4 +18,8 @@
     @media (max-width: 767px){ 
         padding: 4.444vw;
     }
+
+    & > .details-component {
+        width: 30%;
+    }
 }

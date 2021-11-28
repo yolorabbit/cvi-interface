@@ -9,11 +9,14 @@ import ArbitrageTables from "./ArbitrageTables/ArbitrageTables";
 import config from "config/config";
 import ActiveSection from "./ActiveSection";
 import MainSection from "components/MainSection";
+import useCvi from 'components/Hooks/Cvi';
 import "./Arbitrage.scss";
 
 const Arbitrage = () => {
   const [activeView, setActiveView] = useState();
   
+  useCvi();
+
   return useMemo(() => (
     <div className="arbitrage-component">
       <SubNavbar
