@@ -1,6 +1,6 @@
 import ActionController from 'components/Actions/ActionController';
 import config from 'config/config';
-import React from 'react'
+import React, { useMemo } from 'react'
 import './Form.scss';
 
 const Form = ({ amount, setAmount, selectedCurrency, type }) => {
@@ -16,8 +16,18 @@ const Form = ({ amount, setAmount, selectedCurrency, type }) => {
                 balances={{ tokenAmount: "0" }}
                 disabled={!amount}
             />
+
+            <SeeMore />
         </div>
     )
+}
+
+const SeeMore = () => {
+    return useMemo(() => {
+        return <div className="see-more-component">
+            <span>Please note that the submitted requests expire after 12 hours. You won’t be able to fulfill Mint/Burn request after it is expired.</span>
+        </div>
+    }, []);
 }
 
 export default Form;

@@ -1,4 +1,5 @@
 .arbitrage-form-component {
+    height: 100%;
     width: 448px;
     margin-right: 36px;
 
@@ -6,5 +7,13 @@
         & .input-group-component.amount-component__group {
             margin-top: 0;
         }
+    }
+
+}
+
+.see-more-component {
+    margin-top: 16px;
+    & span {
+        font-size: 12px;
     }
 }
