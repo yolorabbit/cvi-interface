@@ -1,7 +1,8 @@
 .arbitrage-form-component {
     height: 100%;
-    width: 448px;
-    margin-right: 36px;
+    width: 30%;
+    padding-right: 36px;
+    max-width: 100%;
 
     & .action-controller_component {
         & .input-group-component.amount-component__group {
