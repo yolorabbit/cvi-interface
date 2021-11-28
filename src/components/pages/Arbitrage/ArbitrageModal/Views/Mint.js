@@ -67,7 +67,6 @@ const Mint = ({ closeBtn }) => {
       
             <Checkbox
               onClick={() => setCollateralMint(!collateralMint)}
-              id="collateralMint"
               title="Collateral mint"
               checked={collateralMint}
               tooltip={<Tooltip type="question" left={30} maxWidth={400} minWidth={250} content={"Collateral Mint tooltip"} />}
