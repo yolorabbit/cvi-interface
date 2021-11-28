@@ -4,13 +4,14 @@ import Tabs from 'components/Tabs';
 import { useInDOM } from 'components/Hooks';
 import './TabsForm.scss';
 import { appViewContext } from 'components/Context';
+import { activeTabs } from 'config/arbitrageConfig';
 
 const TabsForm = React.forwardRef(({id = "view", tabs = [], isDropdown, dontChangeQuery, activeTab, setActiveTab, className, rightContent, children}, ref) => {
     const history = useHistory();
     const { activeView } = useContext(appViewContext);
     const isArray = tabs instanceof Array;
     const _tabsKeys = isArray ? tabs : Object.keys(tabs);
-
+    console.log(activeView);
     const isActiveInDOM = useInDOM();
     
     useEffect(() => {
@@ -44,6 +45,7 @@ const TabsForm = React.forwardRef(({id = "view", tabs = [], isDropdown, dontChan
                         tabs={tabs} 
                         activeTab={activeTab} 
                         setActiveTab={setActiveTab}
+                        prefix={activeTabs[activeView] ? "token" : "index"}
                     />
 
                     {rightContent && <div className="tabs-form-component__header--right">

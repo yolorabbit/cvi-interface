@@ -6,7 +6,7 @@ import { track } from 'shared/analytics';
 import config from 'config/config';
 import './Tabs.scss';
 
-const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, activeTab, setActiveTab}) => {
+const Tabs = ({enableOnly, type = "default", suffix = "", prefix, isDropdown, tabs, activeTab, setActiveTab}) => {
     const [isOpen, setIsOpen] = useState();
     const isArray = tabs instanceof Array;
     const _tabsKeys = isArray ? tabs : Object.keys(tabs);
@@ -35,7 +35,7 @@ const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, acti
     return useMemo(() => {
         const renderTabs = () => {
             return _tabsKeys.map((tab, index) => {
-                const oracleLabel = config.volatilityKey[tab] ? `${tab.toUpperCase()} index` : undefined;
+                const oracleLabel = config.volatilityKey[tab] ? `${tab.toUpperCase()}${prefix ? ` ${prefix}` : ''}` : undefined;
                 const tabLabel = formattedTabs[tab] ?? oracleLabel ?? tab;
                 return <Button
                     key={uniqueId(tab)} 
@@ -68,7 +68,7 @@ const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, acti
                 </>}
             </div>
         )
-    }, [type, isDropdown, isOpen, formattedTabs, activeTab, tabs, _tabsKeys, suffix, enableOnly, onTabChange, onClickDropdown]);
+    }, [type, isDropdown, isOpen, formattedTabs, activeTab, tabs, _tabsKeys, prefix, suffix, enableOnly, onTabChange, onClickDropdown]);
 }
 
 export default Tabs;
