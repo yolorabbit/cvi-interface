@@ -253,7 +253,7 @@
         }
     }
     
-    &.open.positions {
+    &.open.positions, &.pending {
         & thead {
             & tr {
                 border-color: transparent;

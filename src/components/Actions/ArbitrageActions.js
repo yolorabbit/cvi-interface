@@ -1,8 +1,9 @@
 import { useActionController } from "./ActionController";
 import { useMemo } from 'react';
-import Mint from "./Mint";
 import arbitrageConfig from "config/arbitrageConfig";
-import Burn from "./Burn";
+import SubmitBurn from "./SubmitBurn";
+import SubmitMint from "./SubmitMint";
+import Fulfill from "./Fulfill";
 
 const ArbitrageActions = () => {
     const { type } = useActionController();
@@ -10,9 +11,11 @@ const ArbitrageActions = () => {
     return useMemo(() => {
         switch(type) {
             case arbitrageConfig.actionsConfig.burn.key: 
-                return <Burn />
+                return <SubmitBurn />
+            case arbitrageConfig.actionsConfig.fulfill.key:
+                return <Fulfill />
             default:
-                return <Mint />
+                return <SubmitMint />
         }
     }, [type]);
 }

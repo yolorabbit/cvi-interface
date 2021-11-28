@@ -1,0 +1,43 @@
+.arbitrage-tables-component {
+    & tr {
+      &.pending  {
+        &:first-child {
+          & td {
+            &:first-child {
+              width: 5.646vw;
+  
+              @media (max-width: 1365px) {
+                width: 6.128vw;
+              }
+            }
+          }
+        }
+  
+        .actions-wrapper {
+          display:flex;
+          align-items: center;
+          justify-content: flex-end;
+          vertical-align: middle;
+          height: 100%;
+        }
+      }
+    }
+  
+    .table-component tbody tr td {
+      width: auto;
+    }
+  }
+  
+  .row-actions-wrapper {
+    display:flex;
+    align-items: center;
+    justify-content: flex-end;
+    vertical-align: middle;
+    height: 100%;
+    @media (max-width: 767px) {
+      flex-direction: column;
+      .action-controller_component {
+        width: 100%;
+      }
+    }
+  }

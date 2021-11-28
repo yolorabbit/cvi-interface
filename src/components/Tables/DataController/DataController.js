@@ -2,9 +2,11 @@ import ConnectWallet from 'components/ConnectWallet/ConnectWallet';
 import { appViewContext } from 'components/Context';
 import EmptyData from 'components/EmptyData/EmptyData';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
+import config from 'config/config';
 import platformConfig from 'config/platformConfig';
 import stakingConfig, { stakingViews } from 'config/stakingConfig';
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { useLocation } from 'react-router';
 
 
 const dataControllerContext = createContext({});
@@ -18,7 +20,8 @@ const DataController = ({children, data = [], subHeaders = {}, activeTab, authGu
     const [currentPage, setCurrentPage] = useState(1);
     const { account } = useActiveWeb3React();
     const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? activeTab?.toLowerCase();
-
+    const location = useLocation();
+    
     useEffect(() => {
         setCurrentPage(1);
     }, [activeTab, activeView]);
@@ -28,8 +31,8 @@ const DataController = ({children, data = [], subHeaders = {}, activeTab, authGu
     if(!data?.length) return <EmptyData isSpinner={data === null} text={activeTabLabel === 'index' ? 'No data found.' : `You have no ${activeTabLabel ?? 'data'}`} />
 
     if(!activeTab) return null;
-    if(!activeView && !stakingConfig.headers?.[activeTab]) return null; 
-    if(activeView && (!platformConfig.headers?.[activeView]?.[activeTab] && !platformConfig.headers?.[activeTab])) return null;
+    if(location.pathname === config.routes.platform.path && activeView && (!platformConfig.headers?.[activeView]?.[activeTab] && !platformConfig.headers?.[activeTab])) return null;
+    if(location.pathname === config.routes.staking.path && !activeView && !stakingConfig.headers?.[activeTab]) return null;
 
     const tableHeaders = customTableHeaders || (stakingViews?.[activeTab] ? Object.values(stakingConfig.headers?.[activeTab]) :  
         Object.values(platformConfig.headers?.[activeView]?.[activeTab]));

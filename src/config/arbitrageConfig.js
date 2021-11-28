@@ -96,6 +96,63 @@ const arbitrageConfig = {
     "burn": {
         key: "burn",
     },
+    "fulfill": {
+      key: "fulfill"
+    }
+  },
+  tables: {
+    [activeTabs.mint]: {
+      "pending": {
+        headers: {
+          type: "Type",
+          amount: "Amount",
+          submitTime: "Submit time",
+          submitTimeToFulfillment: "Submitted time to fulfilment",
+          timeToFulfillmentFee: "Time to fulfilment fee",
+          upfrontPayment: "Up front payment",
+          estimatedNumberOfTokens: "Estimated number of minted tokens",
+          fulfillmentIn: "Fulfilment in",
+          action: true
+        }
+      },
+      "history": {
+        type: "Type",
+        amount: "Amount",
+        submitTime: "Submit time",
+        submitTimeToFulfillment: "Submitted time to fulfilment",
+        fulfillmentTime: "Fulfilment time",
+        timeToFulfillmentAndPenaltyFees: "Time to fulfilment and penalty fees",
+        mintFee: "Mint fee",
+        collateralMint: "Collateral mint",
+        receivedToken: "Received tokens"
+      }
+    },
+    [activeTabs.burn]: {
+      "pending": {
+        headers: {
+          type: "Type",
+          amount: "Amount",
+          submitTime: "Submit time",
+          submitTimeToFulfillment: "Submitted time to fulfilment",
+          timeToFulfillmentFee: "Time to fulfilment fee",
+          upfrontPayment: "Up front payment",
+          estimatedNumberOfTokens: "Estimated number of minted tokens",
+          fulfillmentIn: "Fulfilment in",
+          action: true
+        }
+      },
+      "history": {
+        type: "Type",
+        amount: "Amount",
+        submitTime: "Submit time",
+        submitTimeToFulfillment: "Submitted time to fulfilment",
+        fulfillmentTime: "Fulfilment time",
+        timeToFulfillmentAndPenaltyFees: "Time to fulfilment and penalty fees",
+        mintFee: "Mint fee",
+        collateralMint: "Collateral mint",
+        receivedToken: "Received tokens"
+      }
+    }
   }
 }
 

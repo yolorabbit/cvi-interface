@@ -281,7 +281,7 @@ button {
 
 .modal {
     &__container {
-        & .sell-component, & .withdraw-component, & .unstake-component, & .stake-component {
+        & .sell-component, & .withdraw-component, & .unstake-component, & .stake-component, & .fulfill-component {
             &__container {
                 display: flex;
                 flex-direction: column;
@@ -347,7 +347,7 @@ button {
 }
 
 
-.sell-component, .withdraw-component, .unstake-component, .stake-component, .migrate-component {
+.sell-component, .withdraw-component, .unstake-component, .stake-component, .migrate-component, .fulfill-component  {
     height: inherit;
     vertical-align: middle;
     

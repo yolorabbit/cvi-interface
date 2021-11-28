@@ -4,6 +4,7 @@ import { useMemo } from "react"
 import HistoryRow from "./HistoryRow"
 import IndexRow from "./IndexRow"
 import LiquidityRow from "./LiquidityRow"
+import PendingRequestsRow from "./PendingRequestsRow"
 import StakeAssetsRow from "./StakeAssetsRow"
 import StakedAssetsRow from "./StakedAssetsRow"
 import StatsRow from "./StatsRow"
@@ -33,7 +34,10 @@ const ActiveRow = ({activeTab, isHeader, rowData}) => {
     
             case stakingViews["available-to-stake"]:
                 return <StakeAssetsRow rowData={rowData} isHeader={isHeader} />
-    
+            
+            case 'pending':
+                return <PendingRequestsRow className={activeTab} rowData={rowData} isHeader={isHeader} />
+
             default:
                 return null;
         }

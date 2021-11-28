@@ -1,6 +1,5 @@
 import { appViewContext } from 'components/Context';
 import { useIsTablet } from 'components/Hooks';
-import useAssets from 'components/Hooks/useAssets';
 import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
@@ -17,7 +16,7 @@ const ArbitrageTables = () => {
 
     return useMemo(() => {
         if(!activeView) return null;
-
+   
         const renderView = () => {
             if(!activeTab) return null;
             switch(activeTab) {
@@ -51,17 +50,41 @@ const DataView = () => {
 }
 
 const DefaultTable = ({activeTab}) => {
-    const filterAssets = useAssets(activeTab);
+    const { activeView } = useContext(appViewContext);
 
     return useMemo(() => {
+        const filterAssets = [{
+            type: "Mint",
+            amount: "100 USDC",
+            submitTime: Date.now(),
+            submitTimeToFulfillment: Date.now() + 5000000,
+            timeToFulfillmentFee: "1.5 USDC",
+            upfrontPayment: "95 USDC",
+            estimatedNumberOfTokens: "0.911 ETHVI",
+            fulfillmentIn: Date.now() + 10000000,
+            action: true
+        },
+        {
+            type: "Mint",
+            amount: "100 USDC",
+            submitTime: Date.now(),
+            submitTimeToFulfillment: Date.now() + 5000000,
+            timeToFulfillmentFee: "1.5 USDC",
+            upfrontPayment: "95 USDC",
+            estimatedNumberOfTokens: "0.911 ETHVI",
+            fulfillmentIn: Date.now() + 10000000,
+            action: true
+        }]
+
         return <DataController 
             authGuard
             activeTab={activeTab} 
             data={filterAssets}
+            customTableHeaders={Object.values(arbitrageConfig.tables[activeView][activeTab].headers)}
         >
            <DataView />
         </DataController>
-    }, [activeTab, filterAssets])
+    }, [activeTab, activeView])
 }
 
 const HistoryTable = ({activeTab}) => {

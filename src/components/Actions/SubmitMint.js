@@ -8,7 +8,7 @@ import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import ErrorModal from 'components/Modals/ErrorModal';
 
-const Mint = () => {
+const SubmitMint = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
     const { disabled, setIsOpen, amount, setAmount, cb: updateAvailableBalance } = useActionController();
@@ -81,4 +81,4 @@ const Mint = () => {
     }, [amount, disabled, errorMessage, isProcessing, modalIsOpen, onClick])
 }
 
-export default Mint;
+export default SubmitMint;

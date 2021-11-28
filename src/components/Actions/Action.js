@@ -4,15 +4,17 @@ import platformConfig from 'config/platformConfig';
 import stakingConfig from 'config/stakingConfig';
 import PlatformActions from './PlatformActions';
 import StakingActions from './StakingActions';
-import './Action.scss';
 import ConnectWallet from 'components/ConnectWallet';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import arbitrageConfig from 'config/arbitrageConfig';
 import ArbitrageActions from './ArbitrageActions';
+import './Action.scss';
 
 const authGuard = {
     "buy": true,
-    "deposit": true
+    "deposit": true,
+    "mint": true,
+    "burn": true,
 }
 
 const Action = () => {

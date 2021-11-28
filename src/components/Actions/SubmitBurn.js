@@ -8,7 +8,7 @@ import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import ErrorModal from 'components/Modals/ErrorModal';
 
-const Burn = () => {
+const SubmitBurn = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
     const { disabled, setIsOpen, amount, setAmount, cb: updateAvailableBalance } = useActionController();
@@ -81,4 +81,4 @@ const Burn = () => {
     }, [amount, disabled, errorMessage, isProcessing, modalIsOpen, onClick])
 }
 
-export default Burn;
+export default SubmitBurn;
