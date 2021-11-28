@@ -1,0 +1,98 @@
+.checkbox-component {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  .custom-checkbox {
+    position: absolute;
+    opacity: 0;
+    & + label {
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+    }
+    & + label:before {
+      content: "";
+      display: inline-block;
+      vertical-align: text-bottom;
+      margin-right: 0.417vw;
+      width: 0.625vw;
+      height: 0.625vw;
+      background: transparent;
+      border: 2px solid white;
+      border-radius: 4px;
+      transition: all 0.2s ease-out;
+      @media (max-width: 1365px) {
+        margin-right: 0.586vw;
+        width: 0.879vw;
+        height: 0.879vw;
+      }
+      @media (max-width: 1024px) {
+        margin-right: 1.043vw;
+        width: 1.565vw;
+        height: 1.565vw;
+      }
+      @media (max-width: 767px) {
+        margin-right: 2.222vw;
+        width: 3.333vw;
+        height: 3.333vw;
+      }
+    }
+    &:hover + label:before {
+      border: 2px solid #fea716;
+      background: rgba(254, 167, 22, 0.5);
+      transition: all 0.2s ease-in;
+    }
+    &:checked + label:before {
+      border: 2px solid #fea716;
+      background: transparent;
+      transition: all 0.2s ease-in;
+    }
+    &:checked + label:after {
+      content: "";
+      position: absolute;
+      left: 0.104vw;
+      top: 0.313vw;
+      width: 0.625vw;
+      height: 0.625vw;
+      background: url("../../images/icons/checkbox-checked.svg") no-repeat;
+      background-size: contain;
+      @media (max-width: 1365px) {
+        left: 0.147vw;
+        top: 0.44vw;
+        width: 0.879vw;
+        height: 0.879vw;
+      }
+      @media (max-width: 1024px) {
+        left: 0.261vw;
+        top: 0.782vw;
+        width: 1.565vw;
+        height: 1.565vw;
+      }
+      @media (max-width: 1024px) and (orientation: landscape) {
+        top: 0.326vw;
+      }
+      @media (max-width: 767px) {
+        left: 0.556vw;
+        top: 1.667vw;
+        width: 3.333vw;
+        height: 3.333vw;
+      }
+    }
+    &:disabled + label:before {
+      background: #222540;
+      border: 2px solid #2f3250;
+    }
+  }
+  .checkbox-title {
+    font-size: 0.625vw;
+    @media (max-width: 1365px) {
+      font-size: 0.879vw;
+    }
+    @media (max-width: 1024px) {
+      font-size: 1.565vw;
+    }
+    @media (max-width: 767px) {
+      font-size: 3.333vw;
+    }
+  }
+}
