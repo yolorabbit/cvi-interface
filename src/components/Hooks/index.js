@@ -7,6 +7,8 @@ import platformConfig from '../../config/platformConfig';
 import stakingConfig from "config/stakingConfig";
 import { getW3 } from '@coti-io/cvi-sdk';
 import { chainNames } from '../../connectors';
+import config from "config/config";
+import arbitrageConfig from "config/arbitrageConfig";
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);
@@ -36,6 +38,7 @@ export const useIsLaptop = () => {
 export const useActiveToken = (selectedCurrency, view, protocol) => {
   const { selectedNetwork } = useSelector(({app}) => app);
   if(view === "staking") return stakingConfig.tokens[selectedNetwork][protocol][selectedCurrency?.toLowerCase()];
+  if(view === config.routes.arbitrage.path) return arbitrageConfig.tokens[selectedNetwork][selectedCurrency?.toLowerCase()];
   return platformConfig.tokens[selectedNetwork][selectedCurrency?.toLowerCase()];
 }
 

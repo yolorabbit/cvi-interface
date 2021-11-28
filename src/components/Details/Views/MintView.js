@@ -1,32 +1,41 @@
 import { useMemo} from "react";
 import Stat from "components/Stat";
-import { useActiveToken, useActiveVolInfo } from "components/Hooks";
+import { useActiveToken } from "components/Hooks";
 import config from "config/config";
 
-const MintView = ({amount, selectedCurrency, activeVolIndex }) => {
-    const activeVolInfo = useActiveVolInfo(activeVolIndex);
+const MintView = ({amount, selectedCurrency }) => {
     const activeToken = useActiveToken(selectedCurrency, config.routes.arbitrage.path);
 
     return useMemo(() => {
         const tokenName = activeToken?.name?.toUpperCase();
        
-        return  (
-            <> 
-                <Stat 
-                    className="bold amount"
-                    title="Mint amount" 
-                    value={!amount ? "0" : amount} 
-                    _suffix={tokenName} 
-                />
+        return <> 
+            <Stat 
+                className="bold amount"
+                title="Amount" 
+                value={!amount ? "0" : amount} 
+                _suffix={tokenName} 
+            />
 
-                <Stat 
-                    className="low-priority large-value"
-                    title={`${activeVolIndex?.toUpperCase()} index`} 
-                    value={activeVolInfo?.index} 
-                />
-            </>
-        )
-    }, [activeToken?.name, amount, activeVolIndex, activeVolInfo?.index]) 
+            <Stat 
+                title="Up front payment" 
+                value={"0"} 
+                _suffix={tokenName} 
+            />
+            
+            <Stat 
+                title="Time to fulfillment" 
+                value={"00:00 HH:MM"} 
+            />
+
+            <Stat 
+                className="bold green"
+                title="Estimated number of tokens" 
+                value={"0"} 
+                _suffix={tokenName}
+            />
+        </>
+    }, [activeToken?.name, amount]) 
 }
 
 export default MintView;
