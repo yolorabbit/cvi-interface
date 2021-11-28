@@ -7,6 +7,8 @@ import { appViewContext } from 'components/Context';
 import Action from './Action';
 import platformConfig from 'config/platformConfig';
 import { useActiveToken } from '../Hooks';
+import arbitrageConfig from 'config/arbitrageConfig';
+import TimeToFullfill from 'components/pages/Arbitrage/TimeToFullfill';
 
 const actionControllerContext = createContext({});
 export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
@@ -65,7 +67,8 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
             availableBalance={balances?.tokenAmount}
             view={view}
             protocol={protocol} 
-          />         
+          />   
+
           {(type === platformConfig.actionsConfig.sell.key) ? <AdvancedOptions 
             slippageTolerance={slippageTolerance} 
             setSlippageTolerance={setSlippageTolerance} 
@@ -85,6 +88,8 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
               availableBalance={balances?.tokenAmount}
               protocol={protocol} 
             />
+
+            {arbitrageConfig.actionsConfig[type] && <TimeToFullfill />}   
 
             {activeToken.name === 'usdc' && <AdvancedOptions 
                 slippageTolerance={slippageTolerance} 

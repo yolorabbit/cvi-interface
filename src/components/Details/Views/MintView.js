@@ -4,7 +4,6 @@ import { useActiveToken, useActiveVolInfo } from "components/Hooks";
 import config from "config/config";
 
 const MintView = ({amount, selectedCurrency, activeVolIndex }) => {
-    console.log(activeVolIndex);
     const activeVolInfo = useActiveVolInfo(activeVolIndex);
     const activeToken = useActiveToken(selectedCurrency, config.routes.arbitrage.path);
 

@@ -1,10 +1,19 @@
+import ActionController from 'components/Actions/ActionController';
 import React from 'react'
 import './Form.scss';
 
-const Form = ({activeTab}) => {
+const Form = ({ amount, setAmount, selectedCurrency, type }) => {
+    
     return (
         <div className="arbitrage-form-component">
-            {activeTab} form
+            <ActionController 
+                amount={amount}
+                setAmount={setAmount}
+                token={selectedCurrency}
+                type={type}
+                balances={{ tokenAmount: "0" }}
+                disabled={!amount}
+            />
         </div>
     )
 }

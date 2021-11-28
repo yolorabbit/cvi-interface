@@ -93,6 +93,14 @@ const arbitrageConfig = {
         [activeViews.history]: "History"
       }
     }
+  },
+  actionsConfig: {
+    "mint": {
+        key: "mint",
+    },
+    "burn": {
+        key: "burn",
+    },
   }
 }
 

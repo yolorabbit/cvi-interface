@@ -1,3 +1,10 @@
 .arbitrage-form-component {
-    width: 30%;
+    width: 448px;
+    margin-right: 36px;
+
+    & .action-controller_component {
+        & .input-group-component.amount-component__group {
+            margin-top: 0;
+        }
+    }
 }
