@@ -22,17 +22,8 @@ const arbitrageConfig = {
   tabs,
   tokens: {
     [chainNames.Ethereum]: {
-      "ethvi-usdc": {
-        key: "ethvi-usdc",
-        name: "ethvi",
-        decimals: 6,
-        fixedDecimals: 2,
-        lpTokensDecimals: 18,
-        oracleId: config.oraclesData.ethvi.oracleId,
-        view: activeTabs.mint
-      },
-      "usdc-ethvi": {
-        key: "usdc-ethvi",
+      "usdc": {
+        key: "usdc",
         name: "usdc",
         decimals: 6,
         fixedDecimals: 2,
@@ -40,10 +31,19 @@ const arbitrageConfig = {
         oracleId: config.oraclesData.ethvi.oracleId,
         view: activeTabs.burn
       },
+      "ethvi": {
+        key: "ethvi",
+        name: "ethvi",
+        decimals: 6,
+        fixedDecimals: 2,
+        lpTokensDecimals: 18,
+        oracleId: config.oraclesData.ethvi.oracleId,
+        view: activeTabs.mint
+      },
     },
     [chainNames.Matic]: {
-      "usdc-cvol": {
-        key: "usdc-cvol",
+      "cvol": {
+        key: "cvol",
         name: "usdc",
         decimals: 6,
         fixedDecimals: 6,
@@ -51,9 +51,9 @@ const arbitrageConfig = {
         oracleId: config.oraclesData.cvi.oracleId,
         view: activeTabs.mint
       },
-      "cvol-usdc": {
-        key: "cvol-usdc",
-        name: "cvol",
+      "usdc": {
+        key: "usdc",
+        name: "usdc",
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,
