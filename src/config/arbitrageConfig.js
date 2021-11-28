@@ -80,6 +80,20 @@ const arbitrageConfig = {
       }, 
     }
   },
+  tablesInfo: {
+    [activeTabs.mint]: {
+      tabs: {
+        [activeViews.pending]: "Pending requests",
+        [activeViews.history]: "History"
+      }
+    },
+    [activeTabs.burn]: {
+      tabs: {
+        [activeViews.pending]: "Pending requests",
+        [activeViews.history]: "History"
+      }
+    }
+  }
 }
 
 export default arbitrageConfig;
