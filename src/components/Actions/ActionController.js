@@ -87,11 +87,12 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
               setInsufficientBalance={setInsufficientBalance}
               availableBalance={balances?.tokenAmount}
               protocol={protocol} 
+              view={view}
             />
 
             {arbitrageConfig.actionsConfig[type] && <TimeToFullfill />}   
 
-            {activeToken.name === 'usdc' && <AdvancedOptions 
+            {activeToken?.name === 'usdc' && <AdvancedOptions 
                 slippageTolerance={slippageTolerance} 
                 setSlippageTolerance={setSlippageTolerance} 
             />}

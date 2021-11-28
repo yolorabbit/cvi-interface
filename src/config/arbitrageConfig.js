@@ -22,6 +22,15 @@ const arbitrageConfig = {
   tabs,
   tokens: {
     [chainNames.Ethereum]: {
+      "ethvi-usdc": {
+        key: "ethvi-usdc",
+        name: "ethvi",
+        decimals: 6,
+        fixedDecimals: 2,
+        lpTokensDecimals: 18,
+        oracleId: config.oraclesData.ethvi.oracleId,
+        view: "mint"
+      },
       "usdc-ethvi": {
         key: "usdc-ethvi",
         name: "usdc",
@@ -29,18 +38,8 @@ const arbitrageConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         type: "v3",
-        leverage: ["1", "2"],
         oracleId: config.oraclesData.ethvi.oracleId,
-        rel: {
-          contractKey: "USDC",
-          platform: "ETHVOL-USDC-Platform",
-          feesCalc: "ETHVOL-USDC-FeesCalculator",
-          feesModel: "ETHVOL-USDC-Platform",
-          positionRewards: "ETHVOL-USDC-PositionRewards",
-          oracle: "ETHVOL-Oracle",
-          stakingRewards: "ETHVOL-USDCLP-StakingRewards",
-          liquidation: "ETHVOL-USDC-Liquidation"
-        }
+        view: "burn"
       },
     },
     [chainNames.Matic]: {
@@ -50,20 +49,15 @@ const arbitrageConfig = {
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,
-        type: "usdc",
-        leverage: ["1", "2"],
-        address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
         oracleId: config.oraclesData.cvi.oracleId,
-        rel: {
-          contractKey: "USDC",
-          platform: "CVOL-USDC-Platform",
-          feesCalc: "CVOL-USDC-FeesCalculator",
-          feesModel: "CVOL-USDC-Platform",
-          positionRewards: "CVOL-USDC-PositionRewards",
-          oracle: "CVOL-Oracle",
-          stakingRewards: "CVOL-USDCLP-StakingRewards",
-          liquidation: "CVOL-USDC-Liquidation"
-        }
+      },
+      "cvol-usdc": {
+        key: "usdc-cvol",
+        name: "cvol",
+        decimals: 6,
+        fixedDecimals: 6,
+        lpTokensDecimals: 18,
+        oracleId: config.oraclesData.cvi.oracleId,
       },
     }
   },
