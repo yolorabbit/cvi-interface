@@ -35,6 +35,12 @@
         white-space: nowrap;
     }
 
+    &.row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
     &.multiline {
         & p {
             font-size: 0.573vw;
@@ -90,6 +96,12 @@
             @media (max-width: 767px){
                 font-size: 3.21vw;
             }
+        }
+    }
+
+    &.small-value {
+        & p, & h2 {
+            font-size: 14px;
         }
     }
 

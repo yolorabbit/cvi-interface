@@ -1,6 +1,7 @@
 import React from "react";
 import "./TimeToFullfill.scss";
 import Dropdown from "../../../Dropdown";
+import Stat from "components/Stat";
 
 const TimeToFullfill = () => {
   return (
@@ -20,6 +21,14 @@ const TimeToFullfill = () => {
           dropdownOptions={Array.from(Array(60).keys())}
           initialValue={0}
           type="number"
+        />
+      </div>
+      <div className="time-to-fulfill-fee">
+        <Stat 
+          className="row bold small-value"
+          title="Time to fulfillment fee"
+          value="1"
+          format="1%"
         />
       </div>
     </div>

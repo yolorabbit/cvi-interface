@@ -29,7 +29,7 @@ const arbitrageConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.ethvi.oracleId,
-        view: "mint"
+        view: activeTabs.mint
       },
       "usdc-ethvi": {
         key: "usdc-ethvi",
@@ -37,9 +37,8 @@ const arbitrageConfig = {
         decimals: 6,
         fixedDecimals: 2,
         lpTokensDecimals: 18,
-        type: "v3",
         oracleId: config.oraclesData.ethvi.oracleId,
-        view: "burn"
+        view: activeTabs.burn
       },
     },
     [chainNames.Matic]: {
@@ -50,14 +49,16 @@ const arbitrageConfig = {
         fixedDecimals: 6,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.cvi.oracleId,
+        view: activeTabs.mint
       },
       "cvol-usdc": {
-        key: "usdc-cvol",
+        key: "cvol-usdc",
         name: "cvol",
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.cvi.oracleId,
+        view: activeTabs.burn
       },
     }
   },
