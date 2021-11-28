@@ -12,10 +12,10 @@ const Value = ({className, text, subText, prefix, bottomText, protocol, format, 
                     <DataState value={text === null ? null : text ?? subText}>
                         {coin && <Coin token={coin} />}
                         {prefix && <span>{prefix}</span>}
-                        <b>{progressBarPercents ? 
+                        {text && <b>{progressBarPercents ? 
                             <span style={{width: `${progressBarPercents}%`}}>{commaFormatted(format) ?? text}</span> : 
                             commaFormatted(format) ?? text}
-                        </b>
+                        </b>}
                         <span>{(text && subText) ? <>&nbsp;{subText}</> : subText}</span>
                         {bottomText && <div>{bottomText} {protocol && protocol !== "platform" && <span className="value-component__protocol">{`(${protocol})`}</span>}</div>}
                     </DataState>

@@ -1,0 +1,22 @@
+.arbitrage-statistics-component {
+    padding: 16px 56px;
+
+    & .value-component {
+        & span { 
+            color: rgba(white, 0.8);
+        }
+    }
+
+    & .index-value-component__top--info {
+        margin: 0;
+        
+        & span {
+            font-size: 14px;
+        }
+
+        & img {
+            height: 24px;
+            width: 24px;
+        }
+    }
+}
