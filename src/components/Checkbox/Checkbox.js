@@ -3,7 +3,6 @@ import "./Checkbox.scss";
 
 const Checkbox = ({
   onClick,
-  id,
   title,
   className,
   tooltip,
@@ -12,18 +11,14 @@ const Checkbox = ({
 }) => {
   return (
     <div className={`checkbox-component ${className ?? ''}`}>
-      <input
-        id={id}
-        className="custom-checkbox"
-        type="checkbox"
-        disabled={disabled}
-        onClick={onClick}
-        defaultChecked={checked}
-      />
-      <label htmlFor={id}></label>
-      <div className="checkbox-title">
-        {title} {tooltip}
+      <div 
+        className={`checkbox ${className ?? ''} ${disabled ?? ''} ${!disabled && checked ? 'checked' : ''}`}
+        onClick={onClick}>
+          {checked && <img className="check-mark" src={require('../../images/icons/checkbox-checked.svg').default} alt="check" />}
       </div>
+      <h2 className="checkbox-title">
+        {title} {tooltip}
+      </h2>
     </div>
   );
 };
