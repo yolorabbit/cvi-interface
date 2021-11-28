@@ -22,6 +22,16 @@ const Statistics = () => {
                         activeIndex={loadActiveVol} 
                     />}
                 />
+
+                <Value 
+                    subText="Platform price"
+                    bottomText="1000 USDC" 
+                />
+
+                <Value 
+                    subText="Uniswap price"
+                    bottomText="1000 USDC" 
+                />
             </Container>
         )
     }, [selectedNetwork]);

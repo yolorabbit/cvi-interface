@@ -1,22 +1,52 @@
 .arbitrage-statistics-component {
+    min-height: auto;
+    display: flex;
     padding: 16px 56px;
+    height: 80px;
 
     & .value-component {
-        & span { 
+        margin-right: 108px;
+
+        & > span { 
             color: rgba(white, 0.8);
+        }
+
+        & > div {
+            margin: 10px 0 0 0;
+            font-size: 18px;
+            font-weight: bold;
+            line-height: normal;
+        }
+
+        & .index-value-component__top--title, & .index-value-component__top--value {
+            font-size: 18px;
+        }
+
+        & .index-value-component {
+            margin: 0;
         }
     }
 
+    & .index-value-component__top {
+        min-height: auto;
+        align-items: center;
+        margin: 0;
+    }
+    
     & .index-value-component__top--info {
         margin: 0;
-        
+
         & span {
-            font-size: 14px;
+            font-size: 18px;
         }
 
         & img {
             height: 24px;
             width: 24px;
+        }
+
+        &.low {
+            color: #f96a9a;
         }
     }
 }
