@@ -1,29 +1,42 @@
+import config from "config/config";
 import { contractsContext } from "contracts/ContractContext";
 import { useContext, useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addEvent } from "store/actions/events";
 import { useActiveWeb3React } from "../wallet";
 
+const eventsToListen = [
+    "Transfer",
+    "Withdraw",
+    "RewardAdded",
+    "RewardPaid",
+    "Staked",
+    "Withdrawn",
+    "Claimed",
+    "Mint",
+    "Burn"
+];
+
 const useSubscribe = () => {
-    const { selectedNetwork } = useSelector(({app}) => app);
-    const assets = require(`./${selectedNetwork.toLowerCase()}.json`);
     const { account, library: web3 } = useActiveWeb3React();
     const [subscribedEvents,  setSubscribedEvents] = useState({});
     const [called,  setCalled] = useState(null);
     const contracts = useContext(contractsContext);
     const dispatch = useDispatch();
-    
+    const mapEvents = () => {
+        // filter the JSON Interface from the contracts
+        const [contractsNames, contractsObj] = [Object.keys(contracts), Object.values(contracts)];
+        return contractsObj.map((a, i) => ({name: contractsNames[i], events: a._jsonInterface.filter(({type}) => type === 'event') }));
+    }
     const subscribeLogEvent = () => {
+        const assets = mapEvents();
         assets.forEach(({name, events} )=> {
             try {
                 const contract = contracts[name];
-                if(!contract) return;
-                events.forEach(eventName => {
-                    const eventJsonInterface = web3.utils?._?.find(
-                        contract._jsonInterface,
-                        o => o.name === eventName && o.type === 'event',
-                    )
-                    if(!['openposition', "closeposition", "deposit", "withdraw", "approval"].includes(eventName.toLowerCase())){
+                if(!contract) return
+                events.forEach(eventJsonInterface => {
+                    const eventName = eventJsonInterface.name;
+                    if(eventsToListen.includes(eventName)){
                         const subscription = web3.eth.subscribe('logs', {
                             address: contract.options.address,
                             topics: [eventJsonInterface?.signature, web3.utils.padLeft(account, 64)]
@@ -35,7 +48,9 @@ const useSubscribe = () => {
                                     result.data,
                                     result.topics.slice(1),
                                     )
-                                    // console.log(`New ${eventName} of ${name}!`, eventObj);
+                                    if(!config.isMainnet || process.env.NODE_ENV === "development") {
+                                        console.log(`New ${eventName} of ${name}!`, eventObj);
+                                    }
                                     dispatch(addEvent(name, eventName, eventObj))
                                 }
                             })
@@ -47,7 +62,9 @@ const useSubscribe = () => {
                                     [eventName]: subscription
                                 }
                             }))
-                            console.log(`subscribed to event '${eventName}' of contract '${name}' `) 
+                            if(!config.isMainnet || process.env.NODE_ENV === "development") {
+                                console.log(`subscribed to event '${eventName}' of contract '${name}' `) 
+                            }
                         }
                 });
             } catch (error) {
