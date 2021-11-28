@@ -172,7 +172,25 @@ const config = {
         left: "0",
         mobileLeft: -40,
       }
-    }
+    },
+    estimatedMinted: {
+      title: "Estimated number of minted tokens",
+      className: "bold green",
+      tooltip: {
+        content: "? - Estimated number of minted tokens",
+        left: "0",
+        mobileLeft: -40,
+      }
+    },
+    estimatedBurn: {
+      title: "Estimated number of recieved tokens",
+      className: "bold green",
+      tooltip: {
+        content: "? - Estimated number of recieved tokens",
+        left: "0",
+        mobileLeft: -40,
+      }
+    },
   },
   migrationStepsTypes: {
     'start': 'start',

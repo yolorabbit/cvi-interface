@@ -47,17 +47,17 @@ export const useIsLockedTime = (start = true) => {
     return _lockedTime;
 }
 
-export const CountdownComponent = ({lockedTime}) => {
+export const CountdownComponent = ({ lockedTime, className }) => {
     return useMemo(() => {
         if(lockedTime === "N/A" || !lockedTime) return null;
-        return <div className="count-down-component">
+        return <div className={`count-down-component ${className ?? ''}`}>
             {lockedTime && lockedTime > 0 ? <> 
                 <img src={require('../../images/icons/processing.svg').default} alt="processing" /> 
                 <b>{getTimeDurationFormatted(lockedTime)}</b> 
                 <small>HH:MM</small>
             </> : null }  
         </div>
-    }, [lockedTime])
+    }, [lockedTime, className])
 }
 
 export default CountdownComponent;
