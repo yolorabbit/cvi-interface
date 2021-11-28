@@ -6,9 +6,9 @@ import Row from "components/Layout/Row";
 import arbitrageConfig from "config/arbitrageConfig";
 import Container from "components/Layout/Container";
 import ArbitrageTables from "./ArbitrageTables/ArbitrageTables";
-import MainSection from "components/MainSection";
 import config from "config/config";
 import ActiveSection from "./ActiveSection";
+import MainSection from "components/MainSection";
 import "./Arbitrage.scss";
 
 const Arbitrage = () => {

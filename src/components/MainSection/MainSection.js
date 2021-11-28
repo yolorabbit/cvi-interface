@@ -3,9 +3,9 @@ import config from 'config/config';
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { activeVolsSet } from 'utils';
-import './MainTabsContainer.scss';
+import './MainSection.scss';
 
-const MainTabsContainer = ({children, path = config.routes.platform.path}) => {
+const MainSection = ({children, path = config.routes.platform.path}) => {
     const [activeTab, setActiveTab] = useState();
     const { selectedNetwork } = useSelector(({app}) => app);
     const activeVolsList = Object.keys(activeVolsSet(selectedNetwork, path));
@@ -13,7 +13,7 @@ const MainTabsContainer = ({children, path = config.routes.platform.path}) => {
     return (
         <TabsForm
             id="index"
-            className="index-tabs-form-container"
+            className="main-section-container"
             tabs={activeVolsList}
             activeTab={activeTab}
             setActiveTab={(tab) => setActiveTab(tab)}
@@ -23,4 +23,4 @@ const MainTabsContainer = ({children, path = config.routes.platform.path}) => {
     )
 }
 
-export default MainTabsContainer;
+export default MainSection;

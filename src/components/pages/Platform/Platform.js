@@ -12,13 +12,10 @@ import useHistoryEvents from 'components/Hooks/useHistoryEvents';
 import IndexStats from './IndexStats';
 import useCvi from 'components/Hooks/Cvi';
 import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
-import MainSection from 'components/MainSection';
 import config from 'config/config';
 import ActiveSection from './ActiveSection';
+import MainSection from 'components/MainSection';
 import './Platform.scss';
-import Form from './Form';
-import MainTabsContainer from 'components/MainTabsContainer';
-import config from 'config/config';
 
 
 const Platform = () => {

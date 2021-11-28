@@ -1,0 +1,25 @@
+.fullfill-wrapper {
+    .time-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      span {
+          padding: 0.625vw;
+          font-size: 0.938vw;
+        font-weight: bold;
+        @media (max-width: 1365px) {
+          padding: 1.172vw;
+          font-size: 1.319vw;
+        }
+        @media (max-width: 1024px) {
+          padding: 1.565vw;
+          font-size: 2.347vw;
+        }
+        @media (max-width: 767px) {
+          padding: 3.333vw;
+          font-size: 3.889vw;
+        }
+      }
+    }
+  }
