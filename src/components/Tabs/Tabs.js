@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Button from '../Elements/Button';
 import platformConfig from 'config/platformConfig';
 import { uniqueId } from 'lodash';
@@ -8,40 +8,41 @@ import './Tabs.scss';
 
 const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, activeTab, setActiveTab}) => {
     const [isOpen, setIsOpen] = useState();
-    
+    const isArray = tabs instanceof Array;
+    const _tabsKeys = isArray ? tabs : Object.keys(tabs);
+
     const formattedTabs = useMemo(
         () => Object.values(platformConfig.tabs).reduce((a, b) => ({...a, ...b})), 
     []);
 
     useEffect(() => {
-        if(tabs.includes(enableOnly)) {
+        if(_tabsKeys.includes(enableOnly)) {
             setActiveTab(enableOnly);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [enableOnly, tabs]);
+    }, [enableOnly, _tabsKeys, setActiveTab]);
 
-    const onTabChange = (tab) => {
+    const onTabChange = useCallback((tab) => {
         if(enableOnly === tab) return;
         setActiveTab(tab);
         track(`${tab} tab`);
-    }
+    }, [enableOnly, setActiveTab])
 
-    const onClickDropdown = () => {
+    const onClickDropdown = useCallback(() => {
         if(!isDropdown) return;
         setIsOpen(!isOpen);
-    }
+    }, [isDropdown, isOpen])
    
     return useMemo(() => {
         const renderTabs = () => {
-            return tabs.map((tab, index) => {
+            return _tabsKeys.map((tab, index) => {
                 const oracleLabel = config.volatilityKey[tab] ? `${tab.toUpperCase()} index` : undefined;
                 const tabLabel = formattedTabs[tab] ?? oracleLabel ?? tab;
                 return <Button
                     key={uniqueId(tab)} 
                     className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
-                    buttonText={`${suffix}${tabLabel}`} 
+                    buttonText={tabs?.[tab] ?? `${suffix}${tabLabel}`} 
                     disabled={enableOnly && enableOnly !== "0" && enableOnly !== tab}
-                    onClick={() => onTabChange(tabs[index])} 
+                    onClick={() => onTabChange(_tabsKeys[index])} 
                 />
             })
         }
@@ -50,15 +51,15 @@ const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, acti
             <div className={`tabs-component ${type ?? ''}`} onClick={() => onClickDropdown()}>
                 {isDropdown ? <div className={`tabs-component__dropdown ${isOpen ? 'is-open' : ''}`}> 
                     <div className="tabs-component__dropdown--header">
-                        <span className={`tabs-component__tab`}>{formattedTabs[activeTab] ?? activeTab}</span>
+                        <span className={`tabs-component__tab`}>{formattedTabs[activeTab] ?? tabs?.[activeTab] ?? activeTab}</span>
                         <img src={require('../../images/icons/dropdown-chevron.svg').default} alt="chevron" />
                     </div>
     
                     {isOpen && <div className="tabs-component__dropdown--options">
-                        {tabs?.filter(tab => tab !== activeTab)?.map((tab, index) => <Button 
+                        {_tabsKeys?.filter(tab => tab !== activeTab)?.map((tab, index) => <Button 
                             key={uniqueId(tab)} 
                             className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
-                            buttonText={formattedTabs[tab] ?? tab} 
+                            buttonText={formattedTabs[tab] ?? tabs?.[tab] ?? tab} 
                             onClick={() => onTabChange(tab)} 
                         />)}
                     </div>}
@@ -67,8 +68,7 @@ const Tabs = ({enableOnly, type = "default", suffix = "", isDropdown, tabs, acti
                 </>}
             </div>
         )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeTab, enableOnly, formattedTabs, isDropdown, isOpen, suffix, tabs, type]);
+    }, [type, isDropdown, isOpen, formattedTabs, activeTab, tabs, _tabsKeys, suffix, enableOnly, onTabChange, onClickDropdown]);
 }
 
 export default Tabs;

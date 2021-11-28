@@ -16,7 +16,7 @@ const ArbitrageTables = () => {
             <Container className="arbitrage-tables-component">
                 <TabsForm 
                     id="table"
-                    tabs={Object.values(arbitrageConfig.tablesInfo[activeView].tabs)} 
+                    tabs={arbitrageConfig.tablesInfo[activeView].tabs} 
                     activeTab={activeTab} 
                     setActiveTab={(tab) => setActiveTab(tab)}
                 >
