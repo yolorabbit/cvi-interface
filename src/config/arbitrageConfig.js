@@ -33,7 +33,7 @@ const arbitrageConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.ethvi.oracleId,
-        view: activeTabs.burn
+        view: activeTabs.mint
       },
       "ethvi": {
         key: "ethvi",
@@ -42,7 +42,7 @@ const arbitrageConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.ethvi.oracleId,
-        view: activeTabs.mint
+        view: activeTabs.burn
       },
     },
     [chainNames.Matic]: {
@@ -157,8 +157,13 @@ const arbitrageConfig = {
         mintFee: "Mint fee",
         collateralMint: "Collateral mint",
         receivedToken: "Received tokens"
-      }
-    }
+      },
+    },
+  },
+  requestType: {
+    1: activeTabs.mint,
+    2: activeTabs.mint,
+    3: "collateralizedMint" 
   }
 }
 

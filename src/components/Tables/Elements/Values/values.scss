@@ -33,6 +33,12 @@
         }
     }
 
+    &.uppercase-first-letter {
+        &::first-letter {
+            text-transform: uppercase;
+        }
+    }
+
     &__protocol {
         text-transform: capitalize;
         font-weight: normal;

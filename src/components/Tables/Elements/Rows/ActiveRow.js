@@ -13,14 +13,11 @@ import TradeRow from "./TradeRow"
 const ActiveRow = ({activeTab, isHeader, rowData}) => {
     return useMemo(() => {
         switch(activeTab) {
-            case activeViews.history: {
+            
+            case activeViews.history: 
+            case "history":
                 return <HistoryRow rowData={rowData} isHeader={isHeader} />
-            }
-
-            case "history": {
-                return <HistoryRow rowData={rowData} isHeader={isHeader} />
-            }
-
+            
             case 'stats': 
                 return <StatsRow rowData={rowData} />
 

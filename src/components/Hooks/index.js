@@ -8,7 +8,7 @@ import stakingConfig from "config/stakingConfig";
 import { getW3 } from '@coti-io/cvi-sdk';
 import { chainNames } from '../../connectors';
 import config from "config/config";
-import arbitrageConfig from "config/arbitrageConfig";
+import arbitrageConfig, { activeTabs } from "config/arbitrageConfig";
 import { useLocation } from "react-router";
 
 export const useViewport = () => {
@@ -36,13 +36,14 @@ export const useIsLaptop = () => {
   return width <= 1365
 }
 
-export const useActiveToken = (selectedCurrency, view, protocol) => {
+export const useActiveToken = (searchInput, view, protocol) => {
   const { selectedNetwork } = useSelector(({app}) => app);
   const location = useLocation();
   const pathname = view || location?.pathname;
-  if(pathname === "staking") return stakingConfig.tokens[selectedNetwork][protocol][selectedCurrency?.toLowerCase()];
-  if(pathname === config.routes.arbitrage.path) return arbitrageConfig.tokens[selectedNetwork][selectedCurrency?.toLowerCase()];
-  return platformConfig.tokens[selectedNetwork][selectedCurrency?.toLowerCase()];
+  if(activeTabs[searchInput]) return Object.values(arbitrageConfig.tokens[selectedNetwork]).find(({view}) => view === searchInput); // search in abitrage by active view 
+  if(pathname === "staking") return stakingConfig.tokens[selectedNetwork][protocol][searchInput?.toLowerCase()];
+  if(pathname === config.routes.arbitrage.path) return arbitrageConfig.tokens[selectedNetwork][searchInput?.toLowerCase()];
+  return platformConfig.tokens[selectedNetwork][searchInput?.toLowerCase()];
 }
 
 export const useInDOM = () => {
