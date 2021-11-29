@@ -51,9 +51,6 @@ const Mint = ({ closeBtn, requestData }) => {
     }
 
     useEffect(()=>{
-      console.log(w3);
-      console.log(requestData);
-      console.log(activeToken);
       const preFulfill = async () => {
         const preFulfillRes = await w3?.tokens[activeToken.rel.contractKey].preFulfill(requestData.requestId)
         // const { fulfillFees, fulfillFeesPercent, receive } = preFulfillRes;
