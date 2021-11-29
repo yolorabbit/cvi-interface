@@ -1,25 +1,17 @@
 import { appViewContext } from 'components/Context';
 import Details from 'components/Details/Details';
 import React, { useContext, useEffect, useState } from 'react'
-import { useActiveToken, useW3SDK } from 'components/Hooks';
+import { useActiveToken } from 'components/Hooks';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Form from '../Form';
 import GraphsThumbnail from '../GraphsThumbnail';
 import './ActiveSection.scss';
 
-const LONG_TOKEN = { // @TODO: use sdk from context
-  ETHVOL_USDC_LONG: "ETHVOL-USDC-LONG",
-}
-
 const ActiveSection = ({activeTab}) => { 
-    const { activeView } = useContext(appViewContext);
+    const { activeView, w3 } = useContext(appViewContext);
     const activeToken = useActiveToken(activeTab);
     const [amount, setAmount] = useState("");
     const { account } = useActiveWeb3React();
-
-    const w3 = useW3SDK({
-      token: [LONG_TOKEN.ETHVOL_USDC_LONG]
-    });
 
     useEffect(() => {
         const start = async() => {

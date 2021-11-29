@@ -12,7 +12,7 @@ const useArbitrageEvents = (w3, activeToken) => {
         if(!activeToken?.rel || !account || !w3?.tokens) return;
 
         const fetchUnfulfilledRequests = async () => {
-          const unfulfilledRequests = await w3?.tokens[activeToken.rel.volatilityToken].getUnfulfilledRequests({account});
+          const unfulfilledRequests = await w3?.tokens[activeToken.rel.contractKey].getUnfulfilledRequests({account});
           dispatch(setUnfulfilledRequests(unfulfilledRequests))
         }
     
@@ -26,7 +26,7 @@ const useArbitrageEvents = (w3, activeToken) => {
         if(!activeToken?.rel || !w3?.tokens) return;
         
         const fetchHistory = async () => {
-          const history = await w3?.tokens[activeToken.rel.volatilityToken].getHistory({account});
+          const history = await w3?.tokens[activeToken.rel.contractKey].getHistory({account});
           dispatch(setData("arbitrage", history));
         }
         if(!arbitrage && account && w3?.tokens) {
@@ -36,10 +36,10 @@ const useArbitrageEvents = (w3, activeToken) => {
       }, [w3?.tokens, account, activeToken?.rel]);
     
       useEffect(()=>{
-        if(!events || !events[activeToken?.rel?.volatilityToken] || !w3?.tokens) return;
+        if(!events || !events[activeToken?.rel?.contractKey] || !w3?.tokens) return;
     
         const getUnfulfilledRequestsById = async (requestId, lastEvent) => {
-          const lastRequest = await w3?.tokens[activeToken.rel.volatilityToken].getRequest(requestId);
+          const lastRequest = await w3?.tokens[activeToken.rel.contractKey].getRequest(requestId);
           if(lastRequest) {
             const { owner, raw: { tokenAmount }, requestType, targetTimestamp, requestTimestamp } = lastRequest
             const eventData = {
@@ -56,13 +56,13 @@ const useArbitrageEvents = (w3, activeToken) => {
             dispatch(setUnfulfilledRequests(eventData, true))
           }
         }
-        const longTokenUnfulfilledEvents = events[activeToken.rel.volatilityToken]?.SubmitRequest.events;
+        const longTokenUnfulfilledEvents = events[activeToken.rel.contractKey]?.SubmitRequest.events;
         if(!!longTokenUnfulfilledEvents?.length) {
           const lastEvent = longTokenUnfulfilledEvents[longTokenUnfulfilledEvents.length-1];
           getUnfulfilledRequestsById(lastEvent.requestId, lastEvent);
         }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [events[activeToken?.rel?.volatilityToken]?.SubmitRequest.events.length]);
+      }, [events[activeToken?.rel?.contractKey]?.SubmitRequest.events.length]);
 
     return [{unfulfilledRequests, arbitrage}, events];
 }

@@ -26,19 +26,6 @@ const arbitrageConfig = {
   tabs,
   tokens: {
     [chainNames.Ethereum]: {
-      "usdc": {
-        key: "usdc",
-        name: "usdc",
-        decimals: 6,
-        fixedDecimals: 2,
-        lpTokensDecimals: 18,
-        oracleId: config.oraclesData.ethvi.oracleId,
-        view: activeTabs.mint,
-        rel: {
-          contractKey: "USDC",
-          volatilityToken: "ETHVOL-USDC-LONG" 
-        }
-      },
       "ethvi": {
         key: "ethvi",
         name: "ethvi",
@@ -46,10 +33,19 @@ const arbitrageConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.ethvi.oracleId,
-        view: activeTabs.burn,
         rel: {
           contractKey: "ETHVOL-USDC-LONG",
-          volatilityToken: "ETHVOL-USDC-LONG" 
+        },
+        pairToken: {
+          key: "usdc",
+          name: "usdc",
+          decimals: 6,
+          fixedDecimals: 2,
+          lpTokensDecimals: 18,
+          oracleId: config.oraclesData.ethvi.oracleId,
+          rel: {
+            contractKey: "USDC",
+          }
         }
       },
     },
@@ -61,23 +57,20 @@ const arbitrageConfig = {
         fixedDecimals: 6,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.cvi.oracleId,
-        view: activeTabs.mint,
         rel: {
           contractKey: "ETHVOL-USDC-LONG",
-          volatilityToken: "ETHVOL-USDC-LONG" 
-        }
-      },
-      "usdc": {
-        key: "usdc",
-        name: "usdc",
-        decimals: 6,
-        fixedDecimals: 6,
-        lpTokensDecimals: 18,
-        oracleId: config.oraclesData.cvi.oracleId,
-        view: activeTabs.burn,
-        rel: {
-          contractKey: "USDC",
-          volatilityToken: "ETHVOL-USDC-LONG" 
+        },
+        pairToken: {
+          key: "usdc",
+          name: "usdc",
+          decimals: 6,
+          fixedDecimals: 6,
+          lpTokensDecimals: 18,
+          oracleId: config.oraclesData.cvi.oracleId,
+          rel: {
+            contractKey: "USDC",
+            volatilityToken: "ETHVOL-USDC-LONG" 
+          }
         }
       },
     }

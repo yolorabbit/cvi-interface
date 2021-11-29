@@ -2,13 +2,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { useWeb3React } from "@web3-react/core";
-import { viewportContext } from "../Context";
+import { appViewContext, viewportContext } from "../Context";
 import platformConfig from '../../config/platformConfig';
 import stakingConfig from "config/stakingConfig";
 import { getW3 } from '@coti-io/cvi-sdk';
 import { chainNames } from '../../connectors';
 import config from "config/config";
-import arbitrageConfig, { activeTabs } from "config/arbitrageConfig";
+import arbitrageConfig from "config/arbitrageConfig";
 import { useLocation } from "react-router";
 
 export const useViewport = () => {
@@ -37,10 +37,13 @@ export const useIsLaptop = () => {
 }
 
 export const useActiveToken = (searchInput, view, protocol) => {
+  const { activeToken } = useContext(appViewContext);
   const { selectedNetwork } = useSelector(({app}) => app);
   const location = useLocation();
+
+  if(!searchInput && activeToken) return activeToken;
+
   const pathname = view || location?.pathname;
-  if(activeTabs[searchInput]) return Object.values(arbitrageConfig.tokens[selectedNetwork]).find(({view}) => view === searchInput); // search in abitrage by active view 
   if(pathname === "staking") return stakingConfig.tokens[selectedNetwork][protocol][searchInput?.toLowerCase()];
   if(pathname === config.routes.arbitrage.path) return arbitrageConfig.tokens[selectedNetwork][searchInput?.toLowerCase()];
   return platformConfig.tokens[selectedNetwork][searchInput?.toLowerCase()];

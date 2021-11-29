@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { appViewContext, viewContext } from "components/Context";
+import { appViewContext } from "components/Context";
 import SubNavbar from "components/SubNavbar";
 import Layout from "components/Layout/Layout";
 import Row from "components/Layout/Row";
@@ -11,16 +11,17 @@ import MainSection from "components/MainSection";
 import useCvi from 'components/Hooks/Cvi';
 import Statistics from "./Statistics";
 import { useActiveToken, useW3SDK } from "components/Hooks";
-import "./Arbitrage.scss";
 import useArbitrageEvents from "components/Hooks/useArbitrageEvents";
+import "./Arbitrage.scss";
 
 const Arbitrage = () => {
   useCvi();
   const [activeView, setActiveView] = useState();
-  const activeToken = useActiveToken(activeView);
-
+  const [activeTokenKey, setActiveTokenKey] = useState();
+  const activeToken = useActiveToken(activeTokenKey, config.routes.arbitrage.path);
+  
   const w3Filters = activeToken?.rel ? {
-    token: [activeToken.rel.volatilityToken]
+    token: [activeToken.rel.contractKey]
   } : null;
 
   const w3 = useW3SDK(w3Filters);
@@ -28,35 +29,32 @@ const Arbitrage = () => {
   useArbitrageEvents(w3, activeToken);
   
   return useMemo(() => (
-    <viewContext.Provider value={{w3}}>
-      <div className="arbitrage-component">
-        {/* <ArbitrageModal activeView={activeView}/> */}
-        <SubNavbar
-          tabs={Object.keys(arbitrageConfig.tabs["sub-navbar"])}
-          activeView={activeView}
-          setActiveView={setActiveView} 
-          />
+    <div className="arbitrage-component">
+      <SubNavbar
+        tabs={Object.keys(arbitrageConfig.tabs["sub-navbar"])}
+        activeView={activeView}
+        setActiveView={setActiveView} 
+        />
 
-        <appViewContext.Provider value={{ activeView }}>
-          <Layout>
-            <Row className="statistics-row-component">
-              <Statistics />
-            </Row>
+      <appViewContext.Provider value={{ activeView, w3, activeToken }}>
+        <Layout>
+          <Row className="statistics-row-component">
+            <Statistics />
+          </Row>
 
-            <Row flex="100%">
-              <MainSection path={config.routes.arbitrage.path}>
-                <ActiveSection />
-              </MainSection>
-            </Row>
+          <Row flex="100%">
+            <MainSection path={config.routes.arbitrage.path} cb={(tab) => setActiveTokenKey(tab)}>
+              <ActiveSection />
+            </MainSection>
+          </Row>
 
-            <Row>
-              <ArbitrageTables />
-            </Row>
-          </Layout>
-        </appViewContext.Provider>
-      </div>
-    </viewContext.Provider>
-  ), [activeView, w3]);
+          <Row>
+            <ArbitrageTables />
+          </Row>
+        </Layout>
+      </appViewContext.Provider>
+    </div>
+  ), [activeToken, activeView, w3]);
 };
 
 export default Arbitrage;

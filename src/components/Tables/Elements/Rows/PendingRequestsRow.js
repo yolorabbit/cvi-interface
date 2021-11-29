@@ -4,7 +4,6 @@ import RowItem from './RowItem';
 import Value from '../Values/Value';
 import ActionController from "components/Actions/ActionController";
 import arbitrageConfig from "config/arbitrageConfig";
-import config from "config/config";
 import Countdown from "components/Countdown";
 
 
@@ -22,9 +21,11 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         upfrontPayment,
     } = rowData
         
-    const activeToken = useActiveToken(type, config.routes.arbitrage.path);
+    const activeToken = useActiveToken();
 
     const fulfillmentController = useMemo(() => {
+        if(!activeToken) return;
+        
         return <ActionController
             amountLabel={type}
             isModal
@@ -36,7 +37,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 tokenAmount: "10"
             }}
         />
-    }, [activeToken.name, amount, type]);
+    }, [activeToken, amount, type]);
 
     const RowData = useMemo(() => (
         <>
