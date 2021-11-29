@@ -10,7 +10,7 @@ import Countdown from "components/Countdown";
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const isTablet = useIsTablet();
     const [amount, setAmount] = useState("");
-
+    
     const { 
         amount: tokenAmount,
         estimatedNumberOfTokens,

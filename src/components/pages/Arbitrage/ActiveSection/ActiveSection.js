@@ -6,11 +6,13 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Form from '../Form';
 import GraphsThumbnail from '../GraphsThumbnail';
 import './ActiveSection.scss';
+import config from 'config/config';
 
 const ActiveSection = ({activeTab}) => { 
     const { activeView, w3 } = useContext(appViewContext);
-    const activeToken = useActiveToken(activeTab);
+    const activeToken = useActiveToken(activeView, config.routes.arbitrage.path);
     const [amount, setAmount] = useState("");
+    const [availableBalance, setAvailableBalance] = useState(null);
     const { account } = useActiveWeb3React();
 
     useEffect(() => {

@@ -8,7 +8,7 @@ import stakingConfig from "config/stakingConfig";
 import { getW3 } from '@coti-io/cvi-sdk';
 import { chainNames } from '../../connectors';
 import config from "config/config";
-import arbitrageConfig from "config/arbitrageConfig";
+import arbitrageConfig,{ activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
 import { useLocation } from "react-router";
 
 export const useViewport = () => {
@@ -42,10 +42,14 @@ export const useActiveToken = (searchInput, view, protocol) => {
   const location = useLocation();
 
   if(!searchInput && activeToken) return activeToken;
-
+  
   const pathname = view || location?.pathname;
   if(pathname === "staking") return stakingConfig.tokens[selectedNetwork][protocol][searchInput?.toLowerCase()];
-  if(pathname === config.routes.arbitrage.path) return arbitrageConfig.tokens[selectedNetwork][searchInput?.toLowerCase()];
+  if(pathname === config.routes.arbitrage.path) {
+    if(activeToken && arbitrageActiveTabs[searchInput]) return searchInput === arbitrageActiveTabs.mint ? activeToken : activeToken.pairToken;
+    const searchedToken = arbitrageConfig.tokens[selectedNetwork][searchInput?.toLowerCase()];
+    return searchedToken ? searchedToken : activeToken;
+  }
   return platformConfig.tokens[selectedNetwork][searchInput?.toLowerCase()];
 }
 

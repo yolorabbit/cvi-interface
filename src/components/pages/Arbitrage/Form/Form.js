@@ -5,7 +5,7 @@ import './Form.scss';
 
 const Form = ({ amount, setAmount, selectedCurrency, type }) => {
     
-    return (
+    return useMemo(() => (
         <div className="arbitrage-form-component">
             <ActionController 
                 view={config.routes.arbitrage.path}
@@ -19,7 +19,7 @@ const Form = ({ amount, setAmount, selectedCurrency, type }) => {
 
             <SeeMore />
         </div>
-    )
+    ), [amount, selectedCurrency, setAmount, type]);
 }
 
 const SeeMore = () => {

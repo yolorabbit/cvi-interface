@@ -9,6 +9,7 @@ import platformConfig from 'config/platformConfig';
 import { useActiveToken } from '../Hooks';
 import arbitrageConfig from 'config/arbitrageConfig';
 import TimeToFullfill from 'components/pages/Arbitrage/TimeToFullfill';
+import { activeTabs as arbitrageActiveTabs } from 'config/arbitrageConfig';
 
 const actionControllerContext = createContext({});
 export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
@@ -28,8 +29,15 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(appViewContext);
-  const activeToken = useActiveToken(token);
+  const _activeToken = useActiveToken(token);
 
+  const getActiveToken = useCallback( () => {
+    if(arbitrageActiveTabs?.[activeView]) return activeView === arbitrageActiveTabs.mint ? _activeToken : _activeToken.pairToken;
+    return _activeToken;
+  }, [_activeToken, activeView]);
+
+  const activeToken = getActiveToken();
+  
   const renderActionComponent = useCallback((isModal = false) => {
     return <ActionControllerContext 
         disabled={!(!disabled && !insufficientBalance)}
@@ -52,7 +60,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
     if(!isOpen && amount !== "") {
       setAmount("");
     }
-    //eslint-disable-next-line
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, activeView]);
 
   return useMemo(() => {
@@ -100,8 +108,7 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         }
         {renderActionComponent(isModal)}
     </div>
-    //eslint-disable-next-line
-  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, renderActionComponent, type, slippageTolerance])
+  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, type, slippageTolerance, setSlippageTolerance, renderActionComponent, activeToken?.name])
 };
 
 const AdvancedOptions = ({slippageTolerance, setSlippageTolerance}) => {
