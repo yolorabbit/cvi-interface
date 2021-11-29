@@ -42,7 +42,7 @@ const IndexsTable = () => {
 
     return useMemo(() => {
         const loadIndexsInfo = () => {
-            return Object.keys(config.volatilityKey).map(key => indexsInfo[key]);
+            return Object.keys(config.volatilityIndexKey).map(key => indexsInfo[key]);
         }
 
         const indexsList = loadIndexsInfo();

@@ -35,8 +35,8 @@ const Tabs = ({enableOnly, type = "default", suffix = "", prefix, isDropdown, ta
     return useMemo(() => {
         const renderTabs = () => {
             return _tabsKeys.map((tab, index) => {
-                const oracleLabel = config.volatilityKey[tab] ? `${tab.toUpperCase()}${prefix ? ` ${prefix}` : ''}` : undefined;
-                const tabLabel = formattedTabs[tab] ?? oracleLabel ?? tab;
+                const volLabel = (config.volatilityIndexKey[tab] || config.volatilityTokenKey[tab]) ? `${tab.toUpperCase()}${prefix ? ` ${prefix}` : ''}` : undefined;
+                const tabLabel = formattedTabs[tab] ?? volLabel ?? tab;
                 return <Button
                     key={uniqueId(tab)} 
                     className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 

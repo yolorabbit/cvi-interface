@@ -48,7 +48,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     _suffix={tokenName}
                     className="large-value"
                     format={toDisplayAmount(purchaseFee === "0" ? "0" : purchaseFee?.openFee?.toString(), activeToken.decimals)}
-                    actEthvol={activeVolIndex === config.volatilityKey.ethvi}
+                    actEthvol={activeVolIndex === config.volatilityIndexKey.ethvi}
                 />
 
                 <Stat 
@@ -71,7 +71,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     name="collateralRatio" 
                     value={collateralRatioData === "N/A" ? "N/A" : collateralRatioData?.collateralRatio} 
                     format={`${customFixedTokenValue(collateralRatioData?.collateralRatio, 0, 8)}%`}
-                    actEthvol={activeVolIndex === config.volatilityKey.ethvi}
+                    actEthvol={activeVolIndex === config.volatilityIndexKey.ethvi}
                 />
     
                 <Stat 
@@ -80,7 +80,7 @@ const TradeView = ({amount, leverage, selectedCurrency, activeVolIndex, slippage
                     value={currentFundingFee === "N/A" ? "N/A" : currentFundingFee?.toString()} 
                     format={currentFundingFee === "N/A" ? "N/A" : customFixed(customFixedTokenValue(currentFundingFee?.toString() === "0" ? "0" : currentFundingFee?.div(toBN("24"))?.toString(), activeToken.decimals, activeToken.decimals), activeToken.fixedDecimals)}
                     _suffix={tokenName}
-                    actEthvol={activeVolIndex === config.volatilityKey.ethvi}
+                    actEthvol={activeVolIndex === config.volatilityIndexKey.ethvi}
                 />
                 
                 <Stat 

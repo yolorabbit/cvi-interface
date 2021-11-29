@@ -38,7 +38,7 @@ const LiquidityView = ({amount, selectedCurrency, activeVolIndex}) => {
                 name="collateralRatio" 
                 value={collateralRatioData?.collateralRatio} 
                 format={`${customFixed(toDisplayAmount(collateralRatioData?.collateralRatio, 8), 0)}%`}
-                actEthvol={activeVolIndex === config.volatilityKey.ethvi}
+                actEthvol={activeVolIndex === config.volatilityIndexKey.ethvi}
             />
 
             <Stat 

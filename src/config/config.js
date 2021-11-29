@@ -78,7 +78,11 @@ const config = {
     BTC: 2,
     ETH: 3
   },
-  volatilityKey: { // @TODO: refactor this config
+  volatilityTokenKey: { // @TODO: refactor this config
+    "cvol": "cvol",
+    "ethvi": "ethvi",
+  },
+  volatilityIndexKey: { // @TODO: refactor this config
     "cvi": "cvi",
     "ethvi": "ethvi",
   },
