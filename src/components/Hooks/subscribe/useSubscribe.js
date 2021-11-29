@@ -14,7 +14,8 @@ const eventsToListen = [
     "Withdrawn",
     "Claimed",
     "Mint",
-    "Burn"
+    "Burn",
+    "SubmitRequest"
 ];
 
 const useSubscribe = () => {

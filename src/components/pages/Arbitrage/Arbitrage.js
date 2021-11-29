@@ -22,28 +22,53 @@ const LONG_TOKEN = {
 
 const Arbitrage = () => {
   const [activeView, setActiveView] = useState();
-  const {unfulfilledRequests} = useSelector(state => state.wallet);
+  const [{unfulfilledRequests},events] = useSelector(({wallet, events}) => [wallet, events]);
   const { account } = useActiveWeb3React();
   const dispatch = useDispatch();
-
+  useCvi();
+  
   const w3 = useW3SDK({
     token: [LONG_TOKEN.ETHVOL_USDC_LONG]
   });
   
-  useCvi();
-
   useEffect(()=>{
     const fetchUnfulfilledRequests = async () => {
       const unfulfilledRequests = await w3?.tokens[LONG_TOKEN.ETHVOL_USDC_LONG].getUnfulfilledRequests({account});
       dispatch(setUnfulfilledRequests(unfulfilledRequests))
     }
-    
     if(!unfulfilledRequests && account && w3?.tokens) {
       fetchUnfulfilledRequests();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [w3?.tokens, account]);
 
+  useEffect(()=>{
+    const getUnfulfilledRequestsById = async (requestId, lastEvent) => {
+      const lastRequest = await w3?.tokens[LONG_TOKEN.ETHVOL_USDC_LONG].getRequest(requestId);
+      if(lastRequest) {
+        const { owner, raw: { tokenAmount }, requestType, targetTimestamp, requestTimestamp } = lastRequest
+        const eventData = {
+          account: owner,
+          event: "SubmitRequest",
+          requestId,
+          requestType,
+          submitFeesAmount: lastEvent.submitFeesAmount,
+          targetTimestamp,
+          timestamp: requestTimestamp,
+          tokenAmount
+        }
+
+        dispatch(setUnfulfilledRequests(eventData, true))
+      }
+    }
+    const longTokenUnfulfilledEvents = events[LONG_TOKEN.ETHVOL_USDC_LONG]?.SubmitRequest.events;
+    if(!!longTokenUnfulfilledEvents?.length) {
+      const lastEvent = longTokenUnfulfilledEvents[longTokenUnfulfilledEvents.length-1];
+      getUnfulfilledRequestsById(lastEvent.requestId, lastEvent);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [events[LONG_TOKEN.ETHVOL_USDC_LONG]?.SubmitRequest.events.length]);
+  
   return useMemo(() => (
     <div className="arbitrage-component">
       {/* <ArbitrageModal activeView={activeView}/> */}

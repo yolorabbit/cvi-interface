@@ -32,7 +32,7 @@ const setData = (state, {view, data, isUpdate}) => {
 const setUnfulfilledRequests = (state, action) => {
     return {
         ...state,
-        unfulfilledRequests: action.data
+        unfulfilledRequests: action.isUpdate ? [action.data].concat(state.unfulfilledRequests) : action.data
     }
 }
 
