@@ -10,6 +10,8 @@ import { useActiveToken } from '../Hooks';
 import arbitrageConfig from 'config/arbitrageConfig';
 import TimeToFullfill from 'components/pages/Arbitrage/TimeToFullfill';
 import { activeTabs as arbitrageActiveTabs } from 'config/arbitrageConfig';
+import Mint from 'components/pages/Arbitrage/ArbitrageModal/Views/Mint';
+import Burn from 'components/pages/Arbitrage/ArbitrageModal/Views/Burn';
 
 const actionControllerContext = createContext({});
 export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
@@ -25,7 +27,7 @@ export const useActionController = () => {
   return context;
 }
 
-const ActionController = ({type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, slippageTolerance, setSlippageTolerance, isModal, view="platform", protocol, balances, cb}) => {
+const ActionController = ({action, requestData, type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, slippageTolerance, setSlippageTolerance, isModal, view="platform", protocol, balances, cb}) => {
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(appViewContext);
@@ -57,33 +59,44 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
   }, [amount, balances, cb, disabled, insufficientBalance, isOpen, leverage, protocol, setAmount, token, type, slippageTolerance])
 
   useEffect(() => {
+    if(action) return;
     if(!isOpen && amount !== "") {
       setAmount("");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, activeView]);
 
-  return useMemo(() => {
-    return <div className="action-controller_component">
-        {(isModal && isOpen) && <Modal clickOutsideDisabled closeIcon handleCloseModal={() => setIsOpen(false)}>
-          <InputAmount 
-            label={amountLabel}
-            symbol={token} 
-            amount={amount} 
-            setAmount={setAmount} 
-            setInsufficientBalance={setInsufficientBalance}
-            availableBalance={balances?.tokenAmount}
-            view={view}
-            protocol={protocol} 
-          />   
+  const getInnerModal = () => {
+    switch (action) {
+      case "mint": return <Mint closeBtn={() => setIsOpen(false)} requestData={requestData} />
+      case "burn": return <Burn closeBtn={() => setIsOpen(false)} requestData={requestData} />
+    
+      default: return (
+        <InputAmount 
+          label={amountLabel}
+          symbol={token} 
+          amount={amount} 
+          setAmount={setAmount} 
+          setInsufficientBalance={setInsufficientBalance}
+          availableBalance={balances?.tokenAmount}
+          view={view}
+          protocol={protocol} 
+        />
+      )
+    }
+  }
 
+  return useMemo(() => {
+
+    return <div className="action-controller_component">
+        {(isModal && isOpen) && <Modal className={action ? "arbitrage-modal" : ""} clickOutsideDisabled closeIcon handleCloseModal={() => setIsOpen(false)}>
+          {getInnerModal()}
           {(type === platformConfig.actionsConfig.sell.key) ? <AdvancedOptions 
             slippageTolerance={slippageTolerance} 
             setSlippageTolerance={setSlippageTolerance} 
           /> : <br/>}
 
-          {renderActionComponent()}
-
+          {!action && renderActionComponent()}
         </Modal>}
 
         {!isModal && <>
@@ -108,7 +121,8 @@ const ActionController = ({type, disabled, amountLabel = "Amount", token, levera
         }
         {renderActionComponent(isModal)}
     </div>
-  }, [isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, type, slippageTolerance, setSlippageTolerance, renderActionComponent, activeToken?.name])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [action, isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, type, slippageTolerance, setSlippageTolerance, renderActionComponent, activeToken?.name])
 };
 
 const AdvancedOptions = ({slippageTolerance, setSlippageTolerance}) => {
