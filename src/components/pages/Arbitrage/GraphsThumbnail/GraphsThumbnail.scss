@@ -1,11 +1,33 @@
 .graphs-thumbnail-component {
   width: 40%;
-  @media (max-width: 1024px) {
+  @media (max-width: 1365px) {
     width: 100%;
   }
   & .tabs-form-component__header {
     background: transparent;
   }
+
+  .tabs-component__tab {
+    display: flex;
+    height: 2.083vw;
+    @media (max-width: 1365px){
+        height: 2.93vw;
+        padding: 0;
+    }
+
+    @media (max-width: 1024px){
+        height: 4.172vw;
+    }
+
+    @media (max-width: 767px){
+        height: 8.172vw;
+        text-align: center;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2.222vw;
+    }
+}
 
   & .tabs-component__dropdown--header {
     border: solid 2px #fea716;
