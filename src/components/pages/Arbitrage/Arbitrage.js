@@ -46,6 +46,7 @@ const Arbitrage = () => {
 
   return useMemo(() => (
     <div className="arbitrage-component">
+      {/* <ArbitrageModal activeView={activeView}/> */}
       <SubNavbar
         tabs={Object.keys(arbitrageConfig.tabs["sub-navbar"])}
         activeView={activeView}

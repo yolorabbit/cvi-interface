@@ -1,12 +1,62 @@
-import React from "react";
-import "./GraphsThumbnail.scss";
+import { viewportContext } from 'components/Context';
+import arbitrageConfig from 'config/arbitrageConfig';
+import React, { useContext, useMemo, useRef, useState } from 'react';
+import Container from 'components/Layout/Container';
+import TabsForm from 'components/TabsForm';
+import fulillmentGraph from 'images/graphs/fulfilment.svg';
+import fulillmentGraphMobile from 'images/graphs/fulfilment-mobile.svg';
+import penaltyGraph from 'images/graphs/penalty.svg';
+import penaltyGraphMobile from 'images/graphs/penalty-mobile.svg';
+import './GraphsThumbnail.scss';
 
-const GraphsThumbnail = () => {
-  return (
-    <div className="graphs-thumbnail-component">
-      Graphs
-    </div>
-  );
-};
+const GraphsThumbnail = ({tabs = [
+  arbitrageConfig.tabs.graphs['fulfilment'],
+  arbitrageConfig.tabs.graphs['penalty'
+  ]]}) => {
+    const tabsFormRef = useRef();
+    const [activeTab, setActiveTab] = useState(tabs.length > 0 ? tabs[0] : undefined);
+    const { width } = useContext(viewportContext);
+
+    return useMemo(() => {
+        return (
+            <Container className="graphs-thumbnail-component">
+                <TabsForm 
+                ref={tabsFormRef}
+                className="arbitrage-graphs-tabs"
+                id="graphs"
+                tabs={tabs} 
+                isDropdown={width <= 767}
+                activeTab={activeTab} 
+                setActiveTab={(tab) => setActiveTab(tab)}
+                >
+                  <ActiveGraph 
+                  activeTab={activeTab}
+                  width={width} 
+                  />
+                </TabsForm>
+            </Container>
+        )
+    }, [activeTab, tabs, width])
+}
+
+const ActiveGraph = ({activeTab = "", width}) => {
+    return useMemo(() => {
+        return (
+            <div className="graph-wrapper">
+              {activeTab.toLowerCase() === arbitrageConfig.tabs.graphs['fulfilment']?.toLowerCase() ? 
+              <>
+                <img className="graph-image" src={width >= 767 ? fulillmentGraph : fulillmentGraphMobile} alt="Time to fullfillment fee" />
+                <p className="graph-note">The fee decreases the more the user's time to fulfillment target gets closer to the 3 hours bound.</p>
+              </>
+              :
+              <>
+                <img className="graph-image" src={width >= 767 ? penaltyGraph : penaltyGraphMobile} alt="Time penalty fee" />
+                <p className="graph-note">A time penalty fee is introduced if the user fulfills his request prior/after his specified target time.</p>
+              </>
+            }
+            </div> 
+            )}, [activeTab, width]);
+}
 
 export default GraphsThumbnail;
+

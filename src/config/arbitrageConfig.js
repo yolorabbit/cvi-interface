@@ -15,6 +15,10 @@ export const tabs = {
   "sub-navbar": {
     "mint": "Mint",
     "burn": "Burn"
+  },
+  graphs: {
+    "fulfilment": "Time to fulfilment fee",
+    "penalty": "Time penalty fee",
   }
 }
 

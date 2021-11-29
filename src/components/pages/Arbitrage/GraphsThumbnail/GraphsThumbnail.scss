@@ -1,3 +1,119 @@
 .graphs-thumbnail-component {
   width: 40%;
+  @media (max-width: 1024px) {
+    width: 100%;
+  }
+  & .tabs-form-component__header {
+    background: transparent;
+  }
+
+  & .tabs-component__dropdown--header {
+    border: solid 2px #fea716;
+    background: transparent;
+    & .tabs-component__tab {
+      text-transform: capitalize;
+      border-radius: 0.108vw;
+      padding: 0;
+      border: 0;
+      font-size: 0.833vw;
+      font-weight: normal;
+      line-height: 1.25vw;
+      height: 2.083vw;
+      margin-right: 0;
+      transition: 0.2s all;
+      min-width: 7.5vw;
+      color: rgba(white, 1);
+      background: transparent;
+      @media (max-width: 1365px) {
+        border-radius: 0.293vw;
+        font-size: 1.172vw;
+        line-height: 1.758vw;
+        height: 2.93vw;
+        margin-right: 0;
+        min-width: 10.549vw;
+      }
+
+      @media (max-width: 1024px) {
+        border-radius: 0.521vw;
+        font-size: 2.086vw;
+        line-height: 3.129vw;
+        height: 5.214vw;
+        min-width: 18.774vw;
+      }
+
+      @media (max-width: 767px) {
+        padding: 0;
+        border: 0;
+        font-size: 3.889vw;
+        line-height: 0;
+        height: auto;
+        display: flex;
+        align-items: center;
+      }
+
+      &.active {
+        background-color: #fea716;
+        font-weight: bold;
+        color: white;
+
+        @media (max-width: 767px) {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+
+  & .tabs-component__dropdown--options {
+    background: transparent;
+    .tabs-component__tab  {
+      text-align: left;
+      color: rgba(white, 0.75);
+    }
+  }
+
+  .graph-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 1.458vw;
+    @media (max-width: 1365px) {
+      padding: 0 2.051vw;
+    }
+    @media (max-width: 1024px) {
+      padding: 0 3.651vw;
+    }
+    @media (max-width: 767px) {
+      padding: 0;
+    }
+    .graph-image {
+      object-position: bottom;
+      width: 100%;
+      object-fit: contain;
+      padding: 0.417vw 0 0.833vw;
+      @media (max-width: 1365px) {
+        padding: 0.586vw 0 1.172vw;
+      }
+      @media (max-width: 1024px) {
+        padding: 1.043vw 0 2.086vw;
+      }
+      @media (max-width: 767px) {
+        padding: 2.222vw 0 4.444vw;
+      }
+    }
+    .graph-note {
+      font-size: 0.625vw;
+      margin: 0;
+      @media (max-width: 1365px) {
+        font-size: 0.879vw;
+      }
+      @media (max-width: 1024px) {
+        font-size: 1.565vw;
+      }
+      @media (max-width: 767px) {
+        font-size: 3.333vw;
+      }
+    }
+  }
 }
