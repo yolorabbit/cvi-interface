@@ -56,7 +56,6 @@ const Burn = ({ closeBtn, requestData }) => {
   },[w3, requestData, activeToken]);
     
   return useMemo(() => {
-    console.log("preFulfillData: ", preFulfillData);
       return (
           <>
             <Title
