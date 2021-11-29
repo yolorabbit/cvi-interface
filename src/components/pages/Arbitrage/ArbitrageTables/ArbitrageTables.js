@@ -78,7 +78,7 @@ const DefaultTable = ({activeTab}) => {
             authGuard
             activeTab={activeTab} 
             data={data}
-            customTableHeaders={tableHeaders ? null : Object.values(tableHeaders)}
+            customTableHeaders={!tableHeaders ? [] : Object.values(tableHeaders)}
         >
            <DataView />
         </DataController>
@@ -88,11 +88,10 @@ const DefaultTable = ({activeTab}) => {
 const HistoryTable = ({activeTab}) => {
     const { activeView } = useContext(appViewContext);
     const { arbitrage } = useSelector(({wallet}) => wallet);
-    // const historyData = useMemo(() => {
-    //     return wallet?.[activeView === activeTabs.mint ? 'mints' : 'burns'];
-    // }, [activeView, wallet]);
 
     return useMemo(() => {
+        const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
+
         //TODO: add more details to history mapping
         const historyData = arbitrage ? arbitrage.map((event)=>({
             type: event.event,
@@ -111,7 +110,7 @@ const HistoryTable = ({activeTab}) => {
             activeTab={activeTab} 
             data={historyData}
             showPaginator
-            customTableHeaders={Object.values(arbitrageConfig.tables[activeView][activeTab].headers)}
+            customTableHeaders={!tableHeaders ? [] : Object.values(arbitrageConfig.tables[activeView][activeTab].headers)}
         >
             <DataView />
         </DataController>
