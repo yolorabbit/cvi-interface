@@ -55,6 +55,8 @@ const DefaultTable = ({activeTab}) => {
     const { unfulfilledRequests } = useSelector(({wallet}) => wallet);
 
     return useMemo(() => {
+        const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
+
         const data = unfulfilledRequests ? unfulfilledRequests.map(({
             event, id, requestId, requestType, submitFeesAmount, targetTimestamp, timestamp, tokenAmount,
         }) => ({
@@ -76,7 +78,7 @@ const DefaultTable = ({activeTab}) => {
             authGuard
             activeTab={activeTab} 
             data={data}
-            customTableHeaders={Object.values(arbitrageConfig.tables[activeView][activeTab].headers)}
+            customTableHeaders={tableHeaders ? null : Object.values(tableHeaders)}
         >
            <DataView />
         </DataController>
