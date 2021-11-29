@@ -7,6 +7,17 @@
     & .value-component {
         margin-right: 108px;
 
+        &:first-child {
+            min-width: 276px;
+        }
+
+        & > h5 {
+            color: rgba(white, 0.8);
+            font-weight: normal;
+            margin: 0 0 10px 0;
+            line-height: normal;
+        } 
+
         & > span { 
             color: rgba(white, 0.8);
         }
@@ -18,7 +29,7 @@
             line-height: normal;
         }
 
-        & .index-value-component__top--title, & .index-value-component__top--value {
+        & .index-value-component__top--title, & .index-value-component__top--value, & b {
             font-size: 18px;
         }
 
