@@ -12,7 +12,7 @@ const ActiveSection = ({activeTab}) => {
     const { activeView, w3 } = useContext(appViewContext);
     const activeToken = useActiveToken(activeView, config.routes.arbitrage.path);
     const [amount, setAmount] = useState("");
-    const [availableBalance, setAvailableBalance] = useState(null);
+    // const [availableBalance, setAvailableBalance] = useState(null);
     const { account } = useActiveWeb3React();
 
     useEffect(() => {

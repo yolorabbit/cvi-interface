@@ -3,8 +3,9 @@ import { useMemo, useState } from "react";
 import RowItem from './RowItem';
 import Value from '../Values/Value';
 import ActionController from "components/Actions/ActionController";
-import arbitrageConfig, { activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
+import arbitrageConfig from "config/arbitrageConfig";
 import Countdown from "components/Countdown";
+import config from "config/config";
 
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
@@ -21,9 +22,8 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         upfrontPayment,
     } = rowData
         
-    const activeVolatilityToken = useActiveToken();
-    const activeToken = type === arbitrageActiveTabs.mint ? activeVolatilityToken.pairToken : activeVolatilityToken
-
+    const activeToken = useActiveToken(type, config.routes.arbitrage.path);
+    
     const fulfillmentController = useMemo(() => {
         if(!activeToken) return;
         
