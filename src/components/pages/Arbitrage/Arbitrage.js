@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { appViewContext } from "components/Context";
+import { appViewContext, viewContext } from "components/Context";
 import SubNavbar from "components/SubNavbar";
 import Layout from "components/Layout/Layout";
 import Row from "components/Layout/Row";
@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUnfulfilledRequests } from 'store/actions/wallet'
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { useW3SDK } from "components/Hooks";
+
 
 const LONG_TOKEN = {
   ETHVOL_USDC_LONG: "ETHVOL-USDC-LONG"
@@ -70,33 +71,35 @@ const Arbitrage = () => {
   }, [events[LONG_TOKEN.ETHVOL_USDC_LONG]?.SubmitRequest.events.length]);
   
   return useMemo(() => (
-    <div className="arbitrage-component">
-      {/* <ArbitrageModal activeView={activeView}/> */}
-      <SubNavbar
-        tabs={Object.keys(arbitrageConfig.tabs["sub-navbar"])}
-        activeView={activeView}
-        setActiveView={setActiveView} 
-      />
+    <viewContext.Provider value={{w3}}>
+      <div className="arbitrage-component">
+        {/* <ArbitrageModal activeView={activeView}/> */}
+        <SubNavbar
+          tabs={Object.keys(arbitrageConfig.tabs["sub-navbar"])}
+          activeView={activeView}
+          setActiveView={setActiveView} 
+          />
 
-      <appViewContext.Provider value={{ activeView }}>
-        <Layout>
-          <Row className="statistics-row-component">
-            <Statistics />
-          </Row>
+        <appViewContext.Provider value={{ activeView }}>
+          <Layout>
+            <Row className="statistics-row-component">
+              <Statistics />
+            </Row>
 
-          <Row flex="100%">
-            <MainSection path={config.routes.arbitrage.path}>
-              <ActiveSection />
-            </MainSection>
-          </Row>
+            <Row flex="100%">
+              <MainSection path={config.routes.arbitrage.path}>
+                <ActiveSection />
+              </MainSection>
+            </Row>
 
-          <Row>
-            <ArbitrageTables />
-          </Row>
-        </Layout>
-      </appViewContext.Provider>
-    </div>
-  ), [activeView]);
+            <Row>
+              <ArbitrageTables />
+            </Row>
+          </Layout>
+        </appViewContext.Provider>
+      </div>
+    </viewContext.Provider>
+  ), [activeView, w3]);
 };
 
 export default Arbitrage;
