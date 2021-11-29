@@ -3,9 +3,8 @@ import { useIsTablet } from 'components/Hooks';
 import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
-import arbitrageConfig, { activeTabs, activeViews } from 'config/arbitrageConfig';
+import arbitrageConfig, { activeViews } from 'config/arbitrageConfig';
 import React, { useContext, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
 import Container from '../../../Layout/Container';
 import TabsForm from '../../../TabsForm';
 import './ArbitrageTables.scss';
@@ -54,6 +53,7 @@ const DefaultTable = ({activeTab}) => {
 
     return useMemo(() => {
         const filterAssets = [{
+            token: "usdc",
             type: "Mint",
             amount: "100 USDC",
             submitTime: Date.now(),
@@ -65,6 +65,7 @@ const DefaultTable = ({activeTab}) => {
             action: true
         },
         {
+            token: "usdc",
             type: "Mint",
             amount: "100 USDC",
             submitTime: Date.now(),
@@ -89,22 +90,46 @@ const DefaultTable = ({activeTab}) => {
 
 const HistoryTable = ({activeTab}) => {
     const { activeView } = useContext(appViewContext);
-    const wallet = useSelector(({wallet}) => wallet);
+    // const wallet = useSelector(({wallet}) => wallet);
     
-    const historyData = useMemo(() => {
-        return wallet?.[activeView === activeTabs.mint ? 'mints' : 'burns'];
-    }, [activeView, wallet]);
-    
+    // const historyData = useMemo(() => {
+    //     return wallet?.[activeView === activeTabs.mint ? 'mints' : 'burns'];
+    // }, [activeView, wallet]);
+
     return useMemo(() => {
+        const historyData = [{
+            type: "Mint",
+            amount: "100 USDC",
+            submitTime: Date.now(),
+            submitTimeToFulfillment: Date.now() + 5000000,
+            timeToFulfillmentFee: Date.now() + 10000000,
+            estimatedNumberOfTokens: "0.911 ETHVI",
+            fulfillmentIn: Date.now() + 10000000,
+            collateralMint: "Yes",
+            receivedTokens: "usdc",
+        },
+        {
+            type: "Mint",
+            amount: "100 USDC",
+            submitTime: Date.now(),
+            submitTimeToFulfillment: Date.now() + 5000000,
+            timeToFulfillmentFee: Date.now() + 10000000,
+            estimatedNumberOfTokens: "0.911 ETHVI",
+            fulfillmentIn: Date.now() + 10000000,
+            collateralMint: "Yes",
+            receivedTokens: "usdc",
+        }]
+        
         return <DataController 
             authGuard
             activeTab={activeTab} 
             data={historyData}
             showPaginator
+            customTableHeaders={Object.values(arbitrageConfig.tables[activeView][activeTab].headers)}
         >
             <DataView />
         </DataController>
-    }, [activeTab, historyData]);
+    }, [activeTab, activeView]);
 }
 
 

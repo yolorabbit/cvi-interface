@@ -17,6 +17,10 @@ const ActiveRow = ({activeTab, isHeader, rowData}) => {
                 return <HistoryRow rowData={rowData} isHeader={isHeader} />
             }
 
+            case "history": {
+                return <HistoryRow rowData={rowData} isHeader={isHeader} />
+            }
+
             case 'stats': 
                 return <StatsRow rowData={rowData} />
 

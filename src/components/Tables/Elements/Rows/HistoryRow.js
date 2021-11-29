@@ -5,11 +5,13 @@ import { appViewContext } from "components/Context";
 import platformConfig from "config/platformConfig";
 import { Value } from "../Values";
 import { omit } from "lodash";
+import arbitrageConfig from "config/arbitrageConfig";
 
 const HistoryRow = ({rowData, isHeader}) => {
     const isTablet = useIsTablet();
     const { activeView } = useContext(appViewContext); 
-    const headers = useMemo(() => Object.values(platformConfig.headers?.[activeView]?.History), [activeView]);
+    const headers = useMemo(() =>  Object.values(arbitrageConfig.tables?.[activeView]?.history.headers) || 
+        Object.values(platformConfig.headers?.[activeView]?.History), [activeView]);
     
   
     const RowData = useMemo(() => {
