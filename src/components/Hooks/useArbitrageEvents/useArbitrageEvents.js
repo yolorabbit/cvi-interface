@@ -62,7 +62,7 @@ const useArbitrageEvents = (w3, activeToken) => {
       getUnfulfilledRequestsById(lastEvent.requestId, lastEvent);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [events[activeToken?.rel?.contractKey]?.SubmitRequest.events.length]);
+  }, [events[activeToken?.rel?.contractKey]?.SubmitRequest?.events.length]);
 }
 
 export default useArbitrageEvents;
