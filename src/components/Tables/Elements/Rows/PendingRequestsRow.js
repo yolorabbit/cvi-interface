@@ -6,6 +6,7 @@ import ActionController from "components/Actions/ActionController";
 import arbitrageConfig from "config/arbitrageConfig";
 import Countdown from "components/Countdown";
 import config from "config/config";
+import moment from 'moment';
 
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
@@ -49,17 +50,17 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                 header={arbitrageConfig.tables[type].pending.headers.amount}
-                content={<Value text={tokenAmount} />}
+                content={<Value text={tokenAmount} subText={activeToken.name.toUpperCase()}/>}
             />
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTime}
-                content={<Value text={submitTime} />}
+                content={<Value text={moment.unix(submitTime).format('HH:MM')} />}
             />
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTimeToFulfillment}
-                content={<Value text={submitTimeToFulfillment} />}
+                content={<Value text={moment.unix(submitTimeToFulfillment).format('HH:MM')} subText="HH:MM"/>}
             />
 
             <RowItem
@@ -89,7 +90,8 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 </div>
             } />
         </>
-    ), [estimatedNumberOfTokens, fulfillmentController, submitTime, submitTimeToFulfillment, timeToFulfillmentFee, tokenAmount, type, upfrontPayment]);
+    ), [estimatedNumberOfTokens, fulfillmentController, submitTime, submitTimeToFulfillment, timeToFulfillmentFee, tokenAmount, type, upfrontPayment, activeToken.name]);
+    console.log("RowData ", RowData)
 
     if (isHeader) {
         return <>

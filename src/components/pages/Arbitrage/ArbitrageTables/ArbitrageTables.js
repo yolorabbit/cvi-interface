@@ -1,16 +1,17 @@
-import { toDisplayAmount } from '@coti-io/cvi-sdk';
+
+import { useActiveToken, useIsTablet } from "components/Hooks";
 import { appViewContext } from 'components/Context';
-import { useIsTablet } from 'components/Hooks';
 import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import arbitrageConfig, { activeViews } from 'config/arbitrageConfig';
 import React, { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import Container from '../../../Layout/Container';
-import TabsForm from '../../../TabsForm';
+import Container from 'components/Layout/Container';
+import TabsForm from 'components/TabsForm';
 import './ArbitrageTables.scss';
 import moment from 'moment';
+import { toDisplayAmount } from 'utils/index';
 
 const ArbitrageTables = () => {
     const [activeTab, setActiveTab] = useState();
@@ -53,10 +54,10 @@ const DataView = () => {
 const DefaultTable = ({activeTab}) => {
     const { activeView } = useContext(appViewContext);
     const { unfulfilledRequests } = useSelector(({wallet}) => wallet);
+    const activeToken = useActiveToken()
 
     return useMemo(() => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
-
         const data = unfulfilledRequests ? unfulfilledRequests.map(({
             event, id, requestId, requestType, submitFeesAmount, targetTimestamp, timestamp, tokenAmount,
         }) => ({
@@ -64,13 +65,13 @@ const DefaultTable = ({activeTab}) => {
             id,
             requestId,
             type: arbitrageConfig.requestType[requestType],
-            amount: tokenAmount,
+            amount: toDisplayAmount(tokenAmount.toString(), activeToken.decimals),
             submitTime: timestamp,
             submitTimeToFulfillment: targetTimestamp,
             timeToFulfillmentFee: submitFeesAmount,
             upfrontPayment: '-',
             estimatedNumberOfTokens: '-',
-            fulfillmentIn: '-',
+            fulfillmentIn: targetTimestamp,
             action: true
         })) : null;
 
