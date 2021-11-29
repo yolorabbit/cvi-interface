@@ -9,8 +9,6 @@ import config from "config/config";
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const isTablet = useIsTablet();
-    const [amount, setAmount] = useState("");
-    
     const { 
         amount: tokenAmount,
         estimatedNumberOfTokens,
@@ -25,20 +23,13 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const activeToken = useActiveToken(type, config.routes.arbitrage.path);
     
     const fulfillmentController = useMemo(() => {
-        if(!activeToken) return;
-        
         return <ActionController
-            amountLabel={type}
+            action={type}
             isModal
-            token={activeToken.name}
-            amount={amount}
-            setAmount={setAmount}
             type={arbitrageConfig.actionsConfig.fulfill.key}
-            balances={{
-                tokenAmount: "10"
-            }}
+            requestData={rowData}
         />
-    }, [activeToken, amount, type]);
+    }, [rowData, type]);
 
     const RowData = useMemo(() => (
         <>
