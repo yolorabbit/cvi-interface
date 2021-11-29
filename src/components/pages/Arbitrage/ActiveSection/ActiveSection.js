@@ -50,12 +50,12 @@ const ActiveSection = ({activeTab}) => {
                     type={activeView}
                     amount={amount}
                     setAmount={setAmount}
-                    selectedCurrency={activeToken.name} />
+                />
 
                 <Details
                     activeVolIndex={activeTab}
-                    selectedCurrency={activeToken.name}
-                    amount={amount} />
+                    amount={amount} 
+                />
 
                 <GraphsThumbnail />
             </div>

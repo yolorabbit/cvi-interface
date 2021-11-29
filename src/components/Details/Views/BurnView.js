@@ -1,10 +1,10 @@
 import { useMemo} from "react";
 import Stat from "components/Stat";
 import { useActiveToken } from "components/Hooks";
-import config from "config/config";
+import { activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
 
-const BurnView = ({amount, selectedCurrency }) => {
-    const activeToken = useActiveToken(selectedCurrency, config.routes.arbitrage.path);
+const BurnView = ({ amount }) => {
+    const activeToken = useActiveToken(arbitrageActiveTabs.burn);
 
     return useMemo(() => {
         const tokenName = activeToken?.name?.toUpperCase();

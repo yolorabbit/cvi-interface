@@ -1,10 +1,10 @@
 import { useMemo} from "react";
 import Stat from "components/Stat";
 import { useActiveToken } from "components/Hooks";
-import config from "config/config";
+import { activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
 
-const MintView = ({amount, selectedCurrency }) => {
-    const activeToken = useActiveToken(selectedCurrency, config.routes.arbitrage.path);
+const MintView = ({amount }) => {
+    const activeToken = useActiveToken(arbitrageActiveTabs.mint);
 
     return useMemo(() => {
         const tokenName = activeToken?.name?.toUpperCase();
