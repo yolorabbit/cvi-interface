@@ -12,7 +12,7 @@ import useCvi from 'components/Hooks/Cvi';
 import Statistics from "./Statistics";
 import "./Arbitrage.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { setUnfulfilledRequests } from 'store/actions/wallet'
+import { setData, setUnfulfilledRequests } from 'store/actions/wallet'
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { useW3SDK } from "components/Hooks";
 
@@ -23,7 +23,7 @@ const LONG_TOKEN = {
 
 const Arbitrage = () => {
   const [activeView, setActiveView] = useState();
-  const [{unfulfilledRequests},events] = useSelector(({wallet, events}) => [wallet, events]);
+  const [{unfulfilledRequests, arbitrage},events] = useSelector(({wallet, events}) => [wallet, events]);
   const { account } = useActiveWeb3React();
   const dispatch = useDispatch();
   useCvi();
@@ -39,6 +39,17 @@ const Arbitrage = () => {
     }
     if(!unfulfilledRequests && account && w3?.tokens) {
       fetchUnfulfilledRequests();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [w3?.tokens, account]);
+
+  useEffect(()=>{
+    const fetchHistory = async () => {
+      const history = await w3?.tokens[LONG_TOKEN.ETHVOL_USDC_LONG].getHistory({account});
+      dispatch(setData("arbitrage", history));
+    }
+    if(!arbitrage && account && w3?.tokens) {
+      fetchHistory();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [w3?.tokens, account]);

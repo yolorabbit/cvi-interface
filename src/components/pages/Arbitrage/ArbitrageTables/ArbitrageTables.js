@@ -1,14 +1,16 @@
+import { toDisplayAmount } from '@coti-io/cvi-sdk';
 import { appViewContext } from 'components/Context';
 import { useIsTablet } from 'components/Hooks';
 import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import arbitrageConfig, { activeViews } from 'config/arbitrageConfig';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Container from '../../../Layout/Container';
 import TabsForm from '../../../TabsForm';
 import './ArbitrageTables.scss';
+import moment from 'moment';
 
 const ArbitrageTables = () => {
     const [activeTab, setActiveTab] = useState();
@@ -50,11 +52,7 @@ const DataView = () => {
 
 const DefaultTable = ({activeTab}) => {
     const { activeView } = useContext(appViewContext);
-    const { unfulfilledRequests } = useSelector(({wallet}) => wallet)
-    
-    useEffect(() => {
-        console.log("unfulfilledRequests: ", unfulfilledRequests)
-    }, [unfulfilledRequests]);
+    const { unfulfilledRequests } = useSelector(({wallet}) => wallet);
 
     return useMemo(() => {
         const data = unfulfilledRequests ? unfulfilledRequests.map(({
@@ -87,36 +85,25 @@ const DefaultTable = ({activeTab}) => {
 
 const HistoryTable = ({activeTab}) => {
     const { activeView } = useContext(appViewContext);
-    // const wallet = useSelector(({wallet}) => wallet);
-    
+    const { arbitrage } = useSelector(({wallet}) => wallet);
     // const historyData = useMemo(() => {
     //     return wallet?.[activeView === activeTabs.mint ? 'mints' : 'burns'];
     // }, [activeView, wallet]);
 
     return useMemo(() => {
-        const historyData = [{
-            type: "Mint",
-            amount: "100 USDC",
+        //TODO: add more details to history mapping
+        const historyData = arbitrage ? arbitrage.map((event)=>({
+            type: event.event,
+            amount: `${toDisplayAmount(event.tokenAmount, 6)} USDC`, //toDisplayAmount(tokenAmount, token.decimals) take token.decimal from arbitrageConfig
             submitTime: Date.now(),
             submitTimeToFulfillment: Date.now() + 5000000,
             timeToFulfillmentFee: Date.now() + 10000000,
             estimatedNumberOfTokens: "0.911 ETHVI",
-            fulfillmentIn: Date.now() + 10000000,
+            fulfillmentIn: moment(event.timestamp * 1000).format("DD/MM/YYYY"),
             collateralMint: "Yes",
             receivedTokens: "usdc",
-        },
-        {
-            type: "Mint",
-            amount: "100 USDC",
-            submitTime: Date.now(),
-            submitTimeToFulfillment: Date.now() + 5000000,
-            timeToFulfillmentFee: Date.now() + 10000000,
-            estimatedNumberOfTokens: "0.911 ETHVI",
-            fulfillmentIn: Date.now() + 10000000,
-            collateralMint: "Yes",
-            receivedTokens: "usdc",
-        }]
-        
+        })) : null;
+
         return <DataController 
             authGuard
             activeTab={activeTab} 
@@ -126,7 +113,7 @@ const HistoryTable = ({activeTab}) => {
         >
             <DataView />
         </DataController>
-    }, [activeTab, activeView]);
+    }, [activeTab, activeView, arbitrage]);
 }
 
 

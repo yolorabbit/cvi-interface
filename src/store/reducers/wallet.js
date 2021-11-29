@@ -4,6 +4,7 @@ import * as actionTypes from '../actions/types';
 const initialState = {
     positions: null,
     liquidities: null,
+    arbitrage: null,
     unfulfilledRequests: null
 };
 
