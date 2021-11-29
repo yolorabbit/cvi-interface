@@ -3,7 +3,8 @@ import * as actionTypes from '../actions/types';
 
 const initialState = {
     positions: null,
-    liquidities: null
+    liquidities: null,
+    unfulfilledRequests: null
 };
 
 const setData = (state, {view, data, isUpdate}) => {
@@ -28,9 +29,17 @@ const setData = (state, {view, data, isUpdate}) => {
     }
 }
 
+const setUnfulfilledRequests = (state, action) => {
+    return {
+        ...state,
+        unfulfilledRequests: action.data
+    }
+}
+
 export const walletReducer = (state = initialState, action) => {
     switch ( action.type ) {
         case actionTypes.SET_DATA: return setData(state, action)
+        case actionTypes.SET_UNFULFILLED_REQUEST: return setUnfulfilledRequests(state, action)
         default:
             return state;
     }
