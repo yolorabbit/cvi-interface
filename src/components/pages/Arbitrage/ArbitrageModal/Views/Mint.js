@@ -24,9 +24,8 @@ const Mint = ({ closeBtn, requestData }) => {
     const [preFulfillData, setPreFulfillData] = useState(null)
     const [fee] = useState(0.3)
     const [amountToFullfill] = useState(1700)
-    const [recieveAmount] = useState(900)
-    const [estimatedAmount] = useState(15)
     const dispatch = useDispatch();
+    
     const onClick = async() => {
       try {
         const mintAction = collateralMint ? "fulfillCollateralizedMint" : "fulfillMint";
@@ -167,6 +166,7 @@ const Mint = ({ closeBtn, requestData }) => {
           />
         </>
       )
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     },[preFulfillData, collateralMint])
 }
 

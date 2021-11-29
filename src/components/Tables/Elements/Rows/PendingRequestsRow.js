@@ -1,11 +1,10 @@
-import { useActiveToken, useIsTablet } from "components/Hooks";
-import { useMemo, useState } from "react";
+import { useIsTablet } from "components/Hooks";
+import { useMemo } from "react";
 import RowItem from './RowItem';
 import Value from '../Values/Value';
 import ActionController from "components/Actions/ActionController";
 import arbitrageConfig from "config/arbitrageConfig";
 import Countdown from "components/Countdown";
-import config from "config/config";
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const isTablet = useIsTablet();
@@ -19,8 +18,6 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         upfrontPayment,
         fulfillmentIn,
     } = rowData
-
-    const activeToken = useActiveToken(type, config.routes.arbitrage.path);
     
     const fulfillmentController = useMemo(() => {
         return <ActionController
