@@ -33,7 +33,7 @@ const Mint = ({ closeBtn, requestData }) => {
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - failed",
-        alertType: config.alerts.types.FAILED,
+        alertType: config.alerts.types.CONFIRMED,
         message: "Transaction failed!"
       }));
     } catch {
