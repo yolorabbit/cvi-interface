@@ -60,20 +60,26 @@ const DefaultTable = ({activeTab}) => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
         const data = unfulfilledRequests ? unfulfilledRequests.map(({
             event, id, requestId, requestType, submitFeesAmount, targetTimestamp, timestamp, tokenAmount,
-        }) => ({
-            event,
-            id,
-            requestId,
-            type: arbitrageConfig.requestType[requestType],
-            amount: toDisplayAmount(tokenAmount.toString(), activeToken.decimals),
-            submitTime: timestamp,
-            submitTimeToFulfillment: targetTimestamp,
-            timeToFulfillmentFee: submitFeesAmount,
-            upfrontPayment: '-',
-            estimatedNumberOfTokens: '-',
-            fulfillmentIn: targetTimestamp,
-            action: true
-        })) : null;
+        }) => {
+            
+            const requestTypeLabel = arbitrageConfig.requestType[requestType];
+            const eventTokenProperties = activeToken[`${requestTypeLabel}Properties`];
+
+            return {
+                event,
+                id,
+                requestId,
+                type: requestTypeLabel,
+                amount: `${toDisplayAmount(tokenAmount.toString(), eventTokenProperties.decimals)} ${eventTokenProperties.label.toUpperCase()}`,
+                submitTime: timestamp,
+                submitTimeToFulfillment: targetTimestamp,
+                timeToFulfillmentFee: submitFeesAmount,
+                upfrontPayment: '-',
+                estimatedNumberOfTokens: tokenAmount*1000,
+                fulfillmentIn: targetTimestamp,
+                action: true
+            }
+        }) : null;
 
         return <DataController 
             authGuard
@@ -83,7 +89,7 @@ const DefaultTable = ({activeTab}) => {
         >
            <DataView />
         </DataController>
-    }, [activeTab, activeToken.decimals, activeView, unfulfilledRequests])
+    }, [activeTab, activeToken, activeView, unfulfilledRequests])
 }
 
 const HistoryTable = ({activeTab}) => {

@@ -45,7 +45,15 @@ const arbitrageConfig = {
           oracleId: config.oraclesData.ethvi.oracleId,
           rel: {
             contractKey: "USDC",
-          }
+          },
+        },
+        mintProperties: {
+          label: "USDC",
+          decimals: 6,
+        },
+        burnProperties: {
+          label: "ETHVI",
+          decimals: 18,
         }
       },
     },
@@ -70,6 +78,14 @@ const arbitrageConfig = {
           rel: {
             contractKey: "USDC",
           }
+        },
+        mintProperties: {
+          label: "USDC",
+          decimals: 6,
+        },
+        burnProperties: {
+          label: "ETHVI",
+          decimals: 18,
         }
       },
     }

@@ -6,8 +6,6 @@ import ActionController from "components/Actions/ActionController";
 import arbitrageConfig from "config/arbitrageConfig";
 import Countdown from "components/Countdown";
 import config from "config/config";
-import moment from 'moment';
-
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const isTablet = useIsTablet();
@@ -21,8 +19,9 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         timeToFulfillmentFee,
         type,
         upfrontPayment,
+        fulfillmentIn,
     } = rowData
-        
+
     const activeToken = useActiveToken(type, config.routes.arbitrage.path);
     
     const fulfillmentController = useMemo(() => {
@@ -50,17 +49,17 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                 header={arbitrageConfig.tables[type].pending.headers.amount}
-                content={<Value text={tokenAmount} subText={activeToken.name.toUpperCase()}/>}
+                content={<Value text={tokenAmount}/>}
             />
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTime}
-                content={<Value text={moment.unix(submitTime).format('HH:MM')} />}
+                content={<Value text={submitTime} />}
             />
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTimeToFulfillment}
-                content={<Value text={moment.unix(submitTimeToFulfillment).format('HH:MM')} subText="HH:MM"/>}
+                content={<Value text={submitTimeToFulfillment} subText="HH:MM"/>}
             />
 
             <RowItem
@@ -73,7 +72,6 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 content={<Value text={upfrontPayment} />}
             />
 
-
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.estimatedNumberOfTokens}
                 content={<Value text={estimatedNumberOfTokens} />}
@@ -81,7 +79,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
-                content={<Countdown lockedTime={submitTime} />}
+                content={<Countdown lockedTime={fulfillmentIn} />}
             />
 
             <RowItem content={
@@ -90,8 +88,15 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 </div>
             } />
         </>
-    ), [estimatedNumberOfTokens, fulfillmentController, submitTime, submitTimeToFulfillment, timeToFulfillmentFee, tokenAmount, type, upfrontPayment, activeToken.name]);
-    console.log("RowData ", RowData)
+    ), [estimatedNumberOfTokens,
+        fulfillmentController,
+        submitTime,
+        submitTimeToFulfillment,
+        timeToFulfillmentFee,
+        tokenAmount,
+        type,
+        upfrontPayment,
+        fulfillmentIn]);
 
     if (isHeader) {
         return <>
