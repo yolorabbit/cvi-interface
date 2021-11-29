@@ -33,7 +33,11 @@ const arbitrageConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.ethvi.oracleId,
-        view: activeTabs.mint
+        view: activeTabs.mint,
+        rel: {
+          contractKey: "USDC",
+          volatilityToken: "ETHVOL-USDC-LONG" 
+        }
       },
       "ethvi": {
         key: "ethvi",
@@ -42,18 +46,26 @@ const arbitrageConfig = {
         fixedDecimals: 2,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.ethvi.oracleId,
-        view: activeTabs.burn
+        view: activeTabs.burn,
+        rel: {
+          contractKey: "ETHVOL-USDC-LONG",
+          volatilityToken: "ETHVOL-USDC-LONG" 
+        }
       },
     },
     [chainNames.Matic]: {
       "cvol": {
         key: "cvol",
-        name: "usdc",
+        name: "cvol",
         decimals: 6,
         fixedDecimals: 6,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.cvi.oracleId,
-        view: activeTabs.mint
+        view: activeTabs.mint,
+        rel: {
+          contractKey: "ETHVOL-USDC-LONG",
+          volatilityToken: "ETHVOL-USDC-LONG" 
+        }
       },
       "usdc": {
         key: "usdc",
@@ -62,7 +74,11 @@ const arbitrageConfig = {
         fixedDecimals: 6,
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.cvi.oracleId,
-        view: activeTabs.burn
+        view: activeTabs.burn,
+        rel: {
+          contractKey: "USDC",
+          volatilityToken: "ETHVOL-USDC-LONG" 
+        }
       },
     }
   },

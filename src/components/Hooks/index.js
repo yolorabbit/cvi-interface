@@ -131,10 +131,16 @@ export const useW3SDK = (w3filters) => {
   const [w3, setW3] = useState();
   const { account, library: web3 } = useWeb3React();
   const { selectedNetwork } = useSelector(({app}) => app);
-  const [filters] = useState(w3filters);
+  const [filters, setFilters] = useState(w3filters);
 
   useEffect(() => {
-    if(!account || !selectedNetwork || !web3?.currentProvider) return;
+    if(filters === null && w3filters) {
+      setFilters(w3filters);
+    }
+  }, [filters, w3filters]);
+
+  useEffect(() => {
+    if(!account || !selectedNetwork || !web3?.currentProvider || filters === null) return;
 
     const getW3Instance = async (provider) => {
       try {
