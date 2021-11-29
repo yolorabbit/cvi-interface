@@ -1,8 +1,8 @@
 import Button from 'components/Elements/Button';
-import { useMemo, useState } from 'react';
-import { useActiveToken, useInDOM } from 'components/Hooks';
+import { useState } from 'react';
+import { useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
-import { actionConfirmEvent, toBN, toBNAmount } from '../../utils/index';
+import { actionConfirmEvent } from '../../utils/index';
 import { useDispatch } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
@@ -12,10 +12,8 @@ import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countd
 const Fulfill = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { isOpen, setIsOpen, isModal, disabled, amount, setAmount} = useActionController(); 
-    const activeToken = useActiveToken();
+    const { isOpen, setIsOpen, isModal, disabled, amount, setAmount } = useActionController(); 
     const [isProcessing, setProcessing] = useState();
-    const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lockedTime = useIsLockedTime();
 
     const onClick = async () => {
@@ -71,7 +69,7 @@ const Fulfill = () => {
                 onClick={onClick}
                 processing={isProcessing}
                 processingText={amount > 0  && "Calculating"}
-                disabled={(isOpen && (disabled || tokenAmount?.isZero())) || lockedTime > 0 || lockedTime === null}
+                disabled={disabled}
             />
         </div>
     </div>

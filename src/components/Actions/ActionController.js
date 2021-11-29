@@ -14,9 +14,9 @@ import Mint from 'components/pages/Arbitrage/ArbitrageModal/Views/Mint';
 import Burn from 'components/pages/Arbitrage/ArbitrageModal/Views/Burn';
 
 const actionControllerContext = createContext({});
-export const ActionControllerContext = ({disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
+export const ActionControllerContext = ({action, disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
   return (
-    <actionControllerContext.Provider value={{disabled, type, token, protocol, leverage, amount, setAmount, isModal, slippageTolerance, isOpen, setIsOpen, balances, cb }}>
+    <actionControllerContext.Provider value={{action, disabled, type, token, protocol, leverage, amount, setAmount, isModal, slippageTolerance, isOpen, setIsOpen, balances, cb }}>
       <Action />
     </actionControllerContext.Provider>
   )
@@ -41,7 +41,8 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
   const activeToken = getActiveToken();
   
   const renderActionComponent = useCallback((isModal = false) => {
-    return <ActionControllerContext 
+    return <ActionControllerContext
+        action={action}
         disabled={!(!disabled && !insufficientBalance)}
         type={type} 
         token={token} 
@@ -56,7 +57,7 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
         slippageTolerance={slippageTolerance}
         cb={cb}
       />
-  }, [amount, balances, cb, disabled, insufficientBalance, isOpen, leverage, protocol, setAmount, token, type, slippageTolerance])
+  }, [action, amount, balances, cb, disabled, insufficientBalance, isOpen, leverage, protocol, setAmount, token, type, slippageTolerance])
 
   useEffect(() => {
     if(action) return;

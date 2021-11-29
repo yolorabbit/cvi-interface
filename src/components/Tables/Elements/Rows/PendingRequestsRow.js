@@ -25,6 +25,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
             isModal
             type={arbitrageConfig.actionsConfig.fulfill.key}
             requestData={rowData}
+            disabled={false} // change to timestamp > timestamp + 15min;
         />
     }, [rowData, type]);
 
