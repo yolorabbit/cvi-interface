@@ -16,7 +16,6 @@ const Form = ({ amount, setAmount, selectedCurrency, type }) => {
                 balances={{ tokenAmount: "0" }}
                 disabled={!amount}
             />
-
             <SeeMore />
         </div>
     ), [amount, selectedCurrency, setAmount, type]);

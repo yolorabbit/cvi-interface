@@ -1,6 +1,6 @@
 import { appViewContext } from 'components/Context';
 import Details from 'components/Details/Details';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useActiveToken } from 'components/Hooks';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Form from '../Form';
@@ -40,26 +40,27 @@ const ActiveSection = ({activeTab}) => {
         }
     }, [w3?.tokens, account, w3, activeToken?.name]);
 
-    if(!activeToken?.name) return null;
+    
+    return useMemo(() => {
+        if(!activeToken?.name) return null;
+        
+        return (
+            <div className="arbitrage-section-component">
+                <Form
+                    type={activeView}
+                    amount={amount}
+                    setAmount={setAmount}
+                    selectedCurrency={activeToken.name} />
 
-    return (
-        <div className="arbitrage-section-component">
-            <Form 
-                type={activeView} 
-                amount={amount}
-                setAmount={setAmount}
-                selectedCurrency={activeToken.name}
-            />
+                <Details
+                    activeVolIndex={activeTab}
+                    selectedCurrency={activeToken.name}
+                    amount={amount} />
 
-            <Details 
-                activeVolIndex={activeTab} 
-                selectedCurrency={activeToken.name}
-                amount={amount}
-            />
-
-            <GraphsThumbnail />
-        </div>
-    )
+                <GraphsThumbnail />
+            </div>
+        );
+    }, [activeTab, activeToken?.name, activeView, amount]);
 }
 
 export default ActiveSection;

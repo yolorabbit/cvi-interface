@@ -83,7 +83,7 @@ const DefaultTable = ({activeTab}) => {
         >
            <DataView />
         </DataController>
-    }, [activeTab, activeView, unfulfilledRequests])
+    }, [activeTab, activeToken.decimals, activeView, unfulfilledRequests])
 }
 
 const HistoryTable = ({activeTab}) => {
