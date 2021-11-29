@@ -157,16 +157,18 @@ const arbitrageConfig = {
         }
       },
       "history": {
-        type: "Type",
-        amount: "Amount",
-        submitTime: "Submit time",
-        submitTimeToFulfillment: "Submitted time to fulfilment",
-        fulfillmentTime: "Fulfilment time",
-        timeToFulfillmentAndPenaltyFees: "Time to fulfilment and penalty fees",
-        mintFee: "Mint fee",
-        collateralMint: "Collateral mint",
-        receivedToken: "Received tokens"
-      },
+        headers: {
+          type: "Type",
+          amount: "Amount",
+          submitTime: "Submit time",
+          submitTimeToFulfillment: "Submitted time to fulfilment",
+          fulfillmentTime: "Fulfilment time",
+          timeToFulfillmentAndPenaltyFees: "Time to fulfilment and penalty fees",
+          mintFee: "Mint fee",
+          collateralMint: "Collateral mint",
+          receivedToken: "Received tokens"
+        }
+      }
     },
   },
   requestType: {

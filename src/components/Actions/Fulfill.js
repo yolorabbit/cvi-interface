@@ -12,8 +12,8 @@ import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countd
 const Fulfill = () => {
     const dispatch = useDispatch(); 
     const isActiveInDOM = useInDOM();
-    const { isOpen, setIsOpen, isModal, disabled, token, amount, setAmount} = useActionController(); 
-    const activeToken = useActiveToken(token);
+    const { isOpen, setIsOpen, isModal, disabled, amount, setAmount} = useActionController(); 
+    const activeToken = useActiveToken();
     const [isProcessing, setProcessing] = useState();
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const lockedTime = useIsLockedTime();
@@ -62,21 +62,19 @@ const Fulfill = () => {
         }
     }
 
-    return <> 
-        <div className="fulfill-component">
-            <div className="fulfill-component__container">
-                {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
-                <Button 
-                    className="fulfill-component__container--button" 
-                    buttonText="Fulfill" 
-                    onClick={onClick}
-                    processing={isProcessing}
-                    processingText={amount > 0  && "Calculating"}
-                    disabled={(isOpen && (disabled || tokenAmount?.isZero())) || lockedTime > 0 || lockedTime === null}
-                />
-            </div>
+    return <div className="fulfill-component">
+        <div className="fulfill-component__container">
+            {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
+            <Button 
+                className="fulfill-component__container--button" 
+                buttonText="Fulfill" 
+                onClick={onClick}
+                processing={isProcessing}
+                processingText={amount > 0  && "Calculating"}
+                disabled={(isOpen && (disabled || tokenAmount?.isZero())) || lockedTime > 0 || lockedTime === null}
+            />
         </div>
-    </>
+    </div>
      
 }
 
