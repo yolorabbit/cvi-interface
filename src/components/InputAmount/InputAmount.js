@@ -19,13 +19,14 @@ const InputAmount = ({
     error,
     availableBalance,
     view,
-    protocol
+    protocol,
+    type
 }) => {
-    const activeToken = useActiveToken(symbol, view, protocol); 
+    const activeToken = useActiveToken(view === config.routes.arbitrage.path ? type : symbol, view, protocol); 
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const availableBalanceAmount = useMemo(() => customFixedTokenValue(availableBalance, activeToken.decimals, activeToken.decimals), [activeToken, availableBalance]);
     const insufficientBalance = useMemo(() => tokenAmount.gt(toBN(availableBalance)), [tokenAmount, availableBalance]);
-   
+
     useEffect(() => {
         setInsufficientBalance(insufficientBalance);
         //eslint-disable-next-line

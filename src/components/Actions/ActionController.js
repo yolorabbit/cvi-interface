@@ -82,6 +82,7 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
           availableBalance={balances?.tokenAmount}
           view={view}
           protocol={protocol} 
+          type={type}
         />
       )
     }
@@ -110,6 +111,7 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
               availableBalance={balances?.tokenAmount}
               protocol={protocol} 
               view={view}
+              type={type}
             />
 
             {arbitrageConfig.actionsConfig[type] && <TimeToFullfill />}   
