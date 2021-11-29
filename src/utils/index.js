@@ -160,9 +160,12 @@ export const activeVolsSet = (selectedNetwork, path = "/platform") => {
     const _config = getConfig();
     const tokens = _config.tokens[selectedNetwork];
     const tokensKeys = Object.keys(tokens);
+
+    const findId = path === config.routes.arbitrage.path ? "key" : "oracleId";
+
     const activeVolsObject = tokensKeys
-        .filter(tokenKey => tokens[tokenKey].oracleId && !tokens[tokenKey].soon)
-        .reduce((prev, current) => ({...prev, [tokens[current].oracleId]: tokens[current].oracleId}), {});
+        .filter(tokenKey => tokens[tokenKey][findId] && !tokens[tokenKey].soon)
+        .reduce((prev, current) => ({...prev, [tokens[current][findId]]: tokens[current][findId]}), {});
 
     return activeVolsObject;
 }

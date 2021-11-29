@@ -34,7 +34,7 @@ const Arbitrage = () => {
         tabs={Object.keys(arbitrageConfig.tabs["sub-navbar"])}
         activeView={activeView}
         setActiveView={setActiveView} 
-        />
+      />
 
       <appViewContext.Provider value={{ activeView, w3, activeToken }}>
         <Layout>

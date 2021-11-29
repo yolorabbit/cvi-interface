@@ -58,7 +58,7 @@ const arbitrageConfig = {
         lpTokensDecimals: 18,
         oracleId: config.oraclesData.cvi.oracleId,
         rel: {
-          contractKey: "ETHVOL-USDC-LONG",
+          contractKey: "CVOL-USDC-LONG",
         },
         pairToken: {
           key: "usdc",
@@ -69,7 +69,6 @@ const arbitrageConfig = {
           oracleId: config.oraclesData.cvi.oracleId,
           rel: {
             contractKey: "USDC",
-            volatilityToken: "ETHVOL-USDC-LONG" 
           }
         }
       },
@@ -173,7 +172,7 @@ const arbitrageConfig = {
   },
   requestType: {
     1: activeTabs.mint,
-    2: activeTabs.mint,
+    2: activeTabs.burn,
     3: "collateralizedMint" 
   }
 }
