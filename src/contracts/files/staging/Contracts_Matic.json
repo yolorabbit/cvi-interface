@@ -5499,9 +5499,9 @@
       }
     ],
     "creation": {
-      "block": 21474649,
-      "timestamp": 1637148088,
-      "transactionHash": "0xcd49e382aff4f029f0c5a32df2f83d364c7d5343155a5b61922d3071f2fba494"
+      "block": 17002125,
+      "timestamp": 1626623755,
+      "transactionHash": "0xda2dfd71aa24263afb3f3675f06cc77c09639c7bcacd7330becd3fe19c4742d1"
     }
   },
   "CVOL-USDC-PositionRewards": {
@@ -5940,6 +5940,1027 @@
         "type": "function"
       },
       { "inputs": [], "name": "withdrawAllRewards", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
-    ]
+    ],
+    "creation": {
+      "block": 21177533,
+      "timestamp": 1636480099,
+      "transactionHash": "0x0fe2cc6404201ac2a7b04124134e169622529460fff931335abaeff4721be1c7"
+    }
+  },
+  "CVOL-USDC-RequestFeesCalculator": {
+    "address": "0x37960e1e359541ffd071065b685026899bcB96c3",
+    "abi": [
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "inputs": [],
+        "name": "MAX_FEE_PERCENTAGE",
+        "outputs": [{ "internalType": "uint168", "name": "", "type": "uint168" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "afterTargetMaxTime",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "afterTargetMaxTimePenaltyFeePercent",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "afterTargetMidTime",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "afterTargetMidTimePenaltyFeePercent",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "beforeTargetTimeMaxPenaltyFeePercent",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "tokensLeftAmount", "type": "uint256" }],
+        "name": "calculateFindersFee",
+        "outputs": [{ "internalType": "uint256", "name": "findersFeeAmount", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "_timeDelay", "type": "uint256" }],
+        "name": "calculateTimeDelayFee",
+        "outputs": [{ "internalType": "uint16", "name": "feePercentage", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "components": [
+              { "internalType": "uint8", "name": "requestType", "type": "uint8" },
+              { "internalType": "uint168", "name": "tokenAmount", "type": "uint168" },
+              { "internalType": "uint16", "name": "timeDelayRequestFeesPercent", "type": "uint16" },
+              { "internalType": "uint16", "name": "maxRequestFeesPercent", "type": "uint16" },
+              { "internalType": "address", "name": "owner", "type": "address" },
+              { "internalType": "uint32", "name": "requestTimestamp", "type": "uint32" },
+              { "internalType": "uint32", "name": "targetTimestamp", "type": "uint32" }
+            ],
+            "internalType": "struct IVolatilityToken.Request",
+            "name": "_request",
+            "type": "tuple"
+          }
+        ],
+        "name": "calculateTimePenaltyFee",
+        "outputs": [{ "internalType": "uint16", "name": "feePercentage", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "findersFeePercent",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "getMaxFees",
+        "outputs": [{ "internalType": "uint16", "name": "maxFeesPercent", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "components": [
+              { "internalType": "uint8", "name": "requestType", "type": "uint8" },
+              { "internalType": "uint168", "name": "tokenAmount", "type": "uint168" },
+              { "internalType": "uint16", "name": "timeDelayRequestFeesPercent", "type": "uint16" },
+              { "internalType": "uint16", "name": "maxRequestFeesPercent", "type": "uint16" },
+              { "internalType": "address", "name": "owner", "type": "address" },
+              { "internalType": "uint32", "name": "requestTimestamp", "type": "uint32" },
+              { "internalType": "uint32", "name": "targetTimestamp", "type": "uint32" }
+            ],
+            "internalType": "struct IVolatilityToken.Request",
+            "name": "_request",
+            "type": "tuple"
+          }
+        ],
+        "name": "isLiquidable",
+        "outputs": [{ "internalType": "bool", "name": "liquidable", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "maxTimeDelayFeePercent",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "maxTimeWindow",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "minTimeDelayFeePercent",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "minTimeWindow",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "minWaitTime",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+      {
+        "inputs": [{ "internalType": "uint16", "name": "_findersFeePercent", "type": "uint16" }],
+        "name": "setFindersFee",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint32", "name": "_minWaitTime", "type": "uint32" }],
+        "name": "setMinWaitTime",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "uint16", "name": "_minTimeDelayFeePercent", "type": "uint16" },
+          { "internalType": "uint16", "name": "_maxTimeDelayFeePercent", "type": "uint16" }
+        ],
+        "name": "setTimeDelayFeesParameters",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "uint16", "name": "_beforeTargetTimeMaxPenaltyFeePercent", "type": "uint16" },
+          { "internalType": "uint32", "name": "_afterTargetMidTime", "type": "uint32" },
+          { "internalType": "uint16", "name": "_afterTargetMidTimePenaltyFeePercent", "type": "uint16" },
+          { "internalType": "uint32", "name": "_afterTargetMaxTime", "type": "uint32" },
+          { "internalType": "uint16", "name": "_afterTargetMaxTimePenaltyFeePercent", "type": "uint16" }
+        ],
+        "name": "setTimePenaltyFeeParameters",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "uint32", "name": "_minTimeWindow", "type": "uint32" },
+          { "internalType": "uint32", "name": "_maxTimeWindow", "type": "uint32" }
+        ],
+        "name": "setTimeWindow",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ],
+    "creation": {
+      "block": 21902154,
+      "timestamp": 1638110130,
+      "transactionHash": "0xa41fac0a3839471a402735a18353a35cd1ed974f60975ce4e0421aec0f669728"
+    }
+  },
+  "CVOL-USDC-LONG": {
+    "address": "0xDD042A17f7d9c407B66e62e4c5e8ee53ECd1Aa77",
+    "abi": [
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "spender", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
+        ],
+        "name": "Approval",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "tokenAmount", "type": "uint256" },
+          { "indexed": false, "internalType": "uint256", "name": "burnedTokens", "type": "uint256" }
+        ],
+        "name": "Burn",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "tokenAmount", "type": "uint256" },
+          { "indexed": false, "internalType": "uint256", "name": "mintedTokens", "type": "uint256" },
+          { "indexed": false, "internalType": "uint256", "name": "mintedShortTokens", "type": "uint256" }
+        ],
+        "name": "CollateralizedMint",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": false, "internalType": "uint256", "name": "requestId", "type": "uint256" },
+          { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "fulfillFeesAmount", "type": "uint256" },
+          { "indexed": false, "internalType": "bool", "name": "isAborted", "type": "bool" }
+        ],
+        "name": "FulfillRequest",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": false, "internalType": "uint256", "name": "requestId", "type": "uint256" },
+          { "indexed": false, "internalType": "uint8", "name": "requestType", "type": "uint8" },
+          { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "liquidator", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "findersFeeAmount", "type": "uint256" }
+        ],
+        "name": "LiquidateRequest",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "tokenAmount", "type": "uint256" },
+          { "indexed": false, "internalType": "uint256", "name": "mintedTokens", "type": "uint256" }
+        ],
+        "name": "Mint",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": false, "internalType": "uint256", "name": "epoch", "type": "uint256" },
+          { "indexed": false, "internalType": "uint256", "name": "prevScalingFactor", "type": "uint256" },
+          { "indexed": false, "internalType": "uint256", "name": "newScalingFactor", "type": "uint256" }
+        ],
+        "name": "Rebase",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": false, "internalType": "uint256", "name": "requestId", "type": "uint256" },
+          { "indexed": false, "internalType": "uint8", "name": "requestType", "type": "uint8" },
+          { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "tokenAmount", "type": "uint256" },
+          { "indexed": false, "internalType": "uint256", "name": "submitFeesAmount", "type": "uint256" },
+          { "indexed": false, "internalType": "uint32", "name": "targetTimestamp", "type": "uint32" }
+        ],
+        "name": "SubmitRequest",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "from", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "to", "type": "address" },
+          { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
+        ],
+        "name": "Transfer",
+        "type": "event"
+      },
+      {
+        "inputs": [],
+        "name": "BURN_REQUEST_TYPE",
+        "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "CVI_DECIMALS_FIX",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "DELTA_PRECISION_DECIMALS",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "MAX_PERCENTAGE",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "MINT_REQUEST_TYPE",
+        "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "PRECISION_DECIMALS",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "SCALING_FACTOR_DECIMALS",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "string", "name": "name_", "type": "string" },
+          { "internalType": "string", "name": "symbol_", "type": "string" },
+          { "internalType": "uint8", "name": "decimals_", "type": "uint8" }
+        ],
+        "name": "__ElasticToken_init",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "owner_", "type": "address" },
+          { "internalType": "address", "name": "spender", "type": "address" }
+        ],
+        "name": "allowance",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "spender", "type": "address" },
+          { "internalType": "uint256", "name": "value", "type": "uint256" }
+        ],
+        "name": "approve",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "address", "name": "who", "type": "address" }],
+        "name": "balanceOf",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "address", "name": "who", "type": "address" }],
+        "name": "balanceOfUnderlying",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "cappedRebase",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "cviOracle",
+        "outputs": [{ "internalType": "contract ICVIOracle", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "decimals",
+        "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "spender", "type": "address" },
+          { "internalType": "uint256", "name": "subtractedValue", "type": "uint256" }
+        ],
+        "name": "decreaseAllowance",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "deviationPerSingleRebaseLag",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "feesCalculator",
+        "outputs": [{ "internalType": "contract IFeesCalculator", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "feesCollector",
+        "outputs": [{ "internalType": "contract IFeesCollector", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "_requestId", "type": "uint256" }],
+        "name": "fulfillBurnRequest",
+        "outputs": [{ "internalType": "uint256", "name": "tokensReceived", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "_requestId", "type": "uint256" }],
+        "name": "fulfillCollateralizedMintRequest",
+        "outputs": [
+          { "internalType": "uint256", "name": "tokensMinted", "type": "uint256" },
+          { "internalType": "uint256", "name": "shortTokensMinted", "type": "uint256" }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "uint256", "name": "_requestId", "type": "uint256" },
+          { "internalType": "uint16", "name": "_maxBuyingPremiumFeePercentage", "type": "uint16" }
+        ],
+        "name": "fulfillMintRequest",
+        "outputs": [{ "internalType": "uint256", "name": "tokensMinted", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "spender", "type": "address" },
+          { "internalType": "uint256", "name": "addedValue", "type": "uint256" }
+        ],
+        "name": "increaseAllowance",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "initSupply",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "initialTokenToLPTokenRate",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "contract IERC20Upgradeable", "name": "_token", "type": "address" },
+          { "internalType": "string", "name": "_lpTokenName", "type": "string" },
+          { "internalType": "string", "name": "_lpTokenSymbolName", "type": "string" },
+          { "internalType": "uint8", "name": "_leverage", "type": "uint8" },
+          { "internalType": "uint256", "name": "_initialTokenToVolTokenRate", "type": "uint256" },
+          { "internalType": "contract IPlatform", "name": "_platform", "type": "address" },
+          { "internalType": "contract IFeesCollector", "name": "_feesCollector", "type": "address" },
+          { "internalType": "contract IFeesCalculator", "name": "_feesCalculator", "type": "address" },
+          { "internalType": "contract IRequestFeesCalculator", "name": "_requestFeesCalculator", "type": "address" },
+          { "internalType": "contract ICVIOracle", "name": "_cviOracle", "type": "address" }
+        ],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "leverage",
+        "outputs": [{ "internalType": "uint8", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "_requestId", "type": "uint256" }],
+        "name": "liquidateRequest",
+        "outputs": [{ "internalType": "uint256", "name": "findersFeeAmount", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "maxDeviationPercentage",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "maxScalingFactor",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "maxTotalRequestsAmount",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "minDeviationPercentage",
+        "outputs": [{ "internalType": "uint16", "name": "", "type": "uint16" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "name",
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "platform",
+        "outputs": [{ "internalType": "contract IPlatform", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "uint256", "name": "indexDelta", "type": "uint256" },
+          { "internalType": "bool", "name": "positive", "type": "bool" }
+        ],
+        "name": "rebase",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      { "inputs": [], "name": "rebaseCVI", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+      {
+        "inputs": [],
+        "name": "rebaser",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+      {
+        "inputs": [],
+        "name": "requestFeesCalculator",
+        "outputs": [{ "internalType": "contract IRequestFeesCalculator", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "requests",
+        "outputs": [
+          { "internalType": "uint8", "name": "requestType", "type": "uint8" },
+          { "internalType": "uint168", "name": "tokenAmount", "type": "uint168" },
+          { "internalType": "uint16", "name": "timeDelayRequestFeesPercent", "type": "uint16" },
+          { "internalType": "uint16", "name": "maxRequestFeesPercent", "type": "uint16" },
+          { "internalType": "address", "name": "owner", "type": "address" },
+          { "internalType": "uint32", "name": "requestTimestamp", "type": "uint32" },
+          { "internalType": "uint32", "name": "targetTimestamp", "type": "uint32" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "scalingFactor",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "contract ICVIOracle", "name": "_newCVIOracle", "type": "address" }],
+        "name": "setCVIOracle",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "bool", "name": "_newCappedRebase", "type": "bool" }],
+        "name": "setCappedRebase",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint16", "name": "_newDeviationPercentagePerSingleRebaseLag", "type": "uint16" }],
+        "name": "setDeviationPerSingleRebaseLag",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "contract IFeesCalculator", "name": "_newFeesCalculator", "type": "address" }],
+        "name": "setFeesCalculator",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "contract IFeesCollector", "name": "_newCollector", "type": "address" }],
+        "name": "setFeesCollector",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint16", "name": "_newMaxDeviationPercentage", "type": "uint16" }],
+        "name": "setMaxDeviation",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "_maxTotalRequestsAmount", "type": "uint256" }],
+        "name": "setMaxTotalRequestsAmount",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint16", "name": "_newMinDeviationPercentage", "type": "uint16" }],
+        "name": "setMinDeviation",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "contract IPlatform", "name": "_newPlatform", "type": "address" }],
+        "name": "setPlatform",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "address", "name": "_rebaser", "type": "address" }],
+        "name": "setRebaser",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "contract IRequestFeesCalculator", "name": "_newRequestFeesCalculator", "type": "address" }],
+        "name": "setRequestFeesCalculator",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "bool", "name": "_verifyTotalRequestsAmount", "type": "bool" }],
+        "name": "setVerifyTotalRequestsAmount",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "uint168", "name": "_tokenAmount", "type": "uint168" },
+          { "internalType": "uint32", "name": "_timeDelay", "type": "uint32" }
+        ],
+        "name": "submitBurnRequest",
+        "outputs": [{ "internalType": "uint256", "name": "requestId", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "uint168", "name": "_tokenAmount", "type": "uint168" },
+          { "internalType": "uint32", "name": "_timeDelay", "type": "uint32" }
+        ],
+        "name": "submitMintRequest",
+        "outputs": [{ "internalType": "uint256", "name": "requestId", "type": "uint256" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [{ "internalType": "string", "name": "", "type": "string" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "token",
+        "outputs": [{ "internalType": "contract IERC20Upgradeable", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "totalRequestsAmount",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "totalSupply",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "to", "type": "address" },
+          { "internalType": "uint256", "name": "value", "type": "uint256" }
+        ],
+        "name": "transfer",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "from", "type": "address" },
+          { "internalType": "address", "name": "to", "type": "address" },
+          { "internalType": "uint256", "name": "value", "type": "uint256" }
+        ],
+        "name": "transferFrom",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "unerlyingValue", "type": "uint256" }],
+        "name": "underlyingToValue",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "value", "type": "uint256" }],
+        "name": "valueToUnderlying",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "verifyTotalRequestsAmount",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    "creation": {
+      "block": 21902156,
+      "timestamp": 1638110141,
+      "transactionHash": "0xec46ab1b13db5b01be7c734ab2f4a1f3f607d8ad14a0fadb52f3d636af5b803b"
+    }
+  },
+  "CVOL-USDC-Rebaser": {
+    "address": "0x7D58E8A2d19Fdb8fBeA321EA89C792acf096Bd2E",
+    "abi": [
+      {
+        "inputs": [
+          { "internalType": "contract IVolatilityToken", "name": "_volatilityToken", "type": "address" },
+          { "internalType": "contract IUniswapV2Pair[]", "name": "_uniswapPairs", "type": "address[]" }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          { "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" },
+          { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+        ],
+        "name": "OwnershipTransferred",
+        "type": "event"
+      },
+      {
+        "inputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
+        "name": "checkUpkeep",
+        "outputs": [
+          { "internalType": "bool", "name": "upkeepNeeded", "type": "bool" },
+          { "internalType": "bytes", "name": "performData", "type": "bytes" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "enableWhitelist",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "lastUpkeepTime",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "owner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "pairs",
+        "outputs": [{ "internalType": "contract IUniswapV2Pair", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
+        "name": "performUpkeep",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      { "inputs": [], "name": "rebase", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+      {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "rebasers",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+      {
+        "inputs": [{ "internalType": "bool", "name": "_enableWhitelist", "type": "bool" }],
+        "name": "setEnableWhitelist",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          { "internalType": "address", "name": "user", "type": "address" },
+          { "internalType": "bool", "name": "isAllowed", "type": "bool" }
+        ],
+        "name": "setRebaserAddress",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "contract IUniswapV2Pair[]", "name": "_uniswapPairs", "type": "address[]" }],
+        "name": "setUniswapPairs",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint32", "name": "_upkeepInterval", "type": "uint32" }],
+        "name": "setUpkeepInterval",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "uint32", "name": "_upkeepTimeWindow", "type": "uint32" }],
+        "name": "setUpkeepTimeWindow",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "contract IVolatilityToken", "name": "_volatilityToken", "type": "address" }],
+        "name": "setVolatilityToken",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+        "name": "transferOwnership",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "upkeepInterval",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "upkeepTimeWindow",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "volatilityToken",
+        "outputs": [{ "internalType": "contract IVolatilityToken", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    "creation": {
+      "block": 21902164,
+      "timestamp": 1638110513,
+      "transactionHash": "0x21475b6ab600b530659b809f46155ef24ac1e21a49cc5cbdcce10278e326f872"
+    }
+  },
+  "UNIV2USDCCVOL-USDC-LONG": {
+    "address": "0x173d553ee704b87B7263D44bafF401F34DB97600",
+    "abiRef": "UNIV2",
+    "creation": {
+      "block": 21902177,
+      "timestamp": 1638110596,
+      "transactionHash": "0x9b41242a100713d529227cec842a43be4ef2f754d6bb19c702979a58fcf58d51"
+    }
   }
 }
