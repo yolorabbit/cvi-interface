@@ -39,23 +39,11 @@ const useArbitrageEvents = (w3, activeToken) => {
     if(!events || !events[activeToken?.rel?.contractKey] || !w3?.tokens) return;
 
     const getUnfulfilledRequestsById = async (requestId, lastEvent) => {
-      const lastRequest = await w3?.tokens[activeToken.rel.contractKey].getRequest(requestId);
-      if(lastRequest) {
-        const { owner, raw: { tokenAmount }, requestType, targetTimestamp, requestTimestamp } = lastRequest
-        const eventData = {
-          account: owner,
-          event: "SubmitRequest",
-          requestId,
-          requestType,
-          submitFeesAmount: lastEvent.submitFeesAmount,
-          targetTimestamp,
-          timestamp: requestTimestamp,
-          tokenAmount
-        }
-
-        dispatch(setUnfulfilledRequests(eventData, true))
-      }
+      const lastRequest = await w3?.tokens[activeToken.rel.contractKey].getUnfulfilledRequests({requestId, account});
+      console.log(lastRequest);
+      dispatch(setUnfulfilledRequests(lastRequest[0], true))
     }
+    
     const longTokenUnfulfilledEvents = events[activeToken.rel.contractKey]?.SubmitRequest.events;
     if(!!longTokenUnfulfilledEvents?.length) {
       const lastEvent = longTokenUnfulfilledEvents[longTokenUnfulfilledEvents.length-1];
