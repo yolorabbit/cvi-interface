@@ -29,7 +29,7 @@ const MintView = ({amount }) => {
             />
 
             <Stat 
-                className="bold green"
+                className="bold green no-padding"
                 title="Estimated number of tokens" 
                 value={"0"} 
                 _suffix={tokenName}

@@ -25,6 +25,10 @@
         }
     }
 
+    &.no-padding {
+        padding-bottom: 0;
+    }
+
     &.red {
         & p {
             color: #f96a9a;
@@ -101,7 +105,20 @@
 
     &.small-value {
         & p, & h2 {
-            font-size: 14px;
+            font-size: 0.729vw;
+            @media (max-width: 1365px) {
+                font-size: 1.026vw;
+            }
+      
+            @media (max-width: 1024px) {
+                font-size: 1.825vw;
+                margin: 16px 0 0 0;
+            }
+            
+            @media (max-width: 767px) {
+                font-size: 3.889vw;
+                margin: 4.444vw 0 0 0;
+            }
         }
     }
 

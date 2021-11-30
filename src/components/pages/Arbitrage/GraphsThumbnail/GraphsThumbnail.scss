@@ -1,22 +1,44 @@
 .graphs-thumbnail-component {
   width: 40%;
+
   @media (max-width: 1365px) {
     width: 100%;
   }
   & .tabs-form-component__header {
     background: transparent;
+
+    & .tabs-component {
+      &.default {
+        @media (max-width: 1365px) {
+          padding: 0;
+          margin-top: 3.516vw;
+        }
+  
+        @media (max-width: 1024px) {
+          margin-top: 3.129vw;
+          padding: 0 5.2vw;
+        }
+        
+        @media (max-width: 767px) {
+          margin-top: 13.333vw;
+          border: 0;
+        }
+      }
+    }
   }
 
   .tabs-component__tab {
     display: flex;
     height: 2.083vw;
+
     @media (max-width: 1365px){
         height: 2.93vw;
         padding: 0;
+        margin-right: 2.93vw;
     }
 
     @media (max-width: 1024px){
-        height: 4.172vw;
+        height: 5.215vw;
     }
 
     @media (max-width: 767px){
@@ -64,6 +86,7 @@
       }
 
       @media (max-width: 767px) {
+        margin: 0;
         padding: 0;
         border: 0;
         font-size: 3.889vw;
@@ -90,6 +113,10 @@
     .tabs-component__tab  {
       text-align: left;
       color: rgba(white, 0.75);
+      margin: 0;
+      text-align: left;
+      width: 100%;
+      display: block;
     }
   }
 
@@ -98,35 +125,48 @@
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    width: 100%;
-    padding: 0 1.458vw;
+    max-width: 100%;
+    padding: 0 2.5vw 0 3.083vw;
+
     @media (max-width: 1365px) {
-      padding: 0 2.051vw;
-    }
-    @media (max-width: 1024px) {
-      padding: 0 3.651vw;
-    }
-    @media (max-width: 767px) {
       padding: 0;
     }
+
+    @media (max-width: 767px) {
+      padding: 0 1.111vw;
+    }
+
     .graph-image {
       object-position: bottom;
-      width: 100%;
       object-fit: contain;
-      padding: 0.417vw 0 0.833vw;
+      padding: 0;
+      max-height: 100%;
+      max-width: 100%;
+      width: 33.177vw;
+      margin-top: 0.833vw;
+      height: auto;
+
       @media (max-width: 1365px) {
-        padding: 0.586vw 0 1.172vw;
+        width: 100%;
+        object-fit: cover;
+        height: auto;
+        margin-top: 1.172vw;
       }
+
       @media (max-width: 1024px) {
-        padding: 1.043vw 0 2.086vw;
+        margin-top: 3.129vw;
       }
+      
       @media (max-width: 767px) {
-        padding: 2.222vw 0 4.444vw;
+        margin-top: 6.667vw;
       }
     }
     .graph-note {
       font-size: 0.625vw;
-      margin: 0;
+      margin: 16px 0 0 0;
+      width: 100%;
+      max-width: 100%;
+
       @media (max-width: 1365px) {
         font-size: 0.879vw;
       }

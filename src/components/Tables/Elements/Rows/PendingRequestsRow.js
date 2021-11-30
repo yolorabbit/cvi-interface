@@ -20,7 +20,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         type,
         upfrontPayment,
         fulfillmentIn,
-    } = rowData
+    } = rowData;
     
     const fulfillmentController = useMemo(() => {
         return <ActionController
@@ -103,8 +103,8 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                     <>
                         <Value className="uppercase-first-letter" text={type} subText={
                             <span className="margin-inline-start">
-                                <b>{amount}</b>
-                                <span>{symbol}</span>
+                                <b>{amount}&nbsp;</b>
+                                <span></span>
                            </span>
                             }/>
                         <div className="row-actions-wrapper">

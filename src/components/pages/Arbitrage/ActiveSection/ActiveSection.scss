@@ -28,6 +28,17 @@
         & .details-component__container {
             border-radius: 0.417vw;
             background-color: #222540;
+            @media (max-width: 1365px) {
+                border-radius: 0.586vw;
+            }
+      
+            @media (max-width: 1024px) {
+                border-radius: 1.043vw;
+            }
+            
+            @media (max-width: 767px) {
+                border-radius: 2.222vw;
+            }
         }
     }
 }
