@@ -4,15 +4,14 @@ import { appViewContext } from "components/Context";
 import { delay, isNumber } from "lodash";
 import Dropdown from "components/Dropdown/Dropdown";
 import "./TimeToFullfill.scss";
-import { useActiveWeb3React } from "components/Hooks/wallet";
+import Spinner from "components/Spinner/Spinner";
 
 const TimeToFullfill = () => {
-  const { account } = useActiveWeb3React();
   const [hoursDropdownValue, setHoursDropdownValue] = useState("");
   const [minutesDropdownValue, setMinutesDropdownValue] = useState("");
   const { w3, activeToken } = useContext(appViewContext);
-  const [maxHours, setMaxHours] = useState(0);
-  const [maxMinutes, setMaxMinutes] = useState(0);
+  const [maxHours, setMaxHours] = useState();
+  const [maxMinutes, setMaxMinutes] = useState();
 
   const getOptions = useCallback((minRange, maxRange) => {
     if(maxMinutes === 0 && maxHours === 0) return [];
@@ -21,7 +20,7 @@ const TimeToFullfill = () => {
   }, [maxHours, maxMinutes])
 
   useEffect(() => {
-    if(!w3 || !w3.tokens || !account) return; 
+    if(!w3 || !w3.tokens) return; 
 
     const fetchData = async () => {
       try {
@@ -38,7 +37,7 @@ const TimeToFullfill = () => {
 
     delay(() => fetchData(), 350);
 
-  }, [account, activeToken.rel.contractKey, w3]);
+  }, [activeToken.rel.contractKey, w3]);
 
   useEffect(() => {
     if(!isNumber(hoursDropdownValue) && !isNumber(!minutesDropdownValue)) {
@@ -52,10 +51,14 @@ const TimeToFullfill = () => {
   }, [hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue]);
 
   return useMemo(() => {
+    
     return (
       <div className="fullfill-wrapper">
         <h2>Time to fulfillment</h2>
-        {account && <span>(Between {maxMinutes < 60 ? `${maxMinutes} minutes` : `${maxMinutes / 60} hours`} to {maxHours} hours)</span>}
+        <BetweenText 
+          maxMinutes={maxMinutes} 
+          maxHours={maxHours} 
+        />
         <div className="time-wrapper">
           <Dropdown
             type="number"
@@ -83,7 +86,13 @@ const TimeToFullfill = () => {
         </div>
       </div>
     );
-  }, [account, getOptions, hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue])
+  }, [getOptions, hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue])
 };
 
+const BetweenText = ({maxMinutes, maxHours}) => {
+  return useMemo(() => {
+    if(!maxMinutes && !maxHours) return <span className="between-text">Between <Spinner className="statistics-spinner" /> hours to <Spinner className="statistics-spinner" /> hours.</span>
+    return <span>(Between {maxMinutes < 60 ? `${maxMinutes} minutes` : `${maxMinutes / 60} hours`} to {maxHours} hours)</span>
+  }, [maxHours, maxMinutes]);
+}
 export default TimeToFullfill;

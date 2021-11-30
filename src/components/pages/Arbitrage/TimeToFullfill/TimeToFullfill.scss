@@ -1,4 +1,30 @@
 .fullfill-wrapper {
+    & .between-text {
+      display: flex;
+
+      & .statistics-spinner {
+        margin: 0 0.559vw 0 0.4vw;
+
+        @media (max-width: 1365px) {
+          margin: 0 0.659vw 0 0.466vw;
+          height: 1.099vw;
+          width: 0.44vw;
+        }
+  
+        @media (max-width: 1024px) {
+          margin: 0 1.173vw 0 0.652vw;
+          height: 1.956vw;
+          width: 0.782vw;
+        }
+        
+        @media (max-width: 767px) {
+          margin: 0 2.5vw 0 1.389vw;
+          height: 4.167vw;
+          width: 1.667vw;
+        }
+      }
+    }
+
     & .time-to-fulfill-fee {
       margin-top: 1.25vw;
       
