@@ -29,8 +29,7 @@ const Burn = ({ closeBtn, requestData }) => {
   
   const onClick = async() => {
     try {
-      const res = await w3?.tokens[activeToken.rel.contractKey].fulfillBurn(originalRequest, account);
-      console.log(res);
+      await w3?.tokens[activeToken.rel.contractKey].fulfillBurn(originalRequest, account);
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - failed",
