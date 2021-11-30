@@ -2,9 +2,8 @@ import React, { useRef,useCallback, useMemo, useState } from "react";
 import "./Dropdown.scss";
 import { useOnClickOutside } from "components/Hooks";
 
-const Dropdown = ({ label, type, initialValue, dropdownOptions, clickOutsideDisabled }) => {
+const Dropdown = ({ label, type, dropdownOptions, dropdownValue, setDropdownValue, clickOutsideDisabled }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownValue, setDropdownValue] = useState(initialValue);
 
   const containerRef = useRef(null);
   useOnClickOutside(containerRef, () => !clickOutsideDisabled && setIsOpen(false));
@@ -21,9 +20,10 @@ const Dropdown = ({ label, type, initialValue, dropdownOptions, clickOutsideDisa
         (isNaN(Number(value)) || !dropdownOptions.includes(Number(value)))
       )
         return; // Only Numbers, Only if included in options
+      
       setDropdownValue(value);
     },
-    [dropdownOptions, type]
+    [dropdownOptions, setDropdownValue, type]
   );
 
   return useMemo(() => {
@@ -73,7 +73,7 @@ const Dropdown = ({ label, type, initialValue, dropdownOptions, clickOutsideDisa
         )}
       </div>
     );
-  }, [ label, dropdownOptions, dropdownValue, isOpen, dropdownToggle, valueChange ]);
+  }, [isOpen, dropdownValue, valueChange, dropdownToggle, label, dropdownOptions, setDropdownValue]);
 };
 
 export default Dropdown;
