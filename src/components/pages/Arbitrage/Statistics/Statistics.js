@@ -29,8 +29,8 @@ const Statistics = () => {
         return (
             <Container className="arbitrage-statistics-component">
                 <Value
-                    subText="Index"
-                    bottomText={<IndexValue
+                    header="Index"
+                    text={loadActiveVol === null ? null : <IndexValue
                         type="arbitrage-statistics"
                         activeIndex={loadActiveVol}
                     />}
@@ -38,12 +38,12 @@ const Statistics = () => {
 
                 <Value
                     header="Platform price"
-                    text={intrinsicValue === null ? null : customFixed(intrinsicValue, activeToken.fixedDecimals)}
+                    text={intrinsicValue === null ? null : `${customFixed(intrinsicValue, activeToken.fixedDecimals)} USDC`}
                 />
 
                 <Value
                     header="Uniswap price"
-                    text={tokenPrice === null ? null : customFixed(tokenPrice, activeToken.fixedDecimals)}
+                    text={tokenPrice === null ? null : `${customFixed(tokenPrice, activeToken.fixedDecimals)} USDC`}
                 />
             </Container>
         )

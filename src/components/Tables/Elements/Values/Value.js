@@ -17,7 +17,7 @@ const Value = ({className, text, header, subText, prefix, bottomText, protocol, 
                                 <span style={{width: `${progressBarPercents}%`}}>{commaFormatted(format) ?? text}</span> : 
                                 commaFormatted(format) ?? text}
                             </b>}
-                            <span>{(text && subText) ? <>&nbsp;{subText}</> : subText}</span>
+                            {subText && <span>{(text && subText) ? <>&nbsp;{subText}</> : subText}</span>}
                             {bottomText && <div>{bottomText} {protocol && protocol !== "platform" && <span className="value-component__protocol">{`(${protocol})`}</span>}</div>}
                         </DataState>
                     </>

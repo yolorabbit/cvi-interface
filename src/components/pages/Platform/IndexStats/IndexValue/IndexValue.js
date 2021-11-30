@@ -10,7 +10,7 @@ const IndexValue = ({type, activeIndex = "cvi", header}) => {
 
     return (
         <div className="index-value-component">
-            {activeVolInfo ? <> 
+            {activeVolInfo?.key ? <> 
                 {header && <h2 className="index-value-component__header">{header}</h2> }
                 <div className="index-value-component__top">
                     {!header && activeVolInfo && <span className="index-value-component__top--title">

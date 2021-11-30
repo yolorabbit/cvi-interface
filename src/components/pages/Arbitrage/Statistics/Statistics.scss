@@ -1,21 +1,90 @@
 .arbitrage-statistics-component {
-    min-height: auto;
     display: flex;
-    padding: 16px 56px;
-    height: 80px;
+    padding: 0.833vw 3.2vw;
+    min-height: 4.167vw;
+    
+    @media (max-width: 1365px) {
+        padding: 1.172vw 3.35vw;
+        min-height: 5.861vw;
+    }
+
+    @media (max-width: 1024px) {
+        min-height: 10.431vw;
+        padding: 2.086vw 3.129vw;
+    }
+
+    @media (max-width: 767px) {
+        padding: 4.444vw 4.444vw;
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+    }
 
     & .value-component {
-        margin-right: 108px;
+        margin-right: 5.625vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
 
-        &:first-child {
-            min-width: 276px;
+        @media (max-width: 1365px) {
+            margin-right: 7.912vw;
+        }
+    
+        @media (max-width: 1024px) {
+            margin-right: 9.909vw;
+        }
+    
+        @media (max-width: 767px) {
+            margin-right: 0;
         }
 
-        & > h5 {
+        &:first-child {
+            min-width: 14.375vw;
+
+            @media (max-width: 1365px) {
+                min-width: 20.22vw;
+            }
+        
+            @media (max-width: 1024px) {
+                min-width: 33.984vw;
+            }
+        
+            @media (max-width: 767px) {
+                min-width: auto;
+            }
+        }
+
+        &:first-child {
+            & h5 {
+                @media (max-width: 767px) { 
+                    margin-top: 0;
+                }
+            }
+        }
+
+        & > h5, & > span {
             color: rgba(white, 0.8);
             font-weight: normal;
-            margin: 0 0 10px 0;
             line-height: normal;
+            white-space: nowrap;
+            margin: 0 0 0.721vw 0;
+            font-size: 0.729vw;
+            display: block;
+
+            @media (max-width: 1365px) {
+                margin: 0 0 0.733vw 0;
+                font-size: 1.026vw;
+            }
+        
+            @media (max-width: 1024px) {
+                font-size: 1.825vw;
+                margin: 0 0 1.173vw 0;
+            }
+        
+            @media (max-width: 767px) {
+                font-size: 3.889vw;
+                margin: 4.444vw 0 2.778vw 0;
+            }
         } 
 
         & > span { 
@@ -23,18 +92,58 @@
         }
 
         & > div {
-            margin: 10px 0 0 0;
-            font-size: 18px;
             font-weight: bold;
-            line-height: normal;
+            font-size: 0.938vw;
+            margin: 0;
+
+            @media (max-width: 1365px) {
+                font-size: 1.319vw;
+            }
+        
+            @media (max-width: 1024px) {
+                font-size: 2.347vw;
+            }
+        
+            @media (max-width: 767px) {
+                font-size: 5vw;
+                line-height: 1;
+            }
         }
 
         & .index-value-component__top--title, & .index-value-component__top--value, & b {
-            font-size: 18px;
+            font-size: 0.938vw;
+            white-space: nowrap;
+            
+            @media (max-width: 1365px) {
+                font-size: 1.319vw;
+            }
+        
+            @media (max-width: 1024px) {
+                font-size: 2.347vw;
+            }
+        
+            @media (max-width: 767px) {
+                font-size: 3.889vw;
+            }
         }
 
         & .index-value-component {
             margin: 0;
+        }
+    }
+
+    & .index-value-component__top--value {
+        margin-right: 1.25vw;
+        @media (max-width: 1365px) {
+            margin-right: 2.25vw;
+        }
+    
+        @media (max-width: 1024px) {
+            margin-right: 2.608vw;
+        }
+    
+        @media (max-width: 767px) {
+            margin-right: 20px;
         }
     }
 
@@ -48,12 +157,38 @@
         margin: 0;
 
         & span {
-            font-size: 18px;
+            font-size: 0.938vw;
+
+            @media (max-width: 1365px) {
+                font-size: 1.319vw;
+            }
+        
+            @media (max-width: 1024px) {
+                font-size: 2.347vw;
+            }
+        
+            @media (max-width: 767px) {
+                font-size: 3.889vw;
+            }
         }
 
         & img {
-            height: 24px;
-            width: 24px;
+            height: 1.25vw;
+            width: 1.25vw;
+            @media (max-width: 1365px) {
+                height: 1.758vw;
+                width: 1.758vw;
+            }
+        
+            @media (max-width: 1024px) {
+                height: 3.129vw;
+                width: 3.129vw;
+            }
+        
+            @media (max-width: 767px) {
+                height: 24px;
+                width: 24px;
+            }
         }
 
         &.low {
