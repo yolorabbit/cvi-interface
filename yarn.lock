@@ -1188,10 +1188,10 @@
     "exec-sh" "^0.3.2"
     "minimist" "^1.2.0"
 
-"@coti-io/cvi-sdk@^0.0.78":
-  "integrity" "sha512-dI/CV/IkUWWr0Z44deBkrh9gZNMMChchcn7XnbMPR7Rhhb4H4ZcNJRaow5OOEStsgMY2mHXMkreS+mAYy7fZKg=="
-  "resolved" "https://registry.npmjs.org/@coti-io/cvi-sdk/-/cvi-sdk-0.0.78.tgz"
-  "version" "0.0.78"
+"@coti-io/cvi-sdk@^0.0.79":
+  "integrity" "sha512-7cZ3ZcCLmIrVxbQNqdaE7/rIWT2eoHeIhFP7nIQHg6nrh3xkTupG9rWuL9UAcOiJ9Y2e/mP4eABRS+U4Y5ewGg=="
+  "resolved" "https://registry.npmjs.org/@coti-io/cvi-sdk/-/cvi-sdk-0.0.79.tgz"
+  "version" "0.0.79"
   dependencies:
     "@ethersproject/contracts" "^5.4.1"
     "@ethersproject/providers" "^5.4.3"
