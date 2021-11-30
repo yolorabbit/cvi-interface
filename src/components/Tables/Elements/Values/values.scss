@@ -32,6 +32,36 @@
             font-size: 3.889vw;    
         }
     }
+    &.small-subtext {
+        span {
+            font-size: 0.521vw;
+            @media (max-width: 1365px) {
+                font-size: 0.733vw;
+            }
+    
+            @media (max-width: 1024px) {
+                font-size: 1.304vw;
+            }
+    
+            @media (max-width: 767px) {
+                font-size: 2.778vw;
+            }
+        }
+    }
+    & .margin-inline-start {
+        margin-inline-start: 1.771vw;
+        @media (max-width: 1365px) {
+            margin-inline-start: 2.491vw;
+        }
+
+        @media (max-width: 1024px) {
+            margin-inline-start: 4.433vw;
+        }
+
+        @media (max-width: 767px) {
+            margin-inline-start: 9.444vw;
+        }
+    }
 
     &.uppercase-first-letter {
         &::first-letter {

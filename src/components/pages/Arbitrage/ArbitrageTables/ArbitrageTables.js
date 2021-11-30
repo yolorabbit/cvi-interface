@@ -70,9 +70,15 @@ const DefaultTable = ({activeTab}) => {
                 id,
                 requestId,
                 type: requestTypeLabel,
-                amount: `${toDisplayAmount(tokenAmount.toString(), eventTokenProperties.decimals)} ${eventTokenProperties.label.toUpperCase()}`,
-                submitTime: timestamp,
-                submitTimeToFulfillment: targetTimestamp,
+                amount: {
+                    text: toDisplayAmount(tokenAmount.toString(), eventTokenProperties?.decimals),
+                    subText: eventTokenProperties?.label.toUpperCase()
+                },
+                submitTime: moment.unix(timestamp).format("DD/MM/YY HH:MM"),
+                submitTimeToFulfillment: {
+                    text: moment.unix(targetTimestamp).format("HH:MM"),
+                    subText: "HH:MM"
+                },
                 timeToFulfillmentFee: submitFeesAmount,
                 upfrontPayment: '-',
                 estimatedNumberOfTokens: tokenAmount*1000,
@@ -95,22 +101,25 @@ const DefaultTable = ({activeTab}) => {
 const HistoryTable = ({activeTab}) => {
     const { activeView } = useContext(appViewContext);
     const { arbitrage } = useSelector(({wallet}) => wallet);
+    const activeToken = useActiveToken()
 
     return useMemo(() => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
 
         //TODO: add more details to history mapping
-        const historyData = arbitrage ? arbitrage.map((event)=>({
-            type: event.event,
-            amount: `${toDisplayAmount(event.tokenAmount, 6)} USDC`, //toDisplayAmount(tokenAmount, token.decimals) take token.decimal from arbitrageConfig
-            submitTime: Date.now(),
-            submitTimeToFulfillment: Date.now() + 5000000,
+        const historyData = arbitrage ? arbitrage.map(({
+            event, tokenAmount
+        }) => {
+
+            const eventTokenProperties = activeToken[`${event.toLowerCase()}Properties`];
+
+            return {
+            type: event,
+            amount: `${toDisplayAmount(tokenAmount.toString(), eventTokenProperties?.decimals)} ${eventTokenProperties?.label.toUpperCase()}`,
             timeToFulfillmentFee: Date.now() + 10000000,
-            estimatedNumberOfTokens: "0.911 ETHVI",
-            fulfillmentIn: moment(event.timestamp * 1000).format("DD/MM/YYYY"),
             collateralMint: "Yes",
-            receivedTokens: "usdc",
-        })) : null;
+            receivedTokens: eventTokenProperties?.label.toUpperCase(),
+        }}) : null;
 
         return <DataController 
             authGuard
@@ -121,7 +130,7 @@ const HistoryTable = ({activeTab}) => {
         >
             <DataView />
         </DataController>
-    }, [activeTab, activeView, arbitrage]);
+    }, [activeTab, activeView, activeToken, arbitrage]);
 }
 
 

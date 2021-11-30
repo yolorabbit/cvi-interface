@@ -1,4 +1,4 @@
-import { useIsTablet } from "components/Hooks";
+import { useIsMobile, useIsTablet } from "components/Hooks";
 import { useMemo } from "react";
 import RowItem from './RowItem';
 import Value from '../Values/Value';
@@ -8,6 +8,8 @@ import Countdown from "components/Countdown";
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const isTablet = useIsTablet();
+    const isMobile = useIsMobile();
+    
     const { 
         amount: tokenAmount,
         estimatedNumberOfTokens,
@@ -38,17 +40,17 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                 header={arbitrageConfig.tables[type].pending.headers.amount}
-                content={<Value text={tokenAmount}/>}
+                content={<Value text={tokenAmount.text} subText={tokenAmount.subText}/>}
             />
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTime}
-                content={<Value text={submitTime} />}
+                content={<Value text={submitTime}/> }
             />
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTimeToFulfillment}
-                content={<Value text={submitTimeToFulfillment} subText="HH:MM"/>}
+                content={<Value className="small-subtext" text={submitTimeToFulfillment.text} subText={submitTimeToFulfillment.subText}/>}
             />
 
             <RowItem
@@ -71,11 +73,13 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 content={<Countdown lockedTime={fulfillmentIn} />}
             />
 
-            <RowItem content={
+            {(!isTablet || isMobile) && <RowItem content={
                 <div className="row-actions-wrapper">
                     {fulfillmentController}
                 </div>
-            } />
+                } />
+            }
+
         </>
     ), [estimatedNumberOfTokens,
         fulfillmentController,
@@ -85,12 +89,27 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         tokenAmount,
         type,
         upfrontPayment,
-        fulfillmentIn]);
+        fulfillmentIn,
+        isTablet,
+        isMobile]);
 
     if (isHeader) {
         return <>
             <RowItem
-                content={<Value className="uppercase-first-letter" text={type} />}
+                type={type}
+                content={
+                    <>
+                        <Value className="uppercase-first-letter" text={type} subText={
+                            <span className="margin-inline-start">
+                                <b>{tokenAmount.text}</b>
+                                <span>{tokenAmount.subText}</span>
+                           </span>
+                            }/>
+                        <div className="row-actions-wrapper">
+                           {isTablet && !isMobile && fulfillmentController}
+                        </div>
+                    </>
+                }
             />
         </>
     }
