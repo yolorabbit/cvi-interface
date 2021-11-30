@@ -1,9 +1,13 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useRef,useCallback, useMemo, useState } from "react";
 import "./Dropdown.scss";
+import { useOnClickOutside } from "components/Hooks";
 
-const Dropdown = ({ label, type, initialValue, dropdownOptions, prefix }) => {
+const Dropdown = ({ label, type, initialValue, dropdownOptions, clickOutsideDisabled }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownValue, setDropdownValue] = useState(initialValue);
+
+  const containerRef = useRef(null);
+  useOnClickOutside(containerRef, () => !clickOutsideDisabled && setIsOpen(false));
 
   const dropdownToggle = useCallback(() => {
     setIsOpen(!isOpen);
@@ -30,6 +34,7 @@ const Dropdown = ({ label, type, initialValue, dropdownOptions, prefix }) => {
 
     return (
       <div
+        ref={containerRef}
         className={`dropdown-component${isOpen ? " open" : ""}${dropdownValue === "" ? " error" : ""}`}>
         <div className="dropdown-group">
           <div className="input-group">
