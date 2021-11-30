@@ -38,12 +38,12 @@ const Statistics = () => {
 
                 <Value
                     header="Platform price"
-                    text={intrinsicValue ? customFixed(intrinsicValue, activeToken.fixedDecimals) : null}
+                    text={intrinsicValue === null ? null : customFixed(intrinsicValue, activeToken.fixedDecimals)}
                 />
 
                 <Value
                     header="Uniswap price"
-                    text={tokenPrice ? customFixed(tokenPrice, activeToken.fixedDecimals) : null}
+                    text={tokenPrice === null ? null : customFixed(tokenPrice, activeToken.fixedDecimals)}
                 />
             </Container>
         )

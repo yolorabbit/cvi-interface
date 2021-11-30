@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
-import { useWeb3React } from "@web3-react/core";
 import { appViewContext, viewportContext } from "../Context";
 import platformConfig from '../../config/platformConfig';
 import stakingConfig from "config/stakingConfig";
@@ -10,6 +9,7 @@ import { chainNames } from '../../connectors';
 import config from "config/config";
 import arbitrageConfig,{ activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
 import { useLocation } from "react-router";
+import { useActiveWeb3React } from "./wallet";
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);
@@ -136,7 +136,7 @@ export const useActiveVolInfo = (volKeyOrOracle = "cvi") => { // use active vol 
 
 export const useW3SDK = (w3filters) => {
   const [w3, setW3] = useState();
-  const { account, library: web3 } = useWeb3React();
+  const { library: web3 } = useActiveWeb3React();
   const { selectedNetwork } = useSelector(({app}) => app);
   const [filters, setFilters] = useState(w3filters);
 
@@ -147,7 +147,7 @@ export const useW3SDK = (w3filters) => {
   }, [filters, w3filters]);
 
   useEffect(() => {
-    if(!account || !selectedNetwork || !web3?.currentProvider || filters === null) return;
+    if(!selectedNetwork || !web3?.currentProvider || filters === null) return;
 
     const getW3Instance = async (provider) => {
       try {
@@ -163,7 +163,7 @@ export const useW3SDK = (w3filters) => {
     }
 
     getW3Instance(web3?.currentProvider);
-  }, [web3?.currentProvider, account, selectedNetwork, filters]);
+  }, [web3?.currentProvider, selectedNetwork, filters]);
 
   return w3;
 }

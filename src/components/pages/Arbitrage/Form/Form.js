@@ -19,7 +19,9 @@ const Form = ({ amount, setAmount, type }) => {
     }, [account, tokenContract]);
 
     useEffect(() => {
-        if(!tokenContract || !account) return;
+        if(!account) return setAvailableBalance("0");
+        if(!tokenContract) return;
+
         getAvailableBalance();
     }, [account, tokenContract, getAvailableBalance]);
 
