@@ -102,14 +102,22 @@
       .open-icon {
         z-index: 9;
         cursor: pointer;
+        width: 1.25vw;
+        height: 1.25vw;
         margin-inline-end: 0.417vw;
         @media (max-width: 1365px) {
+          width: 1.758vw;
+          height: 1.758vw;
           margin-inline-end: 0.586vw;
         }
         @media (max-width: 1024px) {
+          width: 3.129vw;
+          height: 3.129vw;
           margin-inline-end: 1.043vw;
         }
         @media (max-width: 767px) {
+          width: 6.667vw;
+          height: 6.667vw;
           margin-inline-end: 2.222vw;
         }
       }

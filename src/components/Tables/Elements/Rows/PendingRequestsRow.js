@@ -34,15 +34,17 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
     const RowData = useMemo(() => (
         <>
-            <RowItem
-                header={arbitrageConfig.tables[type].pending.headers.type}
-                content={<Value className="uppercase-first-letter" text={type} />}
-            />
-
-            <RowItem
-                header={arbitrageConfig.tables[type].pending.headers.amount}
-                content={<Value text={amount} subText={symbol}/>}
-            />
+            {(!isTablet && !isMobile) && 
+            <>
+                <RowItem
+                    header={arbitrageConfig.tables[type].pending.headers.type}
+                    content={<Value className="uppercase-first-letter" text={type} />}
+                />
+                <RowItem
+                    header={arbitrageConfig.tables[type].pending.headers.amount}
+                    content={<Value text={amount} subText={symbol}/>}
+                />
+            </>}
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTime}
