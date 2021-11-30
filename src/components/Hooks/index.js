@@ -1,16 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useContext } from "react";
 import { useSelector } from "react-redux";
 import { appViewContext, viewportContext } from "../Context";
 import platformConfig from '../../config/platformConfig';
 import stakingConfig from "config/stakingConfig";
-import { getW3 } from '@coti-io/cvi-sdk';
 import { chainNames } from '../../connectors';
 import config from "config/config";
 import arbitrageConfig,{ activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
 import { useLocation } from "react-router";
 import { useActiveWeb3React } from "./wallet";
 import { DAY } from "./useEvents";
+import { getW3 } from '@coti-io/cvi-sdk';
+import debounce from "lodash.debounce";
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);
@@ -141,6 +142,27 @@ export const useW3SDK = (w3filters) => {
   const { selectedNetwork } = useSelector(({app}) => app);
   const [filters, setFilters] = useState(w3filters);
 
+  const getW3Instance = useCallback(async (provider) => {
+    try {
+      // @TODO: fix sdk caching
+      const w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
+        provider, 
+        env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
+      }).init(filters);
+
+      if(!config.isMainnet || process.env.REACT_APP_DAYS_TO_COUNT_FROM) { // run staging env from block number timestamp sub days in env
+        const blockTimestamp = await (await w3Inst.block.getBlock()).timestamp;
+        w3Inst.forkTimestamp = blockTimestamp - (DAY * process.env.REACT_APP_DAYS_TO_COUNT_FROM);
+      }
+
+      setW3(w3Inst);
+    } catch(error) {
+      console.log(error);
+    }
+  }, [filters, selectedNetwork])
+
+  const getW3InstanceDebounce = useMemo(() => debounce(getW3Instance, 500), [getW3Instance]);
+
   useEffect(() => {
     if(filters === null && w3filters) {
       setFilters(w3filters);
@@ -149,27 +171,12 @@ export const useW3SDK = (w3filters) => {
 
   useEffect(() => {
     if(!selectedNetwork || !web3?.currentProvider || filters === null) return;
+    getW3InstanceDebounce(web3?.currentProvider);
 
-    const getW3Instance = async (provider) => {
-      try {
-        const w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
-          provider, 
-          env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
-        }).init(filters);
-        
-        if(!config.isMainnet || process.env.REACT_APP_DAYS_TO_COUNT_FROM) { // run staging env from block number timestamp sub days in env
-          const blockTimestamp = await (await w3Inst.block.getBlock()).timestamp;
-          w3Inst.forkTimestamp = blockTimestamp - (DAY * process.env.REACT_APP_DAYS_TO_COUNT_FROM);
-        }
-        
-        setW3(w3Inst);
-      } catch(error) {
-        console.log(error);
-      }
+    return () => {
+      getW3InstanceDebounce.cancel();
     }
-
-    getW3Instance(web3?.currentProvider);
-  }, [web3?.currentProvider, selectedNetwork, filters]);
+  }, [web3?.currentProvider, selectedNetwork, filters, getW3InstanceDebounce]);
 
   return w3;
 }
