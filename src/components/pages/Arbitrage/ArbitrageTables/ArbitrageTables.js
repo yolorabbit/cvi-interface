@@ -70,10 +70,8 @@ const DefaultTable = ({activeTab}) => {
                 id,
                 requestId,
                 type: requestTypeLabel,
-                amount: {
-                    text: toDisplayAmount(tokenAmount.toString(), eventTokenProperties?.decimals),
-                    subText: eventTokenProperties?.label.toUpperCase()
-                },
+                amount: toDisplayAmount(tokenAmount.toString(), eventTokenProperties?.decimals),
+                symbol: eventTokenProperties?.label.toUpperCase(),
                 submitTime: moment.unix(timestamp).format("DD/MM/YY HH:MM"),
                 submitTimeToFulfillment: {
                     text: moment.unix(targetTimestamp).format("HH:MM"),
@@ -101,19 +99,18 @@ const DefaultTable = ({activeTab}) => {
 const HistoryTable = ({activeTab}) => {
     const { activeView } = useContext(appViewContext);
     const { arbitrage } = useSelector(({wallet}) => wallet);
-    const activeToken = useActiveToken()
+    const activeToken = useActiveToken();
 
     return useMemo(() => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
-
         //TODO: add more details to history mapping
         const historyData = arbitrage ? arbitrage.map(({
             event, tokenAmount
         }) => {
 
-            const eventTokenProperties = activeToken[`${event.toLowerCase()}Properties`];
+        const eventTokenProperties = activeToken[`${event.toLowerCase()}Properties`];
 
-            return {
+        return {
             type: event,
             amount: `${toDisplayAmount(tokenAmount.toString(), eventTokenProperties?.decimals)} ${eventTokenProperties?.label.toUpperCase()}`,
             timeToFulfillmentFee: Date.now() + 10000000,

@@ -11,7 +11,8 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const isMobile = useIsMobile();
     
     const { 
-        amount: tokenAmount,
+        amount,
+        symbol,
         estimatedNumberOfTokens,
         submitTime,
         submitTimeToFulfillment,
@@ -40,7 +41,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                 header={arbitrageConfig.tables[type].pending.headers.amount}
-                content={<Value text={tokenAmount.text} subText={tokenAmount.subText}/>}
+                content={<Value text={amount} subText={symbol}/>}
             />
 
             <RowItem
@@ -86,7 +87,8 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         submitTime,
         submitTimeToFulfillment,
         timeToFulfillmentFee,
-        tokenAmount,
+        amount,
+        symbol,
         type,
         upfrontPayment,
         fulfillmentIn,
@@ -101,8 +103,8 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                     <>
                         <Value className="uppercase-first-letter" text={type} subText={
                             <span className="margin-inline-start">
-                                <b>{tokenAmount.text}</b>
-                                <span>{tokenAmount.subText}</span>
+                                <b>{amount}</b>
+                                <span>{symbol}</span>
                            </span>
                             }/>
                         <div className="row-actions-wrapper">
