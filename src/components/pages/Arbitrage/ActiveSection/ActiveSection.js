@@ -55,6 +55,7 @@ const ActiveSection = ({activeTab}) => {
                 <Details
                     activeVolIndex={activeTab}
                     amount={amount} 
+                    path={config.routes.arbitrage.path}
                 />
 
                 <GraphsThumbnail />

@@ -12,6 +12,7 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Graphs from '../Graphs';
 import './ActiveSection.scss';
 import Details from 'components/Details/Details';
+import config from 'config/config';
 
 const ActiveSection = ({activeTab}) => {
     const isTablet = useIsTablet();
@@ -76,10 +77,11 @@ const ActiveSection = ({activeTab}) => {
                <div className="platform-form-component__middle">
                     <Details 
                         activeVolIndex={activeTab}
-                        selectedCurrency={selectedCurrency?.toUpperCase()} 
+                        selectedCurrency={selectedCurrency?.toLowerCase()} 
                         amount={amount} 
                         leverage={leverage} 
                         slippageTolerance={slippageTolerance}
+                        path={config.routes.platform.path}
                     />
                </div>
 

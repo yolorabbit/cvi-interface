@@ -11,17 +11,19 @@ const TradeView = lazy(() => import('./Views/TradeView'));
 const MintView = lazy(() => import('./Views/MintView'));
 const BurnView = lazy(() => import('./Views/BurnView'));
 
-const Details = ({activeVolIndex, amount, leverage, slippageTolerance}) => {
+const Details = ({activeVolIndex, amount, leverage, slippageTolerance, selectedCurrency, path = config.routes.platform.path}) => {
     const { activeView } = useContext(appViewContext);
-    const activeToken = useActiveToken(activeView, config.routes.arbitrage.path);
+    const activeToken = useActiveToken(selectedCurrency ?? activeView, path);
 
     return useMemo(() => {
+        if(!activeToken) return null;
+        
         const getActiveView = () => {
             switch(activeView) {
                 case platformActiveViews.trade:
                     return <TradeView 
                         amount={amount} 
-                        selectedCurrency={activeToken.name} 
+                        selectedCurrency={activeToken.key} 
                         leverage={leverage}
                         activeVolIndex={activeVolIndex}
                         slippageTolerance={slippageTolerance}
@@ -30,7 +32,7 @@ const Details = ({activeVolIndex, amount, leverage, slippageTolerance}) => {
                 case platformActiveViews["view-liquidity"]:
                     return <LiquidityView 
                         amount={amount} 
-                        selectedCurrency={activeToken.name} 
+                        selectedCurrency={activeToken.key} 
                         activeVolIndex={activeVolIndex}
                     />
     
@@ -60,7 +62,7 @@ const Details = ({activeVolIndex, amount, leverage, slippageTolerance}) => {
                 </div>
             </div>
         )
-    }, [activeToken.name, activeView, activeVolIndex, amount, leverage, slippageTolerance]); 
+    }, [activeToken, activeView, activeVolIndex, amount, leverage, slippageTolerance]); 
 }
 
 export default Details;
