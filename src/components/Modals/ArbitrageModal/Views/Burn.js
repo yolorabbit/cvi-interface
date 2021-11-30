@@ -3,7 +3,7 @@ import Title from "components/Elements/Title";
 import Stat from "components/Stat";
 import Button from "components/Elements/Button";
 import CountdownComponent from "components/Countdown";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
 import { addAlert } from 'store/actions';
@@ -24,17 +24,21 @@ const Burn = ({ closeBtn, requestData }) => {
   const [recieveAmount] = useState(900)
   const [estimatedAmount] = useState(15)
   const dispatch = useDispatch();
-    
+  const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
+  const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId)
+  
   const onClick = async() => {
     try {
-      await w3?.tokens[activeToken.rel.contractKey].fulfillBurn(requestData.requestId, account);
+      const res = await w3?.tokens[activeToken.rel.contractKey].fulfillBurn(originalRequest, account);
+      console.log(res);
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - failed",
         alertType: config.alerts.types.CONFIRMED,
         message: "Transaction failed!"
       }));
-    } catch {
+    } catch (error) {
+      console.log("fulfill burn error: ", error);
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - failed",
@@ -48,12 +52,12 @@ const Burn = ({ closeBtn, requestData }) => {
 
   useEffect(()=>{
     const preFulfill = async () => {
-      const preFulfillRes = await w3?.tokens[activeToken.rel.contractKey].preFulfill(requestData.requestId)
+      const preFulfillRes = await w3?.tokens[activeToken.rel.contractKey].preFulfillBurn(originalRequest)
       // const { fulfillFees, fulfillFeesPercent, receive } = preFulfillRes;
       setPreFulfillData(preFulfillRes)
     }
-    if(w3?.tokens[activeToken.rel.contractKey]) preFulfill();
-  },[w3, requestData, activeToken]);
+    if(w3?.tokens[activeToken.rel.contractKey] && originalRequest) preFulfill();
+  },[w3, requestData, activeToken, originalRequest]);
     
   return useMemo(() => {
       return (

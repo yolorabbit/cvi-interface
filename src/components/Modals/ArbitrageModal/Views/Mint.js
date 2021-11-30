@@ -10,7 +10,7 @@ import { useActiveToken } from 'components/Hooks';
 import { toDisplayAmount } from '@coti-io/cvi-sdk';
 import { customFixed } from 'utils';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
 
@@ -22,21 +22,25 @@ const Mint = ({ closeBtn, requestData }) => {
   const [upFrontPayment] = useState(1000)
   const [fullfillmentIn] = useState(27280000)
   const [preFulfillData, setPreFulfillData] = useState(null)
-  const [fee] = useState(0.3)
   const [amountToFullfill] = useState(1700)
   const dispatch = useDispatch();
-    
+  const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
+  const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId)
+  
   const onClick = async() => {
     try {
       const mintAction = collateralMint ? "fulfillCollateralizedMint" : "fulfillMint";
-      await w3?.tokens[activeToken.rel.contractKey][mintAction](requestData.requestId, account);
+      console.log('originalRequest: ', originalRequest);
+      const res = await w3?.tokens[activeToken.rel.contractKey][mintAction](originalRequest, account);
+      console.log(res);
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - failed",
         alertType: config.alerts.types.CONFIRMED,
         message: "Transaction failed!"
       }));
-    } catch {
+    } catch (error){
+      console.log("fulfill mint error: ", error);
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - failed",
@@ -50,14 +54,16 @@ const Mint = ({ closeBtn, requestData }) => {
 
   useEffect(()=>{
     const preFulfill = async () => {
-      const preFulfillRes = await w3?.tokens[activeToken.rel.contractKey].preFulfill(requestData.requestId)
+      const preFulfillRes = await w3?.tokens[activeToken.rel.contractKey].preFulfillMint(originalRequest)
       // const { fulfillFees, fulfillFeesPercent, receive } = preFulfillRes;
+      console.log(preFulfillRes);
       setPreFulfillData(preFulfillRes)
     }
-    if(w3?.tokens[activeToken.rel.contractKey]) preFulfill();
-  },[w3, requestData, activeToken]);
+    if(w3?.tokens[activeToken.rel.contractKey] && originalRequest) preFulfill();
+  },[w3, requestData, activeToken, originalRequest]);
 
   return useMemo(() => {
+
     return (
       <>
         <Title
@@ -69,7 +75,7 @@ const Mint = ({ closeBtn, requestData }) => {
         <Stat
           title="Amount"
           className="bold amount"
-          value={requestData.amount || "0"}
+          value={`${requestData.amount} ${requestData.symbol}` || "-"}
         />
   
         <Stat
@@ -91,15 +97,15 @@ const Mint = ({ closeBtn, requestData }) => {
         <Stat
           title="Time to fullfillment and penalty fees"
           className="large-value bold"
-          value={preFulfillData?.fulfillFeesPercent.toString() || "0"}
-          format={`${preFulfillData?.fulfillFeesPercent.toString() || "0"}%`}
+          value={preFulfillData?.penaltyFeePercent.toString() || "-"}
+          format={`${preFulfillData?.penaltyFeePercent.toString() || "-"}%`}
         />
   
         <Stat
           title="Mint fee"
           className="large-value bold nomargin"
-          value={fee || "0"}
-          format={`${fee || "0"}%`}
+          value={preFulfillData?.openFeePercent.toString() || "-"}
+          format={`${preFulfillData?.openFeePercent.toString() || "-"}%`}
         />
   
         <Checkbox
