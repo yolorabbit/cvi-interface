@@ -37,10 +37,11 @@ const Tabs = ({enableOnly, type = "default", suffix = "", prefix, isDropdown, ta
             return _tabsKeys.map((tab, index) => {
                 const volLabel = (config.volatilityIndexKey[tab] || config.volatilityTokenKey[tab]) ? `${tab.toUpperCase()}${prefix ? ` ${prefix}` : ''}` : undefined;
                 const tabLabel = formattedTabs[tab] ?? volLabel ?? tab;
+
                 return <Button
                     key={uniqueId(tab)} 
                     className={`tabs-component__tab ${(tab === activeTab || index === activeTab) ? 'active' : ''}`} 
-                    buttonText={tabs?.[tab] ?? `${suffix}${tabLabel}`} 
+                    buttonText={`${suffix}${isArray ? tabLabel : tabs?.[tab]}`} 
                     disabled={enableOnly && enableOnly !== "0" && enableOnly !== tab}
                     onClick={() => onTabChange(_tabsKeys[index])} 
                 />
@@ -68,7 +69,7 @@ const Tabs = ({enableOnly, type = "default", suffix = "", prefix, isDropdown, ta
                 </>}
             </div>
         )
-    }, [type, isDropdown, isOpen, formattedTabs, activeTab, tabs, _tabsKeys, prefix, suffix, enableOnly, onTabChange, onClickDropdown]);
+    }, [type, isDropdown, isOpen, formattedTabs, activeTab, tabs, _tabsKeys, prefix, suffix, isArray, enableOnly, onTabChange, onClickDropdown]);
 }
 
 export default Tabs;
