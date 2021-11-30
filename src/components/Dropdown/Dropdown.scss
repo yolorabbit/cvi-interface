@@ -25,6 +25,14 @@
     margin-top: 4.444vw;
     border-radius: 2.222vw;
   }
+
+  &.disabled {
+    opacity: 0.5;
+    & .dropdown-group .input-group .open-icon {
+      cursor: initial;
+    }
+  }
+
   &.open {
     z-index: 25;
     border-radius: 0.417vw 0.417vw 0 0;

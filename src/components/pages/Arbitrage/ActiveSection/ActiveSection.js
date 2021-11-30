@@ -1,45 +1,16 @@
 import { appViewContext } from 'components/Context';
 import Details from 'components/Details/Details';
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { useActiveToken } from 'components/Hooks';
-import { useActiveWeb3React } from 'components/Hooks/wallet';
 import Form from '../Form';
 import GraphsThumbnail from '../GraphsThumbnail';
 import './ActiveSection.scss';
 import config from 'config/config';
 
 const ActiveSection = ({activeTab}) => { 
-    const { activeView, w3 } = useContext(appViewContext);
+    const { activeView } = useContext(appViewContext);
     const activeToken = useActiveToken(activeView, config.routes.arbitrage.path);
     const [amount, setAmount] = useState("");
-    // const [availableBalance, setAvailableBalance] = useState(null);
-    const { account } = useActiveWeb3React();
-
-    useEffect(() => {
-        const start = async() => {
-            // show as time delay fee min and max.
-            // const timeDelayWindow = await w3?.tokens[activeToken.rel.contractKey].getTimeDelayWindow();
-            // console.log('timeDelayWindow: ', timeDelayWindow); {min/60 , max/60}
-
-            // calculate time delay fee 
-            // const timeDelayFee = await w3?.tokens[activeToken.rel.contractKey].calculateTimeDelayFee(1000)
-            // console.log("timeDelayFee: ", timeDelayFee);
-            
-            // create mint request
-            // const submitMintRes = await w3?.tokens[activeToken.rel.contractKey].submitMint("10",account, 500);
-            // console.log("submitMintRes: ", submitMintRes);
-
-            // pending reqeusts -> store in reducer under mints
-            // const unfulfilledRequests = await w3?.tokens[activeToken.rel.contractKey].getUnfulfilledRequests({account});
-            // console.log("unfulfilledRequests: ", unfulfilledRequests);
-            
-        }
-
-        if(account && w3?.tokens) {
-            start();
-        }
-    }, [w3?.tokens, account, w3, activeToken?.rel.contractKey]);
-
     
     return useMemo(() => {
         if(!activeToken?.name) return null;

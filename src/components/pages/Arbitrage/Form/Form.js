@@ -26,6 +26,8 @@ const Form = ({ amount, setAmount, type }) => {
     }, [account, tokenContract, getAvailableBalance]);
 
     return useMemo(() => {
+        if(!activeToken?.name) return;
+
         return (
             <div className="arbitrage-form-component">
                 <ActionController
@@ -39,7 +41,7 @@ const Form = ({ amount, setAmount, type }) => {
                 <SeeMore />
             </div>
         );
-    }, [activeToken.name, amount, availableBalance, setAmount, type]);
+    }, [activeToken?.name, amount, availableBalance, setAmount, type]);
 }
 
 const SeeMore = () => {

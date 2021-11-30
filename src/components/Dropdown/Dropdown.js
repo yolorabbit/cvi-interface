@@ -4,13 +4,14 @@ import { useOnClickOutside } from "components/Hooks";
 
 const Dropdown = ({ label, type, dropdownOptions, dropdownValue, setDropdownValue, clickOutsideDisabled }) => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const hasOptions = dropdownOptions?.length > 0;
   const containerRef = useRef(null);
   useOnClickOutside(containerRef, () => !clickOutsideDisabled && setIsOpen(false));
 
   const dropdownToggle = useCallback(() => {
+    if(!hasOptions) return;
     setIsOpen(!isOpen);
-  }, [isOpen]);
+  }, [hasOptions, isOpen]);
 
   const valueChange = useCallback(
     ({ target: { value } }) => {
@@ -28,6 +29,7 @@ const Dropdown = ({ label, type, dropdownOptions, dropdownValue, setDropdownValu
 
   return useMemo(() => {
     const dropdownSelection = (value) => {
+      if(!hasOptions) return;
       setDropdownValue(value);
       setIsOpen(false);
     };
@@ -35,7 +37,8 @@ const Dropdown = ({ label, type, dropdownOptions, dropdownValue, setDropdownValu
     return (
       <div
         ref={containerRef}
-        className={`dropdown-component${isOpen ? " open" : ""}${dropdownValue === "" ? " error" : ""}`}>
+        className={`dropdown-component${isOpen ? " open" : ""}${dropdownValue === "" ? " error" : ""}${!hasOptions ? ' disabled' : ''}`}
+      >
         <div className="dropdown-group">
           <div className="input-group">
             <input
@@ -44,6 +47,7 @@ const Dropdown = ({ label, type, dropdownOptions, dropdownValue, setDropdownValu
               name="dropdown-input"
               value={dropdownValue}
               onChange={valueChange}
+              disabled={!hasOptions}
             />
 
             <img
@@ -73,7 +77,7 @@ const Dropdown = ({ label, type, dropdownOptions, dropdownValue, setDropdownValu
         )}
       </div>
     );
-  }, [isOpen, dropdownValue, valueChange, dropdownToggle, label, dropdownOptions, setDropdownValue]);
+  }, [isOpen, dropdownValue, valueChange, dropdownToggle, label, dropdownOptions, setDropdownValue, hasOptions]);
 };
 
 export default Dropdown;
