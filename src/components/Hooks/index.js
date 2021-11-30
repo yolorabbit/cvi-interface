@@ -10,6 +10,7 @@ import config from "config/config";
 import arbitrageConfig,{ activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
 import { useLocation } from "react-router";
 import { useActiveWeb3React } from "./wallet";
+import { DAY } from "./useEvents";
 
 export const useViewport = () => {
   const { width, height } = useContext(viewportContext);
@@ -155,7 +156,12 @@ export const useW3SDK = (w3filters) => {
           provider, 
           env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
         }).init(filters);
-
+        
+        if(!config.isMainnet || process.env.REACT_APP_DAYS_TO_COUNT_FROM) { // run staging env from block number timestamp sub days in env
+          const blockTimestamp = await (await w3Inst.block.getBlock()).timestamp;
+          w3Inst.forkTimestamp = blockTimestamp - (DAY * process.env.REACT_APP_DAYS_TO_COUNT_FROM);
+        }
+        
         setW3(w3Inst);
       } catch(error) {
         console.log(error);

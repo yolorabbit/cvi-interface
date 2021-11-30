@@ -1,15 +1,32 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import Stat from "components/Stat";
 import { appViewContext } from "components/Context";
-import { delay, isNumber } from "lodash";
+import { debounce, isNumber } from "lodash";
 import Dropdown from "components/Dropdown/Dropdown";
 import "./TimeToFullfill.scss";
 import Spinner from "components/Spinner/Spinner";
+import { customFixed } from "utils";
 
-const TimeToFullfill = () => {
+// show as time delay fee min and max.
+// const timeDelayWindow = await w3?.tokens[activeToken.rel.contractKey].getTimeDelayWindow();
+// console.log('timeDelayWindow: ', timeDelayWindow); {min/60 , max/60}
+
+// calculate time delay fee 
+// const timeDelayFee = await w3?.tokens[activeToken.rel.contractKey].calculateTimeDelayFee(1000)
+// console.log("timeDelayFee: ", timeDelayFee);
+
+// create mint request
+// const submitMintRes = await w3?.tokens[activeToken.rel.contractKey].submitMint("10",account, 500);
+// console.log("submitMintRes: ", submitMintRes);
+
+// pending reqeusts -> store in reducer under mints
+// const unfulfilledRequests = await w3?.tokens[activeToken.rel.contractKey].getUnfulfilledRequests({account});
+// console.log("unfulfilledRequests: ", unfulfilledRequests);
+
+const TimeToFullfill = ({delayFee, setDelayFee}) => {
+  const { w3, activeToken } = useContext(appViewContext);
   const [hoursDropdownValue, setHoursDropdownValue] = useState("");
   const [minutesDropdownValue, setMinutesDropdownValue] = useState("");
-  const { w3, activeToken } = useContext(appViewContext);
   const [maxHours, setMaxHours] = useState();
   const [maxMinutes, setMaxMinutes] = useState();
 
@@ -17,14 +34,34 @@ const TimeToFullfill = () => {
     if(maxMinutes === 0 && maxHours === 0) return [];
     if((!minRange && minRange !== 0) || !maxRange) return [];
     return [...new Array(maxRange)].map((option, index) => index+minRange);
-  }, [maxHours, maxMinutes])
+  }, [maxHours, maxMinutes]);
+
+  const calculateTimeDelayFee = useCallback(async () => {
+    let isValid = true;
+    try {
+      if(!hoursDropdownValue && !minutesDropdownValue) return;
+      const totalTime = Number(hoursDropdownValue * 60 * 60) + Number(minutesDropdownValue * 60);
+      if(totalTime < (maxMinutes * 60) || totalTime > (maxHours * 60 * 60)) return;
+      const timeDelayFee = await w3?.tokens[activeToken.rel.contractKey].calculateTimeDelayFee(totalTime);
+      setDelayFee(timeDelayFee);
+    } catch (error) {
+      isValid = false;
+      console.log(error);
+      setDelayFee("N/A");
+    } finally {
+      if(!isValid) setDelayFee("N/A");
+    }
+  }, [activeToken.rel.contractKey, hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue, setDelayFee, w3?.tokens]);
+
+  const calculateTimeDelayFeeDebounce = useMemo(
+    () => debounce(calculateTimeDelayFee, 750),
+  [calculateTimeDelayFee]);
 
   useEffect(() => {
     if(!w3 || !w3.tokens) return; 
 
     const fetchData = async () => {
       try {
-          // show as time delay fee min and max.
           const {maxTimeWindow, minTimeWindow} = await w3?.tokens[activeToken.rel.contractKey].getTimeDelayWindow();
           setMaxHours(maxTimeWindow ? (maxTimeWindow/60/60) : 0);
           setMaxMinutes(minTimeWindow ? (minTimeWindow/60) : 0);
@@ -35,9 +72,13 @@ const TimeToFullfill = () => {
       }
     }
 
-    delay(() => fetchData(), 350);
+    const fetchDataDebounce = debounce(fetchData, 350);
+    fetchDataDebounce();
 
-  }, [activeToken.rel.contractKey, w3]);
+    return () => {
+      fetchDataDebounce.cancel();
+    }
+  }, [activeToken.rel.contractKey, calculateTimeDelayFeeDebounce, w3]);
 
   useEffect(() => {
     if(!isNumber(hoursDropdownValue) && !isNumber(!minutesDropdownValue)) {
@@ -45,10 +86,16 @@ const TimeToFullfill = () => {
       return setMinutesDropdownValue("0");
     }
 
+    setDelayFee(null);
+    calculateTimeDelayFeeDebounce();
+
     if(Number(hoursDropdownValue) >= maxHours) return setMinutesDropdownValue("0");
     if(Number(hoursDropdownValue) === 0 && Number(minutesDropdownValue) < maxMinutes) return setMinutesDropdownValue(maxMinutes);
 
-  }, [hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue]);
+    return () => {
+      calculateTimeDelayFeeDebounce.cancel();
+    }
+  }, [hoursDropdownValue, minutesDropdownValue, maxHours, maxMinutes, calculateTimeDelayFee, calculateTimeDelayFeeDebounce, setDelayFee]);
 
   return useMemo(() => {
     
@@ -80,13 +127,12 @@ const TimeToFullfill = () => {
           <Stat 
             className="row bold small-value"
             title="Time to fulfillment fee"
-            value="1"
-            format="1%"
+            value={delayFee === 'N/A' ? 'N/A' : delayFee === null ? null : `${customFixed(delayFee, 2)}%`}
           />
         </div>
       </div>
     );
-  }, [getOptions, hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue])
+  }, [delayFee, getOptions, hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue])
 };
 
 const BetweenText = ({maxMinutes, maxHours}) => {

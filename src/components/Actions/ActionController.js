@@ -14,9 +14,9 @@ import Mint from 'components/Modals/ArbitrageModal/Views/Mint';
 import Burn from 'components/Modals/ArbitrageModal/Views/Burn';
 
 const actionControllerContext = createContext({});
-export const ActionControllerContext = ({action, disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
+export const ActionControllerContext = ({action, disabled, token, protocol, type, leverage, amount, setAmount, delayFee, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
   return (
-    <actionControllerContext.Provider value={{action, disabled, type, token, protocol, leverage, amount, setAmount, isModal, slippageTolerance, isOpen, setIsOpen, balances, cb }}>
+    <actionControllerContext.Provider value={{action, disabled, type, token, protocol, leverage, amount, setAmount, delayFee, isModal, slippageTolerance, isOpen, setIsOpen, balances, cb }}>
       <Action />
     </actionControllerContext.Provider>
   )
@@ -27,7 +27,7 @@ export const useActionController = () => {
   return context;
 }
 
-const ActionController = ({action, requestData, type, disabled, amountLabel = "Amount", token, leverage, amount, setAmount, slippageTolerance, setSlippageTolerance, isModal, view="platform", protocol, balances, cb}) => {
+const ActionController = ({action, requestData, type, disabled, amountLabel = "Amount", token, leverage, delayFee, setDelayFee, amount, setAmount, slippageTolerance, setSlippageTolerance, isModal, view="platform", protocol, balances, cb}) => {
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(appViewContext);
@@ -50,6 +50,7 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
         leverage={leverage} 
         amount={amount} 
         setAmount={setAmount} 
+        delayFee={delayFee}
         isOpen={isOpen} 
         isModal={isModal} 
         balances={balances} 
@@ -57,7 +58,7 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
         slippageTolerance={slippageTolerance}
         cb={cb}
       />
-  }, [action, amount, balances, cb, disabled, insufficientBalance, isOpen, leverage, protocol, setAmount, token, type, slippageTolerance])
+  }, [action, disabled, insufficientBalance, type, token, protocol, leverage, amount, setAmount, delayFee, isOpen, balances, slippageTolerance, cb])
 
   useEffect(() => {
     if(action) return;
@@ -114,7 +115,7 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
               type={type}
             />
 
-            {arbitrageConfig.actionsConfig[type] && <TimeToFullfill />}   
+            {arbitrageConfig.actionsConfig[type] && <TimeToFullfill delayFee={delayFee} setDelayFee={setDelayFee} />}   
 
             {activeToken?.name === 'usdc' && <AdvancedOptions 
                 slippageTolerance={slippageTolerance} 

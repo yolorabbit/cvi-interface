@@ -1,25 +1,23 @@
 import Button from 'components/Elements/Button';
-import { useCallback, useMemo, useState } from 'react';
-import { useInDOM } from 'components/Hooks';
+import { useCallback, useContext, useMemo, useState } from 'react';
+import { useActiveToken, useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
 import { actionConfirmEvent } from '../../utils/index';
 import { useDispatch } from 'react-redux';
 import { addAlert } from 'store/actions';
-import config from '../../config/config';
-import ErrorModal from 'components/Modals/ErrorModal';
+import config from 'config/config';
+import { appViewContext } from 'components/Context';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
 
 const SubmitMint = () => {
+    const activeToken = useActiveToken();
+    const { account } = useActiveWeb3React();
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
-    const { disabled, setIsOpen, amount, setAmount, cb: updateAvailableBalance } = useActionController();
-    const [modalIsOpen, setModalIsOpen] = useState();
-    const [errorMessage] = useState();
+    const { disabled, setIsOpen, amount, tokenAmount, setAmount, delayFee } = useActionController();
     const [isProcessing, setProcessing] = useState();
-
-    const toggleModal = async(flag) => {
-        setModalIsOpen(flag);
-    }
-
+    const { w3 } = useContext(appViewContext);
+    
     const onClick = useCallback(async () => {
         setProcessing(true);
 
@@ -30,11 +28,10 @@ const SubmitMint = () => {
                 alertType: config.alerts.types.NOTICE,
                 message: "Please confirm the transaction in your wallet."
             }));
+            
+            const submitMintRes = await w3?.tokens[activeToken.rel.contractKey].submitMint(tokenAmount, account, delayFee);
+            console.log("submitMintRes: ", submitMintRes);
 
-            await new Promise(resolve => setTimeout(() => {
-                resolve(true)
-            }, 1000));
-                
             dispatch(addAlert({
                 id: 'mint',
                 eventName: "Mint request - success",
@@ -56,29 +53,27 @@ const SubmitMint = () => {
             if(isActiveInDOM()) {
                 setProcessing(false);
                 setAmount("");
-                updateAvailableBalance();
                 setIsOpen(false);
             }
         }
-    }, [dispatch, isActiveInDOM, setAmount, setIsOpen, updateAvailableBalance])
+    }, [account, activeToken.rel.contractKey, delayFee, dispatch, isActiveInDOM, setAmount, setIsOpen, tokenAmount, w3?.tokens])
 
     return useMemo(() => {
         return  (
             <> 
-                {modalIsOpen && <ErrorModal error={errorMessage} setModalIsOpen={toggleModal} /> }
                 <div className="mint-component">
                     <Button 
                         className="button" 
                         buttonText="SUBMIT"
                         onClick={onClick}
-                        disabled={disabled}
-                        processing={isProcessing}
-                        processingText={amount > 0 && "Calculating"}
+                        disabled={disabled || delayFee === 'N/A'}
+                        processing={isProcessing || delayFee === null || amount === null}
+                        processingText={(amount > 0 || delayFee === null) && "Calculating"}
                     />
                 </div>
             </>
         )
-    }, [amount, disabled, errorMessage, isProcessing, modalIsOpen, onClick])
+    }, [amount, delayFee, disabled, isProcessing, onClick])
 }
 
 export default SubmitMint;

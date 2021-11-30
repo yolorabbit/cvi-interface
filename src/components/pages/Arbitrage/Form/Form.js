@@ -6,7 +6,7 @@ import config from 'config/config';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import './Form.scss';
 
-const Form = ({ amount, setAmount, type }) => {
+const Form = ({ amount, setAmount, delayFee, setDelayFee, type }) => {
     const { account } = useActiveWeb3React();
     const activeToken = useActiveToken(type); 
     const { w3 } = useContext(appViewContext);
@@ -21,7 +21,6 @@ const Form = ({ amount, setAmount, type }) => {
     useEffect(() => {
         if(!account) return setAvailableBalance("0");
         if(!tokenContract) return;
-
         getAvailableBalance();
     }, [account, tokenContract, getAvailableBalance]);
 
@@ -32,16 +31,19 @@ const Form = ({ amount, setAmount, type }) => {
             <div className="arbitrage-form-component">
                 <ActionController
                     view={config.routes.arbitrage.path}
+                    delayFee={delayFee}
+                    setDelayFee={setDelayFee}
                     amount={amount}
                     setAmount={setAmount}
                     token={activeToken.name}
                     type={type}
                     balances={{ tokenAmount: availableBalance }}
-                    disabled={!amount} />
+                    disabled={!amount} 
+                />
                 <SeeMore />
             </div>
         );
-    }, [activeToken?.name, amount, availableBalance, setAmount, type]);
+    }, [activeToken.name, amount, availableBalance, delayFee, setAmount, setDelayFee, type]);
 }
 
 const SeeMore = () => {
