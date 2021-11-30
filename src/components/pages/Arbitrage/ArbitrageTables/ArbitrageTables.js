@@ -70,7 +70,7 @@ const DefaultTable = ({activeTab}) => {
                 id,
                 requestId,
                 type: requestTypeLabel,
-                amount: toDisplayAmount(tokenAmount.toString(), eventTokenProperties?.decimals),
+                amount: toDisplayAmount(tokenAmount, eventTokenProperties?.decimals),
                 symbol: eventTokenProperties?.label.toUpperCase(),
                 submitTime: moment.unix(timestamp).format("DD/MM/YY HH:MM"),
                 submitTimeToFulfillment: {

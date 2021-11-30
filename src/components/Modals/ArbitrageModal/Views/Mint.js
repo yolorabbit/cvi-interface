@@ -30,12 +30,12 @@ const Mint = ({ closeBtn, requestData }) => {
   const onClick = async() => {
     try {
       const mintAction = collateralMint ? "fulfillCollateralizedMint" : "fulfillMint";
-      await w3?.tokens[activeToken.rel.contractKey][mintAction](originalRequest, account);
+      await w3?.tokens[activeToken.rel.contractKey][mintAction](originalRequest.requestId, {account});
       dispatch(addAlert({
         id: 'mint',
-        eventName: "Mint - failed",
+        eventName: "Mint - success",
         alertType: config.alerts.types.CONFIRMED,
-        message: "Transaction failed!"
+        message: "Transaction success!"
       }));
     } catch (error){
       console.log("fulfill mint error: ", error);

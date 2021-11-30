@@ -29,12 +29,12 @@ const Burn = ({ closeBtn, requestData }) => {
   
   const onClick = async() => {
     try {
-      await w3?.tokens[activeToken.rel.contractKey].fulfillBurn(originalRequest, account);
+      await w3?.tokens[activeToken.rel.contractKey].fulfillBurn(originalRequest.requestId, account);
       dispatch(addAlert({
         id: 'mint',
-        eventName: "Mint - failed",
+        eventName: "Mint - success",
         alertType: config.alerts.types.CONFIRMED,
-        message: "Transaction failed!"
+        message: "Transaction success!"
       }));
     } catch (error) {
       console.log("fulfill burn error: ", error);
