@@ -1,24 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import Stat from "components/Stat";
 import { appViewContext } from "components/Context";
 import { delay, isNumber } from "lodash";
 import Dropdown from "components/Dropdown/Dropdown";
 import "./TimeToFullfill.scss";
+import { useActiveWeb3React } from "components/Hooks/wallet";
 
 const TimeToFullfill = () => {
+  const { account } = useActiveWeb3React();
   const [hoursDropdownValue, setHoursDropdownValue] = useState("");
   const [minutesDropdownValue, setMinutesDropdownValue] = useState("");
   const { w3, activeToken } = useContext(appViewContext);
-  const [maxHours, setMaxHours] = useState();
-  const [maxMinutes, setMaxMinutes] = useState();
+  const [maxHours, setMaxHours] = useState(0);
+  const [maxMinutes, setMaxMinutes] = useState(0);
 
-  const getOptions = (minRange, maxRange) => {
+  const getOptions = useCallback((minRange, maxRange) => {
+    if(maxMinutes === 0 && maxHours === 0) return [];
     if((!minRange && minRange !== 0) || !maxRange) return [];
     return [...new Array(maxRange)].map((option, index) => index+minRange);
-  }
+  }, [maxHours, maxMinutes])
 
   useEffect(() => {
-    if(!w3 || !w3.tokens) return; 
+    if(!w3 || !w3.tokens || !account) return; 
 
     const fetchData = async () => {
       try {
@@ -35,7 +38,7 @@ const TimeToFullfill = () => {
 
     delay(() => fetchData(), 350);
 
-  }, [activeToken.rel.contractKey, w3]);
+  }, [account, activeToken.rel.contractKey, w3]);
 
   useEffect(() => {
     if(!isNumber(hoursDropdownValue) && !isNumber(!minutesDropdownValue)) {
@@ -48,37 +51,39 @@ const TimeToFullfill = () => {
 
   }, [hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue]);
 
-  return (
-    <div className="fullfill-wrapper">
-      <h2>Time to fulfillment</h2>
-      <span>(Between {maxMinutes < 60 ? `${maxMinutes} minutes` : `${maxMinutes / 60} hours`} to {maxHours} hours)</span>
-      <div className="time-wrapper">
-        <Dropdown
-          type="number"
-          label="hours"
-          dropdownOptions={getOptions(maxMinutes >= 60 ? 1 : 0 , maxHours+1)}
-          dropdownValue={hoursDropdownValue}
-          setDropdownValue={setHoursDropdownValue}
-        />
-        <span>:</span>
-        <Dropdown
-          type="number"
-          label="minutes"
-          dropdownOptions={getOptions(hoursDropdownValue === 0 ? maxMinutes : 0, hoursDropdownValue === maxHours ? 0 : (61-maxMinutes))}
-          dropdownValue={minutesDropdownValue}
-          setDropdownValue={setMinutesDropdownValue}
-        />
+  return useMemo(() => {
+    return (
+      <div className="fullfill-wrapper">
+        <h2>Time to fulfillment</h2>
+        {account && <span>(Between {maxMinutes < 60 ? `${maxMinutes} minutes` : `${maxMinutes / 60} hours`} to {maxHours} hours)</span>}
+        <div className="time-wrapper">
+          <Dropdown
+            type="number"
+            label="hours"
+            dropdownOptions={getOptions(maxMinutes >= 60 ? 1 : 0 , maxHours+1)}
+            dropdownValue={hoursDropdownValue}
+            setDropdownValue={setHoursDropdownValue}
+          />
+          <span>:</span>
+          <Dropdown
+            type="number"
+            label="minutes"
+            dropdownOptions={getOptions(hoursDropdownValue === 0 ? maxMinutes : 0, hoursDropdownValue === maxHours ? 0 : (61-maxMinutes))}
+            dropdownValue={minutesDropdownValue}
+            setDropdownValue={setMinutesDropdownValue}
+          />
+        </div>
+        <div className="time-to-fulfill-fee">
+          <Stat 
+            className="row bold small-value"
+            title="Time to fulfillment fee"
+            value="1"
+            format="1%"
+          />
+        </div>
       </div>
-      <div className="time-to-fulfill-fee">
-        <Stat 
-          className="row bold small-value"
-          title="Time to fulfillment fee"
-          value="1"
-          format="1%"
-        />
-      </div>
-    </div>
-  );
+    );
+  }, [account, getOptions, hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue])
 };
 
 export default TimeToFullfill;
