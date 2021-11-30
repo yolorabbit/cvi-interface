@@ -2,6 +2,7 @@ import { useOnClickOutside } from "components/Hooks";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import "./Modal.scss";
+import "../Modals/ArbitrageModal/ArbitrageModal.scss";
 
 const modalRoot = document.getElementById("modal-root");
 

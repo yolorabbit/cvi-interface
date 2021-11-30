@@ -10,8 +10,8 @@ import { useActiveToken } from '../Hooks';
 import arbitrageConfig from 'config/arbitrageConfig';
 import TimeToFullfill from 'components/pages/Arbitrage/TimeToFullfill';
 import { activeTabs as arbitrageActiveTabs } from 'config/arbitrageConfig';
-import Mint from 'components/pages/Arbitrage/ArbitrageModal/Views/Mint';
-import Burn from 'components/pages/Arbitrage/ArbitrageModal/Views/Burn';
+import Mint from 'components/Modals/ArbitrageModal/Views/Mint';
+import Burn from 'components/Modals/ArbitrageModal/Views/Burn';
 
 const actionControllerContext = createContext({});
 export const ActionControllerContext = ({action, disabled, token, protocol, type, leverage, amount, setAmount, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {

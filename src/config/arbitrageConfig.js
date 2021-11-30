@@ -181,7 +181,7 @@ const arbitrageConfig = {
   requestType: {
     1: activeTabs.mint,
     2: activeTabs.burn,
-    3: "collateralizedMint" 
+    3: activeTabs.mint 
   }
 }
 
