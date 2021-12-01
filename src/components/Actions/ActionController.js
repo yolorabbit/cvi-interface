@@ -68,10 +68,10 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, activeView]);
 
-  const getInnerModal = () => {
+  const getInnerModal = useCallback(() => {
     switch (action) {
-      case "mint": return <Mint closeBtn={() => setIsOpen(false)} requestData={requestData} />
-      case "burn": return <Burn closeBtn={() => setIsOpen(false)} requestData={requestData} />
+      case arbitrageActiveTabs.mint: return <Mint closeBtn={() => setIsOpen(false)} requestData={requestData} />
+      case arbitrageActiveTabs.burn: return <Burn closeBtn={() => setIsOpen(false)} requestData={requestData} />
     
       default: return (
         <InputAmount 
@@ -87,46 +87,38 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
         />
       )
     }
-  }
+  }, [action, amount, amountLabel, balances?.tokenAmount, protocol, requestData, setAmount, token, type, view])
 
-  return useMemo(() => {
+  return useMemo(() => <div className="action-controller_component">
+    {(isModal && isOpen) && <Modal className={action ? "arbitrage-modal" : ""} clickOutsideDisabled closeIcon handleCloseModal={() => setIsOpen(false)}>
+      {getInnerModal()}
+      {(type === platformConfig.actionsConfig.sell.key) ? <AdvancedOptions
+        slippageTolerance={slippageTolerance}
+        setSlippageTolerance={setSlippageTolerance} /> : <br />}
 
-    return <div className="action-controller_component">
-        {(isModal && isOpen) && <Modal className={action ? "arbitrage-modal" : ""} clickOutsideDisabled closeIcon handleCloseModal={() => setIsOpen(false)}>
-          {getInnerModal()}
-          {(type === platformConfig.actionsConfig.sell.key) ? <AdvancedOptions 
-            slippageTolerance={slippageTolerance} 
-            setSlippageTolerance={setSlippageTolerance} 
-          /> : <br/>}
+      {!action && renderActionComponent()}
+    </Modal>}
 
-          {!action && renderActionComponent()}
-        </Modal>}
+    {!isModal && <>
+      <InputAmount
+        label={amountLabel}
+        symbol={token}
+        amount={amount}
+        setAmount={setAmount}
+        setInsufficientBalance={setInsufficientBalance}
+        availableBalance={balances?.tokenAmount}
+        protocol={protocol}
+        view={view}
+        type={type} />
 
-        {!isModal && <>
-            <InputAmount 
-              label={amountLabel}
-              symbol={token} 
-              amount={amount} 
-              setAmount={setAmount} 
-              setInsufficientBalance={setInsufficientBalance}
-              availableBalance={balances?.tokenAmount}
-              protocol={protocol} 
-              view={view}
-              type={type}
-            />
+      {arbitrageConfig.actionsConfig[type] && <TimeToFullfill delayFee={delayFee} setDelayFee={setDelayFee} />}
 
-            {arbitrageConfig.actionsConfig[type] && <TimeToFullfill delayFee={delayFee} setDelayFee={setDelayFee} />}   
-
-            {activeToken?.name === 'usdc' && <AdvancedOptions 
-                slippageTolerance={slippageTolerance} 
-                setSlippageTolerance={setSlippageTolerance} 
-            />}
-          </>
-        }
-        {renderActionComponent(isModal)}
-    </div>
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [action, isModal, isOpen, amountLabel, token, amount, setAmount, balances?.tokenAmount, view, protocol, type, slippageTolerance, setSlippageTolerance, renderActionComponent, activeToken?.name])
+      {activeToken?.name === 'usdc' && <AdvancedOptions
+        slippageTolerance={slippageTolerance}
+        setSlippageTolerance={setSlippageTolerance} />}
+    </>}
+    {renderActionComponent(isModal)}
+  </div>, [isModal, isOpen, action, getInnerModal, type, slippageTolerance, setSlippageTolerance, renderActionComponent, amountLabel, token, amount, setAmount, balances?.tokenAmount, protocol, view, delayFee, setDelayFee, activeToken?.name])
 };
 
 const AdvancedOptions = ({slippageTolerance, setSlippageTolerance}) => {

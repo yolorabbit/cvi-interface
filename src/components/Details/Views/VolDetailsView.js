@@ -29,7 +29,7 @@ const VolDetailsView = ({amount, delayFee}) => {
             console.log(error);
             setMaxSubmitFees("N/A");
         } 
-    }, [w3.tokens, fromToken.rel.volTokenKey, fromToken.decimals, tokenAmount, delayFee.delayTime, activeView]);
+    }, [w3?.tokens, fromToken.rel.volTokenKey, fromToken.decimals, tokenAmount, delayFee.delayTime, activeView]);
 
     const loadDataDebounce = useMemo(() => debounce(loadData, 500), [loadData]);
     
@@ -48,7 +48,7 @@ const VolDetailsView = ({amount, delayFee}) => {
         return () => {
             loadDataDebounce.cancel();
         }
-    }, [amount, delayFee?.delayTime, loadDataDebounce, tokenAmount, w3]);
+    }, [amount, delayFee.delayTime, loadDataDebounce, tokenAmount, w3]);
     
     
     return useMemo(() => {
