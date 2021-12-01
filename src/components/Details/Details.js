@@ -8,8 +8,7 @@ import './Details.scss';
 
 const LiquidityView = lazy(() => import('./Views/LiquidityView'));
 const TradeView = lazy(() => import('./Views/TradeView'));
-const MintView = lazy(() => import('./Views/MintView'));
-const BurnView = lazy(() => import('./Views/BurnView'));
+const VolDetailsView = lazy(() => import('./Views/VolDetailsView'));
 
 const Details = ({activeVolIndex, amount, leverage, delayFee, slippageTolerance, selectedCurrency, path = config.routes.platform.path}) => {
     const { activeView } = useContext(appViewContext);
@@ -35,16 +34,10 @@ const Details = ({activeVolIndex, amount, leverage, delayFee, slippageTolerance,
                         selectedCurrency={activeToken.key} 
                         activeVolIndex={activeVolIndex}
                     />
-    
+                
+                case arbitrageActiveViews.burn:
                 case arbitrageActiveViews.mint: 
-                    return <MintView 
-                        amount={amount} 
-                        activeVolIndex={activeVolIndex}
-                        delayFee={delayFee}
-                    />
-    
-                case arbitrageActiveViews.burn: 
-                    return <BurnView 
+                    return <VolDetailsView 
                         amount={amount} 
                         activeVolIndex={activeVolIndex}
                         delayFee={delayFee}

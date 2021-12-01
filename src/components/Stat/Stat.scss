@@ -45,6 +45,18 @@
         justify-content: space-between;
     }
 
+    &.first-letter-cap {
+        & h2 {
+            & span {
+                &:first-child {
+                    &::first-letter {
+                        text-transform: capitalize;
+                    }
+                }
+            }
+        }
+    }
+
     &.multiline {
         & p {
             font-size: 0.573vw;
