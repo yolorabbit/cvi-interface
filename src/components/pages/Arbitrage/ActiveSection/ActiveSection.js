@@ -31,6 +31,7 @@ const ActiveSection = ({activeTab}) => {
                     activeVolIndex={activeTab}
                     amount={amount} 
                     path={config.routes.arbitrage.path}
+                    delayFee={delayFee}
                 />
 
                 <GraphsThumbnaill />
