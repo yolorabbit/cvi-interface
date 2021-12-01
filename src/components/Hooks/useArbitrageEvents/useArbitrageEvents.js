@@ -8,6 +8,7 @@ const useArbitrageEvents = (w3, activeToken) => {
   const [{unfulfilledRequests, arbitrage}, events] = useSelector(({wallet, events}) => [wallet, events]);
   const { actionConfirmed } = events;
   const { account } = useActiveWeb3React();
+// const account = '0xf8d74c0CF0AEBbD58401f18a1382368EB00EFc2d'
 
   const fetchHistory = useCallback(async () => {
     try {

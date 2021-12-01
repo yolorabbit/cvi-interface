@@ -5,6 +5,7 @@ import Value from '../Values/Value';
 import ActionController from "components/Actions/ActionController";
 import arbitrageConfig from "config/arbitrageConfig";
 import Countdown from "components/Countdown";
+import moment from "moment";
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const isTablet = useIsTablet();
@@ -20,17 +21,23 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         type,
         upfrontPayment,
         fulfillmentIn,
+        lastBlockTime,
     } = rowData;
-    
+
+    // Submit Time + 15 minutes
+    const submitTimePlus = moment(submitTime * 1000).add(15, 'minutes');
+    // Last Block Time
+    const isLocked = moment(moment.utc(submitTimePlus)).isSameOrAfter(moment.utc(lastBlockTime * 1000));
+
     const fulfillmentController = useMemo(() => {
         return <ActionController
             action={type}
             isModal
             type={arbitrageConfig.actionsConfig.fulfill.key}
             requestData={rowData}
-            disabled={false} // change to timestamp > timestamp + 15min;
+            disabled={lastBlockTime ? isLocked : true}
         />
-    }, [rowData, type]);
+    }, [rowData, type, lastBlockTime, isLocked]);
 
     const RowData = useMemo(() => (
         <>
@@ -48,7 +55,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTime}
-                content={<Value text={submitTime}/> }
+                content={<Value text={moment(submitTime * 1000).format("DD/MM/YY HH:mm")}/> }
             />
 
             <RowItem
