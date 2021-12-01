@@ -63,7 +63,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.upfrontPayment}
-                content={<Value text={upfrontPayment} />}
+                content={<Value text={`${upfrontPayment} ${symbol}`} />}
             />
 
             <RowItem

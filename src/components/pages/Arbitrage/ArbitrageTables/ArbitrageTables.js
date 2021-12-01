@@ -11,8 +11,9 @@ import Container from 'components/Layout/Container';
 import TabsForm from 'components/TabsForm';
 import './ArbitrageTables.scss';
 import moment from 'moment';
-import { customFixed, toDisplayAmount } from 'utils/index';
+import { customFixed, toBN, toDisplayAmount } from 'utils/index';
 import { upperFirst } from "lodash";
+import { MAX_PERCENTAGE } from "contracts/utils";
 
 const ArbitrageTables = () => {
     const [activeTab, setActiveTab] = useState();
@@ -62,24 +63,27 @@ const DefaultTable = ({activeTab}) => {
         const data = unfulfilledRequests ? unfulfilledRequests.map(({
             event, id, requestId, requestType, submitFeesAmount, targetTimestamp, timestamp, tokenAmount,
         }) => {
-            
+            const MAX_UPFRONT_FEE = toBN("500");
             const requestTypeLabel = arbitrageConfig.requestType[requestType];
             const eventTokenProperties = activeToken[`${requestTypeLabel}Properties`];
-
+            const timeDelayFeeAmount = toBN(tokenAmount).sub(toBN(toBN(tokenAmount).sub(toBN(submitFeesAmount))));
+            const maxFeeAmount = toBN(tokenAmount).div(toBN(MAX_PERCENTAGE)).mul(MAX_UPFRONT_FEE);
+            const advanceAmount = toBN(maxFeeAmount).add(toBN(timeDelayFeeAmount));
+            
             return {
                 event,
                 id,
                 requestId,
                 type: requestTypeLabel,
-                amount: toDisplayAmount(tokenAmount, eventTokenProperties?.decimals),
-                symbol: eventTokenProperties?.label.toUpperCase(),
+                amount: toDisplayAmount(tokenAmount, eventTokenProperties.decimals),
+                symbol: eventTokenProperties.label.toUpperCase(),
                 submitTime: moment.unix(timestamp).format("DD/MM/YY HH:mm"),
                 submitTimeToFulfillment: {
                     text: moment.unix(targetTimestamp).format("HH:mm"),
                     subText: "HH:MM"
                 },
                 timeToFulfillmentFee: submitFeesAmount,
-                upfrontPayment: '-',
+                upfrontPayment: toDisplayAmount(advanceAmount, eventTokenProperties.decimals),
                 estimatedNumberOfTokens: customFixed(toDisplayAmount(tokenAmount*1000, eventTokenProperties.decimals), eventTokenProperties.customFixed),
                 fulfillmentIn: targetTimestamp,
                 action: true

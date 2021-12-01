@@ -57,6 +57,7 @@ let diff;
 const MAX_TIME = 0;
 let lastBlockFetch = 0;
 let cachedBlock;
+export const MAX_PERCENTAGE = "10000";
 
 const localTimestamp = () => {
   return Math.floor(moment.utc().valueOf() / 1000);
