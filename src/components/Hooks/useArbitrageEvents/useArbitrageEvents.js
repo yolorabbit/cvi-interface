@@ -12,7 +12,7 @@ const useArbitrageEvents = (w3, activeToken) => {
     if(!activeToken?.rel || !account || !w3?.tokens) return;
 
     const fetchUnfulfilledRequests = async () => {
-      const unfulfilledRequests = await w3?.tokens[activeToken.rel.contractKey].getUnfulfilledRequests({account});
+      const unfulfilledRequests = await w3?.tokens[activeToken.rel.volTokenKey].getUnfulfilledRequests({account});
       dispatch(setUnfulfilledRequests(unfulfilledRequests))
     }
 
@@ -26,7 +26,7 @@ const useArbitrageEvents = (w3, activeToken) => {
     if(!activeToken?.rel || !w3?.tokens) return;
     
     const fetchHistory = async () => {
-      const history = await w3?.tokens[activeToken.rel.contractKey].getHistory({account});
+      const history = await w3?.tokens[activeToken.rel.volTokenKey].getHistory({account});
       dispatch(setData("arbitrage", history));
     }
     if(!arbitrage && account && w3?.tokens) {
@@ -36,21 +36,21 @@ const useArbitrageEvents = (w3, activeToken) => {
   }, [w3?.tokens, account, activeToken?.rel]);
     
   useEffect(()=>{
-    if(!events || !events[activeToken?.rel?.contractKey] || !w3?.tokens) return;
+    if(!events || !events[activeToken?.rel?.volTokenKey] || !w3?.tokens) return;
 
     const getUnfulfilledRequestsById = async (requestId, lastEvent) => {
-      const lastRequest = await w3?.tokens[activeToken.rel.contractKey].getUnfulfilledRequests({requestId, account});
+      const lastRequest = await w3?.tokens[activeToken.rel.volTokenKey].getUnfulfilledRequests({requestId, account});
       console.log(lastRequest);
       dispatch(setUnfulfilledRequests(lastRequest[0], true))
     }
     
-    const longTokenUnfulfilledEvents = events[activeToken.rel.contractKey]?.SubmitRequest.events;
+    const longTokenUnfulfilledEvents = events[activeToken.rel.volTokenKey]?.SubmitRequest.events;
     if(!!longTokenUnfulfilledEvents?.length) {
       const lastEvent = longTokenUnfulfilledEvents[longTokenUnfulfilledEvents.length-1];
       getUnfulfilledRequestsById(lastEvent.requestId, lastEvent);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [events[activeToken?.rel?.contractKey]?.SubmitRequest?.events.length]);
+  }, [events[activeToken?.rel?.volTokenKey]?.SubmitRequest?.events.length]);
 }
 
 export default useArbitrageEvents;

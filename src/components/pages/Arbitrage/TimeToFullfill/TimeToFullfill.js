@@ -23,7 +23,7 @@ import { customFixed } from "utils";
 // const unfulfilledRequests = await w3?.tokens[activeToken.rel.contractKey].getUnfulfilledRequests({account});
 // console.log("unfulfilledRequests: ", unfulfilledRequests);
 
-const TimeToFullfill = ({delayFee, setDelayFee}) => {
+const TimeToFullfill = ({ delayFee, setDelayFee }) => {
   const { w3, activeToken } = useContext(appViewContext);
   const [hoursDropdownValue, setHoursDropdownValue] = useState("");
   const [minutesDropdownValue, setMinutesDropdownValue] = useState("");
@@ -43,7 +43,10 @@ const TimeToFullfill = ({delayFee, setDelayFee}) => {
       const totalTime = Number(hoursDropdownValue * 60 * 60) + Number(minutesDropdownValue * 60);
       if(totalTime < (maxMinutes * 60) || totalTime > (maxHours * 60 * 60)) return;
       const timeDelayFee = await w3?.tokens[activeToken.rel.contractKey].calculateTimeDelayFee(totalTime);
-      setDelayFee(timeDelayFee);
+      setDelayFee({
+        fee: timeDelayFee,
+        delayTime: totalTime
+      });
     } catch (error) {
       isValid = false;
       console.log(error);
@@ -127,7 +130,7 @@ const TimeToFullfill = ({delayFee, setDelayFee}) => {
           <Stat 
             className="row bold small-value"
             title="Time to fulfillment fee"
-            value={delayFee === 'N/A' ? 'N/A' : delayFee === null ? null : `${customFixed(delayFee, 2)}%`}
+            value={delayFee === 'N/A' ? 'N/A' : delayFee === null ? null : `${customFixed(delayFee.fee, 2)}%`}
           />
         </div>
       </div>

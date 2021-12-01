@@ -30,7 +30,7 @@ const Mint = ({ closeBtn, requestData }) => {
   const onClick = async() => {
     try {
       const mintAction = collateralMint ? "fulfillCollateralizedMint" : "fulfillMint";
-      await w3?.tokens[activeToken.rel.contractKey][mintAction](originalRequest.requestId, {account});
+      await w3?.tokens[activeToken.rel.volTokenKey][mintAction](originalRequest.requestId, {account});
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - success",
@@ -52,12 +52,12 @@ const Mint = ({ closeBtn, requestData }) => {
 
   useEffect(()=>{
     const preFulfill = async () => {
-      const preFulfillRes = await w3?.tokens[activeToken.rel.contractKey].preFulfillMint(originalRequest)
+      const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillMint(originalRequest)
       // const { fulfillFees, fulfillFeesPercent, receive } = preFulfillRes;
       console.log(preFulfillRes);
       setPreFulfillData(preFulfillRes)
     }
-    if(w3?.tokens[activeToken.rel.contractKey] && originalRequest) preFulfill();
+    if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
   },[w3, requestData, activeToken, originalRequest]);
 
   return useMemo(() => {

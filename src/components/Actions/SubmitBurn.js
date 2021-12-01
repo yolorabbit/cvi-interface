@@ -1,24 +1,23 @@
 import Button from 'components/Elements/Button';
-import { useCallback, useMemo, useState } from 'react';
-import { useInDOM } from 'components/Hooks';
+import { useCallback, useContext, useMemo, useState } from 'react';
+import { useActiveToken, useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
-import { actionConfirmEvent } from '../../utils/index';
+import { actionConfirmEvent, toBN, toBNAmount } from '../../utils/index';
 import { useDispatch } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
-import ErrorModal from 'components/Modals/ErrorModal';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
+import { appViewContext } from 'components/Context';
 
 const SubmitBurn = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
-    const { disabled, setIsOpen, amount, setAmount, cb: updateAvailableBalance } = useActionController();
-    const [modalIsOpen, setModalIsOpen] = useState();
-    const [errorMessage] = useState();
+    const { account } = useActiveWeb3React();
+    const { w3 } = useContext(appViewContext);
+    const { type, disabled, setIsOpen, amount, setAmount, delayFee, cb: updateAvailableBalance } = useActionController();
+    const activeToken = useActiveToken(type);
     const [isProcessing, setProcessing] = useState();
-
-    const toggleModal = async(flag) => {
-        setModalIsOpen(flag);
-    }
+    const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
 
     const onClick = useCallback(async () => {
         setProcessing(true);
@@ -31,9 +30,10 @@ const SubmitBurn = () => {
                 message: "Please confirm the transaction in your wallet."
             }));
 
-            await new Promise(resolve => setTimeout(() => {
-                resolve(true)
-            }, 1000));
+            await w3?.tokens[activeToken.rel.volTokenKey].submitBurn(tokenAmount, {
+                delay: delayFee.delayTime,
+                account 
+            });
                 
             dispatch(addAlert({
                 id: 'Burn',
@@ -56,29 +56,28 @@ const SubmitBurn = () => {
             if(isActiveInDOM()) {
                 setProcessing(false);
                 setAmount("");
-                updateAvailableBalance();
                 setIsOpen(false);
+                if(updateAvailableBalance) {
+                    updateAvailableBalance();
+                }
             }
         }
-    }, [dispatch, isActiveInDOM, setAmount, setIsOpen, updateAvailableBalance])
+    }, [account, activeToken.rel.volTokenKey, delayFee?.delayTime, dispatch, isActiveInDOM, setAmount, setIsOpen, tokenAmount, updateAvailableBalance, w3?.tokens])
 
     return useMemo(() => {
         return  (
-            <> 
-                {modalIsOpen && <ErrorModal error={errorMessage} setModalIsOpen={toggleModal} /> }
-                <div className="burn-component">
-                    <Button 
-                        className="button" 
-                        buttonText="SUBMIT"
-                        onClick={onClick}
-                        disabled={disabled}
-                        processing={isProcessing}
-                        processingText={amount > 0 && "Calculating"}
-                    />
-                </div>
-            </>
+            <div className="burn-component">
+                <Button 
+                    className="button" 
+                    buttonText="SUBMIT"
+                    onClick={onClick}
+                    disabled={disabled}
+                    processing={isProcessing}
+                    processingText={amount > 0 && "Calculating"}
+                />
+            </div>
         )
-    }, [amount, disabled, errorMessage, isProcessing, modalIsOpen, onClick])
+    }, [amount, disabled, isProcessing, onClick])
 }
 
 export default SubmitBurn;

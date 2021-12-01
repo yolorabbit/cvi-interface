@@ -29,7 +29,7 @@ const Burn = ({ closeBtn, requestData }) => {
   
   const onClick = async() => {
     try {
-      await w3?.tokens[activeToken.rel.contractKey].fulfillBurn(originalRequest.requestId, account);
+      await w3?.tokens[activeToken.rel.volTokenKey].fulfillBurn(originalRequest.requestId, account);
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - success",
@@ -51,11 +51,11 @@ const Burn = ({ closeBtn, requestData }) => {
 
   useEffect(()=>{
     const preFulfill = async () => {
-      const preFulfillRes = await w3?.tokens[activeToken.rel.contractKey].preFulfillBurn(originalRequest)
+      const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest)
       // const { fulfillFees, fulfillFeesPercent, receive } = preFulfillRes;
       setPreFulfillData(preFulfillRes)
     }
-    if(w3?.tokens[activeToken.rel.contractKey] && originalRequest) preFulfill();
+    if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
   },[w3, requestData, activeToken, originalRequest]);
     
   return useMemo(() => {

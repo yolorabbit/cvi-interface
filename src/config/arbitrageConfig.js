@@ -29,12 +29,12 @@ const arbitrageConfig = {
       "ethvi": {
         key: "ethvi",
         name: "ethvi",
-        decimals: 6,
-        fixedDecimals: 2,
-        lpTokensDecimals: 18,
+        decimals: 18,
+        fixedDecimals: 8,
         oracleId: config.oraclesData.ethvi.oracleId,
         rel: {
           contractKey: "ETHVOL-USDC-LONG",
+          volTokenKey: "ETHVOL-USDC-LONG",
         },
         pairToken: {
           key: "usdc",
@@ -45,6 +45,7 @@ const arbitrageConfig = {
           oracleId: config.oraclesData.ethvi.oracleId,
           rel: {
             contractKey: "USDC",
+            volTokenKey: "ETHVOL-USDC-LONG",
           },
         },
         mintProperties: {
@@ -61,12 +62,12 @@ const arbitrageConfig = {
       "cvol": {
         key: "cvol",
         name: "cvol",
-        decimals: 6,
-        fixedDecimals: 6,
-        lpTokensDecimals: 18,
+        decimals: 18,
+        fixedDecimals: 8,
         oracleId: config.oraclesData.cvi.oracleId,
         rel: {
           contractKey: "CVOL-USDC-LONG",
+          volTokenKey: "CVOL-USDC-LONG",
         },
         pairToken: {
           key: "usdc",
@@ -77,6 +78,7 @@ const arbitrageConfig = {
           oracleId: config.oraclesData.cvi.oracleId,
           rel: {
             contractKey: "USDC",
+            volTokenKey: "CVOL-USDC-LONG",
           }
         },
         mintProperties: {

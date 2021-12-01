@@ -21,7 +21,7 @@ const Arbitrage = () => {
   const activeToken = useActiveToken(activeTokenKey, config.routes.arbitrage.path);
   
   const w3Filters = activeToken?.rel ? {
-    token: [activeToken.rel.contractKey]
+    token: [activeToken.rel.volTokenKey]
   } : null;
 
   const w3 = useW3SDK(w3Filters);

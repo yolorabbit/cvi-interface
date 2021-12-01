@@ -14,9 +14,16 @@ const Form = ({ amount, setAmount, delayFee, setDelayFee, type }) => {
     const [availableBalance, setAvailableBalance] = useState(null);
 
     const getAvailableBalance = useCallback(async () => {
-        const balance = await tokenContract.balanceOf(account);
-        setAvailableBalance(balance);
+        try {
+            setAvailableBalance(null);
+            const balance = await tokenContract.balanceOf(account);
+            setAvailableBalance(balance);
+        } catch(error) {
+            console.log(error);
+            setAvailableBalance("N/A");
+        } 
     }, [account, tokenContract]);
+    
 
     useEffect(() => {
         if(!account) return setAvailableBalance("0");
@@ -39,11 +46,12 @@ const Form = ({ amount, setAmount, delayFee, setDelayFee, type }) => {
                     type={type}
                     balances={{ tokenAmount: availableBalance }}
                     disabled={!amount} 
+                    cb={() => getAvailableBalance()}
                 />
                 <SeeMore />
             </div>
         );
-    }, [activeToken.name, amount, availableBalance, delayFee, setAmount, setDelayFee, type]);
+    }, [activeToken.name, amount, availableBalance, delayFee, getAvailableBalance, setAmount, setDelayFee, type]);
 }
 
 const SeeMore = () => {

@@ -18,7 +18,7 @@ const Statistics = () => {
         if (!selectedNetwork || !activeToken) return null;
 
         const loadActiveVol = Object.values(arbitrageConfig.tokens[selectedNetwork]).map(({ oracleId }) => oracleId)[0];
-        const tokenContract = w3?.tokens[activeToken.rel.contractKey];
+        const tokenContract = w3?.tokens[activeToken.rel.volTokenKey];
         const statisticsDetails = {
             tokenPrice: tokenContract?.uniswapPrice ?? null,
             intrinsicValue: tokenContract?.intrinsicPrice ?? null,
