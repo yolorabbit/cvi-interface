@@ -1,0 +1,62 @@
+<svg id="ETHVol" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <style>
+      .cls-1, .cls-6 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-3 {
+        fill: url(#linear-gradient-2);
+      }
+
+      .cls-4 {
+        fill: #264fa1;
+      }
+
+      .cls-5 {
+        fill: #627eea;
+      }
+
+      .cls-6 {
+        opacity: 0.8;
+      }
+
+      .cls-7 {
+        opacity: 0.1;
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="0.5" y1="0.113" x2="0.5" y2="0.922" gradientUnits="objectBoundingBox">
+      <stop offset="0.1" stop-color="#264fa1"/>
+      <stop offset="0.484" stop-color="#288ec3"/>
+      <stop offset="0.8" stop-color="#2bbede"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.5" y1="0.946" x2="0.5" y2="0.188" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="Group_7213" data-name="Group 7213" transform="translate(-1216 -552)">
+    <circle id="Ellipse_150" data-name="Ellipse 150" class="cls-1" cx="32" cy="32" r="32" transform="translate(1216 552)"/>
+    <g id="Group_6775" data-name="Group 6775" transform="translate(1232.488 565.971)">
+      <g id="Group_6110" data-name="Group 6110">
+        <path id="Path_4038" data-name="Path 4038" class="cls-2" d="M467.316,426.134a2.2,2.2,0,0,1-2.2-2.2v-4.51l13.892-9.087-13.793-8.986v-7.025a.9.9,0,0,1,.9-.9.874.874,0,0,1,.5.156l22.172,14.934a2.191,2.191,0,0,1,0,3.637l-20.251,13.6a2.144,2.144,0,0,1-1.213.377Z" transform="translate(-458.728 -393.43)"/>
+        <path id="Path_4039" data-name="Path 4039" class="cls-3" d="M436.993,453.724a2.144,2.144,0,0,1-1.215-.379l-20.152-13.573a2.191,2.191,0,0,1,0-3.637l22.27-14.956a.873.873,0,0,1,.494-.155.9.9,0,0,1,.9.9v6.942L425.4,437.952l13.793,8.986v4.589a2.157,2.157,0,0,1-.668,1.579,2.245,2.245,0,0,1-1.532.618Z" transform="translate(-414.658 -417.531)"/>
+      </g>
+      <g id="Group_6111" data-name="Group 6111" transform="translate(6.467 7.069)">
+        <path id="Path_4040" data-name="Path 4040" class="cls-4" d="M472.106,565.5l6.434,4.191-6.387,4.288-6.411-4.315Z" transform="translate(-465.742 -550.784)"/>
+        <path id="Path_4041" data-name="Path 4041" class="cls-4" d="M513.97,457.747l-6.434-4.191,6.387-4.288,6.411,4.315Z" transform="translate(-502.245 -449.268)"/>
+      </g>
+    </g>
+  </g>
+  <g id="Group_7214" data-name="Group 7214" transform="translate(-1134 -503)">
+    <circle id="Ellipse_53" data-name="Ellipse 53" class="cls-5" cx="16" cy="16" r="16" transform="translate(1134 503)"/>
+    <g id="Group_5661" data-name="Group 5661" transform="translate(1143.651 509)">
+      <path id="Path_3816" data-name="Path 3816" class="cls-6" d="M22.349,17.4a20.279,20.279,0,0,1-1.3,1.8c-1.6,2.2-4.7,6.6-4.9,6.8-.2-.3-.5-.6-.7-.9l-1.5-2.1a15.258,15.258,0,0,1-1.1-1.6l-1.5-2.1c-.4-.6-.8-1.1-1.2-1.7,0-.1-.1-.1-.1-.2.1,0,.2.1.3.1.6.4,1.3.7,1.9,1.1.5.3,1,.6,1.6.9.7.4,1.3.8,2,1.2.1.1.4.2.5.3.1-.1,3.7-2.2,5.5-3.2A1,1,0,0,1,22.349,17.4Z" transform="translate(-9.651 -6)"/>
+      <path id="Path_3817" data-name="Path 3817" class="cls-7" d="M22.349,16.2l-6.1,3.7L16.2,6S20.649,13.4,22.349,16.2Z" transform="translate(-9.651 -6)"/>
+      <path id="Path_3818" data-name="Path 3818" class="cls-6" d="M9.651,16.3l6.6,3.6L16.2,6S11.351,13.5,9.651,16.3Z" transform="translate(-9.651 -6)"/>
+      <path id="Path_3819" data-name="Path 3819" class="cls-7" d="M22.349,16.2c-.212.159-6,3.7-6.1,3.7-.1-.1-6.6-3.6-6.6-3.6l6.6-3.15Z" transform="translate(-9.651 -6)"/>
+      <path id="Path_3820" data-name="Path 3820" class="cls-7" d="M22.349,17.4l-6.2,3.554V26Z" transform="translate(-9.651 -6)"/>
+    </g>
+  </g>
+</svg>

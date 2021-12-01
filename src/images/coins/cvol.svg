@@ -1,0 +1,24 @@
+<svg id="CVI_coin" data-name="CVI coin" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64" height="64" viewBox="0 0 64 64">
+    <defs>
+        <linearGradient id="linear-gradient" x1=".5" y1=".113" x2=".5" y2=".922" gradientUnits="objectBoundingBox">
+            <stop offset=".1" stop-color="#264fa1"/>
+            <stop offset=".484" stop-color="#288ec3"/>
+            <stop offset=".8" stop-color="#2bbede"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-2" x1=".5" y1=".946" x2=".5" y2=".188" xlink:href="#linear-gradient"/>
+        <style>
+            .cls-4{fill:#264fa1}
+        </style>
+    </defs>
+    <circle id="Ellipse_150" data-name="Ellipse 150" cx="32" cy="32" r="32" style="fill:#fff"/>
+    <g id="Group_6775" data-name="Group 6775" transform="translate(16.488 13.971)">
+        <g id="Group_6110" data-name="Group 6110">
+            <path id="Path_4038" data-name="Path 4038" d="M467.316 426.134a2.2 2.2 0 0 1-2.2-2.2v-4.51l13.892-9.087-13.793-8.986v-7.025a.9.9 0 0 1 .9-.9.874.874 0 0 1 .5.156l22.172 14.934a2.191 2.191 0 0 1 0 3.637l-20.251 13.6a2.144 2.144 0 0 1-1.213.377z" transform="translate(-458.728 -393.43)" style="fill:url(#linear-gradient)"/>
+            <path id="Path_4039" data-name="Path 4039" d="M436.993 453.724a2.144 2.144 0 0 1-1.215-.379l-20.152-13.573a2.191 2.191 0 0 1 0-3.637l22.27-14.956a.873.873 0 0 1 .494-.155.9.9 0 0 1 .9.9v6.942l-13.89 9.086 13.793 8.986v4.589a2.157 2.157 0 0 1-.668 1.579 2.245 2.245 0 0 1-1.532.618z" transform="translate(-414.658 -417.531)" style="fill:url(#linear-gradient-2)"/>
+        </g>
+        <g id="Group_6111" data-name="Group 6111" transform="translate(6.467 7.069)">
+            <path id="Path_4040" data-name="Path 4040" class="cls-4" d="m472.106 565.5 6.434 4.191-6.387 4.288-6.411-4.315z" transform="translate(-465.742 -550.784)"/>
+            <path id="Path_4041" data-name="Path 4041" class="cls-4" d="m513.97 457.747-6.434-4.191 6.387-4.288 6.411 4.315z" transform="translate(-502.245 -449.268)"/>
+        </g>
+    </g>
+</svg>

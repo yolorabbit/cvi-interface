@@ -147,6 +147,22 @@ const stakingConfig = {
             token: "UNIV2GOVIETH"
           }
         },
+        "ethvi-usdc-lp": {
+          key: "ethvi-usdc-lp",
+          label: "ETHVI-USDC LP",
+          address: "0x197e99bD87F98DFde461afE3F706dE36c9635a5D",
+          protocol: stakingProtocols.uniswap,
+          decimals: 18,
+          fixedDecimals: 8,
+          rewardsTokens: ["GOVI"],
+          poolLink: "https://v2.info.uniswap.org/pair/0x197e99bD87F98DFde461afE3F706dE36c9635a5D",
+          rel: {
+            stakingRewards: "GOVIETH-StakingRewards", // @TODO: update it with the real contract
+            tokenDecimals: [18],
+            contractKey: "UNIV2USDCETHVOL-USDC-LONG",
+            token: "UNIV2USDCETHVOL-USDC-LONG"
+          }
+        },
         "rhegic2-eth-lp": {
           disable: true,
           key: "rhegic2-eth-lp",
@@ -271,6 +287,22 @@ const stakingConfig = {
             token: "UNIV2GOVIETH",
             contractKey: "UNIV2GOVIETH",
             tokenDecimals: [18]
+          }
+        },
+        "cvol-usdc-lp": {
+          key: "cvol-usdc-lp",
+          label: "CVOL-USDC LP",
+          address: "0x1dd0095a169e8398448A8e72f15A1868d99D9348",
+          protocol: stakingProtocols.quickswap,
+          decimals: 18,
+          fixedDecimals: 8,
+          rewardsTokens: ["GOVI"],
+          poolLink: "https://info.quickswap.exchange/pair/0x1dd0095a169e8398448A8e72f15A1868d99D9348",
+          rel: {
+            stakingRewards: "GOVIETH-StakingRewards", // @TODO: update it with the real contract
+            token: "UNIV2USDCCVOL-USDC-LONG",
+            contractKey: "UNIV2USDCCVOL-USDC-LONG",
+            tokenDecimals: [18],
           }
         },
       }
