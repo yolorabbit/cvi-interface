@@ -71,8 +71,8 @@ const SubmitMint = () => {
                     buttonText="SUBMIT"
                     onClick={onClick}
                     disabled={disabled || delayFee === 'N/A'}
-                    processing={isProcessing || delayFee === null || amount === null}
-                    processingText={(amount > 0 || delayFee === null) && "Calculating"}
+                    processing={isProcessing || delayFee?.fee === null || amount === null}
+                    processingText={(amount > 0 || delayFee?.fee === null) && "Calculating"}
                 />
             </div>
         )

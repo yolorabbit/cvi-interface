@@ -7,22 +7,6 @@ import "./TimeToFullfill.scss";
 import Spinner from "components/Spinner/Spinner";
 import { customFixed } from "utils";
 
-// show as time delay fee min and max.
-// const timeDelayWindow = await w3?.tokens[activeToken.rel.contractKey].getTimeDelayWindow();
-// console.log('timeDelayWindow: ', timeDelayWindow); {min/60 , max/60}
-
-// calculate time delay fee 
-// const timeDelayFee = await w3?.tokens[activeToken.rel.contractKey].calculateTimeDelayFee(1000)
-// console.log("timeDelayFee: ", timeDelayFee);
-
-// create mint request
-// const submitMintRes = await w3?.tokens[activeToken.rel.contractKey].submitMint("10",account, 500);
-// console.log("submitMintRes: ", submitMintRes);
-
-// pending reqeusts -> store in reducer under mints
-// const unfulfilledRequests = await w3?.tokens[activeToken.rel.contractKey].getUnfulfilledRequests({account});
-// console.log("unfulfilledRequests: ", unfulfilledRequests);
-
 const TimeToFullfill = ({ delayFee, setDelayFee }) => {
   const { w3, activeToken } = useContext(appViewContext);
   const [hoursDropdownValue, setHoursDropdownValue] = useState("");
@@ -36,17 +20,16 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
     return [...new Array(maxRange)].map((option, index) => index+minRange);
   }, [maxHours, maxMinutes]);
 
-  const calculateTimeDelayFee = useCallback(async () => {
+  const calculateTimeDelayFee = useCallback(async (totalTime) => {
     let isValid = true;
     try {
       if(!hoursDropdownValue && !minutesDropdownValue) return;
-      const totalTime = Number(hoursDropdownValue * 60 * 60) + Number(minutesDropdownValue * 60);
       if(totalTime < (maxMinutes * 60) || totalTime > (maxHours * 60 * 60)) return;
       const timeDelayFee = await w3?.tokens[activeToken.rel.contractKey].calculateTimeDelayFee(totalTime);
-      setDelayFee({
+      setDelayFee(prev => ({
+        ...prev,
         fee: timeDelayFee,
-        delayTime: totalTime
-      });
+      }));
     } catch (error) {
       isValid = false;
       console.log(error);
@@ -81,16 +64,17 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
     return () => {
       fetchDataDebounce.cancel();
     }
-  }, [activeToken.rel.contractKey, calculateTimeDelayFeeDebounce, w3]);
+  }, [activeToken.rel.contractKey, w3]);
 
   useEffect(() => {
     if(!isNumber(hoursDropdownValue) && !isNumber(!minutesDropdownValue)) {
       setHoursDropdownValue(maxHours || "0");
       return setMinutesDropdownValue("0");
     }
-
-    setDelayFee(null);
-    calculateTimeDelayFeeDebounce();
+    
+    const totalTime = Number(hoursDropdownValue * 60 * 60) + Number(minutesDropdownValue * 60);
+    setDelayFee({fee: null, delayTime: totalTime});
+    calculateTimeDelayFeeDebounce(totalTime);
 
     if(Number(hoursDropdownValue) >= maxHours) return setMinutesDropdownValue("0");
     if(Number(hoursDropdownValue) === 0 && Number(minutesDropdownValue) < maxMinutes) return setMinutesDropdownValue(maxMinutes);
@@ -130,7 +114,7 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
           <Stat 
             className="row bold small-value"
             title="Time to fulfillment fee"
-            value={delayFee === 'N/A' ? 'N/A' : delayFee === null ? null : `${customFixed(delayFee.fee, 2)}%`}
+            value={delayFee === 'N/A' ? 'N/A' : delayFee?.fee === null ? null : `${customFixed(delayFee.fee, 2)}%`}
           />
         </div>
       </div>

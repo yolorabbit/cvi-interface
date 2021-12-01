@@ -4,7 +4,7 @@ import { useActiveToken } from "components/Hooks";
 import { activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
 import { appViewContext } from "components/Context";
 import debounce from "lodash.debounce";
-import { toBN, toBNAmount, toDisplayAmount } from "utils";
+import { getTimeDurationFormatted, toBN, toBNAmount, toDisplayAmount } from "utils";
 
 const MintView = ({amount, delayFee}) => {
     const { w3 } = useContext(appViewContext);
@@ -25,7 +25,7 @@ const MintView = ({amount, delayFee}) => {
     const loadDataDebounce = useMemo(() => debounce(loadData, 500), [loadData]);
     
     useEffect(() => {
-        if(!w3 || !delayFee || !tokenAmount || !w3?.tokens) return;
+        if(!w3 || !delayFee?.delayTime || !tokenAmount || !w3?.tokens) return;
         if(!amount) return setMaxSubmitFees("0");
         
         setMaxSubmitFees(null);
@@ -34,8 +34,8 @@ const MintView = ({amount, delayFee}) => {
         return () => {
             loadDataDebounce.cancel();
         }
-    }, [amount, delayFee, loadDataDebounce, tokenAmount, w3]);
-
+    }, [amount, delayFee?.delayTime, loadDataDebounce, tokenAmount, w3]);
+    
     return useMemo(() => {
         const tokenName = activeToken?.name?.toUpperCase();
        
@@ -55,7 +55,11 @@ const MintView = ({amount, delayFee}) => {
             
             <Stat 
                 title="Time to fulfillment" 
-                value={"00:00 HH:MM"} 
+                value={
+                    delayFee === "N/A" ? "N/A" 
+                    : !delayFee?.delayTime ? null 
+                    : `${getTimeDurationFormatted(60 * 60 * (delayFee?.delayTime / 3600) * 1000)} HH:MM`
+                } 
             />
 
             <Stat 
@@ -65,7 +69,7 @@ const MintView = ({amount, delayFee}) => {
                 _suffix={tokenName}
             />
         </>
-    }, [activeToken?.name, amount, maxSubmitFees]) 
+    }, [activeToken?.name, amount, delayFee, maxSubmitFees]) 
 }
 
 export default MintView;

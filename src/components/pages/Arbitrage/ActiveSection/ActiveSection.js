@@ -11,7 +11,9 @@ const ActiveSection = ({activeTab}) => {
     const { activeView } = useContext(appViewContext);
     const activeToken = useActiveToken(activeView, config.routes.arbitrage.path);
     const [amount, setAmount] = useState("");
-    const [delayFee, setDelayFee] = useState(null);
+    const [delayFee, setDelayFee] = useState({
+        fee: null
+    });
     const GraphsThumbnaill = useCallback(() => (<GraphsThumbnail />), []);
 
     return useMemo(() => {
