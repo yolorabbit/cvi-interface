@@ -43,6 +43,24 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        margin-right: 0.313vw;
+        @media (max-width: 1365px){
+            margin-right: 0.44vw;
+        }
+
+        @media (max-width: 1024px){
+            margin: 0;
+        }
+
+        & > div {
+            @media (max-width: 1024px){
+                margin: 2.086vw 0.782vw 0 0;
+            }
+
+            @media (max-width: 767px){
+                margin: 4.444vw 2.222vw 0 0;
+            }
+        }
     }
 
     &.first-letter-cap {
