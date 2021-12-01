@@ -31,7 +31,6 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
         fee: timeDelayFee,
       }));
     } catch (error) {
-      isValid = false;
       console.log(error);
       setDelayFee("N/A");
     } finally {
@@ -50,7 +49,7 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
       try {
           const {maxTimeWindow, minTimeWindow} = await w3?.tokens[activeToken.rel.contractKey].getTimeDelayWindow();
           setMaxHours(maxTimeWindow ? (maxTimeWindow/60/60) : 0);
-          setMaxMinutes(minTimeWindow ? (minTimeWindow/60) : 0);
+          setMaxMinutes(minTimeWindow < 3600 ? (minTimeWindow/60) : minTimeWindow/60);
       } catch (error) {
         console.log(error);
         setMaxHours("0");
@@ -97,7 +96,7 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
           <Dropdown
             type="number"
             label="hours"
-            dropdownOptions={getOptions(maxMinutes >= 60 ? 1 : 0 , maxHours+1)}
+            dropdownOptions={getOptions(maxHours > 1 ? 1 : 0 , maxHours > 1 ? maxHours : maxHours+1)}
             dropdownValue={hoursDropdownValue}
             setDropdownValue={setHoursDropdownValue}
           />
@@ -105,7 +104,7 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
           <Dropdown
             type="number"
             label="minutes"
-            dropdownOptions={getOptions(hoursDropdownValue === 0 ? maxMinutes : 0, hoursDropdownValue === maxHours ? 0 : (61-maxMinutes))}
+            dropdownOptions={getOptions(hoursDropdownValue === 0 ? (maxMinutes/60) : 0, hoursDropdownValue === maxHours ? 0 : (61-(maxMinutes/60)))}
             dropdownValue={minutesDropdownValue}
             setDropdownValue={setMinutesDropdownValue}
           />
@@ -123,9 +122,10 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
 };
 
 const BetweenText = ({maxMinutes, maxHours}) => {
+  console.log(maxMinutes);
   return useMemo(() => {
     if(!maxMinutes && !maxHours) return <span className="between-text">Between <Spinner className="statistics-spinner" /> hours to <Spinner className="statistics-spinner" /> hours.</span>
-    return <span>(Between {maxMinutes < 60 ? `${maxMinutes} minutes` : `${maxMinutes / 60} hours`} to {maxHours} hours)</span>
+    return <span>(Between {maxHours <= 1 ? `${maxMinutes} minutes` : `${maxMinutes/60} hour`} to {maxHours} hours)</span>
   }, [maxHours, maxMinutes]);
 }
 export default TimeToFullfill;
