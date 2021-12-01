@@ -16,7 +16,7 @@ const Statistics = () => {
 
     return useMemo(() => {
         if (!selectedNetwork || !activeToken) return null;
-
+        const { pairToken } = activeToken;
         const loadActiveVol = Object.values(arbitrageConfig.tokens[selectedNetwork]).map(({ oracleId }) => oracleId)[0];
         const tokenContract = w3?.tokens[activeToken.rel.volTokenKey];
         const statisticsDetails = {
@@ -24,7 +24,6 @@ const Statistics = () => {
             intrinsicValue: tokenContract?.intrinsicPrice ?? null,
         }
         const { tokenPrice, intrinsicValue } = statisticsDetails;
-
 
         return (
             <Container className="arbitrage-statistics-component">
@@ -38,12 +37,12 @@ const Statistics = () => {
 
                 <Value
                     header="Platform price"
-                    text={intrinsicValue === null ? null : `${customFixed(intrinsicValue, activeToken.fixedDecimals)} USDC`}
+                    text={intrinsicValue === null ? null : `${customFixed(intrinsicValue, pairToken.fixedDecimals)} USDC`}
                 />
 
                 <Value
                     header="Uniswap price"
-                    text={tokenPrice === null ? null : `${customFixed(tokenPrice, activeToken.fixedDecimals)} USDC`}
+                    text={tokenPrice === null ? null : `${customFixed(tokenPrice, pairToken.fixedDecimals)} USDC`}
                 />
             </Container>
         )
