@@ -10,7 +10,7 @@ import arbitrageConfig,{ activeTabs as arbitrageActiveTabs } from "config/arbitr
 import { useLocation } from "react-router";
 import { useActiveWeb3React } from "./wallet";
 import { DAY } from "./useEvents";
-import { getW3 } from '@coti-io/cvi-sdk';
+import { cloneW3 } from '@coti-io/cvi-sdk';
 import debounce from "lodash.debounce";
 
 export const useViewport = () => {
@@ -145,7 +145,7 @@ export const useW3SDK = (w3filters) => {
   const getW3Instance = useCallback(async (provider) => {
     try {
       // @TODO: fix sdk caching
-      const w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
+      const w3Inst = await cloneW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
         provider, 
         env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
       }).init(filters);
