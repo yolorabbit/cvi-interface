@@ -71,9 +71,9 @@ const SubmitBurn = () => {
                     className="button" 
                     buttonText="SUBMIT"
                     onClick={onClick}
-                    disabled={disabled || delayFee === 'N/A' || !amount || amount === "0"}
+                    disabled={disabled || delayFee === 'N/A' || !amount || amount === "0" || !delayFee?.fee}
                     processing={isProcessing || delayFee?.fee === null || amount === null}
-                    processingText={(amount > 0 || delayFee?.fee === null) && "Calculating"}
+                    processingText={!isProcessing && "Calculating"}
                 />
             </div>
         )
