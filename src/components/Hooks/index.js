@@ -10,7 +10,7 @@ import arbitrageConfig,{ activeTabs as arbitrageActiveTabs } from "config/arbitr
 import { useLocation } from "react-router";
 import { useActiveWeb3React } from "./wallet";
 import { DAY } from "./useEvents";
-import { cloneW3 } from '@coti-io/cvi-sdk';
+import { getW3 } from '@coti-io/cvi-sdk';
 import debounce from "lodash.debounce";
 
 export const useViewport = () => {
@@ -144,12 +144,15 @@ export const useW3SDK = (w3filters) => {
 
   const getW3Instance = useCallback(async (provider) => {
     try {
-      // @TODO: fix sdk caching
-      const w3Inst = await cloneW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
+      let w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
         provider, 
         env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
-      }).init(filters);
+      }).init({});
 
+      if(filters) {
+        await w3Inst.initComponents(filters);
+        await w3Inst.refreshComponents();
+      }
       if(!config.isMainnet || process.env.REACT_APP_DAYS_TO_COUNT_FROM) { // run staging env from block number timestamp sub days in env
         const blockTimestamp = await (await w3Inst.block.getBlock()).timestamp;
         w3Inst.forkTimestamp = blockTimestamp - (DAY * process.env.REACT_APP_DAYS_TO_COUNT_FROM);
