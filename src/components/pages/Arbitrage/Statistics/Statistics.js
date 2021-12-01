@@ -41,7 +41,7 @@ const Statistics = () => {
                 />
 
                 <Value
-                    header="Uniswap price"
+                    header={`${arbitrageConfig.exchanges[selectedNetwork].mainExchange.label} price`}
                     text={tokenPrice === null ? null : `${customFixed(tokenPrice, pairToken.fixedDecimals)} USDC`}
                 />
             </Container>

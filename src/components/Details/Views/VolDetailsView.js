@@ -79,7 +79,7 @@ const VolDetailsView = ({amount, delayFee}) => {
 
             <Stat 
                 className="bold green no-padding"
-                title="Estimated number of tokens" 
+                title="You will get once the request is fulfilled" 
                 value={estimatedTokens === null ? null : customFixedTokenValue(estimatedTokens, toToken.fixedDecimals, toToken.decimals)} 
                 _suffix={toToken.name.toUpperCase()}
             />

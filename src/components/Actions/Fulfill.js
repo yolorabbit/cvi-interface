@@ -1,11 +1,8 @@
 import Button from 'components/Elements/Button';
 import { useActionController } from './ActionController';
-import CountdownComponent, { useIsLockedTime } from 'components/Countdown/Countdown';
-
 
 const Fulfill = () => {
-    const { isOpen, setIsOpen, isModal, disabled, amount } = useActionController(); 
-    const lockedTime = useIsLockedTime();
+    const { isOpen, setIsOpen, disabled, amount } = useActionController(); 
 
     const onClick = () => {
         if(!isOpen) return setIsOpen(true);
@@ -13,7 +10,6 @@ const Fulfill = () => {
 
     return <div className="fulfill-component">
         <div className="fulfill-component__container">
-            {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
             <Button 
                 className="fulfill-component__container--button" 
                 buttonText="Fulfill" 

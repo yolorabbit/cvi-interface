@@ -17,13 +17,25 @@ export const tabs = {
     "burn": "Burn"
   },
   graphs: {
-    "fulfilment": "Time to fulfilment fee",
+    "fulfillment": "Time to fulfillment fee",
     "penalty": "Time penalty fee",
   }
 }
 
 const arbitrageConfig = {
   tabs,
+  exchanges: {
+    [chainNames.Ethereum]: {
+      mainExchange: {
+        label: 'Uniswap'
+      },
+    },
+    [chainNames.Matic]: {
+      mainExchange: {
+        label: 'Quickswap'
+      }
+    },
+  },
   tokens: {
     [chainNames.Ethereum]: {
       "ethvi": {
@@ -145,11 +157,11 @@ const arbitrageConfig = {
           type: "Type",
           amount: "Amount",
           submitTime: "Submit time",
-          submitTimeToFulfillment: "Submitted time to fulfilment",
-          timeToFulfillmentFee: "Time to fulfilment fee",
+          submitTimeToFulfillment: "Submitted time to fulfillment",
+          timeToFulfillmentFee: "Time to fulfillment fee",
           upfrontPayment: "Up front payment",
-          estimatedNumberOfTokens: "Estimated number of minted tokens",
-          fulfillmentIn: "Fulfilment in",
+          estimatedNumberOfTokens: "You will get",
+          fulfillmentIn: "Fulfillment in",
           action: true
         }
       },
@@ -157,7 +169,7 @@ const arbitrageConfig = {
         headers: {
           type: "Type",
           amount: "Amount",
-          timeToFulfillmentAndPenaltyFees: "Time to fulfilment and penalty fees",
+          timeToFulfillmentAndPenaltyFees: "Time to fulfillment and penalty fees",
           collateralMint: "Collateral mint",
           receivedToken: "Received tokens"
         }
@@ -169,11 +181,11 @@ const arbitrageConfig = {
           type: "Type",
           amount: "Amount",
           submitTime: "Submit time",
-          submitTimeToFulfillment: "Submitted time to fulfilment",
-          timeToFulfillmentFee: "Time to fulfilment fee",
+          submitTimeToFulfillment: "Submitted time to fulfillment",
+          timeToFulfillmentFee: "Time to fulfillment fee",
           upfrontPayment: "Up front payment",
           estimatedNumberOfTokens: "Estimated number of minted tokens",
-          fulfillmentIn: "Fulfilment in",
+          fulfillmentIn: "Fulfillment in",
           action: true
         }
       },
@@ -181,7 +193,7 @@ const arbitrageConfig = {
         headers: {
           type: "Type",
           amount: "Amount",
-          timeToFulfillmentAndPenaltyFees: "Time to fulfilment and penalty fees",
+          timeToFulfillmentAndPenaltyFees: "Time to fulfillment and penalty fees",
           collateralMint: "Collateral mint",
           receivedToken: "Received tokens"
         }

@@ -3,19 +3,19 @@ import arbitrageConfig from 'config/arbitrageConfig';
 import React, { useMemo, useRef, useState } from 'react';
 import Container from 'components/Layout/Container';
 import TabsForm from 'components/TabsForm';
-import fulillmentGraph from 'images/graphs/fulfilment.svg';
-import fulillmentGraphMobile from 'images/graphs/fulfilment-mobile.svg';
-import fulillmentGraphTablet from 'images/graphs/fulfilment-tablet.svg';
+import fulillmentGraph from 'images/graphs/fulfillment.svg';
+import fulillmentGraphMobile from 'images/graphs/fulfillment-mobile.svg';
+import fulillmentGraphTablet from 'images/graphs/fulfillment-tablet.svg';
 import penaltyGraph from 'images/graphs/penalty.svg';
 import penaltyGraphMobile from 'images/graphs/penalty-mobile.svg';
 import penaltyGraphTablet from 'images/graphs/penalty-tablet.svg';
 import './GraphsThumbnail.scss';
 
-const GraphsThumbnail = ({tabs = [
-    arbitrageConfig.tabs.graphs['fulfilment'],
-    arbitrageConfig.tabs.graphs['penalty']
-  ]
-}) => {
+const GraphsThumbnail = () => {
+    const tabs = useMemo(() => ({
+      fulfillment: arbitrageConfig.tabs.graphs['fulfillment'],
+      penalty: arbitrageConfig.tabs.graphs['penalty']
+    }), []);
     const tabsFormRef = useRef();
     const [activeTab, setActiveTab] = useState(tabs.length > 0 ? tabs[0] : undefined);
     const isMobile = useIsMobile();
@@ -47,7 +47,7 @@ const ActiveGraph = ({activeTab = ""}) => {
     return useMemo(() => {
         return (
             <div className="graph-wrapper">
-              {activeTab.toLowerCase() === arbitrageConfig.tabs.graphs['fulfilment']?.toLowerCase() ? 
+              {activeTab.toLowerCase() === 'fulfillment' ? 
                 <>
                   <img className="graph-image" src={width <= 767 ? fulillmentGraphMobile : width <= 1365 ? fulillmentGraphTablet : fulillmentGraph} alt="Time to fullfillment fee" />
                   <p className="graph-note">The fee decreases the more the user's time to fulfillment target gets closer to the 3 hours bound.</p>
