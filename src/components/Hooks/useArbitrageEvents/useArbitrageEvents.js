@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { setData, setUnfulfilledRequests } from 'store/actions/wallet';
 import { useActiveWeb3React } from '../wallet';
@@ -6,34 +6,44 @@ import { useActiveWeb3React } from '../wallet';
 const useArbitrageEvents = (w3, activeToken) => {
   const dispatch = useDispatch();
   const [{unfulfilledRequests, arbitrage}, events] = useSelector(({wallet, events}) => [wallet, events]);
+  const { actionConfirmed } = events;
   const { account } = useActiveWeb3React();
 
-  useEffect(()=> {
-    if(!activeToken?.rel || !account || !w3?.tokens) return;
-
-    const fetchUnfulfilledRequests = async () => {
-      const unfulfilledRequests = await w3?.tokens[activeToken.rel.volTokenKey].getUnfulfilledRequests({account});
-      dispatch(setUnfulfilledRequests(unfulfilledRequests))
-    }
-
-    if(!unfulfilledRequests) {
-      fetchUnfulfilledRequests();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [w3?.tokens, account, activeToken?.rel]);
-    
-  useEffect(()=>{
-    if(!activeToken?.rel || !w3?.tokens) return;
-    
-    const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
+    try {
       const history = await w3?.tokens[activeToken.rel.volTokenKey].getHistory({account});
       dispatch(setData("arbitrage", history));
+    } catch (error) {
+      console.log(error);
     }
-    if(!arbitrage && account && w3?.tokens) {
-      fetchHistory();
+  }, [account, activeToken?.rel?.volTokenKey, dispatch, w3?.tokens])
+
+  const fetchUnfulfilledRequests = useCallback(async () => {
+    try {
+      const unfulfilledRequests = await w3?.tokens[activeToken.rel.volTokenKey].getUnfulfilledRequests({account});
+      dispatch(setUnfulfilledRequests(unfulfilledRequests));
+    } catch (error) {
+      console.log(error);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [w3?.tokens, account, activeToken?.rel]);
+  }, [account, activeToken?.rel?.volTokenKey, dispatch, w3?.tokens]);
+
+  useEffect(()=> {
+    if(!activeToken?.rel || !account || !w3?.tokens || unfulfilledRequests) return;
+    fetchUnfulfilledRequests();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [w3?.tokens, account, activeToken?.rel, fetchUnfulfilledRequests]);
+    
+  useEffect(()=>{
+    if(!activeToken?.rel || !w3?.tokens || !account || arbitrage) return;
+    fetchHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [w3?.tokens, account, activeToken?.rel, fetchHistory]);
+
+  useEffect(() => {
+    if(!actionConfirmed) return;
+    fetchHistory();
+    fetchUnfulfilledRequests();
+  }, [actionConfirmed, fetchHistory, fetchUnfulfilledRequests])
     
   useEffect(()=>{
     if(!events || !events[activeToken?.rel?.volTokenKey] || !w3?.tokens) return;
