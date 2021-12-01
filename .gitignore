@@ -1,6 +1,10 @@
 # Scfipts
 *.sh
 
+# lock files
+.lock
+*-lock.json
+
 # Logs
 logs
 *.log
