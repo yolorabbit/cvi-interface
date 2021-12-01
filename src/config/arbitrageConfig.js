@@ -31,6 +31,7 @@ const arbitrageConfig = {
         name: "ethvi",
         decimals: 18,
         fixedDecimals: 8,
+        lpTokensDecimals: 18,
         oracleId: config.oraclesData.ethvi.oracleId,
         rel: {
           contractKey: "ETHVOL-USDC-LONG",
@@ -41,7 +42,6 @@ const arbitrageConfig = {
           name: "usdc",
           decimals: 6,
           fixedDecimals: 2,
-          lpTokensDecimals: 18,
           oracleId: config.oraclesData.ethvi.oracleId,
           rel: {
             contractKey: "USDC",
@@ -51,10 +51,14 @@ const arbitrageConfig = {
         mintProperties: {
           label: "USDC",
           decimals: 6,
+          fixedDecimals: 2,
+          lpTokensDecimals: 18,
         },
         burnProperties: {
           label: "ETHVI",
           decimals: 18,
+          fixedDecimals: 8,
+          lpTokensDecimals: 18,
         }
       },
     },
@@ -64,6 +68,7 @@ const arbitrageConfig = {
         name: "cvol",
         decimals: 18,
         fixedDecimals: 8,
+        lpTokensDecimals: 18,
         oracleId: config.oraclesData.cvi.oracleId,
         rel: {
           contractKey: "CVOL-USDC-LONG",
@@ -73,8 +78,7 @@ const arbitrageConfig = {
           key: "usdc",
           name: "usdc",
           decimals: 6,
-          fixedDecimals: 6,
-          lpTokensDecimals: 18,
+          fixedDecimals: 2,
           oracleId: config.oraclesData.cvi.oracleId,
           rel: {
             contractKey: "USDC",
@@ -84,10 +88,14 @@ const arbitrageConfig = {
         mintProperties: {
           label: "USDC",
           decimals: 6,
+          fixedDecimals: 2,
+          lpTokensDecimals: 18,
         },
         burnProperties: {
-          label: "ETHVI",
+          label: "CVOL",
           decimals: 18,
+          fixedDecimals: 8,
+          lpTokensDecimals: 18,
         }
       },
     }
@@ -183,7 +191,10 @@ const arbitrageConfig = {
   requestType: {
     1: activeTabs.mint,
     2: activeTabs.burn,
-    3: activeTabs.mint 
+    3: activeTabs.mint,
+    Mint:activeTabs.mint,
+    Burn:activeTabs.burn,
+    CollateralizedMint:activeTabs.mint,
   }
 }
 

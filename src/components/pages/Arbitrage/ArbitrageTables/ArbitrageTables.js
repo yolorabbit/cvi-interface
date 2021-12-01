@@ -11,7 +11,8 @@ import Container from 'components/Layout/Container';
 import TabsForm from 'components/TabsForm';
 import './ArbitrageTables.scss';
 import moment from 'moment';
-import { toDisplayAmount } from 'utils/index';
+import { customFixed, toDisplayAmount } from 'utils/index';
+import { upperFirst } from "lodash";
 
 const ArbitrageTables = () => {
     const [activeTab, setActiveTab] = useState();
@@ -72,14 +73,14 @@ const DefaultTable = ({activeTab}) => {
                 type: requestTypeLabel,
                 amount: toDisplayAmount(tokenAmount, eventTokenProperties?.decimals),
                 symbol: eventTokenProperties?.label.toUpperCase(),
-                submitTime: moment.unix(timestamp).format("DD/MM/YY HH:MM"),
+                submitTime: moment.unix(timestamp).format("DD/MM/YY HH:mm"),
                 submitTimeToFulfillment: {
-                    text: moment.unix(targetTimestamp).format("HH:MM"),
+                    text: moment.unix(targetTimestamp).format("HH:mm"),
                     subText: "HH:MM"
                 },
                 timeToFulfillmentFee: submitFeesAmount,
                 upfrontPayment: '-',
-                estimatedNumberOfTokens: tokenAmount*1000,
+                estimatedNumberOfTokens: customFixed(toDisplayAmount(tokenAmount*1000, eventTokenProperties.decimals), eventTokenProperties.customFixed),
                 fulfillmentIn: targetTimestamp,
                 action: true
             }
@@ -89,6 +90,7 @@ const DefaultTable = ({activeTab}) => {
             authGuard
             activeTab={activeTab} 
             data={data}
+            showPaginator
             customTableHeaders={!tableHeaders ? [] : Object.values(tableHeaders)}
         >
            <DataView />
@@ -105,16 +107,17 @@ const HistoryTable = ({activeTab}) => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
         //TODO: add more details to history mapping
         const historyData = arbitrage ? arbitrage.map(({
-            event, tokenAmount
+            event, tokenAmount, mintedShortTokens
         }) => {
 
-        const eventTokenProperties = activeToken[`${event.toLowerCase()}Properties`];
-
+            
+        const eventTokenProperties = activeToken[`${arbitrageConfig.requestType[event].toLowerCase()}Properties`];
+        
         return {
-            type: event,
-            amount: `${toDisplayAmount(tokenAmount.toString(), eventTokenProperties?.decimals)} ${eventTokenProperties?.label.toUpperCase()}`,
+            type: upperFirst(arbitrageConfig.requestType[event]),
+            amount: `${customFixed(toDisplayAmount(tokenAmount, eventTokenProperties.decimals), eventTokenProperties.customFixed)} ${eventTokenProperties.label.toUpperCase()}`,
             timeToFulfillmentFee: Date.now() + 10000000,
-            collateralMint: "Yes",
+            collateralMint: mintedShortTokens ? customFixed(toDisplayAmount(mintedShortTokens, eventTokenProperties.lpTokensDecimals), eventTokenProperties.customFixed) : 0,
             receivedTokens: eventTokenProperties?.label.toUpperCase(),
         }}) : null;
 
