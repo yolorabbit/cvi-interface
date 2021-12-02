@@ -38,9 +38,9 @@ const arbitrageConfig = {
   },
   tokens: {
     [chainNames.Ethereum]: {
-      "ethvi": {
-        key: "ethvi",
-        name: "ethvi",
+      "ethvol": {
+        key: "ethvol",
+        name: "ethvol",
         decimals: 18,
         fixedDecimals: 8,
         lpTokensDecimals: 18,
@@ -67,7 +67,7 @@ const arbitrageConfig = {
           lpTokensDecimals: 18,
         },
         burnProperties: {
-          label: "ETHVI",
+          label: "ETHVOL",
           decimals: 18,
           fixedDecimals: 8,
           lpTokensDecimals: 18,

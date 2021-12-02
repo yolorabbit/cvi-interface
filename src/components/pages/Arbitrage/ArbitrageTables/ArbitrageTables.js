@@ -77,8 +77,6 @@ const DefaultTable = ({activeTab}) => {
         }
     }, [library, unfulfilledRequests, activeTab, lastBlockTime])
 
-
-
     return useMemo(() => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
         const data = unfulfilledRequests ? unfulfilledRequests.map(({

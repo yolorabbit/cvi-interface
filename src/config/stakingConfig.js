@@ -147,9 +147,9 @@ const stakingConfig = {
             token: "UNIV2GOVIETH"
           }
         },
-        "ethvi-usdc-lp": {
-          key: "ethvi-usdc-lp",
-          label: "ETHVI-USDC LP",
+        "ethvol-usdc-lp": {
+          key: "ethvol-usdc-lp",
+          label: "ETHVOL-USDC LP",
           address: "0x197e99bD87F98DFde461afE3F706dE36c9635a5D",
           protocol: stakingProtocols.uniswap,
           decimals: 18,
@@ -324,6 +324,7 @@ const stakingConfig = {
         "coti-eth-lp": "COTI-ETH LP",
         "govi-eth-lp": "GOVI-ETH LP",
         "ethvi-usdc-lp": "ETHVI-USDC LP",
+        "ethvol-usdc-lp": "ETHVOL-USDC LP",
         "rhegic2-eth-lp": "RHEGIC2-ETH LP",
         "govi": "GOVI",
       },
