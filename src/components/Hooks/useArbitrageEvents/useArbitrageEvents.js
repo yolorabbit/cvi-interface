@@ -8,25 +8,26 @@ const useArbitrageEvents = (w3, activeToken) => {
   const [{unfulfilledRequests, arbitrage}, events] = useSelector(({wallet, events}) => [wallet, events]);
   const { actionConfirmed } = events;
   const { account } = useActiveWeb3React();
-// const account = '0xf8d74c0CF0AEBbD58401f18a1382368EB00EFc2d'
-
+  const tokenEvents = events[activeToken?.rel?.volTokenKey];
+  const { volTokenKey } = activeToken.rel;
+  
   const fetchHistory = useCallback(async () => {
     try {
-      const history = await w3?.tokens[activeToken.rel.volTokenKey].getHistory({account});
+      const history = await w3?.tokens[volTokenKey].getHistory({account});
       dispatch(setData("arbitrage", history));
     } catch (error) {
-      console.log(error);
+      console.log("ArbitrageEvents fetch history error: ", error);
     }
-  }, [account, activeToken?.rel?.volTokenKey, dispatch, w3?.tokens])
+  }, [account, volTokenKey, dispatch, w3?.tokens])
 
   const fetchUnfulfilledRequests = useCallback(async () => {
     try {
-      const unfulfilledRequests = await w3?.tokens[activeToken.rel.volTokenKey].getUnfulfilledRequests({account});
+      const unfulfilledRequests = await w3?.tokens[volTokenKey].getUnfulfilledRequests({account});
       dispatch(setUnfulfilledRequests(unfulfilledRequests));
     } catch (error) {
       console.log(error);
     }
-  }, [account, activeToken?.rel?.volTokenKey, dispatch, w3?.tokens]);
+  }, [account, volTokenKey, dispatch, w3?.tokens]);
 
   useEffect(()=> {
     if(!activeToken?.rel || !account || !w3?.tokens || unfulfilledRequests) return;
@@ -39,6 +40,24 @@ const useArbitrageEvents = (w3, activeToken) => {
     fetchHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [w3?.tokens, account, activeToken?.rel, fetchHistory]);
+  
+  useEffect(()=>{
+    if(!tokenEvents?.Mint?.events?.length) return;
+    fetchHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenEvents?.Mint?.events?.length]);
+  
+  useEffect(()=>{
+    if(!tokenEvents?.Burn?.events?.length) return;
+    fetchHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenEvents?.Burn?.events?.length]);
+  
+  useEffect(()=>{
+    if(!tokenEvents?.CollateralizedMint?.events?.length) return;
+    fetchHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenEvents?.CollateralizedMint?.events?.length]);
 
   useEffect(() => {
     if(!actionConfirmed) return;
@@ -47,26 +66,36 @@ const useArbitrageEvents = (w3, activeToken) => {
   }, [actionConfirmed, fetchHistory, fetchUnfulfilledRequests])
     
   useEffect(()=>{
-    if(!events || !events[activeToken?.rel?.volTokenKey] || !w3?.tokens) return;
+    if(!events || !tokenEvents || !w3?.tokens) return;
 
-    const getUnfulfilledRequestsById = async (requestId, lastEvent) => {
+    const getUnfulfilledRequestsById = async (requestId) => {
       try {
-        const lastRequest = await w3?.tokens[activeToken.rel.volTokenKey].getUnfulfilledRequests({requestId, account});
-        console.log(lastRequest);
-        if(lastRequest?.length === 0 || !lastRequest) return;
+        const lastRequest = await w3?.tokens[volTokenKey].getUnfulfilledRequests({requestId, account});
+        if(!lastRequest?.length) return;
         dispatch(setUnfulfilledRequests(lastRequest[0], true));
       } catch (error) {
         console.log(error);
       }
     }
     
-    const longTokenUnfulfilledEvents = events[activeToken.rel.volTokenKey]?.SubmitRequest.events;
+    const longTokenUnfulfilledEvents = events[volTokenKey]?.SubmitRequest?.events;
     if(!!longTokenUnfulfilledEvents?.length) {
       const lastEvent = longTokenUnfulfilledEvents[longTokenUnfulfilledEvents.length-1];
-      getUnfulfilledRequestsById(lastEvent.requestId, lastEvent);
+      getUnfulfilledRequestsById(lastEvent.requestId);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [events[activeToken?.rel?.volTokenKey]?.SubmitRequest?.events.length]);
+  }, [tokenEvents?.SubmitRequest?.events?.length]);
+
+  useEffect(()=>{
+    if(!events || !tokenEvents?.FulfillRequest|| !w3?.tokens) return;
+    const longTokenFulfillRequestEvents = events[volTokenKey]?.FulfillRequest?.events;
+    if(!!longTokenFulfillRequestEvents?.length) {
+      const lastEvent = longTokenFulfillRequestEvents[longTokenFulfillRequestEvents.length-1];
+      const unfulfilledFiltered = unfulfilledRequests.filter(({requestId}) => lastEvent.requestId !== requestId);
+      dispatch(setUnfulfilledRequests(unfulfilledFiltered));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenEvents?.FulfillRequest?.events?.length]);
 }
 
 export default useArbitrageEvents;
