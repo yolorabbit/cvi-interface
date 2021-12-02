@@ -131,11 +131,14 @@
     }
 
     &__list-item {
-        width: 6.25vw;
+        width: fit-content;
+        padding: 0 1.25vw;
+        min-width: 6.25vw;
         height: inherit;
 
         @media (max-width: 1365px) {
-            width: 8.791vw;
+            padding: 0 1.758vw;
+            min-width: 8.791vw;
         }
 
         & a {

@@ -140,11 +140,12 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         }
 
         <Stat
-          name="estimatedMinted"
+          name="fulfillmentRequest"
           className="large-value bold green"
           value={preFulfillData}
           format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.decimals), 4) || "0"}`}
-          _suffix={activeToken.name.toUpperCase()}
+          _suffix={`${activeToken.name.toUpperCase()} ≈`}
+          hideTooltip
         />
 
         { collateralMint && 

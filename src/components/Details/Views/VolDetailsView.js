@@ -78,10 +78,11 @@ const VolDetailsView = ({amount, delayFee}) => {
             />
 
             <Stat 
+                name="fulfillmentRequest"
                 className="bold green no-padding"
                 title="You will get once the request is fulfilled" 
                 value={estimatedTokens === null ? null : customFixedTokenValue(estimatedTokens, toToken.fixedDecimals, toToken.decimals)} 
-                _suffix={toToken.name.toUpperCase()}
+                _suffix={`${toToken.name.toUpperCase()} ≈`}
             />
         </>
     }, [fromToken?.name, activeView, amount, maxSubmitFees, delayFee, estimatedTokens, toToken.fixedDecimals, toToken.decimals, toToken.name]) 

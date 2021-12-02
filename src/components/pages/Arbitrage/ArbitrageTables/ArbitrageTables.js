@@ -90,7 +90,8 @@ const DefaultTable = ({activeTab}) => {
             const timeDelayFeeAmount = toBN(tokenAmount).sub(toBN(toBN(tokenAmount).sub(toBN(submitFeesAmount))));
             const maxFeeAmount = toBN(tokenAmount).div(toBN(MAX_PERCENTAGE)).mul(MAX_UPFRONT_FEE);
             const advanceAmount = toBN(maxFeeAmount).add(toBN(timeDelayFeeAmount));
-            
+            const submitTimeSubmitFeeDiff = moment(targetTimestamp*1000).diff(timestamp*1000)
+
             return {
                 event,
                 id,
@@ -100,7 +101,7 @@ const DefaultTable = ({activeTab}) => {
                 symbol: eventTokenProperties?.label.toUpperCase(),
                 submitTime: timestamp,
                 submitTimeToFulfillment: {
-                    text: moment(targetTimestamp * 1000).format("HH:mm"),
+                    text: moment.utc(moment.duration(submitTimeSubmitFeeDiff).asMilliseconds()).format("HH:mm"),
                     subText: "HH:MM"
                 },
                 timeToFulfillmentFee: submitFeesAmount,

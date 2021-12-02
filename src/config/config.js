@@ -41,7 +41,7 @@ const config = {
       restricted: true // block access by country
     },
     arbitrage: {
-      label: "Arbitrage",
+      label: "Tokenized Volatility",
       path: '/arbitrage',
       hide: ['/'],
       restricted: true // block access by country
@@ -191,6 +191,14 @@ const config = {
       className: "bold green",
       tooltip: {
         content: "? - Estimated number of recieved tokens",
+        left: "0",
+        mobileLeft: -40,
+      }
+    },
+    fulfillmentRequest: {
+      title: "You will get once the request is fulfilled",
+      tooltip: {
+        content: "tooltip text",
         left: "0",
         mobileLeft: -40,
       }
