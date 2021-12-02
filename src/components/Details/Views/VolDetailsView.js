@@ -6,7 +6,7 @@ import { appViewContext } from "components/Context";
 import debounce from "lodash.debounce";
 import { customFixedTokenValue, getTimeDurationFormatted, toBN, toBNAmount, toDisplayAmount } from "utils";
 
-const estimatedTokenFunctions = {
+export const estimatedTokenFunctions = {
     [arbitrageActiveTabs.mint]: "estimateMint",
     [arbitrageActiveTabs.burn]: "estimateBurn",
 }

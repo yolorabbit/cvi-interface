@@ -17,6 +17,7 @@ import { MAX_PERCENTAGE } from "contracts/utils";
 import { getLatestBlockTimestamp } from 'contracts/web3Api';
 import { useWeb3React } from "@web3-react/core";
 import config from "config/config";
+import { estimatedTokenFunctions } from "components/Details/Views/VolDetailsView";
 
 const ArbitrageTables = () => {
     const [activeTab, setActiveTab] = useState();
@@ -74,7 +75,7 @@ const DataView = () => {
 }
 
 const DefaultTable = ({activeTab, lastBlockTime}) => {
-    const { activeView } = useContext(appViewContext);
+    const { activeView, w3 } = useContext(appViewContext);
     const { unfulfilledRequests } = useSelector(({wallet}) => wallet);
     const activeToken = useActiveToken()
 
@@ -83,30 +84,35 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
         const data = unfulfilledRequests ? unfulfilledRequests.map(({
             event, id, requestId, requestType, submitFeesAmount, targetTimestamp, timestamp, tokenAmount,
         }) => {
+            const type = arbitrageConfig.requestType[requestType].toLowerCase();
+            const fromToken = arbitrageConfig.requestType[requestType] === activeTabs.burn ? activeToken : activeToken.pairToken; 
+            const fromTokenName = fromToken.name.toUpperCase();
+            const toToken = arbitrageConfig.requestType[requestType] === activeTabs.burn ? activeToken.pairToken : activeToken;
+            const toTokenName = toToken?.name.toUpperCase();
             const MAX_UPFRONT_FEE = toBN("500");
             const requestTypeLabel = arbitrageConfig.requestType[requestType];
-            const eventTokenProperties = activeToken[`${requestTypeLabel}Properties`];
             const timeDelayFeeAmount = toBN(tokenAmount).sub(toBN(toBN(tokenAmount).sub(toBN(submitFeesAmount))));
             const maxFeeAmount = toBN(tokenAmount).div(toBN(MAX_PERCENTAGE)).mul(MAX_UPFRONT_FEE);
             const advanceAmount = toBN(maxFeeAmount).add(toBN(timeDelayFeeAmount));
             const submitTimeSubmitFeeDiff = moment.utc(targetTimestamp*1000).diff(timestamp*1000)
             const SubmitFeeLastBlockDiff = moment.utc(targetTimestamp*1000).diff(lastBlockTime*1000);
+            const estimateTokens = w3.tokens[toToken.rel.volTokenKey][estimatedTokenFunctions[type]](toBN(tokenAmount).sub(advanceAmount));
 
             return {
                 event,
                 id,
                 requestId,
                 type: requestTypeLabel,
-                amount: toDisplayAmount(tokenAmount, eventTokenProperties?.decimals),
-                symbol: eventTokenProperties?.label.toUpperCase(),
+                amount: toDisplayAmount(tokenAmount, fromToken.decimals),
+                symbol: fromTokenName,
                 submitTime: timestamp,
                 submitTimeToFulfillment: {
                     text: moment.utc(moment.duration(submitTimeSubmitFeeDiff).asMilliseconds()).format("HH:mm"),
                     subText: "HH:MM"
                 },
-                timeToFulfillmentFee: commaFormatted(customFixed(toDisplayAmount(submitFeesAmount, eventTokenProperties?.decimals), eventTokenProperties.fixedDecimals)),
-                upfrontPayment: commaFormatted(customFixed(toDisplayAmount(advanceAmount, eventTokenProperties.decimals), eventTokenProperties.fixedDecimals)),
-                estimatedNumberOfTokens: commaFormatted(customFixed(toDisplayAmount(tokenAmount*1000, eventTokenProperties.decimals), eventTokenProperties.customFixed)),
+                timeToFulfillmentFee: commaFormatted(customFixed(toDisplayAmount(submitFeesAmount, fromToken?.decimals), fromToken.fixedDecimals)),
+                upfrontPayment: commaFormatted(customFixed(toDisplayAmount(advanceAmount, fromToken.decimals), fromToken.fixedDecimals)),
+                estimatedNumberOfTokens: `${commaFormatted(customFixed(toDisplayAmount(estimateTokens, toToken.decimals), toToken.fixedDecimals))} ${toTokenName}`,
                 fulfillmentIn: moment.duration(SubmitFeeLastBlockDiff).asMilliseconds(),
                 action: true,
                 lastBlockTime
