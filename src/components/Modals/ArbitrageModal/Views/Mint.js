@@ -53,10 +53,12 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
 
   useEffect(()=>{
     if(!originalRequest) return;
+    setPreFulfillData(null);
 
     const preFulfill = async () => {
       try {
-        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillMint(originalRequest);
+        const preFulfillAction = collateralMint ? "preFulfillCollateralizedMint" : "preFulfillMint";
+        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey][preFulfillAction](originalRequest);
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);
@@ -65,7 +67,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
     }
 
     if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
-  },[w3, requestData, activeToken, originalRequest, closeBtn]);
+  },[w3, requestData, activeToken, originalRequest, closeBtn, collateralMint]);
 
   return useMemo(() => {
     return (
@@ -128,12 +130,12 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
           className="modal-checkbox"
         />
   
-        { collateralMint && <> 
+        {collateralMint && <> 
             <Stat
               title="You will receive"
               className="large-value bold green"
               value={preFulfillData}
-              format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.decimals), 4) || "0"}`}
+              format={(!preFulfillData?.shortReceive || preFulfillData === 'N/A') ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.shortReceive?.toString(), activeToken.decimals), 4) || "0"}`}
               _suffix={"ETHVI-USDC-LP"}
             />
           </>
