@@ -4,14 +4,14 @@ import { appViewContext } from 'components/Context';
 import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
-import arbitrageConfig, { activeViews } from 'config/arbitrageConfig';
+import arbitrageConfig, { activeTabs, activeViews } from 'config/arbitrageConfig';
 import React, { useContext, useMemo, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Container from 'components/Layout/Container';
 import TabsForm from 'components/TabsForm';
 import './ArbitrageTables.scss';
 import moment from 'moment';
-import { customFixed, toBN, toDisplayAmount } from 'utils/index';
+import { commaFormatted, customFixed, customFixedTokenValue, toBN, toDisplayAmount } from 'utils/index';
 import { upperFirst } from "lodash";
 import { MAX_PERCENTAGE } from "contracts/utils";
 import { getLatestBlockTimestamp } from 'contracts/web3Api';
@@ -131,21 +131,26 @@ const HistoryTable = ({activeTab}) => {
 
     return useMemo(() => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
-        //TODO: add more details to history mapping
         const historyData = arbitrage ? arbitrage.map(({
-            event, tokenAmount, mintedShortTokens
+            event, tokenAmount, mintedShortTokens, mintedTokens
         }) => {
+            const fromToken = arbitrageConfig.requestType[event] === activeTabs.burn ? activeToken : activeToken.pairToken;
+            const fromTokenLabel = fromToken.name.toUpperCase();
+            const toToken = arbitrageConfig.requestType[event] === activeTabs.burn ? activeToken.pairToken : activeToken;
+            const toTokenName = toToken?.name.toUpperCase();
+            const type = upperFirst(arbitrageConfig.requestType[event]);
+            const amount = `${commaFormatted(customFixed(toDisplayAmount(tokenAmount, fromToken.decimals), fromToken.fixedDecimals))}`;
+            const tokenlpName = `${fromToken.oracleId.toUpperCase()}-${fromToken.name.toUpperCase()}-LP`;
+            const _mintedShortToken = commaFormatted(customFixedTokenValue(mintedShortTokens, fromToken.fixedDecimals, fromToken.lpTokensDecimals));
+            const receivedTokens = commaFormatted(customFixedTokenValue(mintedTokens, toToken.fixedDecimals, toToken.decimals));
 
-            
-        const eventTokenProperties = activeToken[`${arbitrageConfig.requestType[event].toLowerCase()}Properties`];
-        
-        return {
-            type: upperFirst(arbitrageConfig.requestType[event]),
-            amount: `${customFixed(toDisplayAmount(tokenAmount, eventTokenProperties.decimals), eventTokenProperties.customFixed)} ${eventTokenProperties.label.toUpperCase()}`,
-            timeToFulfillmentFee: Date.now() + 10000000,
-            collateralMint: mintedShortTokens ? customFixed(toDisplayAmount(mintedShortTokens, eventTokenProperties.lpTokensDecimals), eventTokenProperties.customFixed) : 0,
-            receivedTokens: eventTokenProperties?.label.toUpperCase(),
-        }}) : null;
+            return {
+                type,
+                amount: `${amount} ${fromTokenLabel}`,
+                collateralMint: mintedShortTokens ? `${_mintedShortToken} ${tokenlpName}` : 0,
+                receivedTokens: `${receivedTokens} ${toTokenName}`,
+            }
+        }) : null;
 
         return <DataController 
             authGuard

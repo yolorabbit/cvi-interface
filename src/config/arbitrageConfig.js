@@ -54,6 +54,7 @@ const arbitrageConfig = {
           name: "usdc",
           decimals: 6,
           fixedDecimals: 2,
+          lpTokensDecimals: 18,
           oracleId: config.oraclesData.ethvi.oracleId,
           rel: {
             contractKey: "USDC",
@@ -91,6 +92,7 @@ const arbitrageConfig = {
           name: "usdc",
           decimals: 6,
           fixedDecimals: 2,
+          lpTokensDecimals: 18,
           oracleId: config.oraclesData.cvi.oracleId,
           rel: {
             contractKey: "USDC",
@@ -169,7 +171,6 @@ const arbitrageConfig = {
         headers: {
           type: "Type",
           amount: "Amount",
-          timeToFulfillmentAndPenaltyFees: "Time to fulfillment and penalty fees",
           collateralMint: "Collateral mint",
           receivedToken: "Received tokens"
         }
@@ -193,7 +194,6 @@ const arbitrageConfig = {
         headers: {
           type: "Type",
           amount: "Amount",
-          timeToFulfillmentAndPenaltyFees: "Time to fulfillment and penalty fees",
           collateralMint: "Collateral mint",
           receivedToken: "Received tokens"
         }
