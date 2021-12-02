@@ -70,7 +70,7 @@ const SubmitMint = () => {
                     className="button" 
                     buttonText="SUBMIT"
                     onClick={onClick}
-                    disabled={disabled || delayFee === 'N/A' || !amount || amount === "0" || !delayFee?.fee}
+                    disabled={disabled || delayFee === 'N/A' || !amount || amount === "0" || delayFee?.fee === null}
                     processing={isProcessing || delayFee?.fee === null || amount === null}
                     processingText={!isProcessing && "Calculating"}
                 />
