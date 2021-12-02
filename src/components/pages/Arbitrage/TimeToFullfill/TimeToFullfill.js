@@ -122,7 +122,6 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
 };
 
 const BetweenText = ({maxMinutes, maxHours}) => {
-  console.log(maxMinutes);
   return useMemo(() => {
     if(!maxMinutes && !maxHours) return <span className="between-text">Between <Spinner className="statistics-spinner" /> hours to <Spinner className="statistics-spinner" /> hours.</span>
     return <span>(Between {maxHours <= 1 ? `${maxMinutes} minutes` : `${maxMinutes/60} hour`} to {maxHours} hours)</span>

@@ -14,9 +14,9 @@ import Mint from 'components/Modals/ArbitrageModal/Views/Mint';
 import Burn from 'components/Modals/ArbitrageModal/Views/Burn';
 
 const actionControllerContext = createContext({});
-export const ActionControllerContext = ({action, disabled, token, protocol, type, leverage, amount, setAmount, delayFee, slippageTolerance, isModal, isOpen, setIsOpen, balances, cb }) => {
+export const ActionControllerContext = (props = {}) => {
   return (
-    <actionControllerContext.Provider value={{action, disabled, type, token, protocol, leverage, amount, setAmount, delayFee, isModal, slippageTolerance, isOpen, setIsOpen, balances, cb }}>
+    <actionControllerContext.Provider value={props}>
       <Action />
     </actionControllerContext.Provider>
   )
@@ -31,8 +31,8 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [isOpen, setIsOpen] = useState();
   const { activeView } = useContext(appViewContext);
+  
   const _activeToken = useActiveToken(token);
-
   const getActiveToken = useCallback( () => {
     if(arbitrageActiveTabs?.[activeView]) return activeView === arbitrageActiveTabs.mint ? _activeToken : _activeToken.pairToken;
     return _activeToken;

@@ -112,21 +112,21 @@ const DefaultTable = ({activeTab}) => {
             }
         }) : null;
 
-        const checkLockTime = (time) => {
-           const submitTimePlus = moment.utc(time * 1000).add(15, 'minutes');
-           const duration = moment.duration(submitTimePlus.diff(moment.utc(lastBlockTime * 1000)))
-           const miliSecDiff = duration.valueOf()
-           return miliSecDiff > 0;
-        }
+        // const checkLockTime = (time) => {
+        //    const submitTimePlus = moment.utc(time * 1000).add(15, 'minutes');
+        //    const duration = moment.duration(submitTimePlus.diff(moment.utc(lastBlockTime * 1000)))
+        //    const miliSecDiff = duration.valueOf()
+        //    return miliSecDiff > 0;
+        // }
         
-        let filteredLockedTimestamps = []
-        unfulfilledRequests?.filter(item => checkLockTime(item.timestamp))
-        .map(filteredLockedTimestamps => (
-            filteredLockedTimestamps.push(
-                moment.duration(moment.utc(filteredLockedTimestamps.timestamp * 1000).add(15, 'minutes').diff(moment.utc(lastBlockTime * 1000))).valueOf()
-            )
-        ))
-          console.log("filteredLockedTimestamps ", filteredLockedTimestamps.sort())
+        // let filteredLockedTimestamps = []
+        // unfulfilledRequests?.filter(item => checkLockTime(item.timestamp))
+        // .map(filteredLockedTimestamps => (
+        //     filteredLockedTimestamps.push(
+        //         moment.duration(moment.utc(filteredLockedTimestamps.timestamp * 1000).add(15, 'minutes').diff(moment.utc(lastBlockTime * 1000))).valueOf()
+        //     )
+        // ))
+        // console.log("filteredLockedTimestamps ", filteredLockedTimestamps.sort())
 
         return <DataController 
             authGuard

@@ -23,7 +23,7 @@ const Stat = ({actEthvol, actLowRules, name, hideTooltip, prefix = "", _suffix, 
 
             {value ? 
                 <p>{value !== "N/A" && !suffix && _prefix}{value === "N/A" ? value : format ? commaFormatted(format) : commaFormatted(value)} {value !== "N/A" && <span className="suffix">{suffix}</span>}</p> 
-                : !values?.length > 0 && <Spinner className="statistics-spinner" />
+                : !values?.length > 0 && value === null && <Spinner className="statistics-spinner" />
             }
         </div>
     )
