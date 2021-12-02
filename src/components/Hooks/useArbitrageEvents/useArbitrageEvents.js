@@ -9,7 +9,7 @@ const useArbitrageEvents = (w3, activeToken) => {
   const { actionConfirmed } = events;
   const { account } = useActiveWeb3React();
   const tokenEvents = events[activeToken?.rel?.volTokenKey];
-  const { volTokenKey } = activeToken.rel;
+  const { volTokenKey } = activeToken?.rel || {};
   
   const fetchHistory = useCallback(async () => {
     try {
