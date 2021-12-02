@@ -80,7 +80,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
-                content={<Countdown lockedTime={fulfillmentIn} />}
+                content={<Countdown lockedTime={fulfillmentIn} showIfZero/>}
             />
 
             {(!isTablet || isMobile) && <RowItem content={

@@ -11,10 +11,11 @@ import { actionConfirm } from "store/actions/events";
 export const gas = config.isMainnet ? { } : { };
 
 export const getTimeDurationFormatted = (lockedTime) => {
+    const isNegativeTime = lockedTime < 0;
     const minutesDuration = moment.duration(lockedTime).asMinutes();
-    const hours = parseInt(minutesDuration / 60);
-    const minutes = parseInt(minutesDuration % 60);
-    const timeDurationFormatted = `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
+    const hours = parseInt(Math.abs(minutesDuration) / 60);
+    const minutes = parseInt(Math.abs(minutesDuration) % 60);
+    const timeDurationFormatted = `${isNegativeTime ? '-' : ''}${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
     return timeDurationFormatted;
 };
 
