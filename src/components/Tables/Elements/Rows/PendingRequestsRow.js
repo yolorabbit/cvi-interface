@@ -26,7 +26,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
     // Submit Time + 15 minutes
     const submitTimePlus = moment(submitTime * 1000).add(15, 'minutes');
-    // Last Block Time
+    // Check if locked
     const isLocked = moment(moment.utc(submitTimePlus)).isSameOrAfter(moment.utc(lastBlockTime * 1000));
 
     const fulfillmentController = useMemo(() => {
@@ -65,7 +65,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.timeToFulfillmentFee}
-                content={<Value text={timeToFulfillmentFee} />}
+                content={<Value text={timeToFulfillmentFee} subText={symbol} />}
             />
 
             <RowItem
@@ -105,15 +105,14 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         isMobile]);
 
     if (isHeader) {
-        return <>
-            <RowItem
+        return  <RowItem
                 type={type}
                 content={
                     <>
                         <Value className="uppercase-first-letter" text={type} subText={
                             <span className="margin-inline-start">
                                 <b>{amount}&nbsp;</b>
-                                <span></span>
+                                <span>{symbol}</span>
                            </span>
                             }/>
                         <div className="row-actions-wrapper">
@@ -122,7 +121,6 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                     </>
                 }
             />
-        </>
     }
 
     return isTablet ? RowData : <tr className={className ?? ''}>

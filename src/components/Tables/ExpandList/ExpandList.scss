@@ -69,6 +69,11 @@
 
             &__header {
                 background-color: #1b1d38;
+                & .Mint .value-component { 
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                }
             }
             
             &:not(.expanded) {

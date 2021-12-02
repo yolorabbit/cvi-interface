@@ -34,7 +34,19 @@ const HistoryRow = ({rowData, isHeader}) => {
     if(isHeader) {
         return <>
             <RowItem content={<Value text={rowData.date} /> } />
+            {(rowData.type.toLowerCase() === "mint" || rowData.type.toLowerCase() === "burn") ?
+            <RowItem
+                type={rowData.type}
+                content={
+                    <Value className="uppercase-first-letter" text={rowData.type} subText={
+                        <span className="margin-inline-start">
+                            <b>{rowData.amount}&nbsp;</b>
+                        </span>
+                    }/>
+                }
+            /> : 
             <RowItem content={<Value text={rowData.type} /> } />
+            }
         </>
     }
 
