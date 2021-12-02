@@ -91,7 +91,8 @@ const DefaultTable = ({activeTab}) => {
             const maxFeeAmount = toBN(tokenAmount).div(toBN(MAX_PERCENTAGE)).mul(MAX_UPFRONT_FEE);
             const advanceAmount = toBN(maxFeeAmount).add(toBN(timeDelayFeeAmount));
             const submitTimeSubmitFeeDiff = moment(targetTimestamp*1000).diff(timestamp*1000)
-
+            const SubmitFeeLastBlockDiff = moment(targetTimestamp*1000).diff(lastBlockTime*1000)
+            
             return {
                 event,
                 id,
@@ -107,27 +108,11 @@ const DefaultTable = ({activeTab}) => {
                 timeToFulfillmentFee: submitFeesAmount,
                 upfrontPayment: toDisplayAmount(advanceAmount, eventTokenProperties.decimals),
                 estimatedNumberOfTokens: customFixed(toDisplayAmount(tokenAmount*1000, eventTokenProperties.decimals), eventTokenProperties.customFixed),
-                fulfillmentIn: targetTimestamp,
+                fulfillmentIn: moment.duration(SubmitFeeLastBlockDiff).asMilliseconds(),
                 action: true,
-                lastBlockTime : lastBlockTime
+                lastBlockTime
             }
         }) : null;
-
-        // const checkLockTime = (time) => {
-        //    const submitTimePlus = moment.utc(time * 1000).add(15, 'minutes');
-        //    const duration = moment.duration(submitTimePlus.diff(moment.utc(lastBlockTime * 1000)))
-        //    const miliSecDiff = duration.valueOf()
-        //    return miliSecDiff > 0;
-        // }
-        
-        // let filteredLockedTimestamps = []
-        // unfulfilledRequests?.filter(item => checkLockTime(item.timestamp))
-        // .map(filteredLockedTimestamps => (
-        //     filteredLockedTimestamps.push(
-        //         moment.duration(moment.utc(filteredLockedTimestamps.timestamp * 1000).add(15, 'minutes').diff(moment.utc(lastBlockTime * 1000))).valueOf()
-        //     )
-        // ))
-        // console.log("filteredLockedTimestamps ", filteredLockedTimestamps.sort())
 
         return <DataController 
             authGuard
