@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
 
-const Mint = ({ closeBtn, requestData }) => {
+const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn into one view 
   const dispatch = useDispatch();
   const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
   const { w3 } = useContext(appViewContext);

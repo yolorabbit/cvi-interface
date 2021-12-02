@@ -1,152 +1,147 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import Title from "components/Elements/Title";
 import Stat from "components/Stat";
 import Button from "components/Elements/Button";
 import CountdownComponent from "components/Countdown";
-import { useDispatch, useSelector } from 'react-redux';
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
+import { toDisplayAmount } from '@coti-io/cvi-sdk';
+import { customFixed } from 'utils';
+import { useActiveWeb3React } from 'components/Hooks/wallet';
+import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
-import { useActiveWeb3React } from 'components/Hooks/wallet';
 
 const Burn = ({ closeBtn, requestData }) => {
-  const activeToken = useActiveToken();
-  const { w3 } = useContext(appViewContext);
-  const { account } = useActiveWeb3React();
-  const [preFulfillData, setPreFulfillData] = useState(null)
-  const [amount] = useState(100)
-  const [upFrontPayment] = useState(1000)
-  const [fullfillmentIn] = useState(17280000)
-  const [timeToFullfillment] = useState(6)
-  const [fee] = useState(0.3)
-  const [amountToFullfill] = useState(1700)
-  const [recieveAmount] = useState(900)
-  const [estimatedAmount] = useState(15)
   const dispatch = useDispatch();
   const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
+  const { w3 } = useContext(appViewContext);
+  const {account} = useActiveWeb3React();
+  const activeToken = useActiveToken();
+  const [preFulfillData, setPreFulfillData] = useState(null);
+  const [fullfillmentIn] = useState(10000);
+  const [isProcessing, setIsProcessing] = useState();
   const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId)
   
-  const onClick = async() => {
+  const onClick = useCallback(async() => {
     try {
+      setIsProcessing(true);
       await w3?.tokens[activeToken.rel.volTokenKey].fulfillBurn(originalRequest.requestId, account);
       dispatch(addAlert({
-        id: 'mint',
-        eventName: "Mint - success",
+        id: 'burn',
+        eventName: "Burn - success",
         alertType: config.alerts.types.CONFIRMED,
         message: "Transaction success!"
       }));
-    } catch (error) {
+    } catch (error){
       console.log("fulfill burn error: ", error);
       dispatch(addAlert({
-        id: 'mint',
-        eventName: "Mint - failed",
+        id: 'burn',
+        eventName: "Burn - failed",
         alertType: config.alerts.types.FAILED,
         message: "Transaction failed!"
       }));
     } finally {
       closeBtn();
+      setIsProcessing(false);
     }
-  }
+  }, [account, activeToken.rel.volTokenKey, closeBtn, dispatch, originalRequest.requestId, w3?.tokens]);
 
   useEffect(()=>{
-    const preFulfill = async () => {
-      const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest)
-      // const { fulfillFees, fulfillFeesPercent, receive } = preFulfillRes;
-      setPreFulfillData(preFulfillRes)
-    }
-    if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
-  },[w3, requestData, activeToken, originalRequest]);
-    
-  return useMemo(() => {
-      return (
-          <>
-            <Title
-              className="arbitrage-title"
-              color="white"
-              text={`Burn ETHVI tokens`}
-            />
-      
-            <Stat
-              title="Amount"
-              className="bold amount"
-              value={amount || "0"}
-              _suffix={activeToken.name}
-            />
-      
-            <Stat
-              title="Up front payment"
-              className="large-value bold"
-              value={upFrontPayment || "0"}
-              _suffix={activeToken.name}
-            />
-            
-            <div className="stat-component">
-              <h2 >
-              Fullfillment in
-              </h2>
-              <CountdownComponent
-              lockedTime={fullfillmentIn}
-              className={"fullfill-countdown"} />
-            </div>
-      
-            <Stat
-              title="Time to fullfillment and penalty fees"
-              className="large-value bold"
-              value={timeToFullfillment || "0"}
-              format={`${timeToFullfillment || "0"}%`}
-            />
-      
-            <Stat
-              title="Burn fee"
-              className="large-value bold"
-              value={fee || "0"}
-              format={`${fee || "0"}%`}
-            />
-      
-            <Stat
-              title="Amount to fullfill"
-              className="large-value bold"
-              value={amountToFullfill || "0"}
-              format={`${amountToFullfill || "0"}`}
-              _suffix={activeToken.name}
-            />
-      
-            <Stat
-              title="You will receive"
-              className="large-value bold"
-              value={recieveAmount || "0"}
-              format={`${recieveAmount || "0"}`}
-              _suffix={"ETHVI"}
-            />
-      
-            <Stat
-              name="estimatedBurn"
-              className="large-value bold green"
-              value={estimatedAmount || "0"}
-              format={`${estimatedAmount || "0"}`}
-              _suffix={activeToken.name}
-            />
-      
-            <Button
-              className="button arbitrage-button"
-              buttonText={"Fullfill"}
-              processing={false}
-              disabled={false}
-              onClick={onClick}
-            />
+    if(!originalRequest) return;
 
-            <Button
-              className="button secondary arbitrage-button"
-              buttonText={"Cancel"}
-              processing={false}
-              disabled={false}
-              onClick={closeBtn}
-            />
-        </>
-      )
-  // eslint-disable-next-line 
-  }, [preFulfillData])
+    const preFulfill = async () => {
+      try {
+        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest);
+        console.log(preFulfillRes);
+        setPreFulfillData(preFulfillRes);
+      } catch (error) {
+        console.log(error);
+        setPreFulfillData("N/A");
+      }
+    }
+
+    if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
+  },[w3, requestData, activeToken, originalRequest, closeBtn]);
+
+  return useMemo(() => {
+    return (
+      <>
+        <Title
+          className="arbitrage-title"
+          color="white"
+          text={`Burn ETHVI tokens`}
+        />
+
+        {(!requestData || !originalRequest || preFulfillData === "N/A") && <Stat title="Some error occurred." className="bold low" />}
+  
+        <Stat
+          title="Amount"
+          className="bold amount"
+          value={`${requestData.amount} ${requestData.symbol}` || "-"}
+        />
+  
+        <Stat
+          title="Up front payment"
+          className="large-value bold"
+          value={requestData.upfrontPayment || "0"}
+          _suffix={requestData.symbol}
+        />
+
+        <Stat
+          title="Amount to fullfill"
+          className="large-value bold"
+          value={requestData.amount - requestData.upfrontPayment || "0"}
+          _suffix={requestData.symbol}
+        />
+
+        <div className="stat-component">
+          <h2>Fullfillment in</h2>
+          <CountdownComponent
+            lockedTime={fullfillmentIn}
+            className={"fullfill-countdown"} 
+          />
+        </div>
+  
+        <Stat
+          title="Time to fullfillment and penalty fees"
+          className="large-value bold"
+          value={preFulfillData}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(preFulfillData?.penaltyFeePercent.toString(), 4)}%`}
+        />
+  
+        <Stat
+          title="Burn fee"
+          className="large-value bold"
+          value={preFulfillData}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(preFulfillData?.closeFeePercent.toString(), 4)}%`}
+        />
+
+
+        <Stat
+          name="estimatedBurn"
+          className="large-value bold green"
+          value={preFulfillData}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.pairToken.decimals), 4) || "0"}`}
+          _suffix={activeToken.pairToken.name.toUpperCase()}
+        />
+
+        <Button
+          className="button arbitrage-button"
+          buttonText="Fullfill"
+          disabled={isProcessing || !originalRequest || !preFulfillData || preFulfillData === "N/A"}
+          processing={isProcessing}
+          onClick={onClick}
+        />
+
+        <Button
+          className="button secondary arbitrage-button"
+          buttonText="Cancel"
+          onClick={closeBtn}
+        />
+      </>
+    )
+  },[requestData, originalRequest, preFulfillData, fullfillmentIn, activeToken.pairToken.decimals, activeToken.pairToken.name, isProcessing, onClick, closeBtn])
 }
 
 export default Burn
