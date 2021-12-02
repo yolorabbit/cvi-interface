@@ -25,7 +25,6 @@ const Arbitrage = () => {
   } : null;
 
   const w3 = useW3SDK(w3Filters);
-
   useArbitrageEvents(w3, activeToken);
   
   return useMemo(() => (
