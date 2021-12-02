@@ -90,7 +90,6 @@ const DefaultTable = ({activeTab}) => {
             const advanceAmount = toBN(maxFeeAmount).add(toBN(timeDelayFeeAmount));
             const submitTimeSubmitFeeDiff = moment(targetTimestamp*1000).diff(timestamp*1000)
             const SubmitFeeLastBlockDiff = moment(targetTimestamp*1000).diff(lastBlockTime*1000)
-            
             return {
                 event,
                 id,
@@ -103,9 +102,9 @@ const DefaultTable = ({activeTab}) => {
                     text: moment.utc(moment.duration(submitTimeSubmitFeeDiff).asMilliseconds()).format("HH:mm"),
                     subText: "HH:MM"
                 },
-                timeToFulfillmentFee: submitFeesAmount,
-                upfrontPayment: toDisplayAmount(advanceAmount, eventTokenProperties.decimals),
-                estimatedNumberOfTokens: customFixed(toDisplayAmount(tokenAmount*1000, eventTokenProperties.decimals), eventTokenProperties.customFixed),
+                timeToFulfillmentFee: commaFormatted(customFixed(toDisplayAmount(submitFeesAmount, eventTokenProperties?.decimals), eventTokenProperties.fixedDecimals)),
+                upfrontPayment: commaFormatted(customFixed(toDisplayAmount(advanceAmount, eventTokenProperties.decimals), eventTokenProperties.fixedDecimals)),
+                estimatedNumberOfTokens: commaFormatted(customFixed(toDisplayAmount(tokenAmount*1000, eventTokenProperties.decimals), eventTokenProperties.customFixed)),
                 fulfillmentIn: moment.duration(SubmitFeeLastBlockDiff).asMilliseconds(),
                 action: true,
                 lastBlockTime
