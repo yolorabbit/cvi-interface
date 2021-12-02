@@ -50,9 +50,14 @@ const useArbitrageEvents = (w3, activeToken) => {
     if(!events || !events[activeToken?.rel?.volTokenKey] || !w3?.tokens) return;
 
     const getUnfulfilledRequestsById = async (requestId, lastEvent) => {
-      const lastRequest = await w3?.tokens[activeToken.rel.volTokenKey].getUnfulfilledRequests({requestId, account});
-      console.log(lastRequest);
-      dispatch(setUnfulfilledRequests(lastRequest[0], true))
+      try {
+        const lastRequest = await w3?.tokens[activeToken.rel.volTokenKey].getUnfulfilledRequests({requestId, account});
+        console.log(lastRequest);
+        if(lastRequest?.length === 0 || !lastRequest) return;
+        dispatch(setUnfulfilledRequests(lastRequest[0], true));
+      } catch (error) {
+        console.log(error);
+      }
     }
     
     const longTokenUnfulfilledEvents = events[activeToken.rel.volTokenKey]?.SubmitRequest.events;
