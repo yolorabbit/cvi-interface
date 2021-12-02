@@ -34,7 +34,7 @@ const HistoryRow = ({rowData, isHeader}) => {
     if(isHeader) {
         return <>
             <RowItem content={<Value text={rowData.date} /> } />
-            {(rowData.type.toLowerCase() === "mint" || rowData.type.toLowerCase() === "burn") ?
+            {(rowData.type.toLowerCase() === arbitrageConfig.requestType[rowData.type]) ?
             <RowItem
                 type={rowData.type}
                 content={
