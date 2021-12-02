@@ -21,16 +21,33 @@ import config from "config/config";
 const ArbitrageTables = () => {
     const [activeTab, setActiveTab] = useState();
     const { activeView } = useContext(appViewContext);
+    const [lastBlockTime, setLastBlockTime] = useState();
+    const { library } = useWeb3React(config.web3ProviderId);
+
+    useEffect(() => {
+        const latestBlockTimestamp = async () => {
+            try {
+                const latestBlockTime = await getLatestBlockTimestamp(library.eth.getBlock);
+                setLastBlockTime(latestBlockTime);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        if (!lastBlockTime) {
+            latestBlockTimestamp()
+        }
+    }, [library, activeTab, lastBlockTime])
+
     return useMemo(() => {
         if(!activeView) return null;
-   
+        
         const renderView = () => {
             if(!activeTab) return null;
             switch(activeTab) {
                 case activeViews.history:
                     return <HistoryTable activeTab={activeTab} />
                 default:
-                    return <DefaultTable activeTab={activeTab} />
+                    return <DefaultTable lastBlockTime={lastBlockTime} activeTab={activeTab} />
             }
         }
 
@@ -46,7 +63,7 @@ const ArbitrageTables = () => {
                 </TabsForm>
             </Container>
         )
-    }, [activeTab, activeView]);
+    }, [activeTab, activeView, lastBlockTime]);
 }
 
 const DataView = () => {
@@ -56,26 +73,10 @@ const DataView = () => {
     }, [isTablet]);
 }
 
-const DefaultTable = ({activeTab}) => {
+const DefaultTable = ({activeTab, lastBlockTime}) => {
     const { activeView } = useContext(appViewContext);
-    const [lastBlockTime, setLastBlockTime] = useState();
     const { unfulfilledRequests } = useSelector(({wallet}) => wallet);
     const activeToken = useActiveToken()
-    const { library } = useWeb3React(config.web3ProviderId);
-
-    useEffect(() => {
-        const latestBlockTimestamp = async () => {
-            try {
-                const latestBlockTime = await getLatestBlockTimestamp(library.eth.getBlock);
-                setLastBlockTime(latestBlockTime);
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        if (!lastBlockTime) {
-            latestBlockTimestamp()
-        }
-    }, [library, unfulfilledRequests, activeTab, lastBlockTime])
 
     return useMemo(() => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
@@ -88,8 +89,9 @@ const DefaultTable = ({activeTab}) => {
             const timeDelayFeeAmount = toBN(tokenAmount).sub(toBN(toBN(tokenAmount).sub(toBN(submitFeesAmount))));
             const maxFeeAmount = toBN(tokenAmount).div(toBN(MAX_PERCENTAGE)).mul(MAX_UPFRONT_FEE);
             const advanceAmount = toBN(maxFeeAmount).add(toBN(timeDelayFeeAmount));
-            const submitTimeSubmitFeeDiff = moment(targetTimestamp*1000).diff(timestamp*1000)
-            const SubmitFeeLastBlockDiff = moment(targetTimestamp*1000).diff(lastBlockTime*1000)
+            const submitTimeSubmitFeeDiff = moment.utc(targetTimestamp*1000).diff(timestamp*1000)
+            const SubmitFeeLastBlockDiff = moment.utc(targetTimestamp*1000).diff(lastBlockTime*1000);
+
             return {
                 event,
                 id,

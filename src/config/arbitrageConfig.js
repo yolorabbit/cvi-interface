@@ -185,7 +185,7 @@ const arbitrageConfig = {
           submitTimeToFulfillment: "Submitted time to fulfillment",
           timeToFulfillmentFee: "Time to fulfillment fee",
           upfrontPayment: "Up front payment",
-          estimatedNumberOfTokens: "Estimated number of minted tokens",
+          estimatedNumberOfTokens: "You will get",
           fulfillmentIn: "Fulfillment in",
           action: true
         }
