@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from 're
 import Title from "components/Elements/Title";
 import Stat from "components/Stat";
 import Button from "components/Elements/Button";
-import CountdownComponent from "components/Countdown";
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
 import { toDisplayAmount } from '@coti-io/cvi-sdk';
@@ -11,6 +10,7 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
+import FulfillmentInTimer from 'components/pages/Arbitrage/FulfillmentInTimer';
 
 const Burn = ({ closeBtn, requestData }) => {
   const dispatch = useDispatch();
@@ -19,7 +19,6 @@ const Burn = ({ closeBtn, requestData }) => {
   const {account} = useActiveWeb3React();
   const activeToken = useActiveToken();
   const [preFulfillData, setPreFulfillData] = useState(null);
-  const [fullfillmentIn] = useState(10000);
   const [isProcessing, setIsProcessing] = useState();
   const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId)
   
@@ -97,10 +96,7 @@ const Burn = ({ closeBtn, requestData }) => {
 
         <div className="stat-component">
           <h2>Fullfillment in</h2>
-          <CountdownComponent
-            lockedTime={fullfillmentIn}
-            className={"fullfill-countdown"} 
-          />
+           <FulfillmentInTimer fulfillmentIn={requestData.fulfillmentIn} />
         </div>
   
         <Stat
@@ -141,7 +137,7 @@ const Burn = ({ closeBtn, requestData }) => {
         />
       </>
     )
-  },[requestData, originalRequest, preFulfillData, fullfillmentIn, activeToken.pairToken.decimals, activeToken.pairToken.name, isProcessing, onClick, closeBtn])
+  },[requestData, originalRequest, preFulfillData, activeToken.pairToken.decimals, activeToken.pairToken.name, isProcessing, onClick, closeBtn])
 }
 
 export default Burn
