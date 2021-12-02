@@ -196,7 +196,7 @@ const config = {
       }
     },
     fulfillmentRequest: {
-      title: "You will get once the request is fulfilled",
+      title: "You will get",
       tooltip: {
         content: "tooltip text",
         left: "0",
