@@ -4,7 +4,6 @@ import Stat from "components/Stat";
 import Button from "components/Elements/Button";
 import Checkbox from "components/Checkbox";
 import Tooltip from "components/Tooltip";
-import CountdownComponent from "components/Countdown";
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
 import { toDisplayAmount } from '@coti-io/cvi-sdk';
@@ -13,6 +12,7 @@ import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
+import FulfillmentInTimer from 'components/pages/Arbitrage/FulfillmentInTimer';
 
 const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn into one view 
   const dispatch = useDispatch();
@@ -22,7 +22,6 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
   const activeToken = useActiveToken();
   const [collateralMint, setCollateralMint] = useState(false);
   const [preFulfillData, setPreFulfillData] = useState(null);
-  const [fullfillmentIn] = useState(10000);
   const [isProcessing, setIsProcessing] = useState();
   const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId)
   
@@ -97,9 +96,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
 
       <div className="stat-component">
         <h2>Fullfillment in</h2>
-        <CountdownComponent
-          lockedTime={fullfillmentIn}
-          className={"fullfill-countdown"} />
+        <FulfillmentInTimer fulfillmentIn={requestData.fulfillmentIn} />
       </div>
 
       <Stat
@@ -158,7 +155,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         buttonText="Cancel"
         onClick={closeBtn} />
     </>
-  ),[requestData, originalRequest, fullfillmentIn, preFulfillData, collateralMint, activeToken.decimals, activeToken.name, isProcessing, onClick, closeBtn])
+  ),[requestData, originalRequest, preFulfillData, collateralMint, activeToken.decimals, activeToken.name, isProcessing, onClick, closeBtn])
 }
 
 export default Mint

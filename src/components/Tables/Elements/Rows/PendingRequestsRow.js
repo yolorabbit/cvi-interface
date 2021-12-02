@@ -4,8 +4,8 @@ import RowItem from './RowItem';
 import Value from '../Values/Value';
 import ActionController from "components/Actions/ActionController";
 import arbitrageConfig from "config/arbitrageConfig";
-import Countdown from "components/Countdown";
 import moment from "moment";
+import FulfillmentInTimer from "components/pages/Arbitrage/FulfillmentInTimer";
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const isTablet = useIsTablet();
@@ -79,8 +79,8 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
             />
 
             <RowItem
-                 header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
-                content={<Countdown lockedTime={fulfillmentIn} showIfZero/>}
+                header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
+                content={<FulfillmentInTimer fulfillmentIn={fulfillmentIn} />}
             />
 
             {(!isTablet || isMobile) && <RowItem content={
