@@ -13,24 +13,26 @@
     }
 
     & img {
-        margin-right: 0.104vw;
+        margin-right: 0.208vw;
         width: 0.833vw;
         height: 0.833vw;
-
+        transform: translateY(0.156vw);
         @media (max-width: 1365px) {
-            margin-right: 0.147vw;  
+            margin-right: 0.294vw;  
             width: 1.172vw;
             height: 1.172vw;   
+            transform: translateY(0.22vw);
         }
 
         @media (max-width: 1024px) {
-            margin-right: 0.522vw;    
+            margin-right: 1.044vw;    
             width: 2.086vw;
             height: 2.086vw;     
+            transform: translateY(0);
         }
         
         @media (max-width: 767px) {
-            margin-right: 0.833vw;
+            margin-right: 1.666vw;
             width: 4.444vw;
             height: 4.444vw;
         }
