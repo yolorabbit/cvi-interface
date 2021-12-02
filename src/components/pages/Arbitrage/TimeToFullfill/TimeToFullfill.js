@@ -104,7 +104,7 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
           <Dropdown
             type="number"
             label="minutes"
-            dropdownOptions={getOptions(hoursDropdownValue === 0 ? (maxMinutes/60) : 0, hoursDropdownValue === maxHours ? 0 : (61-(maxMinutes/60)))}
+            dropdownOptions={getOptions(hoursDropdownValue === 0 ? maxMinutes < 60 ? maxMinutes : (maxMinutes/60) : 0, hoursDropdownValue === maxHours ? 0 : Math.floor((61-(maxMinutes/60))))}
             dropdownValue={minutesDropdownValue}
             setDropdownValue={setMinutesDropdownValue}
           />
