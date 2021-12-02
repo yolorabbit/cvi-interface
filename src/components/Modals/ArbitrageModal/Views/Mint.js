@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import Title from "components/Elements/Title";
 import Stat from "components/Stat";
 import Button from "components/Elements/Button";
@@ -15,20 +15,20 @@ import { addAlert } from 'store/actions';
 import config from 'config/config';
 
 const Mint = ({ closeBtn, requestData }) => {
-  const [collateralMint, setCollateralMint] = useState(false);
-  const {account} = useActiveWeb3React();
-  const { w3 } = useContext(appViewContext);
-  const activeToken = useActiveToken();
-  const [upFrontPayment] = useState(1000)
-  const [fullfillmentIn] = useState(27280000)
-  const [preFulfillData, setPreFulfillData] = useState(null)
-  const [amountToFullfill] = useState(1700)
   const dispatch = useDispatch();
   const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
+  const { w3 } = useContext(appViewContext);
+  const {account} = useActiveWeb3React();
+  const activeToken = useActiveToken();
+  const [collateralMint, setCollateralMint] = useState(false);
+  const [preFulfillData, setPreFulfillData] = useState(null);
+  const [fullfillmentIn] = useState(10000);
+  const [isProcessing, setIsProcessing] = useState();
   const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId)
   
-  const onClick = async() => {
+  const onClick = useCallback(async() => {
     try {
+      setIsProcessing(true);
       const mintAction = collateralMint ? "fulfillCollateralizedMint" : "fulfillMint";
       await w3?.tokens[activeToken.rel.volTokenKey][mintAction](originalRequest.requestId, {account});
       dispatch(addAlert({
@@ -47,21 +47,27 @@ const Mint = ({ closeBtn, requestData }) => {
       }));
     } finally {
       closeBtn();
+      setIsProcessing(false);
     }
-  }
+  }, [account, activeToken.rel.volTokenKey, closeBtn, collateralMint, dispatch, originalRequest.requestId, w3?.tokens]);
 
   useEffect(()=>{
+    if(!originalRequest) return;
+
     const preFulfill = async () => {
-      const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillMint(originalRequest)
-      // const { fulfillFees, fulfillFeesPercent, receive } = preFulfillRes;
-      console.log(preFulfillRes);
-      setPreFulfillData(preFulfillRes)
+      try {
+        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillMint(originalRequest);
+        setPreFulfillData(preFulfillRes);
+      } catch (error) {
+        console.log(error);
+        setPreFulfillData("N/A");
+      }
     }
+
     if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
-  },[w3, requestData, activeToken, originalRequest]);
+  },[w3, requestData, activeToken, originalRequest, closeBtn]);
 
   return useMemo(() => {
-
     return (
       <>
         <Title
@@ -69,6 +75,8 @@ const Mint = ({ closeBtn, requestData }) => {
           color="white"
           text={`Mint ETHVI tokens`}
         />
+
+        {(!requestData || !originalRequest || preFulfillData === "N/A") && <Stat title="Some error occurred." className="bold low" />}
   
         <Stat
           title="Amount"
@@ -79,33 +87,39 @@ const Mint = ({ closeBtn, requestData }) => {
         <Stat
           title="Up front payment"
           className="large-value bold"
-          value={upFrontPayment || "0"}
-          _suffix={activeToken.name}
+          value={requestData.upfrontPayment || "0"}
+          _suffix={requestData.symbol}
         />
-  
+
+        <Stat
+          title="Amount to fullfill"
+          className="large-value bold"
+          value={requestData.amount - requestData.upfrontPayment || "0"}
+          _suffix={requestData.symbol}
+        />
+
         <div className="stat-component">
-          <h2 >
-          Fullfillment in
-          </h2>
+          <h2>Fullfillment in</h2>
           <CountdownComponent
-          lockedTime={fullfillmentIn}
-          className={"fullfill-countdown"} />
+            lockedTime={fullfillmentIn}
+            className={"fullfill-countdown"} 
+          />
         </div>
   
         <Stat
           title="Time to fullfillment and penalty fees"
           className="large-value bold"
-          value={preFulfillData?.penaltyFeePercent.toString() || "-"}
-          format={`${preFulfillData?.penaltyFeePercent.toString() || "-"}%`}
+          value={preFulfillData}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(preFulfillData?.penaltyFeePercent.toString(), 4)}%`}
         />
   
         <Stat
           title="Mint fee"
-          className="large-value bold nomargin"
-          value={preFulfillData?.openFeePercent.toString() || "-"}
-          format={`${preFulfillData?.openFeePercent.toString() || "-"}%`}
+          className="large-value bold"
+          value={preFulfillData}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(preFulfillData?.openFeePercent.toString(), 4) || "-"}%`}
         />
-  
+
         <Checkbox
           onClick={() => setCollateralMint(!collateralMint)}
           title="Collateral mint"
@@ -116,19 +130,11 @@ const Mint = ({ closeBtn, requestData }) => {
   
         { collateralMint && <> 
             <Stat
-              title="Amount to fullfill"
-              className="large-value bold"
-              value={amountToFullfill || "0"}
-              format={`${amountToFullfill || "0"}`}
-              _suffix={activeToken.name}
-            />
-      
-            <Stat
               title="You will receive"
               className="large-value bold green"
-              value={toDisplayAmount(preFulfillData?.receive.toString(), 0) || "0"}
-              format={`${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), 18), 4) || "0"}`}
-              _suffix={" ETHVI-USDC-LP"}
+              value={preFulfillData}
+              format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.decimals), 4) || "0"}`}
+              _suffix={"ETHVI-USDC-LP"}
             />
           </>
         }
@@ -136,37 +142,36 @@ const Mint = ({ closeBtn, requestData }) => {
         <Stat
           name="estimatedMinted"
           className="large-value bold green"
-          value={toDisplayAmount(preFulfillData?.receive.toString(), 0) || "0"}
-          format={`${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), 18), 4) || "0"}`}
-          _suffix={activeToken.name}
+          value={preFulfillData}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.decimals), 4) || "0"}`}
+          _suffix={activeToken.name.toUpperCase()}
         />
 
         { collateralMint && 
           <p className="modal-note">
             Please note: you won't be able to withdraw your liquidity within the
-            next 24 hours. <br/>
+            next 36 hours. <br/>
             You can stake your ETHVI-USDC LP tokens to earn GOVI
             rewards.
           </p> 
         }
+
         <Button
           className="button arbitrage-button"
-          buttonText={"Fullfill"}
-          processing={false}
-          disabled={false}
+          buttonText="Fullfill"
+          disabled={isProcessing || !originalRequest || !preFulfillData || preFulfillData === "N/A"}
+          processing={isProcessing}
           onClick={onClick}
         />
+
         <Button
           className="button secondary arbitrage-button"
-          buttonText={"Cancel"}
-          processing={false}
-          disabled={false}
+          buttonText="Cancel"
           onClick={closeBtn}
         />
       </>
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[preFulfillData, collateralMint])
+  },[requestData, originalRequest, fullfillmentIn, preFulfillData, collateralMint, activeToken.decimals, activeToken.name, isProcessing, onClick, closeBtn])
 }
 
 export default Mint
