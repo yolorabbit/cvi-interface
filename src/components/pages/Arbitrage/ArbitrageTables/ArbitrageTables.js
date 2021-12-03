@@ -81,7 +81,7 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
 
     return useMemo(() => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
-        const data = unfulfilledRequests ? unfulfilledRequests.map(({
+        const data = w3 && unfulfilledRequests ? unfulfilledRequests.map(({
             event, id, requestId, requestType, submitFeesAmount, targetTimestamp, timestamp, tokenAmount,
         }) => {
             const type = arbitrageConfig.requestType[requestType].toLowerCase();
@@ -125,10 +125,13 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
             data={data}
             showPaginator
             customTableHeaders={!tableHeaders ? [] : Object.values(tableHeaders)}
+            labels={{
+                pending: arbitrageConfig.tablesInfo[activeView].tabs.pending.toLowerCase()
+            }}
         >
            <DataView />
         </DataController>
-    }, [activeTab, activeToken, unfulfilledRequests, lastBlockTime]) // eslint-disable-line
+    }, [w3, activeView, activeTab, unfulfilledRequests, activeToken, lastBlockTime]);
 }
 
 const HistoryTable = ({activeTab}) => {

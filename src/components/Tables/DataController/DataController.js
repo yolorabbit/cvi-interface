@@ -15,11 +15,11 @@ export const useDataController = () => {
     return context;
 }
 
-const DataController = ({children, data = [], subHeaders = {}, activeTab, authGuard, pageSize = 5, showPaginator, customTableHeaders, cb}) => {
+const DataController = ({children, data = [], subHeaders = {}, activeTab, authGuard, pageSize = 5, showPaginator, customTableHeaders, cb, labels}) => {
     const { activeView } = useContext(appViewContext);
     const [currentPage, setCurrentPage] = useState(1);
     const { account } = useActiveWeb3React();
-    const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? activeTab?.toLowerCase();
+    const activeTabLabel = stakingConfig.stakingConnectLabels?.[activeTab] ?? labels?.[activeTab?.toLowerCase()] ?? activeTab?.toLowerCase();
     const location = useLocation();
     
     useEffect(() => {
@@ -33,7 +33,6 @@ const DataController = ({children, data = [], subHeaders = {}, activeTab, authGu
     if(!activeTab) return null;
     if(location.pathname === config.routes.platform.path && activeView && (!platformConfig.headers?.[activeView]?.[activeTab] && !platformConfig.headers?.[activeTab])) return null;
     if(location.pathname === config.routes.staking.path && !activeView && !stakingConfig.headers?.[activeTab]) return null;
-
     const tableHeaders = customTableHeaders || (stakingViews?.[activeTab] ? Object.values(stakingConfig.headers?.[activeTab]) :  
         Object.values(platformConfig.headers?.[activeView]?.[activeTab]));
 
