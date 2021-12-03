@@ -142,7 +142,7 @@ const HistoryTable = ({activeTab}) => {
     return useMemo(() => {
         const tableHeaders = arbitrageConfig.tables[activeView][activeTab].headers;
         const historyData = arbitrage ? arbitrage.map(({
-            event, tokenAmount, mintedShortTokens, mintedTokens
+            event, tokenAmount, mintedShortTokens, mintedTokens, burnedTokens
         }) => {
             const fromToken = arbitrageConfig.requestType[event] === activeTabs.burn ? activeToken : activeToken.pairToken;
             const fromTokenLabel = fromToken.name.toUpperCase();
@@ -152,7 +152,7 @@ const HistoryTable = ({activeTab}) => {
             const amount = `${commaFormatted(customFixed(toDisplayAmount(tokenAmount, fromToken.decimals), fromToken.fixedDecimals))}`;
             const tokenlpName = `${fromToken.oracleId.toUpperCase()}-${fromToken.name.toUpperCase()}-LP`;
             const _mintedShortToken = commaFormatted(customFixedTokenValue(mintedShortTokens, fromToken.fixedDecimals, fromToken.lpTokensDecimals));
-            const receivedTokens = commaFormatted(customFixedTokenValue(mintedTokens, toToken.fixedDecimals, toToken.decimals));
+            const receivedTokens = commaFormatted(customFixedTokenValue(mintedTokens ?? burnedTokens, toToken.fixedDecimals, toToken.lpTokensDecimals));
 
             return {
                 type,
