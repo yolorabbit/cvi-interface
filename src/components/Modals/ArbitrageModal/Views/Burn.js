@@ -25,7 +25,7 @@ const Burn = ({ closeBtn, requestData }) => {
   const onClick = useCallback(async() => {
     try {
       setIsProcessing(true);
-      await w3?.tokens[activeToken.rel.volTokenKey].fulfillBurn(originalRequest.requestId, account);
+      await w3?.tokens[activeToken.rel.volTokenKey].fulfillBurn(originalRequest.requestId, {account});
       dispatch(addAlert({
         id: 'burn',
         eventName: "Burn - success",
@@ -47,12 +47,11 @@ const Burn = ({ closeBtn, requestData }) => {
   }, [account, activeToken.rel.volTokenKey, closeBtn, dispatch, originalRequest.requestId, w3?.tokens]);
 
   useEffect(()=>{
-    if(!originalRequest) return;
+    if(!originalRequest || !account) return;
 
     const preFulfill = async () => {
       try {
-        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest);
-        console.log(preFulfillRes);
+        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest, { account });
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);
@@ -61,7 +60,7 @@ const Burn = ({ closeBtn, requestData }) => {
     }
 
     if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
-  },[w3, requestData, activeToken, originalRequest, closeBtn]);
+  },[w3, requestData, activeToken, originalRequest, closeBtn, account]);
 
   return useMemo(() => {
     return (

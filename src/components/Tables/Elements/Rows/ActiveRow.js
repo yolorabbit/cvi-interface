@@ -1,5 +1,6 @@
 import platformConfig, { activeViews } from "config/platformConfig"
 import { stakingViews } from "config/stakingConfig"
+import { uniqueId } from "lodash"
 import { useMemo } from "react"
 import HistoryRow from "./HistoryRow"
 import IndexRow from "./IndexRow"
@@ -37,7 +38,7 @@ const ActiveRow = ({activeTab, isHeader, rowData}) => {
                 return <StakeAssetsRow rowData={rowData} isHeader={isHeader} />
             
             case 'pending':
-                return <PendingRequestsRow className={activeTab} rowData={rowData} isHeader={isHeader} />
+                return <PendingRequestsRow key={rowData.requestId || uniqueId("pending")} className={activeTab} rowData={rowData} isHeader={isHeader} />
 
             default:
                 return null;

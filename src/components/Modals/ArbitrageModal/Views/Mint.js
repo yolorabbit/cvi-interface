@@ -57,7 +57,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
     const preFulfill = async () => {
       try {
         const preFulfillAction = collateralMint ? "preFulfillCollateralizedMint" : "preFulfillMint";
-        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey][preFulfillAction](originalRequest);
+        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey][preFulfillAction](originalRequest, { account });
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);
@@ -66,7 +66,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
     }
 
     if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
-  },[w3, requestData, activeToken, originalRequest, closeBtn, collateralMint]);
+  },[w3, requestData, activeToken, originalRequest, closeBtn, collateralMint, account]);
 
   return useMemo(() => (
     <>
