@@ -3,8 +3,8 @@ import IndexStats from 'components/pages/Platform/IndexStats';
 import Graphs from 'components/pages/Platform/Graphs';
 import React, { useMemo } from 'react';
 import CommentsSection from '../CommentsSection';
-import './CviChartAndData.scss';
 import platformConfig from 'config/platformConfig';
+import './CviChartAndData.scss';
 
 const CviChartAndData = () => {
     

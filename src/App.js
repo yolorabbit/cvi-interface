@@ -5,15 +5,12 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import Platform from './components/pages/Platform';
-import Staking from './components/pages/Staking';
-import Arbitrage from './components/pages/Arbitrage';
 import HelpCenter from './components/pages/HelpCenter';
 import Footer from './components/Footer/Footer';
 import config from './config/config';
 import NotificationList from 'components/NotificationList';
 import Web3ReactManager from 'components/Web3ReactManager';
-import { useEffect, useMemo, useRef } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef } from 'react';
 import { ContractsContext } from 'contracts/ContractContext';
 import { useSelector } from 'react-redux';
 import ReactGA from 'react-ga';
@@ -22,6 +19,10 @@ import Home from 'components/pages/Home';
 import RestrictedModal from 'components/Modals/RestrictedModal';
 import MaintenanceModal from 'components/Modals/MaintenanceModal';
 import './App.scss';
+
+const Platform = lazy(() => import('./components/pages/Platform'));
+const Staking = lazy(() => import('./components/pages/Staking'));
+const Arbitrage = lazy(() => import('./components/pages/Arbitrage'));
 
 const App = () => {
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -74,14 +75,17 @@ const Routes = () => {
         <Navbar />
         <RestrictedModal />
         <MaintenanceModal />
-        <Switch>
-          <Route path={config.routes.arbitrage.path} component={Arbitrage} />
-          <Route path={config.routes.staking.path} component={Staking} />
-          <Route path={config.routes['help-center'].path} component={HelpCenter} />
-          <Route path={config.routes.platform.path} component={Platform} />
-          <Route path={config.routes.home.path} component={Home} />
-          <Redirect to="/" />
-        </Switch>
+        <Suspense fallback={<></>}>
+          <Switch>
+            <Route path={config.routes.arbitrage.path} component={Arbitrage} />
+            <Route path={config.routes.staking.path} component={Staking} />
+            <Route path={config.routes['help-center'].path} component={HelpCenter} />
+            <Route path={config.routes.platform.path} component={Platform} />
+            <Route path={config.routes.home.path} component={Home} />
+            <Redirect to="/" />
+          </Switch>
+        </Suspense>
+
         <Footer />
       </Router>
      </>

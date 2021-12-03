@@ -10,8 +10,9 @@ import ActiveSection from "./ActiveSection";
 import MainSection from "components/MainSection";
 import useCvi from 'components/Hooks/Cvi';
 import Statistics from "./Statistics";
-import { useActiveToken, useW3SDK } from "components/Hooks";
+import { useActiveToken } from "components/Hooks";
 import useArbitrageEvents from "components/Hooks/useArbitrageEvents";
+import useCviSdk from "components/Hooks/CviSdk";
 import "./Arbitrage.scss";
 
 const Arbitrage = () => {
@@ -24,7 +25,7 @@ const Arbitrage = () => {
     token: [activeToken.rel.volTokenKey]
   } : null;
 
-  const w3 = useW3SDK(w3Filters);
+  const w3 = useCviSdk(w3Filters);
   useArbitrageEvents(w3, activeToken);
   
   return useMemo(() => (

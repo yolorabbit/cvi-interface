@@ -1,4 +1,4 @@
-import { useInDOM, useW3SDK } from 'components/Hooks';
+import { useInDOM } from 'components/Hooks';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,6 +6,7 @@ import { setMigrationModalOpen } from 'store/actions';
 import MigrationModal from '.';
 import { useCallback } from 'react';
 import { toBN } from 'utils';
+import useCviSdk from 'components/Hooks/CviSdk';
 
 const MigrationModalToggle = () => {
     const isActiveInDOM = useInDOM();
@@ -14,7 +15,7 @@ const MigrationModalToggle = () => {
     const { migrationModalIsOpen, migrationModalInitiallized } = useSelector(({app}) => app);
     const [isProvidedLiquidity, setIsProvidedLiquidity] = useState();
   
-    const w3 = useW3SDK({
+    const w3 = useCviSdk({
         platformMigrator: ["CVOL-USDT-USDC-PlatformMigrator"]
     });
 

@@ -1,13 +1,13 @@
 import DataController from 'components/Tables/DataController';
-import Table from 'components/Tables/Table';
-import React, { useMemo } from 'react'
+import React, { lazy, Suspense, useMemo } from 'react'
 import { useSelector } from 'react-redux';
 import Stat from 'components/Stat';
 import IndexValue from './IndexValue';
-import './IndexStats.scss';
 import { useIsMobile } from 'components/Hooks';
 import config from 'config/config';
 import platformConfig from 'config/platformConfig';
+import './IndexStats.scss';
+const Table = lazy(() => import('components/Tables/Table'));
 
 const IndexStats = ({type}) => {
     return useMemo(() => {
@@ -53,7 +53,9 @@ const IndexsTable = () => {
             activeTab="index" 
             data={hasSomeVolInfo ? indexsList.filter(vol => vol?.index) : indexsList}
         >
-           <Table />
+           <Suspense fallback={<> </>}>
+                <Table />
+           </Suspense>
            {indexsInfo?.cvi?.time && <span className="last-update-date">{indexsInfo?.cvi?.time}</span> }
         </DataController>
     }, [indexsInfo, isMobile])

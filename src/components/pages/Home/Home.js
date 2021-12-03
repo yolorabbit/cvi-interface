@@ -4,8 +4,8 @@ import PlatformUsecase from "./PlatformUsecase";
 import { UseCase } from "./PlatformUsecase/PlatformUsecase";
 import Row from "components/Layout/Row";
 import useCvi from "components/Hooks/Cvi";
-import "./Home.scss";
 import CviChartAndData from "./CviChartAndData";
+import "./Home.scss";
 
 const Home = () => {
   useCvi();
