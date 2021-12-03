@@ -239,12 +239,12 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   }
 
   useEffect(()=>{
-    if(!contracts || !tokenRel) return
+    if(!contracts || !tokenRel || !web3Api || !web3Api.getAPYPerToken || !web3Api.getPoolSizeLiquidityMining) return
 
     let canceled = false;
     fetchData((cb)=>{
       if(canceled) return
-      cb()
+      cb();
     });
 
     return () => {

@@ -19,6 +19,7 @@ import Home from 'components/pages/Home';
 import RestrictedModal from 'components/Modals/RestrictedModal';
 import MaintenanceModal from 'components/Modals/MaintenanceModal';
 import './App.scss';
+import Layout from 'components/Layout/Layout';
 
 const Platform = lazy(() => import('./components/pages/Platform'));
 const Staking = lazy(() => import('./components/pages/Staking'));
@@ -75,7 +76,7 @@ const Routes = () => {
         <Navbar />
         <RestrictedModal />
         <MaintenanceModal />
-        <Suspense fallback={<></>}>
+        <Suspense fallback={<Layout className="app-loading"></Layout>}>
           <Switch>
             <Route path={config.routes.arbitrage.path} component={Arbitrage} />
             <Route path={config.routes.staking.path} component={Staking} />

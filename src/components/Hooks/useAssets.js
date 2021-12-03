@@ -1,7 +1,6 @@
 import { contractsContext } from "contracts/ContractContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useActiveWeb3React } from "./wallet";
-import stakingApi from 'contracts/apis/staking';
 import { toBN, toBNAmount } from 'utils';
 import stakingConfig from "config/stakingConfig";
 import { useSelector } from "react-redux";
@@ -10,6 +9,7 @@ import web3Api from "contracts/web3Api";
 import { useInDOM, useIsMount } from ".";
 import { useWeb3React } from '@web3-react/core';
 import config from "config/config";
+import stakingApi from 'contracts/apis/staking';
 
 const useAssets = (type) => {
     const { library } = useWeb3React(config.web3ProviderId);
