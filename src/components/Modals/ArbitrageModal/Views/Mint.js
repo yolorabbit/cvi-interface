@@ -118,15 +118,6 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         tooltip={<Tooltip type="question" left={30} maxWidth={400} minWidth={250} content={"Collateral Mint tooltip"} />}
         className="modal-checkbox" />
 
-      {collateralMint && <>
-        <Stat
-          title="You will receive"
-          className="large-value bold green"
-          value={preFulfillData}
-          format={(!preFulfillData?.shortReceive || preFulfillData === 'N/A') ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.shortReceive?.toString(), activeToken.decimals), 4) || "0"}`}
-          _suffix={"ETHVI-USDC-LP"} />
-      </>}
-
       <Stat
         name="estimatedReceivedTokens"
         className="large-value bold green"
@@ -135,13 +126,20 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         _suffix={activeToken.name.toUpperCase()}
         hideTooltip />
 
-      {collateralMint &&
+      {collateralMint && <>
+        <Stat
+          className="large-value bold green no-title"
+          value={preFulfillData}
+          format={(!preFulfillData?.shortReceive || preFulfillData === 'N/A') ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.shortReceive?.toString(), activeToken.decimals), 4) || "0"}`}
+          _suffix={"ETHVI-USDC-LP"} />
+
         <p className="modal-note">
           Please note: you won't be able to withdraw your liquidity within the
           next 36 hours.<br />
           You can stake your ETHVI-USDC LP tokens to earn GOVI
           rewards.
-        </p>}
+        </p>
+      </>}
 
       <Button
         className="button arbitrage-button"

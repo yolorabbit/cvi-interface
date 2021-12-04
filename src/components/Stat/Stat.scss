@@ -152,6 +152,10 @@
         }
     }
 
+    &.no-title {
+        justify-content: flex-end;
+    }
+
     & p {
         font-size: 0.938vw;
         color: white;
