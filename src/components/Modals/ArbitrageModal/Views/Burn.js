@@ -114,7 +114,7 @@ const Burn = ({ closeBtn, requestData }) => {
 
 
         <Stat
-          name="estimatedBurn"
+          name="estimatedReceivedTokens"
           className="large-value bold green"
           value={preFulfillData}
           format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.pairToken.decimals), 4) || "0"}`}

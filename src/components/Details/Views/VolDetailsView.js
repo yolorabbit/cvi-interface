@@ -78,7 +78,7 @@ const VolDetailsView = ({amount, delayFee}) => {
             />
 
             <Stat 
-                name="fulfillmentRequest"
+                name="estimatedReceivedTokens"
                 className="bold green no-padding"
                 title="You will get once the request is fulfilled" 
                 value={estimatedTokens === null ? null : customFixedTokenValue(estimatedTokens, toToken.fixedDecimals, toToken.decimals)} 

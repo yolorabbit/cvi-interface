@@ -195,10 +195,10 @@ const config = {
         mobileLeft: -40,
       }
     },
-    fulfillmentRequest: {
+    estimatedReceivedTokens: {
       title: "You will get",
       tooltip: {
-        content: "tooltip text",
+        content: "? - Estimated number of recieved tokens",
         left: "0",
         mobileLeft: -40,
       }

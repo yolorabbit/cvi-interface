@@ -128,7 +128,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
       </>}
 
       <Stat
-        name="fulfillmentRequest"
+        name="estimatedReceivedTokens"
         className="large-value bold green"
         value={preFulfillData}
         format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.decimals), 4) || "0"}`}
