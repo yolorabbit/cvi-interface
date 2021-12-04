@@ -14,7 +14,6 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
     const { 
         amount,
         symbol,
-        estimatedNumberOfTokens,
         submitTime,
         submitTimeToFulfillment,
         timeToFulfillmentFee,
@@ -74,11 +73,6 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
             />
 
             <RowItem
-                 header={arbitrageConfig.tables[type].pending.headers.estimatedNumberOfTokens}
-                content={<Value text={estimatedNumberOfTokens} />}
-            />
-
-            <RowItem
                 header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
                 content={<FulfillmentInTimer fulfillmentIn={fulfillmentIn} />}
             />
@@ -91,8 +85,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
             }
 
         </>
-    ), [estimatedNumberOfTokens,
-        fulfillmentController,
+    ), [fulfillmentController,
         submitTime,
         submitTimeToFulfillment,
         timeToFulfillmentFee,
