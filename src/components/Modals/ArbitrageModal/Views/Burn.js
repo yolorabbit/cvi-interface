@@ -5,7 +5,7 @@ import Button from "components/Elements/Button";
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
 import { toDisplayAmount } from '@coti-io/cvi-sdk';
-import { customFixed } from 'utils';
+import { commaFormatted, customFixed } from 'utils';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
@@ -102,14 +102,14 @@ const Burn = ({ closeBtn, requestData }) => {
           title="Time to fullfillment and penalty fees"
           className="large-value bold"
           value={preFulfillData}
-          format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(preFulfillData?.penaltyFeePercent.toString(), 4)}%`}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${commaFormatted(customFixed(preFulfillData?.penaltyFeePercent.toString(), 4))}%`}
         />
   
         <Stat
           title="Burn fee"
           className="large-value bold"
           value={preFulfillData}
-          format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(preFulfillData?.closeFeePercent.toString(), 4)}%`}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${commaFormatted(customFixed(preFulfillData?.closeFeePercent.toString(), 4))}%`}
         />
 
 
