@@ -65,7 +65,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.timeToFulfillmentFee}
-                content={<Value text={timeToFulfillmentFee} subText={symbol} />}
+                content={<Value text={timeToFulfillmentFee} />}
             />
 
             <RowItem

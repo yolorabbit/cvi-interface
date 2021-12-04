@@ -97,20 +97,23 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
             const submitTimeSubmitFeeDiff = moment.utc(targetTimestamp*1000).diff(timestamp*1000)
             const SubmitFeeLastBlockDiff = moment.utc(targetTimestamp*1000).diff(lastBlockTime*1000);
             const estimateTokens = w3.tokens[toToken.rel.volTokenKey][estimatedTokenFunctions[type]](toBN(tokenAmount).sub(advanceAmount));
+            const amountFixed = toDisplayAmount(tokenAmount, fromToken.decimals);
+            const fulfillmentFeeFixed = customFixed(toDisplayAmount(submitFeesAmount, fromToken?.decimals), fromToken.fixedDecimals);
+            const fulfillmentFeePercentage = (fulfillmentFeeFixed / amountFixed) * 100;
 
             return {
                 event,
                 id,
                 requestId,
                 type: requestTypeLabel,
-                amount: toDisplayAmount(tokenAmount, fromToken.decimals),
+                amount: amountFixed,
                 symbol: fromTokenName,
                 submitTime: timestamp,
                 submitTimeToFulfillment: {
                     text: moment.utc(moment.duration(submitTimeSubmitFeeDiff).asMilliseconds()).format("HH:mm"),
                     subText: "HH:MM"
                 },
-                timeToFulfillmentFee: commaFormatted(customFixed(toDisplayAmount(submitFeesAmount, fromToken?.decimals), fromToken.fixedDecimals)),
+                timeToFulfillmentFee: `${commaFormatted(customFixed(fulfillmentFeePercentage, 2))}%`,
                 upfrontPayment: commaFormatted(customFixed(toDisplayAmount(advanceAmount, fromToken.decimals), fromToken.fixedDecimals)),
                 estimatedNumberOfTokens: `${commaFormatted(customFixed(toDisplayAmount(estimateTokens, toToken.decimals), toToken.fixedDecimals))} ${toTokenName}`,
                 fulfillmentIn: moment.duration(SubmitFeeLastBlockDiff).asMilliseconds(),
