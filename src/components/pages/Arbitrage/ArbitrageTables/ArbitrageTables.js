@@ -146,7 +146,7 @@ const HistoryTable = ({activeTab}) => {
             const toToken = arbitrageConfig.requestType[event] === activeTabs.burn ? activeToken.pairToken : activeToken;
             const toTokenName = toToken?.name.toUpperCase();
             const type = upperFirst(arbitrageConfig.requestType[event]);
-            const amount = commaFormatted(customFixed(toDisplayAmount(tokenAmount, fromToken.decimals), fromToken.fixedDecimals));
+            const amount = commaFormatted(customFixedTokenValue(tokenAmount, fromToken.fixedDecimals, fromToken.decimals));
             const tokenlpName = `${fromToken.oracleId.toUpperCase()}-${fromToken.name.toUpperCase()} LP`;
             const _mintedShortToken = commaFormatted(customFixedTokenValue(mintedShortTokens, fromToken.fixedDecimals, fromToken.lpTokensDecimals));
             const receivedTokens = commaFormatted(customFixedTokenValue(mintedTokens ?? burnedTokens, toToken.fixedDecimals, toToken.lpTokensDecimals));
