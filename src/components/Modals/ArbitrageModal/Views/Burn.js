@@ -68,7 +68,7 @@ const Burn = ({ closeBtn, requestData }) => {
         <Title
           className="arbitrage-title"
           color="white"
-          text={`Burn ETHVI tokens`}
+          text={`Burn ${activeToken.name.toUpperCase()} tokens`}
         />
 
         {(!requestData || !originalRequest || preFulfillData === "N/A") && <Stat title="Some error occurred." className="bold low" />}
@@ -136,7 +136,7 @@ const Burn = ({ closeBtn, requestData }) => {
         />
       </>
     )
-  },[requestData, originalRequest, preFulfillData, activeToken.pairToken.decimals, activeToken.pairToken.name, isProcessing, onClick, closeBtn])
+  },[activeToken.name, activeToken.pairToken.decimals, activeToken.pairToken.name, requestData, originalRequest, preFulfillData, isProcessing, onClick, closeBtn])
 }
 
 export default Burn

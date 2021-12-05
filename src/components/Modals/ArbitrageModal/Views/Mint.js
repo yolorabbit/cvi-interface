@@ -73,7 +73,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
       <Title
         className="arbitrage-title"
         color="white"
-        text={`Mint ETHVI tokens`} />
+        text={`Mint ${activeToken.name.toUpperCase()} tokens`} />
 
       {(!requestData || !originalRequest || preFulfillData === "N/A") && <Stat title="Some error occurred." className="bold low" />}
 
