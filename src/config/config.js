@@ -203,6 +203,14 @@ const config = {
         mobileLeft: -40,
       }
     },
+    collateralMint: {
+      title: "Collateral mint",
+      tooltip: {
+        content: "The collateral mint option enables the user to mint ETHVOL tokens while providing liquidity to cover the value of the long ETHVI position that those minted ETHVOL tokens hold. The liquidity provided is displayed on the platform page under provide liquidity tab. By using collateral mint option user won't be subject to the premium fees.",
+        left: "0",
+        mobileLeft: -40,
+      }
+    }
   },
   migrationStepsTypes: {
     'start': 'start',

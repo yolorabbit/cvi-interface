@@ -113,9 +113,14 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
 
       <Checkbox
         onClick={() => setCollateralMint(!collateralMint)}
-        title="Collateral mint"
+        title={config.statisticsDetails.collateralMint.title}
         checked={collateralMint}
-        tooltip={<Tooltip type="question" left={30} maxWidth={400} minWidth={250} content={"Collateral Mint tooltip"} />}
+        tooltip={<Tooltip 
+          type="question" 
+          left={config.statisticsDetails.collateralMint.tooltip.left} 
+          mobileLeft={config.statisticsDetails.collateralMint.tooltip.mobileLeft} 
+          content={config.statisticsDetails.collateralMint.tooltip.content} 
+        />}
         className="modal-checkbox" />
 
       <Stat
