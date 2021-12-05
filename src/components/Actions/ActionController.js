@@ -56,9 +56,10 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
         balances={balances} 
         setIsOpen={setIsOpen}
         slippageTolerance={slippageTolerance}
+        requestData={requestData}
         cb={cb}
       />
-  }, [action, disabled, insufficientBalance, type, token, protocol, leverage, amount, setAmount, delayFee, isOpen, balances, slippageTolerance, cb])
+  }, [action, disabled, insufficientBalance, type, token, protocol, leverage, amount, setAmount, delayFee, isOpen, balances, slippageTolerance, requestData, cb])
 
   useEffect(() => {
     if(action) return;
@@ -69,7 +70,7 @@ const ActionController = ({action, requestData, type, disabled, amountLabel = "A
   }, [isOpen, activeView]);
 
   const getInnerModal = useCallback(() => {
-    switch (action) {
+    switch (action) { // @TODO: refactor it to be use in "PendingRequest component"
       case arbitrageActiveTabs.mint: return <Mint closeBtn={() => setIsOpen(false)} requestData={requestData} />
       case arbitrageActiveTabs.burn: return <Burn closeBtn={() => setIsOpen(false)} requestData={requestData} />
     
