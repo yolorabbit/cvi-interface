@@ -56,7 +56,7 @@ const VolDetailsView = ({amount, delayFee}) => {
        
         return <> 
             <Stat 
-                className="bold amount first-letter-cap"
+                className="bold amount first-letter-cap txt-align-end"
                 title={<><span>{activeView}&nbsp;</span> <span>amount</span></>} 
                 value={!amount ? "0" : amount} 
                 _suffix={tokenName} 
