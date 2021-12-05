@@ -177,20 +177,20 @@ const config = {
         mobileLeft: -40,
       }
     },
-    estimatedMinted: {
-      title: "Estimated number of minted tokens",
+    estimateMint: {
+      title: "You will get",
       className: "bold green",
       tooltip: {
-        content: "? - Estimated number of minted tokens",
+        content: "The number of ETHVOL tokens displayed is an estimated amount you will receive after fulfilling you request. Please note that fulfilling your request prior/after the specified target time will incur in time penalty fee that will reduce the amount of ETHVOL tokens you will receive",
         left: "0",
         mobileLeft: -40,
       }
     },
-    estimatedBurn: {
-      title: "Estimated number of recieved tokens",
+    estimateBurn: {
+      title: "You will get",
       className: "bold green",
       tooltip: {
-        content: "? - Estimated number of recieved tokens",
+        content: "The number of USDC tokens displayed is an estimated amount you will receive after fulfilling you request. Please note that fulfilling your request prior/after the specified target time will incur in time penalty fee that will reduce the amount of USDC tokens you will receive",
         left: "0",
         mobileLeft: -40,
       }

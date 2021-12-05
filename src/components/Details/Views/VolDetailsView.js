@@ -6,6 +6,7 @@ import { appViewContext } from "components/Context";
 import debounce from "lodash.debounce";
 import { customFixedTokenValue, getTimeDurationFormatted, toBN, toBNAmount, toDisplayAmount } from "utils";
 import { MAX_PERCENTAGE } from "contracts/utils";
+import config from "config/config";
 
 export const estimatedTokenFunctions = {
     [arbitrageActiveTabs.mint]: "estimateMint",
@@ -54,7 +55,6 @@ const VolDetailsView = ({amount, delayFee}) => {
         }
     }, [amount, delayFee.delayTime, loadDataDebounce, tokenAmount, w3]);
     
-    
     return useMemo(() => {
         const tokenName = fromToken?.name?.toUpperCase();
        
@@ -82,7 +82,8 @@ const VolDetailsView = ({amount, delayFee}) => {
             />
 
             <Stat 
-                name="estimatedReceivedTokens"
+                name={estimatedTokenFunctions[activeView]}
+                actEthvol={config.volatilityTokenKey.ethvol !== toToken.name}
                 className="bold green no-padding txt-align-end"
                 title="You will get once the request is fulfilled" 
                 value={estimatedTokens === null ? null : customFixedTokenValue(estimatedTokens, toToken.fixedDecimals, toToken.decimals)} 

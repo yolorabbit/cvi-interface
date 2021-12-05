@@ -119,7 +119,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         className="modal-checkbox" />
 
       <Stat
-        name="estimatedReceivedTokens"
+        name="estimateMint"
         className="large-value bold green"
         value={preFulfillData}
         format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.decimals), 4) || "0"}`}
