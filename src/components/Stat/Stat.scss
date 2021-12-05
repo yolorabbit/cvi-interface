@@ -156,6 +156,23 @@
         justify-content: flex-end;
     }
 
+    &.txt-align-end {
+        & p {
+        text-align: right;
+        margin-inline-start: 1.25vw;
+            @media (max-width: 1365px){
+                margin-inline-start: 1.758vw;
+            }
+            @media (max-width: 1024px){
+                margin-inline-start: 3.129vw;
+            }
+            @media (max-width: 767px){
+                text-align: unset;
+                margin-inline-start: unset;
+            }
+        }
+    }
+
     & p {
         font-size: 0.938vw;
         color: white;
