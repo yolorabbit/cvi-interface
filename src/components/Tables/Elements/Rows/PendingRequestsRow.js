@@ -40,17 +40,15 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
     const RowData = useMemo(() => (
         <>
-            {(!isTablet && !isMobile) && 
-            <>
-                <RowItem
-                    header={arbitrageConfig.tables[type].pending.headers.type}
-                    content={<Value className="uppercase-first-letter" text={type} />}
-                />
-                <RowItem
-                    header={arbitrageConfig.tables[type].pending.headers.amount}
-                    content={<Value text={amount} subText={symbol}/>}
-                />
-            </>}
+            {(!isTablet && !isMobile) && <RowItem
+                header={arbitrageConfig.tables[type].pending.headers.type}
+                content={<Value className="uppercase-first-letter" text={type} />}
+            />}
+
+            <RowItem
+                header={arbitrageConfig.tables[type].pending.headers.amount}
+                content={<Value text={amount} subText={symbol}/>}
+            />
 
             <RowItem
                  header={arbitrageConfig.tables[type].pending.headers.submitTime}
@@ -72,10 +70,10 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 content={<Value text={`${upfrontPayment} ${symbol}`} />}
             />
 
-            <RowItem
+            {!isTablet && <RowItem
                 header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
                 content={<FulfillmentInTimer fulfillmentIn={fulfillmentIn} />}
-            />
+            />}
 
             {(!isTablet || isMobile) && <RowItem content={
                 <div className="row-actions-wrapper">
@@ -98,19 +96,12 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         isMobile]);
 
     if (isHeader) {
-        return  <RowItem
+        return <RowItem
                 type={type}
                 content={
                     <>
-                        <Value className="uppercase-first-letter" text={type} subText={
-                            <span className="margin-inline-start">
-                                <b>{amount}&nbsp;</b>
-                                <span>{symbol}</span>
-                           </span>
-                            }/>
-                        <div className="row-actions-wrapper">
-                           {isTablet && !isMobile && fulfillmentController}
-                        </div>
+                        <Value className="uppercase-first-letter" text={type} />
+                        <FulfillmentInTimer fulfillmentIn={fulfillmentIn} />
                     </>
                 }
             />
