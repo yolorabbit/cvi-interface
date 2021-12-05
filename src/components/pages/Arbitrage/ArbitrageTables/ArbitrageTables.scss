@@ -1,4 +1,24 @@
 .arbitrage-tables-component {
+  & .expand-list-component {
+    &.history {
+      & .expanded {
+        & .expand-component__expanded {
+          @media (max-width: 767px) {
+            padding-top: 5.556vw;
+          }
+          & .row-item-component  {
+            @media (max-width: 767px) {
+              flex: 100%;
+              &:nth-child(1n) {
+                text-align: left;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   & .table-component {
     &.history {
       table-layout: auto;
