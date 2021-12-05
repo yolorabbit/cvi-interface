@@ -17,7 +17,7 @@
         }
     }
 
-    & b, & span, & div {
+    & b, & span, & div, &.no-value {
         font-size: 0.729vw;
 
         @media (max-width: 1365px) {

@@ -6,7 +6,7 @@ import Coin from './Coin';
 const Value = ({className, text, header, subText, prefix, bottomText, protocol, format, progressBarPercents, coin, showData = true}) => {
     return useMemo(() => {
         return (
-            <div className={`value-component ${className ?? ''}`}>
+            <div className={`value-component ${className ?? ''} ${text ? '' : ' no-value'}`}>
                 {!showData ? <span>-</span> :
                     <>
                         {header && <h5>{header}</h5>} 
