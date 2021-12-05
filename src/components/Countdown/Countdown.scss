@@ -4,7 +4,7 @@
     
     @media (max-width: 1024px) {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
     }
 
     @media (max-width: 767px) { 
@@ -54,14 +54,14 @@
         
         @media (max-width: 767px) {
             margin-right: 0.733vw;
-            font-size: 2.778vw; 
+            font-size: 3.333vw; 
             margin-top: auto;      
         }
     }
 
     & small {
         font-size: 0.521vw;
-
+        margin: auto 0;
         @media (max-width: 1365px) {
             font-size: 0.733vw;        
         }
@@ -71,8 +71,7 @@
         }
         
         @media (max-width: 767px) {
-            font-size: 1.944vw;     
-            margin-top: auto;
+            font-size: 2.222vw;     
         }
     }
 }
