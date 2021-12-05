@@ -19,6 +19,7 @@ const FulfillmentInTimer = ({ fulfillmentIn, actionType, setActionType }) => {
                 lockedTime={_lockedTime} 
                 isExpired={_lockedTime >= -twelveHours}
                 showIfZero 
+                showSeconds
             />
     }, [_lockedTime]);
 }

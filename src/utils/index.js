@@ -10,12 +10,16 @@ import { actionConfirm } from "store/actions/events";
 
 export const gas = config.isMainnet ? { } : { };
 
-export const getTimeDurationFormatted = (lockedTime) => {
+export const getTimeDurationFormatted = (lockedTime, showSeconds) => {
     const isNegativeTime = lockedTime < 0;
-    const minutesDuration = moment.duration(lockedTime).asMinutes();
-    const hours = parseInt(Math.abs(minutesDuration) / 60);
-    const minutes = parseInt(Math.abs(minutesDuration) % 60);
-    const timeDurationFormatted = `${isNegativeTime ? '-' : ''}${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
+    const secondsDuration = moment.duration(lockedTime).asSeconds();
+    const hours = parseInt(Math.abs(secondsDuration) / 60 / 60);
+    const minutes = parseInt((Math.abs(secondsDuration) / 60) % 60);
+    let seconds;
+    if(showSeconds) {
+        seconds = parseInt((Math.abs(secondsDuration) % 60));
+    }
+    const timeDurationFormatted = `${isNegativeTime ? '-' : ''}${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes}` : minutes}${seconds !== undefined ? `:${seconds < 10 ? `0${seconds}` : seconds}` : ''}`;
     return timeDurationFormatted;
 };
 

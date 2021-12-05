@@ -49,22 +49,22 @@ export const useIsLockedTime = (start = true) => {
     return _lockedTime;
 }
 
-export const CountdownComponent = ({ lockedTime, className, showIfZero, isExpired}) => {
+export const CountdownComponent = ({ lockedTime, className, showIfZero, showSeconds, isExpired }) => {
     return useMemo(() => {
         if(lockedTime === "N/A" || !lockedTime) return null;
         return <div className={`count-down-component ${className ?? ''}`}>
             {lockedTime && lockedTime > 0 ?
             <> 
                 <img src={require('../../images/icons/processing.svg').default} alt="processing" /> 
-                <b>{getTimeDurationFormatted(lockedTime)}</b> 
-                <small>HH:MM</small>
+                <b>{getTimeDurationFormatted(lockedTime, showSeconds)}</b> 
+                <small>HH:MM{showSeconds && ":SS"}</small>
             </>
             : (showIfZero && lockedTime < 0) ?
             isExpired ?
             <> 
                 <img src={require('../../images/icons/processing-negative.svg').default} alt="processing" /> 
-                <b>{getTimeDurationFormatted(lockedTime)}</b> 
-                <small>HH:MM</small>
+                <b>{getTimeDurationFormatted(lockedTime, showSeconds)}</b> 
+                <small>HH:MM{showSeconds && ":SS"}</small>
             </> :
             <> 
                 <img src={require('../../images/icons/processing-expired.svg').default} alt="expired" /> 
@@ -73,7 +73,7 @@ export const CountdownComponent = ({ lockedTime, className, showIfZero, isExpire
             : null
             }  
         </div>
-    }, [lockedTime, className, showIfZero, isExpired])
+    }, [lockedTime, className, showIfZero, isExpired, showIfZero])
 }
 
 export default CountdownComponent;
