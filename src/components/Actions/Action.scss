@@ -281,7 +281,7 @@ button {
 
 .modal {
     &__container {
-        & .sell-component, & .withdraw-component, & .unstake-component, & .stake-component, & .fulfill-component {
+        & .sell-component, & .withdraw-component, & .unstake-component, & .stake-component, & .pending-request-component {
             &__container {
                 display: flex;
                 flex-direction: column;
@@ -347,7 +347,7 @@ button {
 }
 
 
-.sell-component, .withdraw-component, .unstake-component, .stake-component, .migrate-component, .fulfill-component  {
+.sell-component, .withdraw-component, .unstake-component, .stake-component, .migrate-component, .pending-request-component  {
     height: inherit;
     vertical-align: middle;
     
@@ -403,6 +403,13 @@ button {
             }
         }
     }
+
+    &.liquidate {
+        & .pending-request-component__container--button {
+            background-color: #264fa1;
+        }
+    }
+    
 }
 
 .migrate-component {

@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import arbitrageConfig from "config/arbitrageConfig";
 import SubmitBurn from "./SubmitBurn";
 import SubmitMint from "./SubmitMint";
-import Fulfill from "./Fulfill";
+import PendingRequest from "./PendingRequest";
 
 const ArbitrageActions = () => {
     const { type } = useActionController();
@@ -12,8 +12,11 @@ const ArbitrageActions = () => {
         switch(type) {
             case arbitrageConfig.actionsConfig.burn.key: 
                 return <SubmitBurn />
+            
             case arbitrageConfig.actionsConfig.fulfill.key:
-                return <Fulfill />
+            case arbitrageConfig.actionsConfig.liquidate.key:
+                return <PendingRequest />
+
             default:
                 return <SubmitMint />
         }

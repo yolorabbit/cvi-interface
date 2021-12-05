@@ -6,7 +6,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { getTimeDurationFormatted } from 'utils';
 import './Countdown.scss';
 
-export const twelveHours = 43200000;
 
 export const useTimer = ({ timerDuration, setTimerDuration, start = true, stopPoint = 0, step = 1000}) => {
     const _lockedDurationTimer = useRef();
@@ -50,7 +49,7 @@ export const useIsLockedTime = (start = true) => {
     return _lockedTime;
 }
 
-export const CountdownComponent = ({ lockedTime, className, showIfZero }) => {
+export const CountdownComponent = ({ lockedTime, className, showIfZero, isExpired}) => {
     return useMemo(() => {
         if(lockedTime === "N/A" || !lockedTime) return null;
         return <div className={`count-down-component ${className ?? ''}`}>
@@ -61,7 +60,7 @@ export const CountdownComponent = ({ lockedTime, className, showIfZero }) => {
                 <small>HH:MM</small>
             </>
             : (showIfZero && lockedTime < 0) ?
-            (lockedTime > -twelveHours) ?
+            isExpired ?
             <> 
                 <img src={require('../../images/icons/processing-negative.svg').default} alt="processing" /> 
                 <b>{getTimeDurationFormatted(lockedTime)}</b> 
@@ -74,7 +73,7 @@ export const CountdownComponent = ({ lockedTime, className, showIfZero }) => {
             : null
             }  
         </div>
-    }, [lockedTime, className, showIfZero])
+    }, [lockedTime, className, showIfZero, isExpired])
 }
 
 export default CountdownComponent;

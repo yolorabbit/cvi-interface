@@ -150,6 +150,9 @@ const arbitrageConfig = {
     },
     "fulfill": {
       key: "fulfill"
+    },
+    "liquidate": {
+      key: "liquidate",
     }
   },
   tables: {

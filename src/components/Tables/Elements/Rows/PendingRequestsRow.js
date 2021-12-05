@@ -1,5 +1,5 @@
 import { useIsMobile, useIsTablet } from "components/Hooks";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import RowItem from './RowItem';
 import Value from '../Values/Value';
 import ActionController from "components/Actions/ActionController";
@@ -8,6 +8,7 @@ import moment from "moment";
 import FulfillmentInTimer from "components/pages/Arbitrage/FulfillmentInTimer";
 
 const PendingRequestsRow = ({ rowData, isHeader, className }) => {
+    const [actionType, setActionType] = useState(arbitrageConfig.actionsConfig.fulfill.key);
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     
@@ -32,11 +33,11 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         return <ActionController
             action={type}
             isModal
-            type={arbitrageConfig.actionsConfig.fulfill.key}
+            type={actionType}
             requestData={rowData}
             disabled={lastBlockTime ? isLocked : true}
         />
-    }, [rowData, type, lastBlockTime, isLocked]);
+    }, [type, actionType, rowData, lastBlockTime, isLocked]);
 
     const RowData = useMemo(() => (
         <>
@@ -72,7 +73,11 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
 
             {!isTablet && <RowItem
                 header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
-                content={<FulfillmentInTimer fulfillmentIn={fulfillmentIn} />}
+                content={<FulfillmentInTimer 
+                    fulfillmentIn={fulfillmentIn} 
+                    actionType={actionType} 
+                    setActionType={setActionType}
+                />}
             />}
 
             {(!isTablet || isMobile) && <RowItem content={
@@ -93,7 +98,8 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         upfrontPayment,
         fulfillmentIn,
         isTablet,
-        isMobile]);
+        isMobile,
+        actionType]);
 
     if (isHeader) {
         return <RowItem
@@ -101,7 +107,11 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 content={
                     <>
                         <Value className="uppercase-first-letter" text={type} />
-                        <FulfillmentInTimer fulfillmentIn={fulfillmentIn} />
+                        <FulfillmentInTimer 
+                            fulfillmentIn={fulfillmentIn} 
+                            actionType={actionType} 
+                            setActionType={setActionType} 
+                        />
                     </>
                 }
             />
