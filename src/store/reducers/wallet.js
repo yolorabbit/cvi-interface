@@ -18,7 +18,10 @@ const setData = (state, {view, data, isUpdate, existKey = "transactionHash"}) =>
     }
 
     if(state[view]) {
-        return { 
+        return data.length < state[view].length ? {
+            ...state,
+            [view]: [...data]
+        } : { 
             ...state,
             [view]: uniqWith(state[view].concat(data), isEqual).sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1)
         }
