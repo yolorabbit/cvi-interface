@@ -5,6 +5,7 @@ import { activeTabs as arbitrageActiveTabs } from "config/arbitrageConfig";
 import { appViewContext } from "components/Context";
 import debounce from "lodash.debounce";
 import { customFixedTokenValue, getTimeDurationFormatted, toBN, toBNAmount, toDisplayAmount } from "utils";
+import { MAX_PERCENTAGE } from "contracts/utils";
 
 export const estimatedTokenFunctions = {
     [arbitrageActiveTabs.mint]: "estimateMint",
@@ -21,9 +22,12 @@ const VolDetailsView = ({amount, delayFee}) => {
 
     const loadData = useCallback(async () => {
         try {
+            const MIN_REQUEST_FEE = toBN("30");
             const maxFees = await w3.tokens[fromToken.rel.volTokenKey].maxSubmitFees(tokenAmount, delayFee.delayTime);
             setMaxSubmitFees(toDisplayAmount(maxFees, fromToken.decimals));
-            const estimateTokens = w3.tokens[fromToken.rel.volTokenKey][estimatedTokenFunctions[activeView]](tokenAmount.sub(maxFees));
+            const _delayFee = await w3.tokens[fromToken.rel.volTokenKey].calculateTimeDelayFee(delayFee.delayTime);
+            const estimateSubmitFee = tokenAmount.mul(toBN(toBN(_delayFee * 100).add(MIN_REQUEST_FEE))).div(toBN(MAX_PERCENTAGE));
+            const estimateTokens = w3.tokens[fromToken.rel.volTokenKey][estimatedTokenFunctions[activeView]](tokenAmount.sub(estimateSubmitFee));
             setEstimatedTokens(estimateTokens);
         } catch (error) {
             console.log(error);

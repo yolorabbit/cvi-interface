@@ -23,7 +23,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
   const [collateralMint, setCollateralMint] = useState(false);
   const [preFulfillData, setPreFulfillData] = useState(null);
   const [isProcessing, setIsProcessing] = useState();
-  const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId)
+  const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId);
   
   const onClick = useCallback(async() => {
     try {
