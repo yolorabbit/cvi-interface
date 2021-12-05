@@ -8,9 +8,9 @@ const initialState = {
     unfulfilledRequests: null
 };
 
-const setData = (state, {view, data, isUpdate}) => {
+const setData = (state, {view, data, isUpdate, existKey = "transactionHash"}) => {
     if(isUpdate) {
-        const txExist = state[view]?.some((event)=> event.transactionHash === data.transactionHash);
+        const txExist = state[view]?.some((event)=> event[existKey] === data[existKey]);
         return txExist ? state : {
             ...state,
             [view]: [data, ...state[view] ?? []]
@@ -30,17 +30,9 @@ const setData = (state, {view, data, isUpdate}) => {
     }
 }
 
-const setUnfulfilledRequests = (state, action) => {
-    return {
-        ...state,
-        unfulfilledRequests: action.isUpdate ? [action.data].concat(state.unfulfilledRequests) : action.data
-    }
-}
-
 export const walletReducer = (state = initialState, action) => {
     switch ( action.type ) {
         case actionTypes.SET_DATA: return setData(state, action)
-        case actionTypes.SET_UNFULFILLED_REQUEST: return setUnfulfilledRequests(state, action)
         default:
             return state;
     }

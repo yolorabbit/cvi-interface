@@ -11,7 +11,6 @@ export const UPDATE_VOL_INFO = "UPDATE_VOL_INFO";
 
 // WALLET 
 export const SET_DATA = 'SET_DATA';
-export const SET_UNFULFILLED_REQUEST = 'SET_UNFULFILLED_REQUEST';
 
 //EVENTS
 export const ADD_EVENT = 'ADD_EVENT';

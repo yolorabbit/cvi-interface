@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { setData, setUnfulfilledRequests } from 'store/actions/wallet';
+import { setData } from 'store/actions/wallet';
 import { useActiveWeb3React } from '../wallet';
 
 const useArbitrageEvents = (w3, activeToken) => {
@@ -23,7 +23,7 @@ const useArbitrageEvents = (w3, activeToken) => {
   const fetchUnfulfilledRequests = useCallback(async () => {
     try {
       const unfulfilledRequests = await w3?.tokens[volTokenKey].getUnfulfilledRequests({account});
-      dispatch(setUnfulfilledRequests(unfulfilledRequests));
+      dispatch(setData("unfulfilledRequests", unfulfilledRequests));
     } catch (error) {
       console.log(error);
     }
@@ -72,7 +72,7 @@ const useArbitrageEvents = (w3, activeToken) => {
       try {
         const lastRequest = await w3?.tokens[volTokenKey].getUnfulfilledRequests({requestId, account});
         if(!lastRequest?.length) return;
-        dispatch(setUnfulfilledRequests(lastRequest[0], true));
+        dispatch(setData("unfulfilledRequests", lastRequest[0], true, "requestId"));
       } catch (error) {
         console.log(error);
       }
@@ -92,7 +92,8 @@ const useArbitrageEvents = (w3, activeToken) => {
     if(!!longTokenFulfillRequestEvents?.length) {
       const lastEvent = longTokenFulfillRequestEvents[longTokenFulfillRequestEvents.length-1];
       const unfulfilledFiltered = unfulfilledRequests.filter(({requestId}) => lastEvent.requestId !== requestId);
-      dispatch(setUnfulfilledRequests(unfulfilledFiltered));
+      dispatch(setData("unfulfilledRequests", unfulfilledFiltered));
+
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenEvents?.FulfillRequest?.events?.length]);
@@ -103,7 +104,7 @@ const useArbitrageEvents = (w3, activeToken) => {
     if(!!longTokenLiquidateRequestEvents?.length) {
       const lastEvent = longTokenLiquidateRequestEvents[longTokenLiquidateRequestEvents.length-1];
       const unfulfilledFiltered = unfulfilledRequests.filter(({requestId}) => lastEvent.requestId !== requestId);
-      dispatch(setUnfulfilledRequests(unfulfilledFiltered));
+      dispatch(setData("unfulfilledRequests", unfulfilledFiltered));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenEvents?.LiquidateRequest?.events?.length]);
