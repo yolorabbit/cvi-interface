@@ -83,7 +83,7 @@ const VolDetailsView = ({amount, delayFee}) => {
 
             <Stat 
                 name={estimatedTokenFunctions[activeView]}
-                actEthvol={config.volatilityTokenKey.ethvol !== toToken.name}
+                actEthvol={config.volatilityTokenKey.ethvol === toToken.name}
                 className="bold green no-padding txt-align-end"
                 title="You will get once the request is fulfilled" 
                 value={estimatedTokens === null ? null : customFixedTokenValue(estimatedTokens, toToken.fixedDecimals, toToken.decimals)} 

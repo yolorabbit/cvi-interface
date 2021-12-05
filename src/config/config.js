@@ -181,7 +181,7 @@ const config = {
       title: "You will get",
       className: "bold green",
       tooltip: {
-        content: "The number of ETHVOL tokens displayed is an estimated amount you will receive after fulfilling you request. Please note that fulfilling your request prior/after the specified target time will incur in time penalty fee that will reduce the amount of ETHVOL tokens you will receive",
+        content: "The number of CVOL tokens displayed is an estimated amount you will receive after fulfilling you request. Please note that fulfilling your request prior/after the specified target time will incur in time penalty fee that will reduce the amount of CVOL tokens you will receive",
         left: "0",
         mobileLeft: -40,
       }

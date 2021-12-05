@@ -10,7 +10,7 @@ const Stat = ({actEthvol, actLowRules, name, hideTooltip, prefix = "", _suffix, 
     content = actLowRules ? content.replace("80","65") : content;
     content = actEthvol ? content.replaceAll("CVI", "ETHVI") : content;
     content = actEthvol ? content.replaceAll("200", "220") : content;
-    content = actEthvol ? content.replaceAll("ETHVOL", "CVOL") : content;
+    content = actEthvol ? content.replaceAll("CVOL", "ETHVOL") : content;
 
     return (
         <div className={`stat-component ${(format && format?.length >= 14) || (!format && value?.length >= 14) ? 'large-value' : ''} ${className ?? ''} ${_className ?? ''} ${values !== "N/A" && values?.length > 0 ? 'multiline' : ''}`}>
