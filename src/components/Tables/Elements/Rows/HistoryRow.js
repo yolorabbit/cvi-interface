@@ -32,22 +32,20 @@ const HistoryRow = ({rowData, isHeader}) => {
     }, [rowData, activeView, headers]);
 
     if(isHeader) {
-        return <>
-            {rowData.date && <RowItem content={<Value text={rowData.date} /> } />}
-            {(rowData.type.toLowerCase() === arbitrageConfig.requestType[rowData.type]) ?
-            <RowItem
-                type={rowData.type}
-                content={
-                    <Value className="uppercase-first-letter" text={rowData.type} subText={
-                        <span className="margin-inline-start">
-                            <b>{rowData.amount}&nbsp;</b>
-                        </span>
-                    }/>
-                }
-            /> : 
-            <RowItem content={<Value text={rowData.type} /> } />
-            }
-        </>
+        return arbitrageConfig.requestType[rowData.type] ?
+            <> 
+                <RowItem
+                    type={rowData.type}
+                    content={<Value className="uppercase-first-letter" text={rowData.type} />} 
+                />
+                <RowItem
+                    content={<Value text={rowData.amount} />}
+                />
+            </> : <> 
+                <RowItem content={<Value text={rowData.date} />} />
+                <RowItem content={<Value text={rowData.type} />} />
+            </>
+        
     }
 
     return isTablet ? RowData : <tr>
