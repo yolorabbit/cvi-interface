@@ -92,16 +92,16 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
             const advanceAmount = toBN(maxFeeAmount).add(toBN(timeDelayFeeAmount));
             const submitTimeSubmitFeeDiff = moment.utc(targetTimestamp*1000).diff(timestamp*1000)
             const SubmitFeeLastBlockDiff = moment.utc(targetTimestamp*1000).diff(lastBlockTime*1000);
-            const amountFixed = toDisplayAmount(tokenAmount, fromToken.decimals);
+            const amountDisplay = toDisplayAmount(tokenAmount, fromToken.decimals);
             const fulfillmentFeeFixed = customFixed(toDisplayAmount(submitFeesAmount, fromToken?.decimals), fromToken.fixedDecimals);
-            const fulfillmentFeePercentage = (fulfillmentFeeFixed / amountFixed) * 100;
+            const fulfillmentFeePercentage = (fulfillmentFeeFixed / amountDisplay) * 100;
 
             return {
                 event,
                 id,
                 requestId,
                 type: requestTypeLabel,
-                amount: amountFixed,
+                amount: commaFormatted(customFixed(amountDisplay, fromToken.fixedDecimals)),
                 symbol: fromTokenName,
                 submitTime: timestamp,
                 submitTimeToFulfillment: {
@@ -146,8 +146,8 @@ const HistoryTable = ({activeTab}) => {
             const toToken = arbitrageConfig.requestType[event] === activeTabs.burn ? activeToken.pairToken : activeToken;
             const toTokenName = toToken?.name.toUpperCase();
             const type = upperFirst(arbitrageConfig.requestType[event]);
-            const amount = `${commaFormatted(customFixed(toDisplayAmount(tokenAmount, fromToken.decimals), fromToken.fixedDecimals))}`;
-            const tokenlpName = `${fromToken.oracleId.toUpperCase()}-${fromToken.name.toUpperCase()}-LP`;
+            const amount = commaFormatted(customFixed(toDisplayAmount(tokenAmount, fromToken.decimals), fromToken.fixedDecimals));
+            const tokenlpName = `${fromToken.oracleId.toUpperCase()}-${fromToken.name.toUpperCase()} LP`;
             const _mintedShortToken = commaFormatted(customFixedTokenValue(mintedShortTokens, fromToken.fixedDecimals, fromToken.lpTokensDecimals));
             const receivedTokens = commaFormatted(customFixedTokenValue(mintedTokens ?? burnedTokens, toToken.fixedDecimals, toToken.lpTokensDecimals));
 
