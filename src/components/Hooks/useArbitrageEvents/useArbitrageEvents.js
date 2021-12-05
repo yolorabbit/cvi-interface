@@ -99,7 +99,7 @@ const useArbitrageEvents = (w3, activeToken) => {
   }, [tokenEvents?.FulfillRequest?.events?.length]);
 
   useEffect(()=>{
-    if(!events || !tokenEvents?.LiquidateRequest|| !w3?.tokens) return;
+    if(!events || !tokenEvents?.LiquidateRequest|| !w3?.tokens || !unfulfilledRequests) return;
     const longTokenLiquidateRequestEvents = events[volTokenKey]?.LiquidateRequest?.events;
     if(!!longTokenLiquidateRequestEvents?.length) {
       const lastEvent = longTokenLiquidateRequestEvents[longTokenLiquidateRequestEvents.length-1];

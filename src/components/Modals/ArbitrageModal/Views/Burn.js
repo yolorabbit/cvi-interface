@@ -5,12 +5,13 @@ import Button from "components/Elements/Button";
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
 import { toDisplayAmount } from '@coti-io/cvi-sdk';
-import { commaFormatted, customFixed } from 'utils';
+import { commaFormatted, customFixed, toBN } from 'utils';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
 import FulfillmentInTimer from 'components/pages/Arbitrage/FulfillmentInTimer';
+import { MAX_PERCENTAGE } from 'contracts/utils';
 
 const Burn = ({ closeBtn, requestData }) => {
   const dispatch = useDispatch();
@@ -52,6 +53,7 @@ const Burn = ({ closeBtn, requestData }) => {
     const preFulfill = async () => {
       try {
         const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest, { account });
+        preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + (toBN(toBN(originalRequest.submitFeesAmount).div(toBN(MAX_PERCENTAGE))).toString() / 1000);
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);
@@ -102,7 +104,7 @@ const Burn = ({ closeBtn, requestData }) => {
           title="Time to fullfillment and penalty fees"
           className="large-value bold"
           value={preFulfillData}
-          format={preFulfillData === 'N/A' ? 'N/A' : `${commaFormatted(customFixed(preFulfillData?.penaltyFeePercent.toString(), 4))}%`}
+          format={preFulfillData === 'N/A' ? 'N/A' : `${commaFormatted(customFixed(preFulfillData?.penaltyFeePercentWithTimeDelay.toString(), 4))}%`}
         />
   
         <Stat

@@ -7,12 +7,13 @@ import Tooltip from "components/Tooltip";
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
 import { toDisplayAmount } from '@coti-io/cvi-sdk';
-import { commaFormatted, customFixed } from 'utils';
+import { commaFormatted, customFixed, toBN } from 'utils';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
 import FulfillmentInTimer from 'components/pages/Arbitrage/FulfillmentInTimer';
+import { MAX_PERCENTAGE } from 'contracts/utils';
 
 const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn into one view 
   const dispatch = useDispatch();
@@ -57,7 +58,8 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
     const preFulfill = async () => {
       try {
         const preFulfillAction = collateralMint ? "preFulfillCollateralizedMint" : "preFulfillMint";
-        const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey][preFulfillAction](originalRequest, { account });
+        let preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey][preFulfillAction](originalRequest, { account });
+        preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + (toBN(toBN(originalRequest.submitFeesAmount).div(toBN(MAX_PERCENTAGE))).toString() / 1000);
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);
@@ -67,7 +69,8 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
 
     if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
   },[w3, requestData, activeToken, originalRequest, closeBtn, collateralMint, account]);
-
+  console.log(preFulfillData);
+  console.log(originalRequest);
   return useMemo(() => (
     <>
       <Title
@@ -103,7 +106,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         title="Time to fullfillment and penalty fees"
         className="large-value bold"
         value={preFulfillData}
-        format={preFulfillData === 'N/A' ? 'N/A' : `${commaFormatted(customFixed(preFulfillData?.penaltyFeePercent.toString(), 4))}%`} />
+        format={preFulfillData === 'N/A' ? 'N/A' : `${commaFormatted(customFixed(preFulfillData?.penaltyFeePercentWithTimeDelay.toString(), 4))}%`} />
 
       <Stat
         title="Mint fee"
