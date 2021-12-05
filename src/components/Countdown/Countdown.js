@@ -73,7 +73,7 @@ export const CountdownComponent = ({ lockedTime, className, showIfZero, showSeco
             : null
             }  
         </div>
-    }, [lockedTime, className, showIfZero, isExpired, showIfZero])
+    }, [lockedTime, className, showSeconds, showIfZero, isExpired])
 }
 
 export default CountdownComponent;
