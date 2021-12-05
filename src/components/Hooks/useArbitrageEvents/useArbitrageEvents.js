@@ -96,6 +96,17 @@ const useArbitrageEvents = (w3, activeToken) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenEvents?.FulfillRequest?.events?.length]);
+
+  useEffect(()=>{
+    if(!events || !tokenEvents?.LiquidateRequest|| !w3?.tokens) return;
+    const longTokenLiquidateRequestEvents = events[volTokenKey]?.LiquidateRequest?.events;
+    if(!!longTokenLiquidateRequestEvents?.length) {
+      const lastEvent = longTokenLiquidateRequestEvents[longTokenLiquidateRequestEvents.length-1];
+      const unfulfilledFiltered = unfulfilledRequests.filter(({requestId}) => lastEvent.requestId !== requestId);
+      dispatch(setUnfulfilledRequests(unfulfilledFiltered));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenEvents?.LiquidateRequest?.events?.length]);
 }
 
 export default useArbitrageEvents;

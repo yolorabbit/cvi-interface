@@ -17,7 +17,8 @@ const eventsToListen = [
     "Burn",
     "SubmitRequest",
     "CollateralizedMint",
-    "FulfillRequest"
+    "FulfillRequest",
+    "LiquidateRequest"
 ];
 
 const useSubscribe = () => {
