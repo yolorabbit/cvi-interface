@@ -7,13 +7,13 @@ import Tooltip from "components/Tooltip";
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
 import { toDisplayAmount } from '@coti-io/cvi-sdk';
-import { commaFormatted, customFixed, toBN } from 'utils';
+import { commaFormatted, customFixed } from 'utils';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
 import FulfillmentInTimer from 'components/pages/Arbitrage/FulfillmentInTimer';
-import { MAX_PERCENTAGE } from 'contracts/utils';
+import { upperCase } from 'lodash';
 
 const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn into one view 
   const dispatch = useDispatch();
@@ -69,8 +69,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
 
     if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
   },[w3, requestData, activeToken, originalRequest, closeBtn, collateralMint, account]);
-  console.log(preFulfillData);
-  console.log(originalRequest);
+
   return useMemo(() => (
     <>
       <Title
@@ -115,16 +114,20 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         format={preFulfillData === 'N/A' ? 'N/A' : `${commaFormatted(customFixed(preFulfillData?.openFeePercent.toString(), 4)) || "-"}%`} />
 
       <Checkbox
+        className="modal-checkbox" 
         onClick={() => setCollateralMint(!collateralMint)}
-        title={config.statisticsDetails.collateralMint.title}
+        title="Collateral mint"
         checked={collateralMint}
         tooltip={<Tooltip 
           type="question" 
-          left={config.statisticsDetails.collateralMint.tooltip.left} 
-          mobileLeft={config.statisticsDetails.collateralMint.tooltip.mobileLeft} 
-          content={config.statisticsDetails.collateralMint.tooltip.content} 
+          left="0" 
+          mobileLeft={-40} 
+          content={<span> 
+            The collateral mint option enables the user to mint {upperCase(activeToken.name)} tokens while providing liquidity to cover the value of the long {upperCase(activeToken.oracleId)} position that those minted {upperCase(activeToken.name)} tokens hold. The liquidity provided is displayed on the platform page under provide liquidity tab. By using collateral mint option user won't be subject to the premium fees.
+          </span>} 
+          maxWidth={400}
         />}
-        className="modal-checkbox" />
+      />
 
       <Stat
         name="estimateMint"
@@ -132,19 +135,22 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         value={preFulfillData}
         format={preFulfillData === 'N/A' ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.receive.toString(), activeToken.decimals), 4) || "0"}`}
         _suffix={activeToken.name.toUpperCase()}
-        hideTooltip />
+        hideTooltip 
+        actEthvol={activeToken.oracleId === config.volatilityIndexKey.ethvi}
+      />
 
       {collateralMint && <>
         <Stat
           className="large-value bold green no-title"
           value={preFulfillData}
           format={(!preFulfillData?.shortReceive || preFulfillData === 'N/A') ? 'N/A' : `${customFixed(toDisplayAmount(preFulfillData?.shortReceive?.toString(), activeToken.decimals), 4) || "0"}`}
-          _suffix={"ETHVI-USDC-LP"} />
+          _suffix={`${activeToken.oracleId.toUpperCase()}-USDC-LP`} 
+        />
 
         <p className="modal-note">
           Please note: you won't be able to withdraw your liquidity within the
           next 36 hours.<br />
-          You can stake your ETHVI-USDC LP tokens to earn GOVI
+          You can stake your {activeToken.oracleId.toUpperCase()}-USDC LP tokens to earn GOVI
           rewards.
         </p>
       </>}
@@ -161,7 +167,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         buttonText="Cancel"
         onClick={closeBtn} />
     </>
-  ),[requestData, originalRequest, preFulfillData, collateralMint, activeToken.decimals, activeToken.name, isProcessing, onClick, closeBtn])
+  ),[activeToken.name, activeToken.decimals, activeToken.oracleId, requestData, originalRequest, preFulfillData, collateralMint, isProcessing, onClick, closeBtn])
 }
 
 export default Mint
