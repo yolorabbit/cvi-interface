@@ -17,7 +17,7 @@ const FulfillmentInTimer = ({ fulfillmentIn, actionType, setActionType }) => {
     return useMemo(() => {
         return <CountdownComponent 
                 lockedTime={_lockedTime} 
-                isExpired={_lockedTime >= -twelveHours}
+                isExpired={_lockedTime <= -twelveHours}
                 showIfZero 
                 showSeconds
             />

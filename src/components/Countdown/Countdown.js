@@ -51,7 +51,7 @@ export const useIsLockedTime = (start = true) => {
 
 export const CountdownComponent = ({ lockedTime, className, showIfZero, showSeconds, isExpired }) => {
     return useMemo(() => {
-        if(lockedTime === "N/A" || !lockedTime) return null;
+        if(lockedTime === "N/A" || lockedTime === undefined) return null;
         return <div className={`count-down-component ${className ?? ''}`}>
             {lockedTime && lockedTime > 0 ?
             <> 
@@ -59,17 +59,17 @@ export const CountdownComponent = ({ lockedTime, className, showIfZero, showSeco
                 <b>{getTimeDurationFormatted(lockedTime, showSeconds)}</b> 
                 <small>HH:MM{showSeconds && ":SS"}</small>
             </>
-            : (showIfZero && lockedTime < 0) ?
-            isExpired ?
-            <> 
-                <img src={require('../../images/icons/processing-negative.svg').default} alt="processing" /> 
-                <b>{getTimeDurationFormatted(lockedTime, showSeconds)}</b> 
-                <small>HH:MM{showSeconds && ":SS"}</small>
-            </> :
-            <> 
-                <img src={require('../../images/icons/processing-expired.svg').default} alt="expired" /> 
-                <b>Expired</b> 
-            </>
+            : showIfZero ?
+                isExpired ?
+                    <> 
+                        <img src={require('../../images/icons/processing-expired.svg').default} alt="expired" /> 
+                        <b>Expired</b> 
+                    </> :
+                    <> 
+                        <img src={require('../../images/icons/processing-negative.svg').default} alt="processing" /> 
+                        <b>{getTimeDurationFormatted(lockedTime, showSeconds)}</b> 
+                        <small>HH:MM{showSeconds && ":SS"}</small>
+                    </>
             : null
             }  
         </div>
