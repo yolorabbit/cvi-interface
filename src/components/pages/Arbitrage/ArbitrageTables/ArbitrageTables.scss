@@ -75,7 +75,12 @@
   justify-content: flex-end;
   vertical-align: middle;
   height: 100%;
-
+  &.isTablet {
+    justify-content: flex-start;
+    button {
+      margin-inline-start: 0;
+    }
+  }
   @media (max-width: 767px) {
     flex-direction: column;
 
