@@ -28,6 +28,7 @@ const PendingRequest = () => {
     const onLiquidate = useCallback(async() => {
         try {
           setIsProcessing(true);
+          await w3?.tokens[activeToken.rel.volTokenKey].refresh();
           await w3?.tokens[activeToken.rel.volTokenKey][requestActionByType[action]](originalRequest.requestId, { account });
           dispatch(addAlert({
             id: action,

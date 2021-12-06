@@ -25,6 +25,7 @@ const Burn = ({ closeBtn, requestData }) => {
   const onClick = useCallback(async() => {
     try {
       setIsProcessing(true);
+      await w3?.tokens[activeToken.rel.volTokenKey].refresh();
       await w3?.tokens[activeToken.rel.volTokenKey].fulfillBurn(originalRequest.requestId, {account});
       dispatch(addAlert({
         id: 'burn',

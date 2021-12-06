@@ -29,6 +29,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
   const onClick = useCallback(async() => {
     try {
       setIsProcessing(true);
+      await w3?.tokens[activeToken.rel.volTokenKey].refresh();
       const mintAction = collateralMint ? "fulfillCollateralizedMint" : "fulfillMint";
       await w3?.tokens[activeToken.rel.volTokenKey][mintAction](originalRequest.requestId, {account});
       dispatch(addAlert({

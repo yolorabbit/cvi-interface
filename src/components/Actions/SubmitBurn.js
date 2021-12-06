@@ -23,7 +23,8 @@ const SubmitBurn = () => {
         setProcessing(true);
 
         try {
-
+            await w3?.tokens[activeToken.rel.volTokenKey].refresh();
+            
             dispatch(addAlert({
                 id: 'notice',
                 alertType: config.alerts.types.NOTICE,
