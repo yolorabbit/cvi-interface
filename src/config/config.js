@@ -41,8 +41,8 @@ const config = {
       restricted: true // block access by country
     },
     arbitrage: {
-      label: "Tokenized Volatility",
-      path: '/arbitrage',
+      label: "Volatility Tokens",
+      path: '/volatility_tokens',
       hide: ['/'],
       restricted: true // block access by country
     },
