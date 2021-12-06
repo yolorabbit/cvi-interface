@@ -5,13 +5,12 @@ import Button from "components/Elements/Button";
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
 import { toDisplayAmount } from '@coti-io/cvi-sdk';
-import { commaFormatted, customFixed, toBN } from 'utils';
+import { commaFormatted, customFixed } from 'utils';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from 'config/config';
 import FulfillmentInTimer from 'components/pages/Arbitrage/FulfillmentInTimer';
-import { MAX_PERCENTAGE } from 'contracts/utils';
 
 const Burn = ({ closeBtn, requestData }) => {
   const dispatch = useDispatch();
@@ -53,7 +52,7 @@ const Burn = ({ closeBtn, requestData }) => {
     const preFulfill = async () => {
       try {
         const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest, { account });
-        preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + (toBN(toBN(originalRequest.submitFeesAmount).div(toBN(MAX_PERCENTAGE))).toString() / 1000);
+        preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + (toDisplayAmount(originalRequest.submitFeesAmount, activeToken.decimals) * 100);
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);
