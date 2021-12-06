@@ -59,7 +59,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
       try {
         const preFulfillAction = collateralMint ? "preFulfillCollateralizedMint" : "preFulfillMint";
         let preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey][preFulfillAction](originalRequest, { account });
-        preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + (toBN(toBN(originalRequest.submitFeesAmount).div(toBN(MAX_PERCENTAGE))).toString() / 1000);
+        preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + Number(requestData.timeToFulfillmentFee.replace('%', ''));
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);

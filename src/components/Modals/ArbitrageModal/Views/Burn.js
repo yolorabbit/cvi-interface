@@ -52,7 +52,7 @@ const Burn = ({ closeBtn, requestData }) => {
     const preFulfill = async () => {
       try {
         const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest, { account });
-        preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + (toDisplayAmount(originalRequest.submitFeesAmount, activeToken.decimals) * 100);
+        preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + Number(requestData.timeToFulfillmentFee.replace('%', ''));
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);
