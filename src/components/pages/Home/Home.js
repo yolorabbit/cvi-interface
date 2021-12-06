@@ -6,10 +6,12 @@ import Row from "components/Layout/Row";
 import useCvi from "components/Hooks/Cvi";
 import CviChartAndData from "./CviChartAndData";
 import "./Home.scss";
+import { useScript } from "components/Hooks";
 
 const Home = () => {
   useCvi();
-
+  useScript("https://crypto.com/price/static/widget/index.js")
+ 
   return useMemo(() => {
     return (
       <div className="home-component">
@@ -25,14 +27,16 @@ const Home = () => {
             type="inner-icon"
             icon="govi-dao"
             title="GOVI DAO token"
-            description={() => (
-              <span>
-                CVI includes a decentralized governance component, where holders
-                of the GOVI token can vote on matters such as the tradable
-                assets, leverage used, deposit amounts, platform fees, and more.{" "}
-                <br /> <br /> By staking their GOVI tokens, GOVI holders will
-                also earn a share of the fees collected from the CVI platform.
-              </span>
+            description={() => (<> 
+                <span>
+                  CVI includes a decentralized governance component, where holders
+                  of the GOVI token can vote on matters such as the tradable
+                  assets, leverage used, deposit amounts, platform fees, and more.<br/>
+                  By staking their GOVI tokens, GOVI holders will
+                  also earn a share of the fees collected from the CVI platform.
+                </span>
+                <span id="crypto-widget-CoinList" data-transparent="true" data-theme="dark" data-design="classic" data-coins="govi"></span>
+            </>
             )}
           />
 
