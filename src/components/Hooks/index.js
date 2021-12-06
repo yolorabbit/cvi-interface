@@ -41,7 +41,7 @@ export const useActiveToken = (searchInput, view, protocol) => {
   if(!searchInput && activeToken) return activeToken;
   
   const pathname = view || location?.pathname;
-  if(pathname === "staking") return stakingConfig.tokens[selectedNetwork][protocol][searchInput?.toLowerCase()];
+  if(pathname === config.routes.staking.label.toLowerCase()) return stakingConfig.tokens[selectedNetwork][protocol][searchInput?.toLowerCase()];
   if(pathname === config.routes.arbitrage.path) {
     if(activeToken && arbitrageActiveTabs[searchInput]) return searchInput === arbitrageActiveTabs.mint ? activeToken.pairToken : activeToken;
     const searchedToken = arbitrageConfig.tokens[selectedNetwork][searchInput?.toLowerCase()];
