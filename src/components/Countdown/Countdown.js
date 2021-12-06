@@ -11,11 +11,11 @@ export const useTimer = ({ timerDuration, setTimerDuration, start = true, stopPo
     const _lockedDurationTimer = useRef();
     const isActiveInDOM = useInDOM();
     useEffect(() => {
-        if(timerDuration === null || timerDuration < stopPoint || !timerDuration || !start) return;
+        if(timerDuration === null || timerDuration < stopPoint || timerDuration === undefined || !start) return;
         _lockedDurationTimer.current = setTimeout(() => {
             if(isActiveInDOM()) { 
                 setTimerDuration(prevTime => {
-                    if(!prevTime) return;
+                    if(prevTime === null || prevTime === undefined) return;
                     if(timerDuration <= stopPoint) {
                         clearTimeout(_lockedDurationTimer.current);
                         return 0;
