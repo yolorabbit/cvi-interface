@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 
 export const twelveHours = 43200000;
 
-const FulfillmentInTimer = ({ fulfillmentIn, actionType, setActionType }) => {
+const FulfillmentInTimer = ({ fulfillmentIn, setActionType }) => {
     const [_lockedTime, setLockTime] = useState(fulfillmentIn);
     useTimer({ timerDuration: _lockedTime, setTimerDuration: setLockTime, start: true, stopPoint: -twelveHours });
 

@@ -18,8 +18,8 @@ import useSubscribe from 'components/Hooks/subscribe/useSubscribe';
 import Home from 'components/pages/Home';
 import RestrictedModal from 'components/Modals/RestrictedModal';
 import MaintenanceModal from 'components/Modals/MaintenanceModal';
-import './App.scss';
 import Layout from 'components/Layout/Layout';
+import './App.scss';
 
 const Platform = lazy(() => import('./components/pages/Platform'));
 const Staking = lazy(() => import('./components/pages/Staking'));

@@ -75,7 +75,6 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
                 content={<FulfillmentInTimer 
                     fulfillmentIn={fulfillmentIn} 
-                    actionType={actionType} 
                     setActionType={setActionType}
                 />}
             />}
@@ -109,7 +108,6 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                         <Value className="uppercase-first-letter" text={type} />
                         <FulfillmentInTimer 
                             fulfillmentIn={fulfillmentIn} 
-                            actionType={actionType} 
                             setActionType={setActionType} 
                         />
                     </>
