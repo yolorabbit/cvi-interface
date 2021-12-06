@@ -87,18 +87,7 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
             }
 
         </>
-    ), [fulfillmentController,
-        submitTime,
-        submitTimeToFulfillment,
-        timeToFulfillmentFee,
-        amount,
-        symbol,
-        type,
-        upfrontPayment,
-        fulfillmentIn,
-        isTablet,
-        isMobile,
-        actionType]);
+    ), [fulfillmentController, submitTime, submitTimeToFulfillment, timeToFulfillmentFee, amount, symbol, type, upfrontPayment, fulfillmentIn, isTablet, isMobile]);
 
     if (isHeader) {
         return <RowItem
