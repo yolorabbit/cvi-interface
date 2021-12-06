@@ -22,11 +22,11 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         upfrontPayment,
         fulfillmentIn,
         lastBlockTime,
+        amountToFulfill,
     } = rowData;
 
     const submitTimePlus = moment(submitTime * 1000).add(15, 'minutes'); // Submit Time + 15 minutes
     const isLocked = moment(moment.utc(submitTimePlus)).isSameOrAfter(moment.utc(lastBlockTime * 1000)); // Check if locked
-    const amountToFulfill = amount - upfrontPayment;
 
     const fulfillmentController = useMemo(() => {
         return <ActionController

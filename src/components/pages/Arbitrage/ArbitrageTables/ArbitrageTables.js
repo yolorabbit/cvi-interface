@@ -95,6 +95,8 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
             const amountDisplay = toDisplayAmount(tokenAmount, fromToken.decimals);
             const fulfillmentFeeFixed = customFixed(toDisplayAmount(submitFeesAmount, fromToken?.decimals), fromToken.fixedDecimals);
             const fulfillmentFeePercentage = (fulfillmentFeeFixed / amountDisplay) * 100;
+            const upfrontPaymentFixed = customFixed(toDisplayAmount(advanceAmount, fromToken.decimals), fromToken.fixedDecimals)
+            const amountToFulfill = customFixed(amountDisplay, fromToken.fixedDecimals) - upfrontPaymentFixed;
 
             return {
                 event,
@@ -109,8 +111,9 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
                     subText: "HH:MM"
                 },
                 timeToFulfillmentFee: `${commaFormatted(customFixed(fulfillmentFeePercentage, 2))}%`,
-                upfrontPayment: commaFormatted(customFixed(toDisplayAmount(advanceAmount, fromToken.decimals), fromToken.fixedDecimals)),
+                upfrontPayment: commaFormatted(upfrontPaymentFixed),
                 fulfillmentIn: moment.duration(SubmitFeeLastBlockDiff).asMilliseconds(),
+                amountToFulfill: commaFormatted(amountToFulfill),
                 action: true,
                 lastBlockTime
             }
