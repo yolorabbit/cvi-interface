@@ -1,7 +1,19 @@
 .home-component {
     background-color: #0f112d;
     flex: 1;
-
+    & .crypto-com-widget {
+        margin-inline-start: -1rem;
+        max-width: 24.375vw;
+        @media (max-width: 1365px) {
+            max-width: 34.286vw;
+        }
+        @media (max-width: 1024px) {
+            max-width: 46.936vw;
+        }
+        @media (max-width: 767px){
+            max-width: 100vw;
+        }
+    }
     & .index-stats-component { 
         height: auto;
     }

@@ -35,7 +35,9 @@ const Home = () => {
                   By staking their GOVI tokens, GOVI holders will
                   also earn a share of the fees collected from the CVI platform.
                 </span>
-                <span id="crypto-widget-CoinList" data-transparent="true" data-theme="dark" data-design="classic" data-coins="govi"></span>
+                <div className="crypto-com-widget">
+                  <span id="crypto-widget-CoinList" data-transparent="true" data-theme="dark" data-design="classic" data-coins="govi"/>
+                </div>
             </>
             )}
           />
