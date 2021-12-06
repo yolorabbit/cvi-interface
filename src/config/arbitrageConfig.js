@@ -165,6 +165,7 @@ const arbitrageConfig = {
           submitTimeToFulfillment: "Submitted time to fulfillment",
           timeToFulfillmentFee: "Time to fulfillment fee",
           upfrontPayment: "Up front payment",
+          amountToFulfill: "Amount to fulfill",
           fulfillmentIn: "Fulfillment in",
           action: true
         }
@@ -187,6 +188,7 @@ const arbitrageConfig = {
           submitTimeToFulfillment: "Submitted time to fulfillment",
           timeToFulfillmentFee: "Time to fulfillment fee",
           upfrontPayment: "Up front payment",
+          amountToFulfill: "Amount to fulfill",
           fulfillmentIn: "Fulfillment in",
           action: true
         }

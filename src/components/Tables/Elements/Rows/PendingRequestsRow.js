@@ -24,10 +24,9 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
         lastBlockTime,
     } = rowData;
 
-    // Submit Time + 15 minutes
-    const submitTimePlus = moment(submitTime * 1000).add(15, 'minutes');
-    // Check if locked
-    const isLocked = moment(moment.utc(submitTimePlus)).isSameOrAfter(moment.utc(lastBlockTime * 1000));
+    const submitTimePlus = moment(submitTime * 1000).add(15, 'minutes'); // Submit Time + 15 minutes
+    const isLocked = moment(moment.utc(submitTimePlus)).isSameOrAfter(moment.utc(lastBlockTime * 1000)); // Check if locked
+    const amountToFulfill = amount - upfrontPayment;
 
     const fulfillmentController = useMemo(() => {
         return <ActionController
@@ -71,6 +70,11 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 content={<Value text={`${upfrontPayment} ${symbol}`} />}
             />
 
+            <RowItem
+                 header={arbitrageConfig.tables[type].pending.headers.amountToFulfill}
+                content={<Value text={`${amountToFulfill} ${symbol}`} />}
+            />
+
             {!isTablet && <RowItem
                 header={arbitrageConfig.tables[type].pending.headers.fulfillmentIn}
                 content={<FulfillmentInTimer 
@@ -87,7 +91,19 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
             }
 
         </>
-    ), [fulfillmentController, submitTime, submitTimeToFulfillment, timeToFulfillmentFee, amount, symbol, type, upfrontPayment, fulfillmentIn, isTablet, isMobile]);
+    ), [fulfillmentController,
+         submitTime,
+         submitTimeToFulfillment,
+         timeToFulfillmentFee,
+         amount,
+         symbol,
+         type,
+         upfrontPayment,
+         fulfillmentIn,
+         isTablet,
+         isMobile,
+         amountToFulfill]
+         );
 
     if (isHeader) {
         return <RowItem
