@@ -2,7 +2,7 @@
 *.sh
 
 # lock files
-.lock
+*.lock
 *-lock.json
 
 # Logs
