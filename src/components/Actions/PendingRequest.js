@@ -25,6 +25,25 @@ const PendingRequest = () => {
     const [isProcessing, setIsProcessing] = useState();
     const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId);
 
+    const checkUserBalance = useCallback(async () => {
+      try {
+        const accountBalance = await w3?.tokens[activeToken.pairToken.rel.contractKey].balanceOf(account); 
+        if(requestData.tokenAmountToFulfill.gt(accountBalance)) {
+          dispatch(addAlert({
+            id: action,
+            eventName: `${upperFirst(action)} - failed`,
+            alertType: config.alerts.types.FAILED,
+            message: "Not enough balance."
+          }));
+          return;
+        }
+        return true;
+      } catch(error) {
+        console.log(error);
+        return;
+      }
+    }, [account, action, activeToken.pairToken.rel.contractKey, dispatch, requestData.tokenAmountToFulfill, w3?.tokens])
+
     const onLiquidate = useCallback(async() => {
         try {
           setIsProcessing(true);
@@ -49,8 +68,10 @@ const PendingRequest = () => {
         }
       }, [account, action, activeToken.rel.volTokenKey, dispatch, originalRequest.requestId, w3?.tokens]);
 
-    const onClick = () => {
+    const onClick = async () => {
         if(type === arbitrageConfig.actionsConfig.fulfill.key) {
+            const hasEnoughBalance = await checkUserBalance();
+            if(!hasEnoughBalance) return;
             if(!isOpen) return setIsOpen(true);
             return;
         }
