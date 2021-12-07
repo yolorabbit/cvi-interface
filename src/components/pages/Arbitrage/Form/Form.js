@@ -57,9 +57,11 @@ const Form = ({ amount, setAmount, delayFee, setDelayFee, type }) => {
 const SeeMore = () => {
     return useMemo(() => {
         return <div className="see-more-component">
-            <span>Please note that the submitted requests expire after 12 hours. You won’t be able to fulfill Mint/Burn request after it is expired.</span>
+            <p>Please note that the submitted requests expire after 12 hours. You won’t be able to fulfill Mint/Burn request after it is expired.</p>
+            <p>The request can't be fulfilled in the first 15 minutes after it is submitted.</p>
         </div>
     }, []);
 }
 
 export default Form;
+

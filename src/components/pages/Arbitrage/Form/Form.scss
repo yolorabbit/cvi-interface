@@ -35,18 +35,21 @@
         margin: 4.444vw 0;
     }
 
-    & span {
+    & p {
+        line-height: 1.25vw;
         font-size: 0.625vw;
+        margin: 0;
         @media (max-width: 1365px) {
             font-size: 0.879vw;
+            line-height: 1.758vw;
         }
-  
         @media (max-width: 1024px) {
             font-size: 1.565vw;
+            line-height: 3.129vw;
         }
-        
         @media (max-width: 767px) {
             font-size: 3.333vw;
+            line-height: 6.667vw;
         }
     }
 }
