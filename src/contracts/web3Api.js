@@ -37,7 +37,7 @@ export const getTokenData = async (contract, protocol) => {
     return { address, symbol, decimals, contract };
 }
 
-export async function getFeesCollectedFromEvents(staking, USDTData, tokensData, { eventsUtils, library, useInitialValue }) {
+export async function getFeesCollectedFromEvents(staking, USDCData, tokensData, { eventsUtils, library, useInitialValue }) {
     const selectedNetwork = await getChainName();
     const bottomBlock = selectedNetwork === chainNames.Matic ? maticBottomBlockSinTheGraphStopToWork :  bottomBlockByNetwork[selectedNetwork]; // temporary fix for matic
     const options = {
@@ -58,12 +58,12 @@ export async function getFeesCollectedFromEvents(staking, USDTData, tokensData, 
         // sum of transfer events from the last SAMPLE_DAYS days
         const sum = events.reduce((p, e) => p.add(toBN(e.returnValues[2])), toBN(0));
         // console.log(`sum ${toDisplayAmount(sum, tokenData.decimals)} ${tokenData.symbol}`);
-        usdSum = usdSum.add(await convert(sum, tokenData, USDTData));
+        usdSum = usdSum.add(await convert(sum, tokenData, USDCData));
     }
-    return toDisplayAmount(usdSum, USDTData.decimals);
+    return toDisplayAmount(usdSum, USDCData.decimals);
 }
 
-const getFeesCollectedFromGraph = async (USDTData, tokensData) => {
+const getFeesCollectedFromGraph = async (USDCData, tokensData) => {
     const selectedNetwork = await getChainName();
     let res = await TheGraph.collectedFeesSum();
     if(selectedNetwork === chainNames.Matic) {
@@ -81,15 +81,15 @@ const getFeesCollectedFromGraph = async (USDTData, tokensData) => {
       //console.log(`filtered ${filtered.length}`);
       let tokenSum = filtered.reduce((p, e) => p.add(toBN(e.sum)), toBN(0));
       //console.log(`tokenSum ${tokenSum} ${token.symbol}`);
-      let tokenSumUSD = await convert(tokenSum, token, USDTData);
-      //console.log(`tokenSumUSD ${tokenSumUSD} ${USDTData.symbol}`);
+      let tokenSumUSD = await convert(tokenSum, token, USDCData);
+      //console.log(`tokenSumUSD ${tokenSumUSD} ${USDCData.symbol}`);
       sum = sum.add(tokenSumUSD);
     }
-    //console.log(`graph sum $${toDisplayAmount(sum, USDTData.decimals)}`);
-    return toDisplayAmount(sum, USDTData.decimals);
+    //console.log(`graph sum $${toDisplayAmount(sum, USDCData.decimals)}`);
+    return toDisplayAmount(sum, USDCData.decimals);
 }
 
-const getFeesCollectedFromApi = async (USDTData, tokensData, chainName) => {
+const getFeesCollectedFromApi = async (USDCData, tokensData, chainName) => {
     let res = await Api.GET_FEES_COLLECTED();
     let feesCollectedResult = [];
 
@@ -107,26 +107,26 @@ const getFeesCollectedFromApi = async (USDTData, tokensData, chainName) => {
     //   console.log(`filtered`, filteredToken);
       let tokenSum = filteredToken[token.symbol.toUpperCase()];
     //   console.log(`tokenSum ${tokenSum} ${token.symbol}`);
-      let tokenSumUSD = await convert(tokenSum, token, USDTData);
-    //   console.log(`tokenSumUSD ${tokenSumUSD} ${USDTData.symbol}`);
+      let tokenSumUSD = await convert(tokenSum, token, USDCData);
+    //   console.log(`tokenSumUSD ${tokenSumUSD} ${USDCData.symbol}`);
       sum = sum.add(tokenSumUSD);
     }
-    return toDisplayAmount(sum, USDTData.decimals);
+    return toDisplayAmount(sum, USDCData.decimals);
 }
 
-export async function getFeesCollected(USDTData, tokensData) {
+export async function getFeesCollected(USDCData, tokensData) {
     const chainName = await getChainName();
     if(chainName === chainNames.Matic) {
-        return await getFeesCollectedFromApi(USDTData, tokensData, chainName);
+        return await getFeesCollectedFromApi(USDCData, tokensData, chainName);
     } else {
-        return await getFeesCollectedFromGraph(USDTData, tokensData);
+        return await getFeesCollectedFromGraph(USDCData, tokensData);
     }
 }
 
 const web3Api = {
     getPlatformBalance: async (contracts, tokens = [], {library}) => {
         try {
-            const USDTData = await getTokenData(contracts["USDT"]);
+            const USDCData = await getTokenData(contracts["USDC"]);
             
             const promiseList = tokens.map(async ({rel: { platform, contractKey}, name, type, fixedDecimals, oracleId}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
@@ -137,9 +137,9 @@ const web3Api = {
                     await contracts[contractKey].methods.balanceOf(contracts[platform]._address).call()
                 )
 
-                const amountConverted = await convert(totalBalance, tokenData, USDTData)
+                const amountConverted = await convert(totalBalance, tokenData, USDCData)
                 return [
-                    `${customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), fixedDecimals)} (${name.toUpperCase()} pool)`, 
+                    `${customFixed(toDisplayAmount(amountConverted.toString(), USDCData.decimals), fixedDecimals)} (${name.toUpperCase()} pool)`, 
                     amountConverted,
                     name,
                     oracleId
@@ -157,7 +157,7 @@ const web3Api = {
     },
     getLiquidityPoolsBalance: async (contracts, tokens = []) => {
         try {
-            const USDTData = await getTokenData(contracts["USDT"]);
+            const USDCData = await getTokenData(contracts["USDC"]);
             
             const promiseList = tokens.map(async ({rel: { platform, contractKey}, name, type, oracleId}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
@@ -167,8 +167,8 @@ const web3Api = {
                 } else {
                     value = await contracts[platform].methods.totalBalanceWithAddendum().call();
                 }
-                const amountConverted = await convert(toBN(value), tokenData, USDTData);
-                const amountFormatted = commaFormatted(customFixed(toDisplayAmount(amountConverted.toString(), USDTData.decimals), 2))
+                const amountConverted = await convert(toBN(value), tokenData, USDCData);
+                const amountFormatted = commaFormatted(customFixed(toDisplayAmount(amountConverted.toString(), USDCData.decimals), 2))
                 return [`${amountFormatted} (${name.toUpperCase()} pool)`, amountConverted, name, oracleId];
             });
 
@@ -196,12 +196,12 @@ const web3Api = {
     },
     getFeesCollected: async (contracts, tokens) => {
         try {
-            const USDTData = await getTokenData(contracts.USDT);
+            const USDCData = await getTokenData(contracts.USDC);
             const tokensData = [];
             for(let token of tokens) {
                 tokensData.push(await getTokenData(contracts[token.rel.contractKey]));
             }
-            const totalFeesCollected = await getFeesCollected(USDTData, tokensData);
+            const totalFeesCollected = await getFeesCollected(USDCData, tokensData);
             return customFixed(totalFeesCollected, 2);
         } catch(error) {
             console.log(error);

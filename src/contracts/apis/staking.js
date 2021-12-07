@@ -27,14 +27,14 @@ const stakingApi = {
                 }
             }
             const data = await getDataByTokenName();
-            const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC":"USDT"]);
+            const USDCData = await getTokenData(contracts["USDC"]);
             
             const getAmount = async () => tokenName === "govi" ? data.stakedTokenAmount : await fromLPTokens(contracts[rel.platform], toBN(data.stakedTokenAmount), token);
-            const stakedAmountUSD = await convert(await getAmount(), tokenData, USDTData);
+            const stakedAmountUSD = await convert(await getAmount(), tokenData, USDCData);
 
             return {
                 ...data,
-                stakedAmountUSD: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmountUSD.toString(), USDTData.decimals)), fixedDecimals))
+                stakedAmountUSD: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmountUSD.toString(), USDCData.decimals)), fixedDecimals))
             }
         } 
         return web3Api.getPoolSizeLiquidityMining(contracts, asset, account, selectedNetwork)
@@ -44,18 +44,18 @@ const stakingApi = {
 
             const {protocol, key: tokenName, fixedDecimals, rel, ...token} = asset;
             const [stakingRewards, platformLPToken] = [contracts[rel.stakingRewards], contracts[rel.token]]
-            const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
+            const USDCData = await getTokenData(contracts["USDC"]);
             const uniswapToken = pairsData[rel.pairToken] || await getTokenData(contracts[rel.pairToken], stakingProtocols.platform);
             const uniswapLPToken = await getTokenData(platformLPToken, protocol);
             const poolSize = await stakingRewards.methods.totalSupply().call();
             // console.log("poolSize: ", poolSize);
-            const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDTData, uniswapLPToken, uniswapToken)
+            const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDCData, uniswapLPToken, uniswapToken)
             // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
             
             const totalStaked = !!account ? await stakingRewards.methods.balanceOf(account).call() : 0;
             // console.log("totalStaked: ", customFixed(toFixed(toDisplayAmount(totalStaked, token.decimals))));
             
-            const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, USDTData, uniswapLPToken, uniswapToken)
+            const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, USDCData, uniswapLPToken, uniswapToken)
             // console.log(tokenName, protocol+" accountStakedUSD: ", accountStakedUSD);
             const mySharePercentage = totalStaked?.toString() === "0" ? toBN("0") : toBN(totalStaked).mul(toBN("1", token.decimals)).div(toBN(poolSize)).mul(toBN("100"));
             
@@ -113,15 +113,15 @@ const stakingApi = {
             lastStakedAmount: {...lastStakedAmount}
         }
     },
-    getAPYPerToken: async (platform, stakingRewards, USDTData, GOVIData, tokenData, token) => {
+    getAPYPerToken: async (platform, stakingRewards, USDCData, GOVIData, tokenData, token) => {
         try {
           if(token.migrated) return ["0", "0", "0"]; // 
           let rate = await stakingRewards.methods.rewardRate().call();
           let total = await stakingRewards.methods.totalSupply().call();
           let dailyReward = toBN(DAY).mul(toBN(rate));
-          let USDDailyReward = toDisplayAmount(await convert(dailyReward, GOVIData, USDTData), USDTData.decimals);
+          let USDDailyReward = toDisplayAmount(await convert(dailyReward, GOVIData, USDCData), USDCData.decimals);
           let stakedTokens = await fromLPTokens(platform, toBN(total), token);
-          let USDStakedTokens = toDisplayAmount(await convert(stakedTokens, tokenData, USDTData), USDTData.decimals);
+          let USDStakedTokens = toDisplayAmount(await convert(stakedTokens, tokenData, USDCData), USDCData.decimals);
 
           const dailyApr = (USDDailyReward / USDStakedTokens) * 100;
           return USDStakedTokens === 0 ? [0, 0, 0] : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
@@ -130,9 +130,9 @@ const stakingApi = {
             return [0, 0, 0];
         }
     },
-    getGOVIAPY: async function(staking, tokensData, USDTData, GOVIData, {eventsUtils, library}) {
+    getGOVIAPY: async function(staking, tokensData, USDCData, GOVIData, {eventsUtils, library}) {
         try {
-            async function getTokenDailyProfitInUSD(USDTData) {
+            async function getTokenDailyProfitInUSD(USDCData) {
                 // console.log(`checking relative to the last ${days} days`);
                 try {
                     const selectedNetwork = await getChainName();
@@ -154,7 +154,7 @@ const stakingApi = {
                         const dailyProfit = toBN(fee).div(toBN(90));
                         
                         
-                        let USDDailyProfits = (await convert(dailyProfit, tokenData, USDTData)).div(toBN(1).pow(toBN(USDTData.decimals)));
+                        let USDDailyProfits = (await convert(dailyProfit, tokenData, USDCData)).div(toBN(1).pow(toBN(USDCData.decimals)));
                         return USDDailyProfits;
                     });
 
@@ -169,14 +169,14 @@ const stakingApi = {
             async function getAPR() {
                // daily profits = totalProfits * seconds in year / time since contract creation
                 // APR = value of (daily profits) / value of (total staked GOVI) * 100
-                let USDDailyProfits = toBN((await getTokenDailyProfitInUSD(USDTData)), USDTData.decimals);
+                let USDDailyProfits = toBN((await getTokenDailyProfitInUSD(USDCData)), USDCData.decimals);
                 // console.log(`USDDailyProfits ${USDDailyProfits.toString()}`);
                 const totalStaked = await staking.methods.totalStaked().call();
                 // console.log(`totalStaked ${totalStaked}`);
-                let USDTotalStaked = (await convert(totalStaked, GOVIData, USDTData))
+                let USDTotalStaked = (await convert(totalStaked, GOVIData, USDCData))
                 // console.log(`USDTotalStaked ${USDTotalStaked}`);
                 if (USDTotalStaked.isZero()) return toBN("0");
-                return toDisplayAmount(USDDailyProfits.div(USDTotalStaked).mul(toBN("100")), USDTData.decimals);
+                return toDisplayAmount(USDDailyProfits.div(USDTotalStaked).mul(toBN("100")), USDCData.decimals);
             }
             
             const dailyApr = await getAPR();
