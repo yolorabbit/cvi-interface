@@ -83,12 +83,11 @@ const PendingRequestsRow = ({ rowData, isHeader, className }) => {
                 />}
             />}
 
-            {(isTablet || isMobile) && <RowItem content={
-                <div className={`row-actions-wrapper${isTablet ? ' isTablet' : ''}`}>
+            <RowItem content={
+                <div className={`row-actions-wrapper${!isMobile && isTablet ? ' isTablet' : ''}`}>
                     {fulfillmentController}
-                </div>
-                } />
-            }
+                </div>}
+                />
 
         </>
     ), [fulfillmentController,

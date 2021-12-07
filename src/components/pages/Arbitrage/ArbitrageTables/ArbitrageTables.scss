@@ -17,6 +17,27 @@
         }
       }
     }
+    &.pending {
+      & .expanded {
+        & .expand-component__expanded {
+           position: relative;
+            & .row-actions-wrapper {
+              &.isTablet {
+                & .action-controller_component {
+                  padding: 3.129vw;
+                  position: absolute;
+                  bottom: 1.043vw;
+                  right: 0;
+                }
+                button {
+                  margin-inline-start: 0;
+                  margin-inline-end: 0;
+                }
+              }
+            }
+        }
+      }
+    }
   }
 
   & .table-component {
@@ -75,12 +96,6 @@
   justify-content: flex-end;
   vertical-align: middle;
   height: 100%;
-  &.isTablet {
-    justify-content: flex-start;
-    button {
-      margin-inline-start: 0;
-    }
-  }
   @media (max-width: 767px) {
     flex-direction: column;
 
