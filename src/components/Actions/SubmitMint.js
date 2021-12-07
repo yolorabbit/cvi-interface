@@ -10,6 +10,7 @@ import { appViewContext } from 'components/Context';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import ErrorModal from 'components/Modals/ErrorModal';
 import { upperCase } from 'lodash';
+import { setData } from 'store/actions/wallet';
 
 const SubmitMint = () => {
     const dispatch = useDispatch();
@@ -50,10 +51,16 @@ const SubmitMint = () => {
                 message: "Please confirm the transaction in your wallet."
             }));
 
-            await w3?.tokens[activeToken.rel.volTokenKey].submitMint(tokenAmount, {
+            const mintResponse = await w3?.tokens[activeToken.rel.volTokenKey].submitMint(tokenAmount, {
                 delay: delayFee.delayTime,
                 account 
             });
+            
+            if(mintResponse.event) {
+                dispatch(setData("unfulfilledRequests", mintResponse.event, true, "requestId"));
+            } else {
+                actionConfirmEvent(dispatch);
+            }
 
             dispatch(addAlert({
                 id: 'mint',
@@ -61,8 +68,6 @@ const SubmitMint = () => {
                 alertType: config.alerts.types.CONFIRMED,
                 message: "Transaction success!"
             }));
-
-            actionConfirmEvent(dispatch);
         } catch (error) {
             console.log(error);
         

@@ -8,6 +8,7 @@ import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { appViewContext } from 'components/Context';
+import { setData } from 'store/actions/wallet';
 
 const SubmitBurn = () => {
     const dispatch = useDispatch();
@@ -31,19 +32,23 @@ const SubmitBurn = () => {
                 message: "Please confirm the transaction in your wallet."
             }));
 
-            await w3?.tokens[activeToken.rel.volTokenKey].submitBurn(tokenAmount, {
+            const burnResponse = await w3?.tokens[activeToken.rel.volTokenKey].submitBurn(tokenAmount, {
                 delay: delayFee.delayTime,
                 account 
             });
-                
+
+            if(burnResponse.event) {
+                dispatch(setData("unfulfilledRequests", burnResponse.event, true, "requestId"));
+            } else {
+                actionConfirmEvent(dispatch);
+            }
+
             dispatch(addAlert({
                 id: 'Burn',
                 eventName: "Burn request - success",
                 alertType: config.alerts.types.CONFIRMED,
                 message: "Transaction success!"
             }));
-
-            actionConfirmEvent(dispatch);
         } catch (error) {
             console.log(error);
         
