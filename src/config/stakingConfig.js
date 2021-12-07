@@ -163,6 +163,7 @@ const stakingConfig = {
             tokenDecimals: [18],
             contractKey: "UNIV2USDCETHVOL-USDC-LONG",
             token: "UNIV2USDCETHVOL-USDC-LONG",
+            longToken: "ETHVOL-USDC-LONG",
             pairToken: "USDC",
           }
         },
@@ -309,6 +310,7 @@ const stakingConfig = {
             stakingRewards: "CVOL-USDC-StakingRewards", // @TODO: update it with the real contract
             token: "UNIV2USDCCVOL-USDC-LONG",
             contractKey: "UNIV2USDCCVOL-USDC-LONG",
+            longToken: "CVOL-USDC-LONG",
             pairToken: "USDC",
             tokenDecimals: [18],
           }

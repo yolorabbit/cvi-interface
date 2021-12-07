@@ -134,10 +134,12 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
       const USDCData = await getTokenData(contracts["USDC"]);
       const uniswapToken = pairsData[tokenRel.pairToken] || await getTokenData(contracts[tokenRel.pairToken], stakingProtocols.platform);
+      const longTokenData = tokenRel.longToken ? await getTokenData(contracts[tokenRel.longToken], protocol) : undefined; 
       const uniswapLPToken = await getTokenData(platformLPToken, protocol);
       const poolSize = await stakingRewards.methods.totalSupply().call();
+
       // console.log("poolSize: ", poolSize);
-      const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDCData, uniswapLPToken, uniswapToken)
+      const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDCData, uniswapLPToken, uniswapToken, longTokenData)
       // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
       const tvl = {
         stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay))),

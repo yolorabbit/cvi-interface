@@ -251,7 +251,7 @@ const stakingApi = {
             }
         }
     },
-    uniswapLPTokenToUSD: async (amount, USDTToken, uniswapLPToken, uniswapToken) => {
+    uniswapLPTokenToUSD: async (amount, USDTToken, uniswapLPToken, uniswapToken, longTokenData) => {
         let totalSupply = toBN(await uniswapLPToken.contract.methods.totalSupply().call());
         // console.log("totalSupply: " + totalSupply);
         if (totalSupply.isZero()) return 0;
@@ -266,7 +266,7 @@ const stakingApi = {
         let reserve1 = reserves[swapped ? "0" :"1"];
         // console.log("reserve1: " + reserve1);
       
-        let ETHValueInUSDFull = await convert(reserve0, undefined, USDTToken);
+        let ETHValueInUSDFull = await convert(reserve0, longTokenData, USDTToken);
         // console.log("ETHValueInUSDFull: " + ETHValueInUSDFull);
         let ETHValueInUSD = toDisplayAmount(ETHValueInUSDFull, USDTToken.decimals);
         // console.log("ETHValueInUSD: " + ETHValueInUSD);
