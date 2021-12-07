@@ -167,7 +167,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
 
       <Button
         className="button arbitrage-button"
-        buttonText="Fullfill"
+        buttonText="Fulfill"
         disabled={isProcessing || !originalRequest || !preFulfillData || preFulfillData === "N/A"}
         processing={isProcessing}
         onClick={onClick} />
