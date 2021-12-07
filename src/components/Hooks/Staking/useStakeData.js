@@ -37,8 +37,10 @@ const initialState = {
   }
 }
 
-const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 };
-const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 };
+export const pairsData = {
+  "COTI": { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 },
+  "RHEGIC2": { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 }
+}
 
 const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const contracts = useContext(contractsContext);
@@ -132,13 +134,12 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const getTVLLM = async (cb) => {
     try{
       const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
-      const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
-      const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
-      const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : tokenName === 'rhegic2-eth-lp' ? RHEGIC2Data : GOVIData;
+      const USDCData = await getTokenData(contracts["USDC"]);
+      const uniswapToken = pairsData[tokenRel.pairToken] || await getTokenData(contracts[tokenRel.pairToken], stakingProtocols.platform);
       const uniswapLPToken = await getTokenData(platformLPToken, protocol);
       const poolSize = await stakingRewards.methods.totalSupply().call();
       // console.log("poolSize: ", poolSize);
-      const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDTData, uniswapLPToken, uniswapToken)
+      const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDCData, uniswapLPToken, uniswapToken)
       // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
       const tvl = {
         stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay))),
@@ -162,7 +163,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
       const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
       const uniswapLPToken = await getTokenData(platformLPToken, protocol);
-      const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : tokenName === 'rhegic2-eth-lp' ? RHEGIC2Data : GOVIData;
+      const uniswapToken = pairsData[tokenRel.pairToken] || await getTokenData(contracts[tokenRel.pairToken], stakingProtocols.platform);
       const apy = await web3Api.getUniswapAPY(stakingRewards, USDTData, GOVIData, uniswapLPToken, uniswapToken);
       // console.log(tokenName, protocol+" apy: ", apy);
       cb(() => setStakedData((prev)=> ({
@@ -202,8 +203,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
           default: {
             tokenData = await getTokenData(contracts[tokenRel.token], protocol);
             balance = await tokenData.contract.methods.balanceOf(account).call();
-            const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
-            const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : tokenName === 'rhegic2-eth-lp' ? RHEGIC2Data : GOVIData;        
+            const uniswapToken = pairsData[tokenRel.pairToken] || await getTokenData(contracts[tokenRel.pairToken], stakingProtocols.platform);
             const usdBalance = await web3Api.uniswapLPTokenToUSD(balance, USDTData, tokenData, uniswapToken)
             return "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance)), 2))
           }

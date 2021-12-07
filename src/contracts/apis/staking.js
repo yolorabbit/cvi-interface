@@ -6,9 +6,7 @@ import { DAY } from "components/Hooks/useEvents";
 import { chainNames } from "connectors";
 import { stakingProtocols } from "config/stakingConfig";
 import Api from "Api";
-
-const COTIData = { address: '0xDDB3422497E61e13543BeA06989C0789117555c5', symbol: 'COTI', decimals: 18 };
-const RHEGIC2Data = { address: '0xAd7Ca17e23f13982796D27d1E6406366Def6eE5f', symbol: 'RHEGIC2', decimals: 18 };
+import { pairsData } from "components/Hooks/Staking/useStakeData";
 
 const stakingApi = {
     getStakedAmountAndPoolShareByToken: async (contracts, asset, account, selectedNetwork) => {
@@ -47,8 +45,7 @@ const stakingApi = {
             const {protocol, key: tokenName, fixedDecimals, rel, ...token} = asset;
             const [stakingRewards, platformLPToken] = [contracts[rel.stakingRewards], contracts[rel.token]]
             const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
-            const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
-            const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : tokenName === 'rhegic2-eth-lp' ? RHEGIC2Data : GOVIData;
+            const uniswapToken = pairsData[rel.pairToken] || await getTokenData(contracts[rel.pairToken], stakingProtocols.platform);
             const uniswapLPToken = await getTokenData(platformLPToken, protocol);
             const poolSize = await stakingRewards.methods.totalSupply().call();
             // console.log("poolSize: ", poolSize);

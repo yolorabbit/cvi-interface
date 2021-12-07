@@ -128,7 +128,8 @@ const stakingConfig = {
             stakingRewards: "COTIETH-StakingRewards",
             tokenDecimals: [18],
             contractKey: "UNIV2COTIETH",
-            token: "UNIV2COTIETH"
+            token: "UNIV2COTIETH",
+            pairToken: "COTI",
           }
         },
         "govi-eth-lp": {
@@ -144,7 +145,8 @@ const stakingConfig = {
             stakingRewards: "GOVIETH-StakingRewards",
             tokenDecimals: [18],
             contractKey: "UNIV2GOVIETH",
-            token: "UNIV2GOVIETH"
+            token: "UNIV2GOVIETH",
+            pairToken: "GOVI",
           }
         },
         "ethvol-usdc-lp": {
@@ -160,7 +162,8 @@ const stakingConfig = {
             stakingRewards: "ETHVOL-USDC-StakingRewards", // @TODO: update it with the real contract
             tokenDecimals: [18],
             contractKey: "UNIV2USDCETHVOL-USDC-LONG",
-            token: "UNIV2USDCETHVOL-USDC-LONG"
+            token: "UNIV2USDCETHVOL-USDC-LONG",
+            pairToken: "USDC",
           }
         },
         "rhegic2-eth-lp": {
@@ -177,7 +180,8 @@ const stakingConfig = {
             stakingRewards: "RHEGIC2ETH-StakingRewards",
             tokenDecimals: [18],
             contractKey: "UNIV2RHEGIC2ETH",
-            token: "UNIV2RHEGIC2ETH"
+            token: "UNIV2RHEGIC2ETH",
+            pairToken: "RHEGIC2",
           }
         },
       },
@@ -195,7 +199,8 @@ const stakingConfig = {
             stakingRewards: "COTIETHSLP-StakingRewards",
             tokenDecimals: [18],
             contractKey: "SLPCOTIETH",
-            token: "SLPCOTIETH"
+            token: "SLPCOTIETH",
+            pairToken: "COTI",
           }
         },
         "govi-eth-lp": {
@@ -211,7 +216,8 @@ const stakingConfig = {
             stakingRewards: "GOVIETHSLP-StakingRewards",
             tokenDecimals: [18],
             contractKey: "SLPGOVIETH",
-            token: "SLPGOVIETH"
+            token: "SLPGOVIETH",
+            pairToken: "GOVI",
           }
         },
       },
@@ -286,6 +292,7 @@ const stakingConfig = {
             stakingRewards: "GOVIETH-StakingRewards",
             token: "UNIV2GOVIETH",
             contractKey: "UNIV2GOVIETH",
+            pairToken: "GOVI",
             tokenDecimals: [18]
           }
         },
@@ -302,6 +309,7 @@ const stakingConfig = {
             stakingRewards: "CVOL-USDC-StakingRewards", // @TODO: update it with the real contract
             token: "UNIV2USDCCVOL-USDC-LONG",
             contractKey: "UNIV2USDCCVOL-USDC-LONG",
+            pairToken: "USDC",
             tokenDecimals: [18],
           }
         },
