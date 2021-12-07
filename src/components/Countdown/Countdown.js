@@ -51,7 +51,7 @@ export const useIsLockedTime = (start = true) => {
 
 export const CountdownComponent = ({ lockedTime, className, showIfZero, showSeconds, isExpired }) => {
     return useMemo(() => {
-        if(lockedTime === "N/A" || lockedTime === undefined || lockedTime === null) return null;
+        if(lockedTime === "N/A" || lockedTime === undefined || lockedTime === null || isNaN(lockedTime)) return null;
         return <div className={`count-down-component ${className ?? ''}`}>
             {lockedTime && lockedTime > 0 ?
             <> 
