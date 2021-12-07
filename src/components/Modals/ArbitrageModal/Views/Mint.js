@@ -69,7 +69,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         if(error.message.toLowerCase().includes('not enough liquiditzy')) 
           setErrorMessage("There is not enough available liquidity to cover your position. Please use a collateral mint option or try again later.")
         else 
-          setErrorMessage("Something went wrong, please use a collateral mint option or try again later.");
+          setErrorMessage("Something went wrong, please try again later.");
         
         setPreFulfillData("N/A");
       }

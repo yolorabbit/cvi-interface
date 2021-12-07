@@ -21,13 +21,15 @@ const PendingRequest = () => {
     const { w3 } = useContext(appViewContext);
     const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
     const { action, isOpen, setIsOpen, disabled, amount, type, requestData} = useActionController(); 
-    const activeToken = useActiveToken();
+    const activeToken = useActiveToken(action, config.routes.arbitrage.path);
     const [isProcessing, setIsProcessing] = useState();
     const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId);
 
     const checkUserBalance = useCallback(async () => {
       try {
-        const accountBalance = await w3?.tokens[activeToken.pairToken.rel.contractKey].balanceOf(account); 
+
+        const accountBalance = await w3?.tokens[activeToken.rel.contractKey].balanceOf(account); 
+
         if(requestData.tokenAmountToFulfill.gt(accountBalance)) {
           dispatch(addAlert({
             id: action,
@@ -42,7 +44,7 @@ const PendingRequest = () => {
         console.log(error);
         return;
       }
-    }, [account, action, activeToken.pairToken.rel.contractKey, dispatch, requestData.tokenAmountToFulfill, w3?.tokens])
+    }, [account, action, activeToken.rel.contractKey, dispatch, requestData.tokenAmountToFulfill, w3?.tokens])
 
     const onLiquidate = useCallback(async() => {
         try {
