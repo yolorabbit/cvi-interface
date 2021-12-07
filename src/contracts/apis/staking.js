@@ -49,13 +49,14 @@ const stakingApi = {
             const uniswapLPToken = await getTokenData(platformLPToken, protocol);
             const poolSize = await stakingRewards.methods.totalSupply().call();
             // console.log("poolSize: ", poolSize);
-            const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDCData, uniswapLPToken, uniswapToken)
+            const longTokenData = rel.longToken ? await getTokenData(contracts[rel.longToken], protocol) : undefined; 
+            const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDCData, uniswapLPToken, uniswapToken, longTokenData);
             // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
             
             const totalStaked = !!account ? await stakingRewards.methods.balanceOf(account).call() : 0;
             // console.log("totalStaked: ", customFixed(toFixed(toDisplayAmount(totalStaked, token.decimals))));
             
-            const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, USDCData, uniswapLPToken, uniswapToken)
+            const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, USDCData, uniswapLPToken, uniswapToken, longTokenData)
             // console.log(tokenName, protocol+" accountStakedUSD: ", accountStakedUSD);
             const mySharePercentage = totalStaked?.toString() === "0" ? toBN("0") : toBN(totalStaked).mul(toBN("1", token.decimals)).div(toBN(poolSize)).mul(toBN("100"));
             
@@ -288,7 +289,7 @@ const stakingApi = {
         // console.log("amountTokens: " + amountTokens);
         return amountTokens * lpTokenValue;
     },
-    getUniswapAPY: async function(stakingRewards, USDTToken, GOVIData, uniswapLPToken, uniswapToken, isStaked) {
+    getUniswapAPY: async function(stakingRewards, USDTToken, GOVIData, uniswapLPToken, uniswapToken, longTokenData, isStaked) {
         // console.log("ETHToken: ", ETHToken);
         let rate = await stakingRewards.methods.rewardRate().call();
         // console.log(`reward rate ${rate}`);
@@ -301,7 +302,7 @@ const stakingApi = {
         // console.log(`USDPeriodRewards ${USDPeriodRewards}`);
         
         // convert from coti/eth or govi/eth to USDT using uniswapLPTokenToUSD (cant use uniswap for this)
-        let USDStakedTokens = await this.uniswapLPTokenToUSD(toBN(total), USDTToken, uniswapLPToken, uniswapToken);
+        let USDStakedTokens = await this.uniswapLPTokenToUSD(toBN(total), USDTToken, uniswapLPToken, uniswapToken, longTokenData);
         // console.log(`USDStakedTokens ${USDStakedTokens}`);
 
         const dailyApr = USDStakedTokens.toString() === "0" ? 0 : (USDPeriodRewards / USDStakedTokens) * 100;
