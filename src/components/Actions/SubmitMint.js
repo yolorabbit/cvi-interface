@@ -32,7 +32,7 @@ const SubmitMint = () => {
             const maxAvailableToOpen = availableToOpen < 0 ? totalRequestsAmount : totalRequestsAmount.add(availableToOpen);
             const availableBalanceWithTokenAmount = totalRequestsAmount.add(tokenAmount);
 
-            if(availableToOpen < 0) {
+            if(availableToOpen <= 0) {
                 return setErrorMessage(`The total pending mint requests amount can not exceed ${commaFormatted(toDisplayAmount(maxAvailableToOpen, activeToken.decimals))} ${upperCase(activeToken.name)} Please try again later`);
             } else if(availableBalanceWithTokenAmount.gt(maxAvailableToOpen)) {
                 const amountToSelect = tokenAmount.sub(toBN(availableBalanceWithTokenAmount.sub(maxAvailableToOpen)));

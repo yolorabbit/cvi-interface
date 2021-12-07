@@ -33,7 +33,7 @@ const PendingRequest = () => {
             id: action,
             eventName: `${upperFirst(action)} - failed`,
             alertType: config.alerts.types.FAILED,
-            message: "Not enough balance."
+            message: "Cannot fulfill due to insufficient wallet balance."
           }));
           return;
         }
