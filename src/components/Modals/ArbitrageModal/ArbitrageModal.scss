@@ -141,39 +141,39 @@
       margin: 5.556vw 0 4.444vw 0;
     }
   }
-  & .fulfill-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-      .no-liquidity-msg {
-        margin-inline-start: 0;
-        color: white;
-        width: 50%;
-        z-index: 200;
-        background: rgba(254, 167, 23 ,0.03);
-        border: 1px solid #fea717;
-        padding: 0.625vw;
-        border-radius: 0.625vw;
-        @media (max-width: 1365px) {
-          padding: 0.879vw;
-          border-radius: 0.879vw;
-        }
-        @media (max-width: 1024px) {
-          padding: 1.565vw;
-          border-radius: 1.565vw;
-        }
-        @media (max-width: 767px) {
-          padding: 3.333vw;
-          border-radius: 3.333vw;
-        }
-        }
-        .fulfill-values {
-          width: 100%;
-          &.no-value {
-            width: 50%;
-            }
-        }
-  }
+  & .no-liquidity-msg {
+    color: white;
+    width: 100%;
+    z-index: 200;
+    background: rgba(254, 167, 23 ,0.03);
+    border: 1px solid #fea717;
+    padding: 0.625vw;
+    border-radius: 0.625vw;
+    font-size: 0.629vw;
+    line-height: 1.25vw;
+    margin: 0.837vw 0 1.674vw 0;
+      @media (max-width: 1365px) {
+        margin: 1.136vw 0 2.272vw 0;
+        font-size: 0.879vw;
+        padding: 0.879vw;
+        border-radius: 0.879vw;
+        line-height: 1.758vw;
+      }
+      @media (max-width: 1024px) {
+        margin: 2.021vw 0 4.042vw 0;
+        line-height: 3.129vw;
+        font-size: 1.565vw;
+        padding: 1.565vw;
+        border-radius: 1.565vw;
+      }
+      @media (max-width: 767px) {
+        margin: 2.222vw 0 4.444vw 0;
+        line-height: 6.667vw;
+        font-size: 3.333vw;   
+        padding: 3.333vw;
+        border-radius: 3.333vw;
+      }
+    }
   & .button {
     text-transform: uppercase;
     background: #fea716;

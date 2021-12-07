@@ -102,38 +102,35 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         <FulfillmentInTimer fulfillmentIn={requestData.fulfillmentIn} />
       </div>
 
-      <div className="fulfill-wrapper">
-          <div className={`fulfill-values${preFulfillData === 'N/A' ? ' no-value' : ''}`}>
-              <Stat
-                title="Time to fullfillment and penalty fees"
-                className="large-value bold"
-                value={preFulfillData === 'N/A' ? '' : preFulfillData}
-                format={preFulfillData === 'N/A' ? 'N/A' :`${commaFormatted(customFixed(preFulfillData?.penaltyFeePercentWithTimeDelay.toString(), 4))}%`} />
+      {preFulfillData === 'N/A' && !collateralMint &&<p className="no-liquidity-msg">There is not enough available liquidity to cover your position. Please use a collateral mint option or try again later.</p>}
+      
+      <Checkbox
+        className="modal-checkbox" 
+        onClick={() => setCollateralMint(!collateralMint)}
+        title="Collateral mint"
+        checked={collateralMint}
+        tooltip={<Tooltip 
+          type="question" 
+          left="0" 
+          mobileLeft={-40} 
+          content={<span>
+            The collateral mint option enables the user to mint {upperCase(activeToken.name)} tokens while providing liquidity to cover the value of the long {upperCase(activeToken.oracleId)} position that those minted {upperCase(activeToken.name)} tokens hold. The liquidity provided is displayed on the platform page under provide liquidity tab. By using collateral mint option user won't be subject to the premium fees.
+            </span>} 
+          maxWidth={400}
+        />}
+      />
 
-              <Stat
-                title="Mint fee"
-                className="large-value bold"
-                value={preFulfillData === 'N/A' ? '' : preFulfillData}
-                format={preFulfillData === 'N/A' ? 'N/A' :`${commaFormatted(customFixed(preFulfillData?.openFeePercent.toString(), 4)) || "-"}%`} />
+      <Stat
+        title="Time to fullfillment and penalty fees"
+        className="large-value bold"
+        value={preFulfillData === 'N/A' ? '' : preFulfillData}
+        format={preFulfillData === 'N/A' ? 'N/A' :`${commaFormatted(customFixed(preFulfillData?.penaltyFeePercentWithTimeDelay.toString(), 4))}%`} />
 
-              <Checkbox
-                className="modal-checkbox" 
-                onClick={() => setCollateralMint(!collateralMint)}
-                title="Collateral mint"
-                checked={collateralMint}
-                tooltip={<Tooltip 
-                  type="question" 
-                  left="0" 
-                  mobileLeft={-40} 
-                  content={<span> 
-                    The collateral mint option enables the user to mint {upperCase(activeToken.name)} tokens while providing liquidity to cover the value of the long {upperCase(activeToken.oracleId)} position that those minted {upperCase(activeToken.name)} tokens hold. The liquidity provided is displayed on the platform page under provide liquidity tab. By using collateral mint option user won't be subject to the premium fees.
-                  </span>} 
-                  maxWidth={400}
-                />}
-              />
-          </div>
-          {preFulfillData === 'N/A' && !collateralMint &&<p className="no-liquidity-msg">There is not enough available liquidity to cover your position. Please use a collateral mint option or try again later.</p>}
-      </div>
+      <Stat
+        title="Mint fee"
+        className="large-value bold"
+        value={preFulfillData === 'N/A' ? '' : preFulfillData}
+        format={preFulfillData === 'N/A' ? 'N/A' :`${commaFormatted(customFixed(preFulfillData?.openFeePercent.toString(), 4)) || "-"}%`} />
 
       <Stat
         name="estimateMint"
