@@ -134,7 +134,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
       const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
       const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
-      const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
+      const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : tokenName === 'rhegic2-eth-lp' ? RHEGIC2Data : GOVIData;
       const uniswapLPToken = await getTokenData(platformLPToken, protocol);
       const poolSize = await stakingRewards.methods.totalSupply().call();
       // console.log("poolSize: ", poolSize);
@@ -162,7 +162,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const USDTData = await getTokenData(contracts[selectedNetwork === chainNames.Matic ? "USDC" : "USDT"]);
       const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
       const uniswapLPToken = await getTokenData(platformLPToken, protocol);
-      const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;
+      const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : tokenName === 'rhegic2-eth-lp' ? RHEGIC2Data : GOVIData;
       const apy = await web3Api.getUniswapAPY(stakingRewards, USDTData, GOVIData, uniswapLPToken, uniswapToken);
       // console.log(tokenName, protocol+" apy: ", apy);
       cb(() => setStakedData((prev)=> ({
@@ -203,7 +203,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
             tokenData = await getTokenData(contracts[tokenRel.token], protocol);
             balance = await tokenData.contract.methods.balanceOf(account).call();
             const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
-            const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : RHEGIC2Data;            
+            const uniswapToken =  tokenName === "coti-eth-lp" ? COTIData : tokenName === "govi-eth-lp" ? GOVIData : tokenName === 'rhegic2-eth-lp' ? RHEGIC2Data : GOVIData;        
             const usdBalance = await web3Api.uniswapLPTokenToUSD(balance, USDTData, tokenData, uniswapToken)
             return "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance)), 2))
           }

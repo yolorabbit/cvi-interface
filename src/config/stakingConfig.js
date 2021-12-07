@@ -8,14 +8,14 @@ export const stakingViews = {
 
 export const stakingProtocols = {
   "uniswap": "uniswap",
-  "sushiswap": "sushiswap", 
+  "sushiswap": "sushiswap",
   "quickswap": "quickswap",
   "platform": "platform"
 }
 
 const stakingConfig = {
   stakingConnectLabels: {
-    [stakingViews.staked]: "staked assets" 
+    [stakingViews.staked]: "staked assets"
   },
   protocolsByNetwork: {
     [chainNames.Ethereum]: [stakingProtocols.uniswap, stakingProtocols.sushiswap],
@@ -263,7 +263,7 @@ const stakingConfig = {
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
-          rewardsTokens: ["USDT","USDC"],
+          rewardsTokens: ["USDT", "USDC"],
           type: "lp-v1",
           rel: {
             contractKey: "GOVI",
@@ -351,13 +351,13 @@ const stakingConfig = {
   },
   actionsConfig: {
     "unstake": {
-        key: "unstake",
+      key: "unstake",
     },
     "stake": {
-        key: "stake",
+      key: "stake",
     },
     "claim": {
-        key: "claim",
+      key: "claim",
     }
   }
 }
