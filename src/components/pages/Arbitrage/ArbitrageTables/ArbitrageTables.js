@@ -5,7 +5,7 @@ import DataController from 'components/Tables/DataController';
 import ExpandList from 'components/Tables/ExpandList';
 import Table from 'components/Tables/Table';
 import arbitrageConfig, { activeTabs, activeViews } from 'config/arbitrageConfig';
-import React, { useContext, useMemo, useState, useEffect } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Container from 'components/Layout/Container';
 import TabsForm from 'components/TabsForm';
@@ -14,29 +14,10 @@ import moment from 'moment';
 import { commaFormatted, customFixed, customFixedTokenValue, toBN, toDisplayAmount } from 'utils/index';
 import { upperFirst } from "lodash";
 import { MAX_PERCENTAGE } from "contracts/utils";
-import { getLatestBlockTimestamp } from 'contracts/web3Api';
-import { useWeb3React } from "@web3-react/core";
-import config from "config/config";
 
 const ArbitrageTables = () => {
     const [activeTab, setActiveTab] = useState();
     const { activeView } = useContext(appViewContext);
-    const [lastBlockTime, setLastBlockTime] = useState();
-    const { library } = useWeb3React(config.web3ProviderId);
-
-    useEffect(() => {
-        const latestBlockTimestamp = async () => {
-            try {
-                const latestBlockTime = await getLatestBlockTimestamp(library.eth.getBlock);
-                setLastBlockTime(latestBlockTime);
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        if (!lastBlockTime) {
-            latestBlockTimestamp()
-        }
-    }, [library, activeTab, lastBlockTime])
 
     return useMemo(() => {
         if(!activeView) return null;
@@ -47,7 +28,7 @@ const ArbitrageTables = () => {
                 case activeViews.history:
                     return <HistoryTable activeTab={activeTab} />
                 default:
-                    return <DefaultTable lastBlockTime={lastBlockTime} activeTab={activeTab} />
+                    return <DefaultTable activeTab={activeTab} />
             }
         }
 
@@ -63,7 +44,7 @@ const ArbitrageTables = () => {
                 </TabsForm>
             </Container>
         )
-    }, [activeTab, activeView, lastBlockTime]);
+    }, [activeTab, activeView]);
 }
 
 const DataView = () => {
@@ -73,7 +54,7 @@ const DataView = () => {
     }, [isTablet]);
 }
 
-const DefaultTable = ({activeTab, lastBlockTime}) => {
+const DefaultTable = ({activeTab}) => {
     const { activeView, w3 } = useContext(appViewContext);
     const { unfulfilledRequests } = useSelector(({wallet}) => wallet);
     const activeToken = useActiveToken()
@@ -83,6 +64,7 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
         const data = w3 && unfulfilledRequests ? unfulfilledRequests.map(({
             event, id, requestId, requestType, submitFeesAmount, targetTimestamp, timestamp, tokenAmount,
         }) => {
+            const lastBlockTime = w3.block.cachedBlock.timestamp;
             const fromToken = arbitrageConfig.requestType[requestType] === activeTabs.burn ? activeToken : activeToken.pairToken; 
             const fromTokenName = fromToken.name.toUpperCase();
             const MAX_UPFRONT_FEE = toBN("500");
@@ -132,7 +114,7 @@ const DefaultTable = ({activeTab, lastBlockTime}) => {
         >
            <DataView />
         </DataController>
-    }, [w3, activeView, activeTab, unfulfilledRequests, activeToken, lastBlockTime]);
+    }, [w3, activeView, activeTab, unfulfilledRequests, activeToken]);
 }
 
 const HistoryTable = ({activeTab}) => {
