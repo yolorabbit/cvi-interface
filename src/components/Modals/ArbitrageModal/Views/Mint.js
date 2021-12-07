@@ -25,7 +25,8 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
   const [preFulfillData, setPreFulfillData] = useState(null);
   const [isProcessing, setIsProcessing] = useState();
   const originalRequest = unfulfilledRequests.find(r => r.requestId === requestData.requestId);
-  
+  const [errorMessage, setErrorMessage] = useState();
+
   const onClick = useCallback(async() => {
     try {
       setIsProcessing(true);
@@ -58,12 +59,18 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
 
     const preFulfill = async () => {
       try {
+        await w3?.tokens[activeToken.rel.volTokenKey].refresh();
         const preFulfillAction = collateralMint ? "preFulfillCollateralizedMint" : "preFulfillMint";
         let preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey][preFulfillAction](originalRequest, { account });
         preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + Number(requestData.timeToFulfillmentFee.replace('%', ''));
         setPreFulfillData(preFulfillRes);
       } catch (error) {
         console.log(error);
+        if(error.message.toLowerCase().includes('not enough liquiditzy')) 
+          setErrorMessage("There is not enough available liquidity to cover your position. Please use a collateral mint option or try again later.")
+        else 
+          setErrorMessage("Something went wrong, please use a collateral mint option or try again later.");
+        
         setPreFulfillData("N/A");
       }
     }
@@ -77,8 +84,6 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         className="arbitrage-title"
         color="white"
         text={`Mint ${activeToken.name.toUpperCase()} tokens`} />
-
-      {(!requestData || !originalRequest || preFulfillData === "N/A") && <Stat title="Some error occurred." className="bold low" />}
 
       <Stat
         title="Amount"
@@ -94,15 +99,16 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
       <Stat
         title="Amount to fullfill"
         className="large-value bold"
-        value={requestData.amount - requestData.upfrontPayment || "0"}
-        _suffix={requestData.symbol} />
+        value={requestData.amountToFulfill || "0"}
+        _suffix={requestData.symbol} 
+      />
 
       <div className="stat-component">
         <h2>Fullfillment in</h2>
         <FulfillmentInTimer fulfillmentIn={requestData.fulfillmentIn} />
       </div>
 
-      {preFulfillData === 'N/A' && !collateralMint &&<p className="no-liquidity-msg">There is not enough available liquidity to cover your position. Please use a collateral mint option or try again later.</p>}
+      {preFulfillData === 'N/A' && errorMessage && !collateralMint &&<p className="no-liquidity-msg">{errorMessage}</p>}
       
       <Checkbox
         className="modal-checkbox" 
@@ -170,7 +176,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
         buttonText="Cancel"
         onClick={closeBtn} />
     </>
-  ),[activeToken.name, activeToken.decimals, activeToken.oracleId, requestData, originalRequest, preFulfillData, collateralMint, isProcessing, onClick, closeBtn])
+  ),[activeToken.name, activeToken.oracleId, activeToken.decimals, requestData.amount, requestData.symbol, requestData.upfrontPayment, requestData.amountToFulfill, requestData.fulfillmentIn, preFulfillData, errorMessage, collateralMint, isProcessing, originalRequest, onClick, closeBtn])
 }
 
 export default Mint

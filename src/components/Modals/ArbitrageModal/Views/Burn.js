@@ -52,6 +52,7 @@ const Burn = ({ closeBtn, requestData }) => {
 
     const preFulfill = async () => {
       try {
+        await w3?.tokens[activeToken.rel.volTokenKey].refresh();
         const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest, { account });
         preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + Number(requestData.timeToFulfillmentFee.replace('%', ''));
         setPreFulfillData(preFulfillRes);
@@ -91,7 +92,7 @@ const Burn = ({ closeBtn, requestData }) => {
         <Stat
           title="Amount to fullfill"
           className="large-value bold"
-          value={requestData.amount - requestData.upfrontPayment || "0"}
+          value={requestData.amountToFulfill || "0"}
           _suffix={requestData.symbol}
         />
 
