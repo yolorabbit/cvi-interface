@@ -34,6 +34,7 @@ node {
       def chain_id = "1337";
       def generate_sourcemap = false;
       def network_url = "https://eth-mainnet.alchemyapi.io/v2/KhQWOrbOeWZoTIkwRt4a4aXPPxx5wj5J";
+      def days_to_count_from = "4"
 
       if (env.BRANCH_NAME == "master" || env.BRANCH_NAME == "master-cvi" || env.BRANCH_NAME == "master-platform" ){
         chain_id = "1";
@@ -69,7 +70,7 @@ node {
       {
         sh "set"
         def AUTH_VAL_FROM_FILE = readFile "${env.authToken}"
-        def cmdline = "--build-arg REACT_APP_NETWORK_URL=${network_url} --build-arg GENERATE_SOURCEMAP=${generate_sourcemap} --build-arg REACT_APP_HOST_V2=${host2} --build-arg REACT_APP_HOST=${host} --build-arg REACT_APP_ENVIRONMENT=${node_env} --build-arg REACT_APP_COTI_URL=${coti_url} --build-arg REACT_APP_COTIPAY_URL=${cotipay_url} --build-arg REACT_APP_CHAIN_ID=${chain_id} . --build-arg ${AUTH_VAL_FROM_FILE}"
+        def cmdline = "--build-arg REACT_APP_NETWORK_URL=${network_url} --build-arg GENERATE_SOURCEMAP=${generate_sourcemap} --build-arg REACT_APP_HOST_V2=${host2} --build-arg REACT_APP_HOST=${host} --build-arg REACT_APP_ENVIRONMENT=${node_env} --build-arg REACT_APP_COTI_URL=${coti_url} --build-arg REACT_APP_COTIPAY_URL=${cotipay_url} --build-arg REACT_APP_CHAIN_ID=${chain_id} --build-arg REACT_APP_DAYS_TO_COUNT_FROM=${days_to_count_from} . --build-arg ${AUTH_VAL_FROM_FILE}"
         app = docker.build(imageName, cmdline)
       }
       } else {
