@@ -18,7 +18,7 @@ const requestActionByType = {
 const PendingRequest = () => {
     const dispatch = useDispatch();
     const {account} = useActiveWeb3React();
-    const { w3 } = useContext(appViewContext);
+    const { w3, w3Filters } = useContext(appViewContext);
     const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
     const { action, isOpen, setIsOpen, disabled, amount, type, requestData} = useActionController(); 
     const activeToken = useActiveToken(action, config.routes.arbitrage.path);
@@ -49,7 +49,7 @@ const PendingRequest = () => {
     const onLiquidate = useCallback(async() => {
         try {
           setIsProcessing(true);
-          await w3?.tokens[activeToken.rel.volTokenKey].refresh();
+          await w3?.refreshComponents(w3Filters);
           await w3?.tokens[activeToken.rel.volTokenKey][requestActionByType[action]](originalRequest.requestId, { account });
           dispatch(addAlert({
             id: action,
@@ -68,7 +68,7 @@ const PendingRequest = () => {
         } finally {
           setIsProcessing(false);
         }
-      }, [account, action, activeToken.rel.volTokenKey, dispatch, originalRequest.requestId, w3?.tokens]);
+      }, [account, action, activeToken.rel.volTokenKey, dispatch, originalRequest.requestId, w3, w3Filters]);
 
     const onClick = async () => {
         if(type === arbitrageConfig.actionsConfig.fulfill.key) {

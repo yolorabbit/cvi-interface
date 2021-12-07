@@ -15,7 +15,7 @@ import FulfillmentInTimer from 'components/pages/Arbitrage/FulfillmentInTimer';
 const Burn = ({ closeBtn, requestData }) => {
   const dispatch = useDispatch();
   const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
-  const { w3 } = useContext(appViewContext);
+  const { w3, w3Filters } = useContext(appViewContext);
   const {account} = useActiveWeb3React();
   const activeToken = useActiveToken();
   const [preFulfillData, setPreFulfillData] = useState(null);
@@ -25,7 +25,7 @@ const Burn = ({ closeBtn, requestData }) => {
   const onClick = useCallback(async() => {
     try {
       setIsProcessing(true);
-      await w3?.tokens[activeToken.rel.volTokenKey].refresh();
+      await w3?.refreshComponents(w3Filters);
       await w3?.tokens[activeToken.rel.volTokenKey].fulfillBurn(originalRequest.requestId, {account});
       dispatch(addAlert({
         id: 'burn',
@@ -45,14 +45,14 @@ const Burn = ({ closeBtn, requestData }) => {
       closeBtn();
       setIsProcessing(false);
     }
-  }, [account, activeToken.rel.volTokenKey, closeBtn, dispatch, originalRequest.requestId, w3?.tokens]);
+  }, [account, activeToken.rel.volTokenKey, closeBtn, dispatch, originalRequest.requestId, w3, w3Filters]);
 
   useEffect(()=>{
     if(!originalRequest || !account) return;
 
     const preFulfill = async () => {
       try {
-        await w3?.tokens[activeToken.rel.volTokenKey].refresh();
+        await w3?.refreshComponents(w3Filters);        
         const preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey].preFulfillBurn(originalRequest, { account });
         preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + Number(requestData.timeToFulfillmentFee.replace('%', ''));
         setPreFulfillData(preFulfillRes);
@@ -63,7 +63,7 @@ const Burn = ({ closeBtn, requestData }) => {
     }
 
     if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
-  },[w3, requestData, activeToken, originalRequest, closeBtn, account]);
+  },[w3, requestData, activeToken, originalRequest, closeBtn, account, w3Filters]);
 
   return useMemo(() => {
     return (

@@ -15,7 +15,7 @@ const SubmitMint = () => {
     const dispatch = useDispatch();
     const isActiveInDOM = useInDOM();
     const { account } = useActiveWeb3React();
-    const { w3 } = useContext(appViewContext);
+    const { w3, w3Filters } = useContext(appViewContext);
     const { type, disabled, setIsOpen, amount, setAmount, delayFee, cb: updateAvailableBalance } = useActionController();
     const activeToken = useActiveToken(type);
     const [isProcessing, setProcessing] = useState();
@@ -26,7 +26,7 @@ const SubmitMint = () => {
         setProcessing(true);
 
         try {
-            await w3?.tokens[activeToken.rel.volTokenKey].refresh();
+            await w3?.refreshComponents(w3Filters);
             const totalRequestsAmount = w3?.tokens[activeToken.rel.volTokenKey].totalRequestsAmount;
             const availableToOpen = w3?.tokens[activeToken.rel.volTokenKey].maxSubmitMintAmount();
             const maxAvailableToOpen = availableToOpen < 0 ? totalRequestsAmount : totalRequestsAmount.add(availableToOpen);
@@ -82,7 +82,7 @@ const SubmitMint = () => {
                 }
             }
         }
-    }, [account, activeToken.decimals, activeToken.name, activeToken.rel.volTokenKey, delayFee.delayTime, dispatch, isActiveInDOM, setAmount, setIsOpen, tokenAmount, updateAvailableBalance, w3?.tokens])
+    }, [account, activeToken.decimals, activeToken.name, activeToken.rel.volTokenKey, delayFee.delayTime, dispatch, isActiveInDOM, setAmount, setIsOpen, tokenAmount, updateAvailableBalance, w3, w3Filters])
 
     return useMemo(() => {
         return  (

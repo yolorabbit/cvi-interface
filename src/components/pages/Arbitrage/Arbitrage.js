@@ -21,9 +21,9 @@ const Arbitrage = () => {
   const [activeTokenKey, setActiveTokenKey] = useState();
   const activeToken = useActiveToken(activeTokenKey, config.routes.arbitrage.path);
   
-  const w3Filters = activeToken?.rel ? {
+  const w3Filters = useMemo(() => activeToken?.rel ? {
     token: [activeToken.rel.volTokenKey]
-  } : null;
+  } : null, [activeToken?.rel])
 
   const w3 = useCviSdk(w3Filters);
   useArbitrageEvents(w3, activeToken);
@@ -36,7 +36,7 @@ const Arbitrage = () => {
         setActiveView={setActiveView} 
       />
 
-      <appViewContext.Provider value={{ activeView, w3, activeToken }}>
+      <appViewContext.Provider value={{ activeView, w3, activeToken, w3Filters }}>
         <Layout>
           <Row className="statistics-row-component">
             <Statistics />
@@ -54,7 +54,7 @@ const Arbitrage = () => {
         </Layout>
       </appViewContext.Provider>
     </div>
-  ), [activeToken, activeView, w3]);
+  ), [activeToken, activeView, w3, w3Filters]);
 };
 
 export default Arbitrage;

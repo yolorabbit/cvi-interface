@@ -18,7 +18,7 @@ import { upperCase } from 'lodash';
 const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn into one view 
   const dispatch = useDispatch();
   const { unfulfilledRequests } = useSelector(({wallet})=>wallet);
-  const { w3 } = useContext(appViewContext);
+  const { w3, w3Filters} = useContext(appViewContext);
   const {account} = useActiveWeb3React();
   const activeToken = useActiveToken();
   const [collateralMint, setCollateralMint] = useState(false);
@@ -30,9 +30,10 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
   const onClick = useCallback(async() => {
     try {
       setIsProcessing(true);
-      await w3?.tokens[activeToken.rel.volTokenKey].refresh();
+      await w3?.refreshComponents(w3Filters);
       const mintAction = collateralMint ? "fulfillCollateralizedMint" : "fulfillMint";
-      await w3?.tokens[activeToken.rel.volTokenKey][mintAction](originalRequest.requestId, {account});
+      const mintResponse = await w3?.tokens[activeToken.rel.volTokenKey][mintAction](originalRequest.requestId, {account});
+      console.log(mintResponse);
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - success",
@@ -51,7 +52,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
       closeBtn();
       setIsProcessing(false);
     }
-  }, [account, activeToken.rel.volTokenKey, closeBtn, collateralMint, dispatch, originalRequest.requestId, w3?.tokens]);
+  }, [account, activeToken.rel.volTokenKey, closeBtn, collateralMint, dispatch, originalRequest.requestId, w3, w3Filters]);
 
   useEffect(()=>{
     if(!originalRequest) return;
@@ -59,7 +60,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
 
     const preFulfill = async () => {
       try {
-        await w3?.tokens[activeToken.rel.volTokenKey].refresh();
+        await w3?.refreshComponents(w3Filters);
         const preFulfillAction = collateralMint ? "preFulfillCollateralizedMint" : "preFulfillMint";
         let preFulfillRes = await w3?.tokens[activeToken.rel.volTokenKey][preFulfillAction](originalRequest, { account });
         preFulfillRes.penaltyFeePercentWithTimeDelay = preFulfillRes.penaltyFeePercent + Number(requestData.timeToFulfillmentFee.replace('%', ''));
@@ -76,7 +77,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
     }
 
     if(w3?.tokens[activeToken.rel.volTokenKey] && originalRequest) preFulfill();
-  },[w3, requestData, activeToken, originalRequest, closeBtn, collateralMint, account]);
+  },[w3, requestData, activeToken, originalRequest, closeBtn, collateralMint, account, w3Filters]);
 
   return useMemo(() => (
     <>
