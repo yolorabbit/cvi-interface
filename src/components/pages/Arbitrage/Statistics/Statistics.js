@@ -52,8 +52,7 @@ const Statistics = () => {
                     className="statistics-trade-button"
                     target="_blank"
                 >
-                        {`Trade ${!isMobile && isTablet ? '' :
-                        activeToken.name.toUpperCase() + ' on ' + arbitrageConfig.exchanges[selectedNetwork].mainExchange.label}`}
+                        {`Trade ${activeToken.name.toUpperCase()}`}
                 </a>
             </Container>
         )
