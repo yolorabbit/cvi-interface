@@ -1,5 +1,5 @@
 import { appViewContext } from 'components/Context';
-import { useActiveToken } from 'components/Hooks';
+import { useActiveToken, useIsMobile, useIsTablet } from 'components/Hooks';
 import Container from 'components/Layout/Container';
 import IndexValue from 'components/pages/Platform/IndexStats/IndexValue';
 import { Value } from 'components/Tables/Elements/Values';
@@ -13,6 +13,8 @@ const Statistics = () => {
     const { selectedNetwork } = useSelector(({ app }) => app);
     const { w3 } = useContext(appViewContext);
     const activeToken = useActiveToken();
+    const isTablet = useIsTablet();
+    const isMobile = useIsMobile();
 
     return useMemo(() => {
         if (!selectedNetwork || !activeToken) return null;
@@ -36,17 +38,26 @@ const Statistics = () => {
                 />
 
                 <Value
-                    header="Platform price"
+                    header={`${!isMobile && isTablet ? '' : activeToken.name.toUpperCase()} Platform price`}
                     text={intrinsicValue === null ? null : `${customFixed(intrinsicValue, pairToken.fixedDecimals)} USDC`}
                 />
 
                 <Value
-                    header={`${arbitrageConfig.exchanges[selectedNetwork].mainExchange.label} price`}
+                    header={`${!isMobile && isTablet ? '' : activeToken.name.toUpperCase()} ${arbitrageConfig.exchanges[selectedNetwork].mainExchange.label} price`}
                     text={tokenPrice === null ? null : `${customFixed(tokenPrice, pairToken.fixedDecimals)} USDC`}
                 />
+
+                <a href={arbitrageConfig.exchanges[selectedNetwork].mainExchange.path}
+                    rel="noopener noreferrer"
+                    className="statistics-trade-button"
+                    target="_blank"
+                >
+                        {`Trade ${!isMobile && isTablet ? '' :
+                        activeToken.name.toUpperCase() + ' on ' + arbitrageConfig.exchanges[selectedNetwork].mainExchange.label}`}
+                </a>
             </Container>
         )
-    }, [activeToken, selectedNetwork, w3]);
+    }, [activeToken, selectedNetwork, w3, isTablet, isMobile]);
 }
 
 export default Statistics;

@@ -27,12 +27,14 @@ const arbitrageConfig = {
   exchanges: {
     [chainNames.Ethereum]: {
       mainExchange: {
-        label: 'Uniswap'
+        label: 'Uniswap',
+        path: 'https://v2.info.uniswap.org/pair/0x197e99bD87F98DFde461afE3F706dE36c9635a5D'
       },
     },
     [chainNames.Matic]: {
       mainExchange: {
-        label: 'Quickswap'
+        label: 'Quickswap',
+        path: 'https://info.quickswap.exchange/pair/0x1dd0095a169e8398448A8e72f15A1868d99D9348'
       }
     },
   },

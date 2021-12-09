@@ -2,7 +2,6 @@
     display: flex;
     padding: 0.833vw 3.2vw;
     min-height: 4.167vw;
-    
     @media (max-width: 1365px) {
         padding: 1.172vw 3.35vw;
         min-height: 5.861vw;
@@ -25,16 +24,19 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-
         @media (max-width: 1365px) {
             margin-right: 7.912vw;
         }
     
         @media (max-width: 1024px) {
-            margin-right: 9.909vw;
+            margin-right: 4.172vw;
         }
     
         @media (max-width: 767px) {
+            margin-right: 0;
+        }
+
+        &:last-of-type {
             margin-right: 0;
         }
 
@@ -46,7 +48,7 @@
             }
         
             @media (max-width: 1024px) {
-                min-width: 33.984vw;
+                min-width: 32.334vw;
             }
         
             @media (max-width: 767px) {
@@ -135,15 +137,15 @@
     & .index-value-component__top--value {
         margin-right: 1.25vw;
         @media (max-width: 1365px) {
-            margin-right: 2.25vw;
+            margin-right: 1.465vw;
         }
     
         @media (max-width: 1024px) {
-            margin-right: 2.608vw;
+            margin-right: 1.565vw;
         }
     
         @media (max-width: 767px) {
-            margin-right: 20px;
+            margin-right: 5.556vw;
         }
     }
 
@@ -193,6 +195,51 @@
 
         &.low {
             color: #f96a9a;
+        }
+    }
+
+    & .statistics-trade-button {
+        font-weight: bold;
+        line-height: 1.25;
+        text-align: center;
+        color: #fff;
+        margin: auto 0 0 1.667vw;
+        height: 2.083vw;
+        border-radius: 0.208vw;
+        padding: 0.625vw 0.417vw;
+        font-size: 0.625vw;
+        background-color: #00a389;
+        text-decoration: none;
+        min-width: 6.25vw;
+        @media (max-width: 1365px) {
+            margin: auto 0 0 2.344vw;
+            height: 2.93vw;
+            border-radius: 0.293vw;
+            padding: 0.879vw 0.586vw;
+            min-width: 8.791vw;
+            font-size: 0.879vw;
+            }
+    
+        @media (max-width: 1024px) {
+            margin: auto 0 0 4.172vw;
+            height: 5.215vw;
+            border-radius: 0.522vw;
+            padding: 1.565vw 1.043vw;
+            min-width: 15.645vw;
+            font-size: 1.565vw;
+            }
+    
+        @media (max-width: 767px) {
+            margin: 4.444vw 0 0 0;
+            width: 100%;
+            height: 11.111vw;
+            border-radius: 1.111vw;
+            padding: 3.333vw 2.222vw;
+            min-width: 33.333vw;
+            font-size: 3.333vw;
+            }
+        &:visited, &:focus, &:active {
+            text-decoration: none;
         }
     }
 }
