@@ -95,19 +95,21 @@ const Buy = () => {
     }, [activeVolInfo, activeToken, amount, getMaxAmount]);
 
     const openFeeWithSlippageIsValid = useCallback(async () => {
-        let fees = await getPurchaseFees();
+        let fees = await getPurchaseFees(); // new fees data
         if(fees === "N/A" || purchaseFee === "N/A") return;
-        const currentFeeWithSlippage = toBN(purchaseFee.openFee)
-            .add(toBN(toBNAmount(slippageTolerance, 7)));
-        const newFee = toBN(fees.openFee);
-        return currentFeeWithSlippage.gt(newFee)
+        const slippageBnValue = toBN(String(slippageTolerance * 100)); // selected slippage as big number
+        const newBuyingPremiumFeeBn = toBN(fees.buyingPremiumFeePercent); // new buying premium fee (when click on buy)
+        const oldBuyingPremiumFee = toBN(purchaseFee.buyingPremiumFeePercent); // buying premium fee on input change 
+        const buyingPremiumFeeDiff = newBuyingPremiumFeeBn.sub(oldBuyingPremiumFee); // diff between new fee and old fee 
+        return slippageBnValue.gt(buyingPremiumFeeDiff); // is valid = slippage is bigger than buying premium fee diff.
         
     }, [getPurchaseFees, purchaseFee, slippageTolerance]);
 
     const buy = useCallback(async () => {
         const _contract = getContract(activeToken.rel.platform);
         const _leverage = !leverage ? "1" : leverage;
-        const _feesWithSlippage = String(Number(purchaseFee?.buyingPremiumFeePercent || 0) + Number((slippageTolerance * 100) || 0));
+        const _feesWithSlippage = toBN(purchaseFee?.buyingPremiumFeePercent || "0").add(toBN(String((slippageTolerance * 100) || "0")));
+
         const maxIndexValue = config.oraclesData[activeToken.oracleId].maxIndex;
         if (activeToken.type === "eth") {
             return await _contract.methods.openPositionETH(maxIndexValue, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount, ...gas });
