@@ -4,9 +4,11 @@ import { useActiveToken } from 'components/Hooks';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import config from 'config/config';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux';
 import './Form.scss';
 
 const Form = ({ amount, setAmount, delayFee, setDelayFee, type }) => {
+    const { unfulfilledRequests } = useSelector(({wallet}) => wallet);
     const { account } = useActiveWeb3React();
     const activeToken = useActiveToken(type); 
     const { w3 } = useContext(appViewContext);
@@ -15,7 +17,6 @@ const Form = ({ amount, setAmount, delayFee, setDelayFee, type }) => {
 
     const getAvailableBalance = useCallback(async () => {
         try {
-            setAvailableBalance(null);
             const balance = await tokenContract.balanceOf(account);
             setAvailableBalance(balance);
         } catch(error) {
@@ -28,8 +29,15 @@ const Form = ({ amount, setAmount, delayFee, setDelayFee, type }) => {
     useEffect(() => {
         if(!account) return setAvailableBalance("0");
         if(!tokenContract) return;
+        setAvailableBalance(null);
         getAvailableBalance();
     }, [account, tokenContract, getAvailableBalance]);
+
+    useEffect(() => {
+        if(unfulfilledRequests === null) return;
+        setAvailableBalance(null);
+        getAvailableBalance();
+    }, [getAvailableBalance, unfulfilledRequests])
 
     return useMemo(() => {
         if(!activeToken?.name) return;
@@ -46,7 +54,7 @@ const Form = ({ amount, setAmount, delayFee, setDelayFee, type }) => {
                     type={type}
                     balances={{ tokenAmount: availableBalance }}
                     disabled={!amount} 
-                    cb={() => getAvailableBalance()}
+                    cb={getAvailableBalance}
                 />
                 <SeeMore />
             </div>
