@@ -169,17 +169,25 @@ export async function getOpenPositionFee(contracts, token, { leverage = 1, token
 export async function getClosePositionFee(contracts, token, { tokenAmount, leverage = 1, account, cviValue }) {
   let pos = await contracts[token.rel.platform].methods.positions(account).call();
   if (toBN(pos.positionUnitsAmount).isZero()) {
-    return toBN(0);
+    return {
+      closeFeeAmount: "0",
+      closeFeePrecent: "0", 
+      closePremiumFeePercent: "0"
+    };
   }
   let posTimestamp = pos.creationTimestamp;
   const params = (token.type === "usdc" || token.type === "v3") ? [posTimestamp, false] : [posTimestamp]
   let closeFeePrecent = toBN(await contracts[token.rel.feesCalc].methods.calculateClosePositionFeePercent(...params).call());
   let maxFeePercent = toBN(await contracts[token.rel.platform].methods.MAX_FEE_PERCENTAGE().call());
 
-  const closePremiumFee = await getClosingPremiumFee(contracts, token, { tokenAmount, leverage, cviValue });
-  const closePremiumFeeAmount = closePremiumFee?.isZero() ? toBN("0") : toBN(tokenAmount).mul(closePremiumFee).div(maxFeePercent);
+  const closePremiumFeePercent = await getClosingPremiumFee(contracts, token, { tokenAmount, leverage, cviValue });
+  const closePremiumFeeAmount = closePremiumFeePercent?.isZero() ? toBN("0") : toBN(tokenAmount).mul(closePremiumFeePercent).div(maxFeePercent);
   const closeFeePrecentAmount = closeFeePrecent?.isZero() ? toBN("0") : toBN(tokenAmount).mul(closeFeePrecent).div(maxFeePercent);
-  return closeFeePrecentAmount.add(closePremiumFeeAmount);
+  return {
+    closeFeeAmount: closeFeePrecentAmount.add(closePremiumFeeAmount),
+    closeFeePrecent, 
+    closePremiumFeePercent
+  };
 }
 
 async function getCurrentFundingFeeV1(platform, account) {

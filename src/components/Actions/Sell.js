@@ -1,5 +1,5 @@
 import Button from 'components/Elements/Button';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useActiveToken, useInDOM } from 'components/Hooks';
 import { useActionController } from './ActionController';
 import { useContext } from 'react';
@@ -85,6 +85,16 @@ const Sell = () => {
         }
     }
 
+    const sellFeeWithSlippageIsValid = useCallback(async () => {
+        let fees = await updateSellFee(); // new fees data
+        if(fees === "N/A" || sellFee === "N/A") return;
+        const slippageBnValue = toBN(String(slippageTolerance * 100)); // selected slippage as big number
+        const newSellPremiumFeeBn = toBN(fees.closePremiumFeePercent); // new buying premium fee (when click on buy)
+        const oldSellPremiumFee = toBN(sellFee.closePremiumFeePercent); // buying premium fee on input change 
+        const sellPremiumFeeDiff = newSellPremiumFeeBn.sub(oldSellPremiumFee); // diff between new fee and old fee 
+        return slippageBnValue.gt(sellPremiumFeeDiff); // is valid = slippage is bigger than buying premium fee diff.
+    }, [sellFee, slippageTolerance, updateSellFee]);
+
     const onClick = async () => {
         if(!isOpen && !sellAllModal) {
             return setIsOpen(true);
@@ -92,8 +102,8 @@ const Sell = () => {
         setProcessing(true);
         
         try {
-            let sellFeeUpdated = await updateSellFee();
-            if(!sellFee.eq(sellFeeUpdated)) return setModalIsOpen(true);
+            const sellFeeIsValid = await sellFeeWithSlippageIsValid();
+            if(!sellFeeIsValid) return setModalIsOpen(true);
 
             if(!sellAllModal) {
                 const [claimRewardData] = await web3Api.getClaimableReward(contracts, activeToken, { account });
@@ -141,7 +151,7 @@ const Sell = () => {
 
         <div className="sell-component">
             <div className="sell-component__container">
-                {(isOpen && !isModal) && <SellInfo sellFee={sellFee} />}
+                {(isOpen && !isModal) && <SellInfo sellFee={sellFee === null ? null : sellFee === 'N/A' ? 'N/A' : sellFee?.closeFeeAmount || "0"} />}
                 {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
                 <Button 
                     className="sell-component__container--button" 
@@ -154,7 +164,6 @@ const Sell = () => {
             </div>
         </div>
     </>
-     
 }
 
 export default Sell;
