@@ -97,6 +97,9 @@ const Sell = () => {
 
     const onClick = async () => {
         if(!isOpen && !sellAllModal) {
+            const [claimRewardData] = await web3Api.getClaimableReward(contracts, activeToken, { account });
+            if(toBN(claimRewardData)?.gt(toBN("0"))) return setSellAllModal(true);
+
             return setIsOpen(true);
         }
         setProcessing(true);
@@ -104,11 +107,6 @@ const Sell = () => {
         try {
             const sellFeeIsValid = await sellFeeWithSlippageIsValid();
             if(!sellFeeIsValid) return setModalIsOpen(true);
-
-            if(!sellAllModal) {
-                const [claimRewardData] = await web3Api.getClaimableReward(contracts, activeToken, { account });
-                if(toBN(claimRewardData)?.gt(toBN("0"))) return setSellAllModal(true);
-            }
 
             dispatch(addAlert({
                 id: 'notice',
@@ -146,7 +144,7 @@ const Sell = () => {
     }
 
     return <> 
-        {sellAllModal && <SellAllModal isProcessing={isProcessing} onSubmit={() => onClick()} setSellAllModal={setSellAllModal} />}
+        {sellAllModal && <SellAllModal isProcessing={isProcessing} onSubmit={() => setIsOpen(true)} setSellAllModal={setSellAllModal} />}
         {modalIsOpen && <ErrorModal error={feesChangedWarning} setModalIsOpen={() => setModalIsOpen(false)} isWarning /> }
 
         <div className="sell-component">
