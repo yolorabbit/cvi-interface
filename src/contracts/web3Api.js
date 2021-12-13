@@ -7,10 +7,10 @@ import stakingApi from "./apis/staking";
 import rewardsApi from './apis/rewards';
 import liquidityApi from "./apis/liquidity";
 import moment from "moment";
-import { chainNames } from "connectors";
+import { chainNames, chainsData } from "connectors";
 import platformConfig from "config/platformConfig";
 import stakingConfig, { stakingProtocols } from "config/stakingConfig";
-import { bottomBlockByNetwork, maticBottomBlockSinTheGraphStopToWork } from "components/Hooks/useEvents";
+import { bottomBlockByNetwork } from "components/Hooks/useEvents";
 import Api from "Api";
  
 export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
@@ -39,7 +39,7 @@ export const getTokenData = async (contract, protocol) => {
 
 export async function getFeesCollectedFromEvents(staking, USDCData, tokensData, { eventsUtils, library, useInitialValue }) {
     const selectedNetwork = await getChainName();
-    const bottomBlock = selectedNetwork === chainNames.Matic ? maticBottomBlockSinTheGraphStopToWork :  bottomBlockByNetwork[selectedNetwork]; // temporary fix for matic
+    const bottomBlock = bottomBlockByNetwork[selectedNetwork]; // temporary fix for matic
     const options = {
         steps: Number.MAX_SAFE_INTEGER,
         bottomBlock: bottomBlock, 
@@ -116,7 +116,7 @@ const getFeesCollectedFromApi = async (USDCData, tokensData, chainName) => {
 
 export async function getFeesCollected(USDCData, tokensData) {
     const chainName = await getChainName();
-    if(chainName === chainNames.Matic) {
+    if(chainsData[chainName].eventCounter) {
         return await getFeesCollectedFromApi(USDCData, tokensData, chainName);
     } else {
         return await getFeesCollectedFromGraph(USDCData, tokensData);

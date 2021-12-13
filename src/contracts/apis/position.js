@@ -4,10 +4,9 @@ import { gas, maxUint256, toBN, toDisplayAmount } from "utils";
 import * as TheGraph from 'graph/queries';
 import { contractState } from "components/Hooks/useHistoryEvents";
 import config from "config/config";
-import { DEFAULT_STEPS } from "components/Hooks/useEvents";
+import { BLOCK_RATES, DEFAULT_STEPS } from "components/Hooks/useEvents";
 import moment from "moment";
 import { getLatestBlockTimestamp } from './../web3Api';
-import { chainNames } from "connectors";
 
 export const getPositionValue = async (platform, account) => {
   try {
@@ -235,7 +234,7 @@ async function getPositionsPNL(contracts, token, {account, library, eventsUtils 
       // console.log("latestBlockNumber: ", latestBlockNumber);
       // console.log("latestTimestamp: ", latestTimestamp);
       const oneWeekBeforeLastestTimestamp = moment(latestTimestamp*1000).subtract(1, "week").valueOf()
-      const oneWeekBeforeBlockNumber = latestBlockNumber - Math.floor((((latestTimestamp*1000) - oneWeekBeforeLastestTimestamp) / 1000) / (chainName === chainNames.Matic ? 2.06 : 13)) 
+      const oneWeekBeforeBlockNumber = latestBlockNumber - Math.floor((((latestTimestamp*1000) - oneWeekBeforeLastestTimestamp) / 1000) / BLOCK_RATES[chainName]) 
       // console.log("oneWeekBeforeBlockNumber: ", oneWeekBeforeBlockNumber);
       
       events = events.filter(event => event.blockNumber < oneWeekBeforeBlockNumber);

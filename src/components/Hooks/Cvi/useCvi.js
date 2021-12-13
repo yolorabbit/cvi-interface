@@ -4,7 +4,7 @@ import Api from "Api";
 import { useDispatch, useSelector } from "react-redux";
 import { updateVolInfo } from "store/actions";
 import { activeVolsSet, customFixed, toDisplayAmount } from "utils";
-import { chainNames } from "connectors";
+import { chainNames, chainsData } from "connectors";
 import { debounce } from "lodash";
 import config from "config/config";
 import { contractsContext } from "contracts/ContractContext";
@@ -49,7 +49,7 @@ const useCvi = () => {
    }
 
    const startPollingInterval = () => {
-      const nextUpdateOnMinutes = selectedNetwork === chainNames.Matic ? 21 : 62;
+      const nextUpdateOnMinutes = chainsData[selectedNetwork]?.poolingInterval || 62;
       const now = moment.utc();
       const pollingTime = ((nextUpdateOnMinutes - (now.minute() % nextUpdateOnMinutes))) * 60 * 1000;
       setTimeDuration(pollingTime);
@@ -57,7 +57,7 @@ const useCvi = () => {
 
    const fetchGraphData = useCallback(async (index = "cvi") => {
          try {
-            const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
+            const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork;
             const { data: hourlySeries } = await Api.GET_INDEX_HISTORY({chainName, index: config.volatilityApiKey[index]}); 
             const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY({chainName, index: config.volatilityApiKey[index]}); 
             const sortedHourlySeries = hourlySeries
@@ -98,7 +98,7 @@ const useCvi = () => {
             fetchGraphData(volKey);
          });
 
-         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
+         const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork;
          const { data: volInfo } = await Api.GET_VOL_INFO(chainName); // fetch vols info from backend
         
          // map and filter backend data by active vols.

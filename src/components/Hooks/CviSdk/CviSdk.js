@@ -15,7 +15,7 @@ const useCviSdk = (w3filters) => {
   
     const getW3Instance = useCallback(async (provider) => {
       try {
-        let w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : 'Ethereum', {
+        let w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork, {
           provider, 
           env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
         }).init({});

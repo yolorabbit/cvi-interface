@@ -24,14 +24,6 @@ const tabs = {
       "liquidity": "Liquidity",
       "history": "History"
   },
-  "index": {
-    [chainNames.Ethereum]: {
-      "cvi": "CVI index",
-    },
-    [chainNames.Matic]: {
-      "cvi": "CVI index",
-    }
-  }
 };
 
 const platformConfig = {
@@ -172,6 +164,30 @@ const platformConfig = {
           liquidation: "CVOL-USDT-Liquidation"
         },
       },
+    },
+    [chainNames.Arbitrum]: {
+      "usdc-cvol": {
+        soon: true,
+        key: "usdc-cvol",
+        name: "usdc",
+        decimals: 6,
+        fixedDecimals: 6,
+        lpTokensDecimals: 18,
+        type: "usdc",
+        leverage: ["1", "2"],
+        address: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+        oracleId: config.oraclesData.cvi.oracleId,
+        rel: {
+          contractKey: "USDC",
+          platform: "CVOL-USDC-Platform",
+          feesCalc: "CVOL-USDC-FeesCalculator",
+          feesModel: "CVOL-USDC-Platform",
+          positionRewards: "CVOL-USDC-PositionRewards",
+          oracle: "CVOL-Oracle",
+          stakingRewards: "CVOL-USDCLP-StakingRewards",
+          liquidation: "CVOL-USDC-Liquidation"
+        }
+      },
     }
   },
   headers: {
@@ -292,10 +308,6 @@ const platformConfig = {
         "Users will be able to complete the migration starting",
         "Wednesday, November 17th, at 11:00 AM UTC"
       ],
-  },
-  maintenanceNetworks: {
-    [chainNames.Ethereum]: false,
-    [chainNames.Matic]: true,
   },
   sellFeeWarningDuration: (60 * 60) * 48,
   sellFeeWarningText: "Sell fee will be considerably higher than usual until 48 hours pass from your last purchase",

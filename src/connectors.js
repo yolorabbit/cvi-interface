@@ -6,8 +6,31 @@ export const defaultChainId = process.env.REACT_APP_ENVIRONMENT === "staging" ? 
 
 export const chainNames = {
     Matic: "Matic",
-    Ethereum: "Ethereum"
+    Ethereum: "Ethereum",
+    Arbitrum: "Arbitrum"
 }
+
+export const chainsData = {
+    [chainNames.Ethereum]: {
+        name: "Ethereum",
+        poolingInterval: 62,
+        explorerUrl: "https://etherscan.io/address",
+        explorerName: "EtherScan"
+    },
+    [chainNames.Matic]: {
+        name: "Matic",
+        eventCounter: true,
+        poolingInterval: 21,
+        explorerUrl: "https://polygon-explorer-mainnet.chainstacklabs.com/address",
+        explorerName: "polygon explorer"
+    },
+    [chainNames.Arbitrum]: {
+        name: "Arbitrum",
+        poolingInterval: 21,
+        explorerUrl: "https://arbiscan.io/address",
+        explorerName: "arbitrum explorer",
+    }
+} 
 
 export const supportedNetworksConfig = {
     "mainnet": {
@@ -35,6 +58,18 @@ export const supportedNetworksConfig = {
             rpcUrls: ['https://polygon-rpc.com'],
             blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com']
         },
+        // arbitrum 
+        42161: {
+            chainId: '0xA4B1',
+            chainName: 'Arbitrum',
+            nativeCurrency: {
+                name: 'ETH',
+                symbol: 'ETH',
+                decimals: 18
+            },
+            rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+            blockExplorerUrls: ['https://arbiscan.io']
+        },
     },
     "staging": {
         31337: {
@@ -48,18 +83,6 @@ export const supportedNetworksConfig = {
             rpcUrls: ['https://staging-ethereum.cvi.finance'],
             blockExplorerUrls: null
         },
-        // matic testnet mumbai
-        // 80001: {
-        //     chainId: '0x13881',
-        //     chainName: 'Matic',
-        //     nativeCurrency: {
-        //         name: 'Matic',
-        //         symbol: 'tMATIC',
-        //         decimals: 18
-        //     },
-        //     rpcUrls: ['https://polygon-mumbai.infura.io/v3/febfb2edfb47420784373875242fd24d'], // https://matic-testnet-archive-rpc.bwarelabs.com
-        //     blockExplorerUrls: ['https://matic.network']
-        // },
         31338: {
             chainId: '0x7A6A',
             chainName: 'Matic',
@@ -86,16 +109,16 @@ export const networksFormatted = {
             name: "Polygon (Matic)",
             icon: "matic.svg"
         },
+        42161: {
+            name: 'Arbitrum',
+            icon: "arbitrum.svg",
+        },
     },
     "staging": {
         31337: {
             name: "Ethereum",
             icon: "ethereum.svg"
         },
-        // 80001: {
-        //     name: "Polygon (Matic)",
-        //     icon: "matic.svg"
-        // },
         31338: {
             name: "Polygon (Matic)",
             icon: "matic.svg"
@@ -117,6 +140,7 @@ export const graphEndpoints = {
             platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc-platform"
           }
         },
+        42161: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi",
     },
     "staging": {
         31337: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi",
@@ -141,6 +165,7 @@ const RPC_URLS = {
     "mainnet": {
         1: supportedNetworksConfig.mainnet[1].rpcUrls,
         137: supportedNetworksConfig.mainnet[137].rpcUrls,
+        42161: supportedNetworksConfig.mainnet[42161].rpcUrls
     },
     "staging": {
         31337: supportedNetworksConfig.staging[31337].rpcUrls,
@@ -153,6 +178,7 @@ const RPC_URLS_NETWORK = {
     "mainnet": {
         1: "https://eth-mainnet.alchemyapi.io/v2/KhQWOrbOeWZoTIkwRt4a4aXPPxx5wj5J",
         137: "https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d",
+        42161: "https://arb1.arbitrum.io/rpc",
     },
     "staging": {
         31337: "https://staging-ethereum.cvi.finance",

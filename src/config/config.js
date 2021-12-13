@@ -19,6 +19,7 @@ const config = {
   maintenanceNetworks: {
     [chainNames.Ethereum]: false,
     [chainNames.Matic]: false,
+    [chainNames.Arbitrum]: false,
   },
   isMainnet: process.env.REACT_APP_ENVIRONMENT === "mainnet",
   routes: {

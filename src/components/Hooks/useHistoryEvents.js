@@ -9,7 +9,7 @@ import * as TheGraph from 'graph/queries';
 import { contractsContext } from 'contracts/ContractContext';
 import { setData } from 'store/actions/wallet';
 import config from 'config/config';
-import { chainNames } from 'connectors';
+import { chainsData } from 'connectors';
 import Contract from 'web3-eth-contract';
 import { useWeb3React } from '@web3-react/core';
 
@@ -96,7 +96,7 @@ const useHistoryEvents = () => {
 
     const fetchPastEvents = useCallback(async function(view, activeToken) {
         if(!activeToken || !account || !selectedNetwork || !contracts || !wallet) return;
-        if(wallet[view] !== null && selectedNetwork !== chainNames.Matic) return;
+        if(wallet[view] !== null && !chainsData[selectedNetwork].eventCounter) return;
 
         let events = [];
         const isUSDC = activeToken.name === "usdc";
@@ -175,7 +175,7 @@ const useHistoryEvents = () => {
                 fetchPastEvents("positions", token);   
                 fetchPastEvents("liquidities", token);
 
-                if(selectedNetwork !== chainNames.Matic) {
+                if(!chainsData[selectedNetwork].eventCounter) {
                     // subscribe to positions
                     subscribe("positions", "Buy", 'OpenPosition', token);
                     subscribe("positions", "Sell", 'ClosePosition', token);

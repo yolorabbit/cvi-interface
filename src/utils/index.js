@@ -3,7 +3,7 @@ import { BN } from "bn.js";
 import arbitrageConfig from "config/arbitrageConfig";
 import config from "config/config";
 import platformConfig from "config/platformConfig";
-import { chainNames, ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
+import { chainsData, ConnectorNames, defaultChainId, supportedNetworksConfigByEnv } from "connectors";
 import { getChainName } from "contracts/utils";
 import moment from "moment";
 import { actionConfirm } from "store/actions/events";
@@ -144,7 +144,7 @@ export const maxUint256 = toBN(2).pow(toBN(256)).sub(toBN(1));
 export const actionConfirmEvent = async (dispatch) => {
     const chainName = await getChainName();
 
-    if(chainName === chainNames.Matic) {
+    if(chainsData[chainName].eventCounter) {
         dispatch(actionConfirm());
     }
 }

@@ -13,7 +13,7 @@ import { commaFormatted, fromBN, toBN } from "utils";
 import { addAlert, setMigrationModalOpen } from "store/actions";
 import { useActiveWeb3React } from "components/Hooks/wallet";
 import { actionConfirm } from "store/actions/events";
-import { chainNames } from "connectors";
+import { chainsData } from "connectors";
 import "./MigrationModal.scss";
 
 export const MigrationModal = ({w3}) => {
@@ -205,7 +205,7 @@ export const MigrationModal = ({w3}) => {
         }))
       }
 
-      if(selectedNetwork === chainNames.Matic) {
+      if(chainsData[selectedNetwork].eventCounter) {
         dispatch(actionConfirm());
       }
 

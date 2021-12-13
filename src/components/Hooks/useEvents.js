@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import * as TheGraph from 'graph/queries';
-import { chainNames } from "connectors";
+import { chainNames, chainsData } from "connectors";
 import { contractsContext } from "contracts/ContractContext";
 import config from "config/config";
 import { useSelector } from "react-redux";
@@ -10,7 +10,14 @@ import { getChainName } from "contracts/utils";
 
 export const bottomBlockByNetwork = {
     [chainNames.Ethereum]: 11686790,
-    [chainNames.Matic]: 15129735 
+    [chainNames.Matic]: 15129735,
+    [chainNames.Arbitrum]: 0,
+}
+
+export const BLOCK_RATES = {
+    [chainNames.Ethereum]: 13.695,
+    [chainNames.Matic]: 2.21,
+    [chainNames.Arbitrum]: 13,
 }
 
 export const DEFAULT_STEPS = 30;
@@ -36,7 +43,7 @@ export const useEvents = () => {
         opt.chainName = opt.chainName ?? chainName;
         if(opt.chainName) {
             opt.bottomBlock = opt.bottomBlock ?? bottomBlockByNetwork[opt.chainName];
-            if(opt.chainName === chainNames.Ethereum) {
+            if(!chainsData[opt.chainName].eventCounter) {
                 opt.stepSize = Number.MAX_SAFE_INTEGER;
             }
         }
@@ -64,7 +71,7 @@ export const useEvents = () => {
         opt.chainName = opt.chainName ?? chainName;
         if(opt.chainName) {
             opt.bottomBlock = opt.bottomBlock ?? bottomBlockByNetwork[opt.chainName];
-            if(opt.chainName === chainNames.Ethereum) {
+            if(!chainsData[opt.chainName].eventCounter) {
                 opt.stepSize = Number.MAX_SAFE_INTEGER;
             }
         }
@@ -113,23 +120,22 @@ export const useEvents = () => {
     }
 
     async function getBlockDaysAgo(days, from) {
-        const BLOCK_RATE = chainName === chainNames.Matic ? 2.21 : 13.695;
         from = from ? from : (await getBlockCached(getBlock)).number;
-        const blocksPerDay = DAY / BLOCK_RATE;
+        const blocksPerDay = DAY / BLOCK_RATES[chainName];
         return Math.floor(from - blocksPerDay * days);
     }
   
     async function getTransferEvents(staking, token, days, tokenName) {
         const selectedNetwork = await getChainName();
-        const bottomBlock = selectedNetwork === chainNames.Matic ? maticBottomBlockSinTheGraphStopToWork :  bottomBlockByNetwork[selectedNetwork]; 
+        const bottomBlock = bottomBlockByNetwork[selectedNetwork]; 
 
         let isETH = false;
         if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
 
         const latestBlockNumber = await (await getBlock("latest")).number;
         const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName]
-        let options = { bottomBlock, stepSize: chainName === chainNames.Ethereum ? (parseInt(stepSize / DEFAULT_STEPS) + 1000) : 2000, steps: chainName === chainNames.Ethereum ? DEFAULT_STEPS : Number.MAX_SAFE_INTEGER };
-        if(chainName === chainNames.Ethereum) {
+        let options = { bottomBlock, stepSize: chainsData[chainName].eventCounter ? 2000 : (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: chainsData[chainName].eventCounter ? Number.MAX_SAFE_INTEGER : DEFAULT_STEPS };
+        if(!chainsData[chainName].eventCounter) {
             options.days = days;
         }
         const filter = { [isETH ? "dst" : "to"]: staking._address };

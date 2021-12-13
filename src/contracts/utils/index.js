@@ -19,7 +19,6 @@ export const platformCreationTimestamp = {
     USDC: {
       // 12909261
       creationTimestamp: 1627404737
-       
     }
   },
   [chainNames.Matic]: {
@@ -30,6 +29,11 @@ export const platformCreationTimestamp = {
     USDC: {
       // creationBlock: 17002125,
       creationTimestamp: 1626623755,
+    }
+  },
+  [chainNames.Arbitrum]: {
+    USDC: {
+      creationTimestamp: 0
     }
   }
 }

@@ -37,6 +37,12 @@ const arbitrageConfig = {
         path: 'https://info.quickswap.exchange/#/pair/0x1dd0095a169e8398448A8e72f15A1868d99D9348'
       }
     },
+    [chainNames.Arbitrum]: {
+      mainExchange: {
+        label: 'Sushiswap',
+        path: 'https://analytics-arbitrum.sushi.com/'
+      }
+    },
   },
   tokens: {
     [chainNames.Ethereum]: {

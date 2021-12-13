@@ -85,7 +85,7 @@ const SelectNetwork = ({view}) => {
 
                 <div className="networks-list-component">
                 {networksList.map(({name, icon, chainName, chainId}, index) => <Button 
-                        disabled={providerName === ConnectorNames.WalletConnect && chainNames.Matic === chainName} 
+                        disabled={providerName === ConnectorNames.WalletConnect && chainNames[chainName]} 
                         className={`button ${activeNetwork.name === name ? 'network-active' : ''}`} 
                         key={index} 
                         onClick={() => onSelectNetwork(chainId)
