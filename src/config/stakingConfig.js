@@ -20,6 +20,7 @@ const stakingConfig = {
   protocolsByNetwork: {
     [chainNames.Ethereum]: [stakingProtocols.uniswap, stakingProtocols.sushiswap],
     [chainNames.Matic]: [stakingProtocols.quickswap],
+    [chainNames.Arbitrum]: [stakingProtocols.sushiswap],
   },
   tokens: {
     [chainNames.Ethereum]: {
@@ -315,6 +316,14 @@ const stakingConfig = {
             tokenDecimals: [18],
           }
         },
+      }
+    },
+    [chainNames.Arbitrum]: {
+      [stakingProtocols.platform]: {
+       
+      },
+      [stakingProtocols.sushiswap]: {
+        
       }
     }
   },
