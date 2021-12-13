@@ -1,4 +1,4 @@
-import {uniqWith, isEqual} from 'lodash';
+import _, { uniqWith, isEqual } from 'lodash';
 import * as actionTypes from '../actions/types';
 
 const initialState = {
@@ -11,7 +11,18 @@ const initialState = {
 const setData = (state, {view, data, isUpdate, existKey = "transactionHash"}) => {
     if(isUpdate) {
         if(data instanceof Array) {
-            if(state[view]?.length > 0) return state;
+            if(state[view]?.length > 0) {
+                return {
+                    ...state,
+                    [view]: [
+                        ..._(state[view])
+                            .keyBy('transactionHash')
+                            .merge(_.keyBy(data, 'transactionHash'))
+                            .values()
+                            .sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1)
+                    ]
+                }
+            }
             return {
                 ...state, 
                 [view]: data
