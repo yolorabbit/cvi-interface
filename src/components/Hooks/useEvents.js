@@ -8,22 +8,8 @@ import moment from 'moment';
 import { useWeb3React } from "@web3-react/core";
 import { getChainName } from "contracts/utils";
 
-export const bottomBlockByNetwork = {
-    [chainNames.Ethereum]: 11686790,
-    [chainNames.Matic]: 15129735,
-    [chainNames.Arbitrum]: 0,
-}
-
-export const BLOCK_RATES = {
-    [chainNames.Ethereum]: 13.695,
-    [chainNames.Matic]: 2.21,
-    [chainNames.Arbitrum]: 13,
-}
-
 export const DEFAULT_STEPS = 30;
-
 export const DAY = 86400;
-export const maticBottomBlockSinTheGraphStopToWork = 18071224;
 
 const EventOptionsDefaults = {
     eventsCount: Number.MAX_SAFE_INTEGER,
@@ -42,7 +28,7 @@ export const useEvents = () => {
         opt = { ...EventOptionsDefaults, ...opt };
         opt.chainName = opt.chainName ?? chainName;
         if(opt.chainName) {
-            opt.bottomBlock = opt.bottomBlock ?? bottomBlockByNetwork[opt.chainName];
+            opt.bottomBlock = opt.bottomBlock ?? chainsData[opt.chainName].bottomBlock;
             if(!chainsData[opt.chainName].eventCounter) {
                 opt.stepSize = Number.MAX_SAFE_INTEGER;
             }
@@ -70,7 +56,7 @@ export const useEvents = () => {
         opt = { ...EventOptionsDefaults, ...opt };
         opt.chainName = opt.chainName ?? chainName;
         if(opt.chainName) {
-            opt.bottomBlock = opt.bottomBlock ?? bottomBlockByNetwork[opt.chainName];
+            opt.bottomBlock = opt.bottomBlock ?? chainsData[opt.chainName].bottomBlock;
             if(!chainsData[opt.chainName].eventCounter) {
                 opt.stepSize = Number.MAX_SAFE_INTEGER;
             }
@@ -121,19 +107,19 @@ export const useEvents = () => {
 
     async function getBlockDaysAgo(days, from) {
         from = from ? from : (await getBlockCached(getBlock)).number;
-        const blocksPerDay = DAY / BLOCK_RATES[chainName];
+        const blocksPerDay = DAY / chainsData[chainName].blockRate;
         return Math.floor(from - blocksPerDay * days);
     }
   
     async function getTransferEvents(staking, token, days, tokenName) {
         const selectedNetwork = await getChainName();
-        const bottomBlock = bottomBlockByNetwork[selectedNetwork]; 
+        const bottomBlock = chainsData[selectedNetwork].bottomBlock; 
 
         let isETH = false;
         if (token._address.toLowerCase() === "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2") isETH = true;
 
         const latestBlockNumber = await (await getBlock("latest")).number;
-        const stepSize = latestBlockNumber - bottomBlockByNetwork[chainName]
+        const stepSize = latestBlockNumber - chainsData[selectedNetwork].bottomBlock;
         let options = { bottomBlock, stepSize: chainsData[chainName].eventCounter ? 2000 : (parseInt(stepSize / DEFAULT_STEPS) + 1000), steps: chainsData[chainName].eventCounter ? Number.MAX_SAFE_INTEGER : DEFAULT_STEPS };
         if(!chainsData[chainName].eventCounter) {
             options.days = days;

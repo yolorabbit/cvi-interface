@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from 'utils';
-import { bottomBlockByNetwork, useEvents } from './useEvents';
+import { useEvents } from './useEvents';
 import { useActiveWeb3React } from './wallet';
 import * as TheGraph from 'graph/queries';
 import { contractsContext } from 'contracts/ContractContext';
@@ -49,7 +49,7 @@ const useHistoryEvents = () => {
     const eventsUtils = useEvents();
     const opt = useMemo(() => ({
         filter: { account },
-        fromBlock: bottomBlockByNetwork[selectedNetwork],
+        fromBlock: chainsData[selectedNetwork].bottomBlock,
         toBlock: 'latest',
     }), [account, selectedNetwork]);
 
@@ -114,7 +114,7 @@ const useHistoryEvents = () => {
         } else {
             let events2 = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0);
             const theGraphLatest = Object.values(events2).flat().sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
-            const stagingBottomBlock = theGraphLatest.length ? theGraphLatest[theGraphLatest.length - 1].blockNumber : bottomBlockByNetwork[selectedNetwork];
+            const stagingBottomBlock = theGraphLatest.length ? theGraphLatest[theGraphLatest.length - 1].blockNumber : chainsData[selectedNetwork].bottomBlock;
             events = await getEventsFast([{
                 contract: contracts[activeToken.rel.platform], 
                 events: { 

@@ -10,7 +10,6 @@ import moment from "moment";
 import { chainNames, chainsData } from "connectors";
 import platformConfig from "config/platformConfig";
 import stakingConfig, { stakingProtocols } from "config/stakingConfig";
-import { bottomBlockByNetwork } from "components/Hooks/useEvents";
 import Api from "Api";
  
 export const getLatestBlockTimestamp = async(getBlock) => (await getBlock("latest")).timestamp
@@ -39,7 +38,7 @@ export const getTokenData = async (contract, protocol) => {
 
 export async function getFeesCollectedFromEvents(staking, USDCData, tokensData, { eventsUtils, library, useInitialValue }) {
     const selectedNetwork = await getChainName();
-    const bottomBlock = bottomBlockByNetwork[selectedNetwork]; // temporary fix for matic
+    const bottomBlock = chainsData[selectedNetwork].bottomBlock; // temporary fix for matic
     const options = {
         steps: Number.MAX_SAFE_INTEGER,
         bottomBlock: bottomBlock, 

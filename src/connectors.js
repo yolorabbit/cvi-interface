@@ -15,20 +15,26 @@ export const chainsData = {
         name: "Ethereum",
         poolingInterval: 62,
         explorerUrl: "https://etherscan.io/address",
-        explorerName: "EtherScan"
+        explorerName: "EtherScan",
+        bottomBlock: 11686790,
+        blockRate: 13.695
     },
     [chainNames.Matic]: {
         name: "Matic",
         eventCounter: true,
         poolingInterval: 21,
         explorerUrl: "https://polygon-explorer-mainnet.chainstacklabs.com/address",
-        explorerName: "polygon explorer"
+        explorerName: "polygon explorer",
+        bottomBlock: 11686790,
+        blockRate: 2.21
     },
     [chainNames.Arbitrum]: {
         name: "Arbitrum",
         poolingInterval: 21,
         explorerUrl: "https://arbiscan.io/address",
         explorerName: "arbitrum explorer",
+        bottomBlock: 0,
+        blockRate: 1
     }
 } 
 

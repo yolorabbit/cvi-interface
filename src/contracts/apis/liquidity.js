@@ -4,7 +4,8 @@ import { getChainName } from "contracts/utils";
 import * as TheGraph from 'graph/queries';
 import moment from "moment";
 import { toBN, toDisplayAmount } from "utils";
-import { BLOCK_RATES, DEFAULT_STEPS } from '../../components/Hooks/useEvents';
+import { DEFAULT_STEPS } from '../../components/Hooks/useEvents';
+import { chainsData } from 'connectors';
 
 export async function toLPTokens(contracts, token, { tokenAmount }) {
   let totalSupply = toBN(await contracts[token.rel.platform].methods.totalSupply().call());
@@ -39,7 +40,7 @@ async function getLiquidityPNL(contracts, token, {account, library, eventsUtils}
       let options = {};
       const {number: latestBlockNumber, timestamp: latestTimestamp} = await (await library.eth.getBlock("latest"));
       const oneWeekBeforeLastestTimestamp = moment(latestTimestamp*1000).subtract(1, "week").valueOf()
-      const oneWeekBeforeBlockNumber = latestBlockNumber - Math.floor((((latestTimestamp*1000) - oneWeekBeforeLastestTimestamp) / 1000) / BLOCK_RATES[chainName]) 
+      const oneWeekBeforeBlockNumber = latestBlockNumber - Math.floor((((latestTimestamp*1000) - oneWeekBeforeLastestTimestamp) / 1000) / chainsData[chainName].blockRate) 
       // const stepSize = latestBlockNumber - oneWeekBeforeBlockNumber;
       events = events.filter(event => event.blockNumber < oneWeekBeforeBlockNumber);
       // console.log('events: ', events);
