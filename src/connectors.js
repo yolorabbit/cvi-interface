@@ -25,7 +25,7 @@ export const chainsData = {
     },
     [chainNames.Matic]: {
         name: "Matic",
-        eventCounter: true,
+        eventCounter: true, // true = if events are not working, fetch data after each async process is completed.
         poolingInterval: 21,
         explorerUrl: "https://polygon-explorer-mainnet.chainstacklabs.com/address",
         explorerName: "polygon explorer",

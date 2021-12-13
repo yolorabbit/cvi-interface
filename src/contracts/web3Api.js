@@ -173,11 +173,10 @@ const web3Api = {
             return "N/A";
         }
     },
-    getGoviPrice: async ({GOVI, USDC, USDT}) => {
+    getGoviPrice: async ({GOVI, USDC}) => {
         try {
-            const chainName = await getChainName();
             const GOVIData = await getTokenData(GOVI, stakingProtocols.platform);
-            const TokenData = await getTokenData(chainName === chainNames.Matic ? USDC : USDT);
+            const TokenData = await getTokenData(USDC);
             const goviPrice = await getPrice(GOVIData, TokenData);
             return goviPrice;
         } catch(error) {
