@@ -17,7 +17,11 @@ export const chainsData = {
         explorerUrl: "https://etherscan.io/address",
         explorerName: "EtherScan",
         bottomBlock: 11686790,
-        blockRate: 13.695
+        blockRate: 13.695,
+        graphEndpoints: {
+            platforms: "https://api.thegraph.com/subgraphs/name/vladi-coti/ethereum-platforms",
+            tokens: "https://api.thegraph.com/subgraphs/name/vladi-coti/ethereum-tokens",
+        }
     },
     [chainNames.Matic]: {
         name: "Matic",
@@ -26,7 +30,11 @@ export const chainsData = {
         explorerUrl: "https://polygon-explorer-mainnet.chainstacklabs.com/address",
         explorerName: "polygon explorer",
         bottomBlock: 11686790,
-        blockRate: 2.21
+        blockRate: 2.21,
+        graphEndpoints: {
+            platforms: "https://api.thegraph.com/subgraphs/name/vladi-coti/polygon-platforms",
+            tokens: "https://api.thegraph.com/subgraphs/name/vladi-coti/polygon-tokens",
+        }
     },
     [chainNames.Arbitrum]: {
         name: "Arbitrum",
@@ -34,7 +42,11 @@ export const chainsData = {
         explorerUrl: "https://arbiscan.io/address",
         explorerName: "arbitrum explorer",
         bottomBlock: 0,
-        blockRate: 1
+        blockRate: 1,
+        graphEndpoints: {
+            platforms: "https://api.thegraph.com/subgraphs/name/vladi-coti/arbitrum-platforms",
+            tokens: "https://api.thegraph.com/subgraphs/name/vladi-coti/arbitrum-tokens",
+        }
     }
 } 
 
@@ -128,37 +140,6 @@ export const networksFormatted = {
         31338: {
             name: "Polygon (Matic)",
             icon: "matic.svg"
-        },
-    }
-}
-
-
-export const graphEndpoints = {
-    "mainnet": {
-        1: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi",
-        137: {
-          usdt: {
-            fees: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon",
-            platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdt-platform"
-          },
-          usdc: {
-            fees: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc",
-            platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc-platform"
-          }
-        },
-        42161: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi",
-    },
-    "staging": {
-        31337: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi",
-        31338: {
-          usdt: {
-            fees: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon",
-            platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdt-platform"
-          },
-          usdc: {
-            fees: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc",
-            platform: "https://api.thegraph.com/subgraphs/name/vladi-coti/cvi-polygon-usdc-platform"
-          }
         },
     }
 }

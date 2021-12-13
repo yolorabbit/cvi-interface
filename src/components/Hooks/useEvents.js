@@ -128,7 +128,7 @@ export const useEvents = () => {
         const eventsData = [{ contract: token, events: { Transfer: [filter] } }];
         const contractEvents = await getEvents(eventsData, options, getBlock);
         if(chainName === chainNames.Matic) {
-            const _events = await TheGraph[`collectedFees${tokenName === "USDC" ? "USDC" : ""}`](Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
+            const _events = await TheGraph.collectedFees(Math.floor(moment.utc().add(-days, 'days').valueOf() / 1000));
             return _events.collectedFees.concat(contractEvents);
         }
         return contractEvents;
@@ -137,7 +137,7 @@ export const useEvents = () => {
     async function getLastOpenEvent(account, token) {
         try {
             if(config.isMainnet) {
-                let _lastOpenEvent = await TheGraph[`lastOpen${token.name === "usdc" ? "USDC" : ""}`](account, contracts[token.rel.platform]._address);
+                let _lastOpenEvent = await TheGraph.lastOpen(account, contracts[token.rel.platform]._address);
                 return !!_lastOpenEvent.openPositions?.length ? _lastOpenEvent.openPositions[0] : null;
             }
             const options = {eventsCount: 1, days: 30 };

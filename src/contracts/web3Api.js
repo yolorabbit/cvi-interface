@@ -63,15 +63,7 @@ export async function getFeesCollectedFromEvents(staking, USDCData, tokensData, 
 }
 
 const getFeesCollectedFromGraph = async (USDCData, tokensData) => {
-    const selectedNetwork = await getChainName();
     let res = await TheGraph.collectedFeesSum();
-    if(selectedNetwork === chainNames.Matic) {
-        const includeUSDC = tokensData.some(token => token.symbol === "USDC");
-        if(includeUSDC) {
-            let usdc_res = await TheGraph.collectedFeesSumUSDC();
-            res.collectedFeesAggregations = res.collectedFeesAggregations.concat(usdc_res.collectedFeesAggregations);
-        }
-    }
     // console.log(`res collectedFees size ${res.collectedFees.length}`);
     let sum = toBN(0);
     for (const token of tokensData.filter(item => item !== null)) {

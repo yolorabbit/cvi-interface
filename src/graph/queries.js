@@ -42,50 +42,6 @@ const allPlatformEventsQuery = gql`
   }
 `;
 
-// const allPositionsQuery = gql`
-//   {
-//     openPositions(orderBy: timestamp, orderDirection: desc) {
-//       id
-//       platform
-//       timestamp
-//       account
-//       tokenAmount
-//       feeAmount
-//       positionUnitsAmount
-//     }
-//     closePositions(orderBy: timestamp, orderDirection: desc) {
-//       id
-//       platform
-//       timestamp
-//       account
-//       tokenAmount
-//       feeAmount
-//       positionUnitsAmount
-//     }
-//   }
-// `;
-
-// const allLiquidityQuery = gql`
-//   {
-//     deposits(orderBy: timestamp, orderDirection: desc) {
-//       platform
-//       timestamp
-//       account
-//       tokenAmount
-//       feeAmount
-//       lpTokensAmount
-//     }
-//     withdraws(orderBy: timestamp, orderDirection: desc) {
-//       platform
-//       timestamp
-//       account
-//       tokenAmount
-//       feeAmount
-//       lpTokensAmount
-//     }
-//   }
-// `;
-
 const accountPositionsQuery = gql`
   query getPositions($account: String!, $platformAddress: String!, $fromTimestamp: BigInt! = 0) {
     openPositions(
@@ -221,24 +177,12 @@ export async function account_liquidities(account, platformAddress, fromTimestam
   return await request(await getGraphEndpoint(), accountLiquidityQuery, { account, platformAddress, fromTimestamp });
 }
 
-export async function account_liquiditiesUSDC(account, platformAddress, fromTimestamp) {
-  return await request(await getGraphEndpoint("platform", "usdc"), accountLiquidityQuery, { account, platformAddress, fromTimestamp });
-}
-
 export async function account_positions(account, platformAddress, fromTimestamp) {
   return await request(await getGraphEndpoint(), accountPositionsQuery, { account, platformAddress, fromTimestamp });
 }
 
-export async function account_positionsUSDC(account, platformAddress, fromTimestamp) {
-  return await request(await getGraphEndpoint("platform", "usdc"), accountPositionsQuery, { account, platformAddress, fromTimestamp });
-}
-
 export async function lastOpen(account, platformAddress) {
   return await request(await getGraphEndpoint(), lastOpenQuery, { account, platformAddress });
-}
-
-export async function lastOpenUSDC(account, platformAddress) {
-  return await request(await getGraphEndpoint("platform", "usdc"), lastOpenQuery, { account, platformAddress });
 }
 
 export async function allPlatformEvents() {
@@ -246,21 +190,13 @@ export async function allPlatformEvents() {
 }
 
 export async function collectedFees(fromTimestamp = 0) {
-  return await request(await getGraphEndpoint("fees", "usdt"), collectedFeesQuery, { fromTimestamp });
-}
-
-export async function collectedFeesUSDC(fromTimestamp = 0) {
-  return await request(await getGraphEndpoint("fees", "usdc"), collectedFeesQuery, { fromTimestamp });
+  return await request(await getGraphEndpoint("fees"), collectedFeesQuery, { fromTimestamp });
 }
 
 export async function collectedFeesSum() {
-  return await request(await getGraphEndpoint("fees", "usdt"), collectedFeesAggregationsQuery);
-}
-
-export async function collectedFeesSumUSDC() {
-  return await request(await getGraphEndpoint("fees", "usdc"), collectedFeesAggregationsQuery);
+  return await request(await getGraphEndpoint("fees"), collectedFeesAggregationsQuery);
 }
 
 export async function migrations(account, fromTimestamp=1637013600, toTimestamp=(new Date().getTime()/1000).toFixed(0)) { // fromTimestamp === migration publish time - 1 day
-  return await request(await getGraphEndpoint("migration", "usdc"), accountMigrationsQuery, { account, fromTimestamp, toTimestamp});
+  return await request(await getGraphEndpoint(), accountMigrationsQuery, { account, fromTimestamp, toTimestamp});
 }

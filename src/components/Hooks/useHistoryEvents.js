@@ -1,6 +1,6 @@
 import platformConfig from 'config/platformConfig';
 import moment from 'moment';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { commaFormatted, customFixed, toBN, toDisplayAmount } from 'utils';
 import { useEvents } from './useEvents';
@@ -12,6 +12,7 @@ import config from 'config/config';
 import { chainsData } from 'connectors';
 import Contract from 'web3-eth-contract';
 import { useWeb3React } from '@web3-react/core';
+import { debounce } from 'lodash';
 
 export const contractState = config.isMainnet ? {
     positions: {
@@ -45,7 +46,6 @@ const useHistoryEvents = () => {
     const actionConfirmedCounter = useSelector(({events}) => events.actionConfirmed);
     let fromWei = library?.utils?.fromWei;
     let getBlock = library?.eth?.getBlock;
-    const historyRef = useRef();
     const eventsUtils = useEvents();
     const opt = useMemo(() => ({
         filter: { account },
@@ -94,23 +94,22 @@ const useHistoryEvents = () => {
         }
     }, [fromWei, getBlock])
 
-    const fetchPastEvents = useCallback(async function(view, activeToken) {
+    const fetchPastEvents = useCallback(async function(wallet, view, activeToken) {
         if(!activeToken || !account || !selectedNetwork || !contracts || !wallet) return;
-        if(wallet[view] !== null && !chainsData[selectedNetwork].eventCounter) return;
+        if(wallet[view] !== null) return;
+        let events = [];    
 
-        let events = [];
         const isUSDC = activeToken.name === "usdc";
         if(config.isMainnet) {
-            events = await TheGraph[`account_${view}${isUSDC ? "USDC" : ""}`](account, contracts[activeToken.rel.platform]._address, 0)
+            events = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0)
             const migrationsTokens = ['usdc','usdt'];
             if(view === "liquidities" && migrationsTokens.includes(activeToken.key.toLowerCase())) {
-              const migrationEvents = await eventsUtils.getMigrationEvents(account, activeToken.key);
-            //   console.log('migrationEvents: ', migrationEvents);
-              const actionType =  isUSDC ? "deposits" : "withdraws";
-              events[actionType] = events[actionType].concat(migrationEvents);
+                const migrationEvents = await eventsUtils.getMigrationEvents(account, activeToken.key);
+                console.log('migrationEvents: ', migrationEvents);
+                const actionType =  isUSDC ? "deposits" : "withdraws";
+                events[actionType] = events[actionType].concat(migrationEvents);
             }
             events = Object.values(events).map((_events, idx) => _events.map((event)=> ({...event, transactionHash: event.id, timestamp: Number(event.timestamp), event: contractState[view][Object.keys(events)[idx]] }))).flat();
-            
         } else {
             let events2 = await TheGraph[`account_${view}`](account, contracts[activeToken.rel.platform]._address, 0);
             const theGraphLatest = Object.values(events2).flat().sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1);
@@ -129,17 +128,17 @@ const useHistoryEvents = () => {
             events = await Promise.all(events.map(event => mapper[view](event, event.event, activeToken)));
         }
         events = events.sort((a, b) => ((b.timestamp ?? b.blockNumber) < (a.timestamp ?? a.blockNumber)) ? -1 : 1);
-        dispatch(setData(view, events));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [account, contracts, mapper, selectedNetwork, wallet]) 
+    
+        dispatch(setData(view, events, true));
+    }, [account, contracts, dispatch, eventsUtils, getEventsFast, mapper, selectedNetwork]) 
 
-    const getContract = (contractKey) => {
+    const getContract = useCallback((contractKey) => {
         const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
         const { abi, abiRef, address } = contractsJSON[contractKey];
         const _contract = new Contract(abi || contractsJSON[abiRef].abi, address);
         _contract.setProvider(web3?.currentProvider);
         return _contract
-    }
+    }, [selectedNetwork, web3?.currentProvider])
     
     const subscribe = useCallback(async function(view, type, eventType, activeToken) {
         const _contract = getContract(activeToken.rel.platform);
@@ -164,37 +163,36 @@ const useHistoryEvents = () => {
         .on('error', console.log);
 
         setSubs(prev => prev.concat({ [`${eventType}-${activeToken.key}`]: sub }) );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [mapper, opt, subs])
+    }, [dispatch, getContract, mapper, opt, subs])
+
+    const loadEvents = useCallback((wallet) => {
+        console.log(wallet);
+        Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon).forEach(token => {
+            if(wallet["positions"] === null) fetchPastEvents(wallet, "positions", token);   
+            if(wallet["liquidities"] === null) fetchPastEvents(wallet, "liquidities", token);
+
+            if(!chainsData[selectedNetwork].eventCounter) {
+                // subscribe to positions
+                subscribe("positions", "Buy", 'OpenPosition', token);
+                subscribe("positions", "Sell", 'ClosePosition', token);
+
+                // subscribe to liquidities
+                subscribe("liquidities", "Deposit", 'Deposit', token);
+                subscribe("liquidities", "Withdraw", 'Withdraw', token);
+            }
+        });
+    }, [fetchPastEvents, selectedNetwork, subscribe]);
+    
+    const fetchPastEventsDebounce = useMemo(() => debounce(loadEvents, 500), [loadEvents]);
 
     useEffect(() => {
-        // if(isMount) return;
         if(!selectedNetwork || !contracts || !account || typeof getEventsFast !== 'function') return;
-        historyRef.current = setTimeout(() => {
-            Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon).forEach(token => {
-                fetchPastEvents("positions", token);   
-                fetchPastEvents("liquidities", token);
-
-                if(!chainsData[selectedNetwork].eventCounter) {
-                    // subscribe to positions
-                    subscribe("positions", "Buy", 'OpenPosition', token);
-                    subscribe("positions", "Sell", 'ClosePosition', token);
-
-                    // subscribe to liquidities
-                    subscribe("liquidities", "Deposit", 'Deposit', token);
-                    subscribe("liquidities", "Withdraw", 'Withdraw', token);
-                }
-
-            });
-        }, 1000);
-        
+        console.log(wallet);
+        fetchPastEventsDebounce(wallet);
         return () => {
-            if(historyRef.current) clearTimeout(historyRef.current);
+            fetchPastEventsDebounce.cancel();
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedNetwork, contracts, account, actionConfirmedCounter])
-
-
+    }, [selectedNetwork, contracts, account, actionConfirmedCounter, getEventsFast, fetchPastEvents, subscribe, wallet, fetchPastEventsDebounce])
 
     return null;
 }

@@ -10,6 +10,14 @@ const initialState = {
 
 const setData = (state, {view, data, isUpdate, existKey = "transactionHash"}) => {
     if(isUpdate) {
+        if(data instanceof Array) {
+            if(state[view]?.length > 0) return state;
+            return {
+                ...state, 
+                [view]: data
+            }
+        }
+       
         const txExist = state[view]?.some((event)=> event[existKey] === data[existKey]);
         return txExist ? state : {
             ...state,
@@ -20,7 +28,7 @@ const setData = (state, {view, data, isUpdate, existKey = "transactionHash"}) =>
     if(state[view]) {
         return data.length < state[view].length ? {
             ...state,
-            [view]: [...data]
+            [view]: data
         } : { 
             ...state,
             [view]: uniqWith(state[view].concat(data), isEqual).sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1)

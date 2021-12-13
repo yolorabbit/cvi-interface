@@ -1,6 +1,6 @@
-import { network, RPC_URLS_NETWORK_BY_ENV } from 'connectors';
+import { chainsData, network, RPC_URLS_NETWORK_BY_ENV } from 'connectors';
 import { parseHex, toBN } from '../../utils';
-import { supportedNetworksConfigByEnv, chainNames, graphEndpoints } from '../../connectors';
+import { supportedNetworksConfigByEnv, chainNames } from '../../connectors';
 import { Pair, Route, Token, TokenAmount, WETH } from '@uniswap/sdk';
 import Contract from 'web3-eth-contract';
 import Web3 from 'web3';
@@ -117,15 +117,11 @@ export async function getERC20Contract(address) {
   }
 }
 
-export const getGraphEndpoint = async (type = "platform", token = "usdt") => {
+export const getGraphEndpoint = async (type) => {
     try {
-        const chainId = await getChainId();
-        if(chainId === 137 || chainId === 31338) { // use ony for matic 
-          if(type === 'migration') return 'https://api.thegraph.com/subgraphs/name/vladi-coti/polygon-platforms'; //'https://api.thegraph.com/subgraphs/name/vladi-coti/cvol-ethereum-usdc';
-          return graphEndpoints[process.env.REACT_APP_ENVIRONMENT][chainId][token][type];
-        }
-        if(token === 'usdc') return 'https://api.thegraph.com/subgraphs/name/vladi-coti/ethereum-platforms'; //'https://api.thegraph.com/subgraphs/name/vladi-coti/cvol-ethereum-usdc';
-        return graphEndpoints[process.env.REACT_APP_ENVIRONMENT][chainId]; // in ethereum the graph endpoint fetch both usdt and eth data, instead of matic that there is a graph instance for each token seperated.
+        const chainName = await getChainName();
+        if(type === "fees") return chainsData[chainName].graphEndpoints.tokens;
+        return chainsData[chainName].graphEndpoints.platforms;
     } catch(error) {
         console.log(error);
     }
