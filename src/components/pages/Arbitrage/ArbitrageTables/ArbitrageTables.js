@@ -70,7 +70,7 @@ const DefaultTable = ({activeTab}) => {
             const MAX_UPFRONT_FEE = toBN("500");
             const requestTypeLabel = arbitrageConfig.requestType[requestType];
             const timeDelayFeeAmount = toBN(tokenAmount).sub(toBN(toBN(tokenAmount).sub(toBN(submitFeesAmount))));
-            const maxFeeAmount = toBN(tokenAmount).div(toBN(MAX_PERCENTAGE)).mul(MAX_UPFRONT_FEE);
+            const maxFeeAmount = toBN(tokenAmount).mul(MAX_UPFRONT_FEE).div(toBN(MAX_PERCENTAGE));
             const advanceAmount = toBN(maxFeeAmount).add(toBN(timeDelayFeeAmount));
             const submitTimeSubmitFeeDiff = moment.utc(targetTimestamp*1000).diff(timestamp*1000)
             const SubmitFeeLastBlockDiff = moment.utc(targetTimestamp*1000).diff(lastBlockTime*1000);
