@@ -166,7 +166,6 @@ const useHistoryEvents = () => {
     }, [dispatch, getContract, mapper, opt, subs])
 
     const loadEvents = useCallback((wallet) => {
-        console.log(wallet);
         Object.values(platformConfig.tokens[selectedNetwork]).filter(({soon}) => !soon).forEach(token => {
             if(wallet["positions"] === null) fetchPastEvents(wallet, "positions", token);   
             if(wallet["liquidities"] === null) fetchPastEvents(wallet, "liquidities", token);

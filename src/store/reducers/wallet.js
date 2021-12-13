@@ -16,8 +16,8 @@ const setData = (state, {view, data, isUpdate, existKey = "transactionHash"}) =>
                     ...state,
                     [view]: [
                         ..._(state[view])
-                            .keyBy('transactionHash')
-                            .merge(_.keyBy(data, 'transactionHash'))
+                            .keyBy(existKey)
+                            .merge(_.keyBy(data, existKey))
                             .values()
                             .sort((a, b) => (b.timestamp < a.timestamp) ? -1 : 1)
                     ]
