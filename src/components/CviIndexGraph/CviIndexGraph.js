@@ -42,7 +42,7 @@ const CviIndexGraph = ({activeVolIndex, maxWidth = 700, maxHeight = 370}) => {
             activeVolIndex,
             chartInitialize, 
             activeRange: activeRange, 
-            series: activeRange === "all" ? (activeVolInfo?.history?.daily ?? []) : activeVolInfo?.history?.hourly ?? [],
+            series: activeRange === "all" ? (activeVolInfo?.history?.daily ?? []) : activeVolInfo?.history?.hourly.slice(0, 4000) ?? [],
             onClick: (id) => {
                 setActiveRange(id);
             }

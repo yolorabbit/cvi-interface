@@ -166,7 +166,7 @@ const ChartOptions = ({ chartInitialize, series, height, maxWidth, activeRange, 
     series: [{
         color: "#f8ba15",
         name: config.volatilityLabel?.[activeVolIndex] ?? 'CVI',
-        turboThreshold: 6000,
+        turboThreshold: 4000,
         data: series.map((item, index) => {
             // if(index === 806) {
             //     return {
