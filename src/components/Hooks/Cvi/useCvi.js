@@ -60,7 +60,12 @@ const useCvi = () => {
             const chainName = selectedNetwork === chainNames.Matic ? 'Polygon' : chainNames.Ethereum;
             const { data: hourlySeries } = await Api.GET_INDEX_HISTORY({chainName, index: config.volatilityApiKey[index]}); 
             const { data: dailyHistory } = await Api.GET_FULL_DAILY_HISTORY({chainName, index: config.volatilityApiKey[index]}); 
-            const sortedHourlySeries = hourlySeries.map(serie => ([serie[0] * 1000, serie[1]])).sort((a,b)=> a[0] - b[0])
+            const sortedHourlySeries = hourlySeries
+               .map(serie => ([serie[0] * 1000, serie[1]]))
+               .sort((a,b)=> b[0] - a[0])
+               .slice(0, 4000)
+               .reverse() // limit to 4000 attributes, from now to the past. 
+
             const sortedDailySeries = dailyHistory.sort((a,b)=> a[0] - b[0])
             dispatch(updateVolInfo({
                history: {
