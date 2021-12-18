@@ -34,7 +34,7 @@ const arbitrageConfig = {
     [chainNames.Matic]: {
       mainExchange: {
         label: 'Quickswap',
-        path: 'https://info.quickswap.exchange/pair/0x1dd0095a169e8398448A8e72f15A1868d99D9348'
+        path: 'https://info.quickswap.exchange/#/pair/0x1dd0095a169e8398448A8e72f15A1868d99D9348'
       }
     },
   },

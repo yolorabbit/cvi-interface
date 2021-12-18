@@ -286,7 +286,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
-          poolLink: "https://info.quickswap.exchange/pair/0x1dab41a0e410c25857f0f49b2244cd089ab88de6",
+          poolLink: "https://info.quickswap.exchange/#/pair/0x1dab41a0e410c25857f0f49b2244cd089ab88de6",
           address: "0x1dAb41a0E410C25857F0f49B2244Cd089AB88DE6",
           type: "lp-v1",
           rel: {
@@ -305,7 +305,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
-          poolLink: "https://info.quickswap.exchange/pair/0x1dd0095a169e8398448A8e72f15A1868d99D9348",
+          poolLink: "https://info.quickswap.exchange/#/pair/0x1dd0095a169e8398448A8e72f15A1868d99D9348",
           rel: {
             stakingRewards: "CVOL-USDC-StakingRewards", // @TODO: update it with the real contract
             token: "UNIV2USDCCVOL-USDC-LONG",
