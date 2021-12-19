@@ -112,6 +112,17 @@ export const supportedNetworksConfig = {
             rpcUrls: ['https://staging-polygon.cvi.finance'], // https://matic-testnet-archive-rpc.bwarelabs.com
             blockExplorerUrls: ['https://matic.network']
         },
+        31339: {
+            chainId: '0x7A6B',
+            chainName: 'Arbitrum',
+            nativeCurrency: {
+                name: 'ETH',
+                symbol: 'ETH',
+                decimals: 18
+            },
+            rpcUrls: ['https://staging-arbitrum.cvi.finance'],
+            blockExplorerUrls: ['https://arbiscan.io']
+        },
     }
 }
 
@@ -141,6 +152,10 @@ export const networksFormatted = {
             name: "Polygon (Matic)",
             icon: "matic.svg"
         },
+        31339: {
+            name: 'Arbitrum',
+            icon: "arbitrum.svg",
+        },
     }
 }
 
@@ -157,6 +172,7 @@ const RPC_URLS = {
     "staging": {
         31337: supportedNetworksConfig.staging[31337].rpcUrls,
         31338: supportedNetworksConfig.staging[31338].rpcUrls,
+        31339: supportedNetworksConfig.staging[31339].rpcUrls
     },
 }
 const RPC_URLS_BY_ENV = RPC_URLS[process.env.REACT_APP_ENVIRONMENT];
@@ -170,6 +186,7 @@ const RPC_URLS_NETWORK = {
     "staging": {
         31337: "https://staging-ethereum.cvi.finance",
         31338: "https://staging-polygon.cvi.finance",
+        31339: "https://staging-arbitrum.cvi.finance"
     },
 }
 export const RPC_URLS_NETWORK_BY_ENV = RPC_URLS_NETWORK[process.env.REACT_APP_ENVIRONMENT]

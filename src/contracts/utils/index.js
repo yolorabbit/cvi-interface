@@ -49,7 +49,8 @@ const getWebProvider = async () => {
 
 let contracts = {
     [chainNames.Ethereum]: {},
-    [chainNames.Matic]: {}
+    [chainNames.Matic]: {},
+    [chainNames.Arbitrum]: {}
 };
 
 export const toTokenAmount = (amount, decimals) => {

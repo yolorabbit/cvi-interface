@@ -320,7 +320,21 @@ const stakingConfig = {
     },
     [chainNames.Arbitrum]: {
       [stakingProtocols.platform]: {
-       
+        "govi": {
+          key: "govi",
+          label: "GOVI",
+          address: "0x07e49d5de43dda6162fa28d24d5935c151875283",
+          protocol: stakingProtocols.platform,
+          decimals: 18,
+          fixedDecimals: 8,
+          rewardsTokens: ["GOVI"],
+          type: "lp-v1",
+          rel: {
+            contractKey: "GOVI",
+            stakingRewards: "StakingV2",
+            tokenDecimals: [18]
+          }
+        }
       },
       [stakingProtocols.sushiswap]: {
         

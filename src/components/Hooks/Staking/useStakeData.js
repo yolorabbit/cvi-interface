@@ -1,5 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { contractsContext } from "contracts/ContractContext";
+import { stakingViewContext } from "components/Context";
 import stakingConfig, { stakingProtocols } from 'config/stakingConfig';
 import { commaFormatted, customFixed, toBN, toDisplayAmount, toFixed } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
@@ -45,6 +46,8 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const contracts = useContext(contractsContext);
   const { account } = useActiveWeb3React();
   const { library } = useWeb3React(config.web3ProviderId);
+  const { selectedNetwork } = useSelector(({app}) => app);
+  const { w3 } = useContext(stakingViewContext);
   const [stakedData, setStakedData] = useState(initialState);
   const eventsUtils = useEvents();
   const token = stakingConfig.tokens[chainName]?.[protocol]?.[tokenName];
@@ -83,6 +86,22 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     })));
   }
 
+  const getAPYSDK = async (cb) => {
+    let apy = [];
+    if (tokenName === 'govi') {
+      const goviStaking = w3.stakings[tokenRel.stakingRewards];
+      apy = [goviStaking.apr, goviStaking.aprWeekly, goviStaking.aprDaily];
+    }
+    else {
+
+    }
+
+    cb(() => setStakedData((prev)=> ({
+      ...prev,
+      apy: apy.map((value) => value ? `${customFixed(value, 2)}%` : "N/A")
+    })));
+  }
+
   const getGoviValueStaked = async (cb) => {
     try {
         const GOVIData = await getTokenData(contracts.GOVI, stakingProtocols.platform);
@@ -114,7 +133,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const tokenData = await getTokenData(contracts[tokenRel.token], protocol);
       const totalBalanceWithAddendumUSDT = await convert(stakedAmountToken, tokenData, USDCData);
       const tvl = {
-        stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals), decimalsCountDisplay))),
+        stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
         stakedAmountUSD: toBN(stakedAmount).isZero() ? "0" : `$${commaFormatted(customFixed(toDisplayAmount(totalBalanceWithAddendumUSDT, USDCData.decimals), 2))}`
       };
 
@@ -126,6 +145,30 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     } catch(error) {
         console.log(error);
         return "N/A";
+    }
+  }
+
+  const getStakedTVLSDK = async (cb) => {
+    try {
+      let tvl = {};
+      if (tokenName === 'govi') {
+        const goviStaking = w3.stakings[tokenRel.stakingRewards];
+        const stakedAmount = goviStaking.totalSupply;
+        console.log(stakedAmount);
+        const stakedAmountUSD = goviStaking.getTVL();
+        tvl = {
+          stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
+          stakedAmountUSD: stakedAmount.isZero() ? "0" : `$${commaFormatted(customFixed(stakedAmountUSD, 2))}`
+        }
+      }
+
+      cb(() => setStakedData((prev)=> ({
+        ...prev,
+        tvl
+      })));
+    } catch(error) {
+      console.log(error);
+      return "N/A";
     }
   }
 
@@ -228,6 +271,37 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     }
   }
 
+  const getTokenBalanceSDK = async (cb) => {
+    if(!account) return cb(()=> setStakedData((prev)=>({
+      ...prev,
+      balance: {
+        tokenBalance: 0,
+        usdBalance: "$0",
+        formatted: 0
+      }
+    })))
+
+    try {
+      let tokenBalance = 0;
+      let usdBalance = 0;
+      if (tokenName === 'govi') {
+        const goviToken = w3.tokens['GOVI'];
+        tokenBalance = await goviToken.balanceOf(account);
+        usdBalance = "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(goviToken.toUSD(tokenBalance))), 2));
+      }
+      cb(()=> setStakedData((prev)=>({
+        ...prev,
+        balance: {
+          tokenBalance,
+          usdBalance,
+          formatted: commaFormatted(customFixed(toFixed(toDisplayAmount(tokenBalance, token.decimals)), 2))
+        }
+      })))
+    } catch (error) {
+      console.log(protocol + " " + tokenName + "error:", error);
+    }
+  }
+
   const fetchLiquidityMiningData = async (cb) => {
     getAPYLM(cb)
     getTVLLM(cb);
@@ -240,20 +314,37 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     getStakedTVL(cb);
   }
 
+  const fetchDataSDK = async (cb) => {
+    getTokenBalanceSDK(cb)
+    getAPYSDK(cb);
+    getStakedTVLSDK(cb);
+  }
+
   useEffect(()=>{
-    if(!contracts || !tokenRel || !web3Api || !web3Api.getAPYPerToken || !web3Api.getPoolSizeLiquidityMining) return
+    if (!selectedNetwork) return
 
     let canceled = false;
-    fetchData((cb)=>{
-      if(canceled) return
-      cb();
-    });
+    if (selectedNetwork === "Arbitrum") {
+      if(!w3) return
+      console.log(w3);
+      fetchDataSDK((cb)=>{
+        if(canceled) return
+        cb();
+      });
+    }
+    else {
+      if(!contracts || !tokenRel || !web3Api || !web3Api.getAPYPerToken || !web3Api.getPoolSizeLiquidityMining) return
 
+      fetchData((cb)=>{
+        if(canceled) return
+        cb();
+      });
+    }
     return () => {
       canceled = true;
     }
     // eslint-disable-next-line
-  }, [contracts, events]);
+  }, [contracts, events, selectedNetwork, w3]);
     
   return useMemo(() => {
     if(!tokenRel) return [stakedData];
