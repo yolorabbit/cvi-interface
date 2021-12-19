@@ -154,7 +154,6 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       if (tokenName === 'govi') {
         const goviStaking = w3.stakings[tokenRel.stakingRewards];
         const stakedAmount = goviStaking.totalSupply;
-        console.log(stakedAmount);
         const stakedAmountUSD = goviStaking.getTVL();
         tvl = {
           stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
@@ -326,7 +325,6 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     let canceled = false;
     if (selectedNetwork === "Arbitrum") {
       if(!w3) return
-      console.log(w3);
       fetchDataSDK((cb)=>{
         if(canceled) return
         cb();
