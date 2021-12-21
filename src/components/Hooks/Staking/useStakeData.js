@@ -9,6 +9,7 @@ import { DAY, useEvents } from "../useEvents";
 import { useActiveWeb3React } from "../wallet";
 import { useSelector } from "react-redux";
 import { useWeb3React } from "@web3-react/core";
+import { aprToAPY } from "@coti-io/cvi-sdk/dist/src/util"
 import config from "config/config";
 
 const initialState = {
@@ -87,15 +88,9 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   }
 
   const getAPYSDK = async (cb) => {
-    let apy = [];
-    if (tokenName === 'govi') {
-      const goviStaking = w3.stakings[tokenRel.stakingRewards];
-      apy = [goviStaking.apr, goviStaking.aprWeekly, goviStaking.aprDaily];
-    }
-    else {
-
-    }
-
+    const goviStaking = w3.stakings[tokenRel.stakingRewards];
+    const apy = [aprToAPY(goviStaking.apr), aprToAPY(goviStaking.aprWeekly), aprToAPY(goviStaking.aprDaily)];
+  
     cb(() => setStakedData((prev)=> ({
       ...prev,
       apy: apy.map((value) => value ? `${customFixed(value, 2)}%` : "N/A")
@@ -150,15 +145,12 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
 
   const getStakedTVLSDK = async (cb) => {
     try {
-      let tvl = {};
-      if (tokenName === 'govi') {
-        const goviStaking = w3.stakings[tokenRel.stakingRewards];
-        const stakedAmount = goviStaking.totalSupply;
-        const stakedAmountUSD = goviStaking.getTVL();
-        tvl = {
-          stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
-          stakedAmountUSD: stakedAmount.isZero() ? "0" : `$${commaFormatted(customFixed(stakedAmountUSD, 2))}`
-        }
+      const goviStaking = w3.stakings[tokenRel.stakingRewards];
+      const stakedAmount = goviStaking.totalSupply;
+      const stakedAmountUSD = goviStaking.getTVL();
+      const tvl = {
+        stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
+        stakedAmountUSD: stakedAmount.isZero() ? "0" : `$${commaFormatted(customFixed(stakedAmountUSD, 2))}`
       }
 
       cb(() => setStakedData((prev)=> ({
@@ -281,13 +273,9 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     })))
 
     try {
-      let tokenBalance = 0;
-      let usdBalance = 0;
-      if (tokenName === 'govi') {
-        const goviToken = w3.tokens['GOVI'];
-        tokenBalance = await goviToken.balanceOf(account);
-        usdBalance = "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(goviToken.toUSD(tokenBalance))), 2));
-      }
+      const goviToken = w3.tokens['GOVI'];
+      const tokenBalance = await goviToken.balanceOf(account);
+      const usdBalance = "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(goviToken.toUSD(tokenBalance))), 2));
       cb(()=> setStakedData((prev)=>({
         ...prev,
         balance: {
@@ -307,37 +295,28 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   }
 
   const fetchData = async (cb) => {
-    getTokenBalance(cb)
-    if(protocol !== "platform") return fetchLiquidityMiningData(cb);
-    getAPY(cb);
-    getStakedTVL(cb);
-  }
-
-  const fetchDataSDK = async (cb) => {
-    getTokenBalanceSDK(cb)
-    getAPYSDK(cb);
-    getStakedTVLSDK(cb);
+    if (selectedNetwork === 'Arbitrum') {
+      getTokenBalanceSDK(cb)
+      getAPYSDK(cb);
+      getStakedTVLSDK(cb);
+    }
+    else {
+      getTokenBalance(cb)
+      if(protocol !== "platform") return fetchLiquidityMiningData(cb);
+      getAPY(cb);
+      getStakedTVL(cb);
+    }
   }
 
   useEffect(()=>{
-    if (!selectedNetwork) return
+    if(!contracts || !tokenRel || !web3Api || !web3Api.getAPYPerToken || !web3Api.getPoolSizeLiquidityMining || !selectedNetwork || !w3) return
 
     let canceled = false;
-    if (selectedNetwork === "Arbitrum") {
-      if(!w3) return
-      fetchDataSDK((cb)=>{
-        if(canceled) return
-        cb();
-      });
-    }
-    else {
-      if(!contracts || !tokenRel || !web3Api || !web3Api.getAPYPerToken || !web3Api.getPoolSizeLiquidityMining) return
+    fetchData((cb)=>{
+      if(canceled) return
+      cb();
+    });
 
-      fetchData((cb)=>{
-        if(canceled) return
-        cb();
-      });
-    }
     return () => {
       canceled = true;
     }
