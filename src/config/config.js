@@ -58,7 +58,7 @@ const config = {
     },
   },
   socialLinks: [
-    { iconName: 'github', to: 'https://github.com/coti-io/cvi-contracts' },
+    { iconName: 'github', to: 'https://github.com/govi-dao/cvi-contracts' },
     { iconName: 'telegram', to: 'https://t.me/cviofficial' },
     { iconName: 'twitter', to: 'https://twitter.com/official_cvi' },
     { iconName: 'medium', to: 'https://cviofficial.medium.com' },
