@@ -142,7 +142,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDCData, uniswapLPToken, uniswapToken, longTokenData)
       // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
       const tvl = {
-        stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, token.decimals), decimalsCountDisplay))),
+        stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, token.decimals)), decimalsCountDisplay)),
         stakedAmountUSD: toBN(poolSize).isZero() ? "0" : `$${commaFormatted(customFixed(tvlUSD, 2))}`
       }
       // console.log(tokenName+" data: ", data);

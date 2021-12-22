@@ -335,6 +335,7 @@ const stakingConfig = {
         "govi-eth-lp": "GOVI-ETH LP",
         "ethvi-usdc-lp": "ETHVI-USDC LP",
         "ethvol-usdc-lp": "ETHVOL-USDC LP",
+        "cvol-usdc-lp": "CVOL-USDC LP",
         "rhegic2-eth-lp": "RHEGIC2-ETH LP",
         "govi": "GOVI",
       },
