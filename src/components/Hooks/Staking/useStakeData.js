@@ -2,6 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { contractsContext } from "contracts/ContractContext";
 import { stakingViewContext } from "components/Context";
 import stakingConfig, { stakingProtocols } from 'config/stakingConfig';
+import { chainNames } from "connectors";
 import { commaFormatted, customFixed, toBN, toDisplayAmount, toFixed } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { convert, fromLPTokens, getPrice } from "contracts/utils";
@@ -150,7 +151,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const stakedAmountUSD = goviStaking.getTVL();
       const tvl = {
         stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
-        stakedAmountUSD: stakedAmount.isZero() ? "0" : `$${commaFormatted(customFixed(stakedAmountUSD, 2))}`
+        stakedAmountUSD: toBN(stakedAmount).isZero() ? "0" : `$${commaFormatted(customFixed(stakedAmountUSD, 2))}`
       }
 
       cb(() => setStakedData((prev)=> ({
@@ -227,13 +228,13 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
         let tokenData;
         const USDCData = await getTokenData(contracts["USDC"]);
         switch (protocol) {
-          case "platform": {
+          case stakingProtocols.platform: {
             tokenData = await getTokenData(contracts[tokenName === "govi" ? "GOVI" : tokenRel.platform], protocol);
             const tokenData2 = await getTokenData(contracts[tokenName === "govi" ? "GOVI" : tokenRel.token], protocol);
             balance = await tokenData.contract.methods.balanceOf(account).call();
             const amountToConvert = async () => tokenName === "govi" ? toBN(balance) : await fromLPTokens(tokenData.contract, toBN(balance), token);
             const usdBalance = await convert(await amountToConvert(), tokenData2, USDCData);
-            return "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance, USDCData.decimals)), 2))
+            return `$${commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance, USDCData.decimals)), 2))}`
           }
           default: {
             tokenData = await getTokenData(contracts[tokenRel.token], protocol);
@@ -241,7 +242,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
             const uniswapToken = pairsData[tokenRel.pairToken] || await getTokenData(contracts[tokenRel.pairToken], stakingProtocols.platform);
             const longTokenData = tokenRel.longToken ? await getTokenData(contracts[tokenRel.longToken], protocol) : undefined; 
             const usdBalance = await web3Api.uniswapLPTokenToUSD(balance, USDCData, tokenData, uniswapToken, longTokenData);
-            return "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance)), 2))
+            return `$${commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance)), 2))}`
           }
         }
       }
@@ -259,6 +260,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       })))
     } catch (error) {
       console.log(protocol + " " +tokenName+" error:" ,error);
+      return "N/A";
     }
   }
 
@@ -275,7 +277,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     try {
       const goviToken = w3.tokens['GOVI'];
       const tokenBalance = await goviToken.balanceOf(account);
-      const usdBalance = "$"+commaFormatted(customFixed(toFixed(toDisplayAmount(goviToken.toUSD(tokenBalance))), 2));
+      const usdBalance = isNaN(tokenBalance)? 'N/A' : `$${commaFormatted(customFixed(toFixed(toDisplayAmount(goviToken.toUSD(tokenBalance))), 2))}`;
       cb(()=> setStakedData((prev)=>({
         ...prev,
         balance: {
@@ -286,6 +288,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       })))
     } catch (error) {
       console.log(protocol + " " + tokenName + "error:", error);
+      return "N/A";
     }
   }
 
@@ -295,14 +298,14 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   }
 
   const fetchData = async (cb) => {
-    if (selectedNetwork === 'Arbitrum') {
+    if (selectedNetwork === chainNames.Arbitrum) {
       getTokenBalanceSDK(cb)
       getAPYSDK(cb);
       getStakedTVLSDK(cb);
     }
     else {
       getTokenBalance(cb)
-      if(protocol !== "platform") return fetchLiquidityMiningData(cb);
+      if(protocol !== stakingProtocols.platform) return fetchLiquidityMiningData(cb);
       getAPY(cb);
       getStakedTVL(cb);
     }
