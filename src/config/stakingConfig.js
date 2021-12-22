@@ -13,6 +13,11 @@ export const stakingProtocols = {
   "platform": "platform"
 }
 
+export const tokensConfig = {
+  "usdc" : { key: "usdc", name: "USDC" },
+  "govi" : { key: "govi", name: "GOVI" }
+}
+
 const stakingConfig = {
   stakingConnectLabels: {
     [stakingViews.staked]: "staked assets"
