@@ -18,7 +18,7 @@ import { useWeb3Api } from 'contracts/useWeb3Api';
 import ErrorModal from 'components/Modals/ErrorModal';
 import Contract from 'web3-eth-contract';
 
-const feesChangedWarning = "This transaction will not succeed due to the change in the sell fee. Please review your trade details and resubmit your sell request";
+const feesChangedWarning = "This transaction will not succeed due to the change in the sell fee premium. Try increasing your slippage tolerance.";
 
 const Sell = () => {
     const dispatch = useDispatch(); 

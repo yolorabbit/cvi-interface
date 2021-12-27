@@ -17,7 +17,7 @@ import Contract from 'web3-eth-contract';
 import { useWeb3React } from '@web3-react/core';
 import { fromUnitsToTokenAmount } from 'contracts/utils';
 
-const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee. Please review your trade details and resubmit your purchase request";
+const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee premium. Try increasing your slippage tolerance.";
 
 const Buy = () => {
     const dispatch = useDispatch();
