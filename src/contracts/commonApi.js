@@ -5,7 +5,7 @@ const commonApi = {
         if(balance === "N/A" || totalBalanceWithAddendum === "N/A") return "N/A";
         if(!balance || !totalBalanceWithAddendum) return null;
         const openPositions = toBN(balance).sub(toBN(totalBalanceWithAddendum));
-        return customFixed(toDisplayAmount(openPositions.toString(), 6), 2);
+        return openPositions.lt(toBN("0")) ? "0" : customFixed(toDisplayAmount(openPositions.toString(), 6), 2);
     },
 }
 
