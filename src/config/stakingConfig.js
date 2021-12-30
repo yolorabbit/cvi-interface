@@ -102,6 +102,7 @@ const stakingConfig = {
         "govi-v1": {
           key: "govi-v1",
           disable: true,
+          overrideApy: 0,
           label: "GOVI",
           address: "0xeeaa40b28a2d1b0b08f6f97bb1dd4b75316c6107",
           protocol: stakingProtocols.platform,
@@ -268,6 +269,7 @@ const stakingConfig = {
         "govi-v1": {
           key: "govi-v1",
           disable: true,
+          overrideApy: 0,
           label: "GOVI",
           address: "0x43Df9c0a1156c96cEa98737b511ac89D0e2A1F46",
           protocol: stakingProtocols.platform,

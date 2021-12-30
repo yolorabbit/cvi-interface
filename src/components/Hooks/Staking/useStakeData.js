@@ -61,6 +61,14 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const events = useSelector(({events})=> events);
   
   const getAPY = async (cb) => {
+    if (token.overrideApy !== undefined) {
+      cb(() => setStakedData((prev)=> ({
+        ...prev,
+        apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => value ? `${customFixed(value, 2)}%` : "N/A")
+      })));
+      return;
+    }
+
     const [platform, stakingRewards] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards]];
     const USDCData = await getTokenData(contracts['USDC']);
     const GOVIData = await getTokenData(contracts['GOVI'], stakingProtocols.platform);
@@ -93,6 +101,14 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   }
 
   const getAPYSDK = async (cb) => {
+    if (token.overrideApy !== undefined) {
+      cb(() => setStakedData((prev)=> ({
+        ...prev,
+        apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => value ? `${customFixed(value, 2)}%` : "N/A")
+      })));
+      return;
+    }
+    
     const goviStaking = w3.stakings[tokenRel.stakingRewards];
     const apy = [aprToAPY(goviStaking.apr), aprToAPY(goviStaking.aprWeekly), aprToAPY(goviStaking.aprDaily)];
   
