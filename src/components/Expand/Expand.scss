@@ -211,4 +211,13 @@
       }
       
    }
+
+   &.highlight {
+      & .expand-component__header {
+         background-color: #1d3a4d;
+      }
+      & .expand-component__expanded {
+         background-color: #1d3a4d;
+      }
+   }
 }

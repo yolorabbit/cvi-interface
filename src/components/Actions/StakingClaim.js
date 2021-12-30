@@ -33,7 +33,8 @@ const StakingClaim = ({tokenName, protocol, claim }) => {
                 alertType: config.alerts.types.NOTICE,
                 message: "Please confirm the transaction in your wallet"
             }));
-            await _contract.methods[tokenName ==='govi' ? "claimAllProfits" : "getReward"]().send({from: account, ...gas});
+            await _contract.methods[(tokenName === stakingConfig.tokens[selectedNetwork]["platform"]["govi-v1"]?.key ||
+                         tokenName === stakingConfig.tokens[selectedNetwork]["platform"]["govi-v2"]?.key) ? "claimAllProfits" : "getReward"]().send({from: account, ...gas});
             dispatch(addAlert({
                 id: 'claim',
                 eventName: `Claim ${token.label ?? token.rewardsTokens[0]} reward- success`,

@@ -11,7 +11,7 @@ import PlatformTables from './PlatformTables';
 import useHistoryEvents from 'components/Hooks/useHistoryEvents';
 import IndexStats from './IndexStats';
 import useCvi from 'components/Hooks/Cvi';
-import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
+import GoviMigrationModalToggle from 'components/Modals/GoviMigrationModal/GoviMigrationModalToggle';
 import config from 'config/config';
 import ActiveSection from './ActiveSection';
 import MainSection from 'components/MainSection';
@@ -28,7 +28,7 @@ const Platform = () => {
         return (
             <div className="platform-component">
                 <SubNavbar tabs={Object.keys(platformConfig.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
-                <MigrationModalToggle />
+                <GoviMigrationModalToggle />
                 <appViewContext.Provider value={{activeView}}>
                     <Layout>
                         <Row className="statistics-row-component">

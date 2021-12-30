@@ -56,7 +56,7 @@ const useAssets = (type) => {
             case "staked": {
                 filteredAssets = filteredAssets.map(async asset => {
                     let staked = await stakingApi.getStakedAmountAndPoolShareByToken(contracts, asset, account, selectedNetwork);
-                    const claim = await stakingApi.getClaimableRewards(contracts, asset, account);
+                    const claim = await stakingApi.getClaimableRewards(contracts, asset, account, selectedNetwork);
                     return {...asset, data: {staked, claim} };
                 })
                 filteredAssets = await Promise.all(filteredAssets);

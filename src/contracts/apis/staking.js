@@ -4,19 +4,21 @@ import { commaFormatted, customFixed, fromBN, toBN, toDisplayAmount, toFixed } f
 import moment from "moment";
 import { DAY } from "components/Hooks/useEvents";
 import { chainNames } from "connectors";
-import { stakingProtocols } from "config/stakingConfig";
+import stakingConfig, { stakingProtocols } from "config/stakingConfig";
 import Api from "Api";
 import { pairsData } from "components/Hooks/Staking/useStakeData";
 
 const stakingApi = {
     getStakedAmountAndPoolShareByToken: async (contracts, asset, account, selectedNetwork) => {
         const {protocol, key: tokenName, fixedDecimals, rel, ...token} = asset
-        
-        if(protocol === "platform") {
+        const isTokenGOVI = tokenName === stakingConfig.tokens[selectedNetwork]["platform"]["govi-v1"]?.key || tokenName === stakingConfig.tokens[selectedNetwork]["platform"]["govi-v2"]?.key;
+
+        if(protocol === stakingProtocols.platform) {
             let tokenData;
             const getDataByTokenName = async () => {
                 switch (tokenName) {
-                    case 'govi':{
+                    case stakingConfig.tokens[selectedNetwork]["platform"]['govi-v1']?.key:
+                    case stakingConfig.tokens[selectedNetwork]["platform"]['govi-v2']?.key:{
                         tokenData = await getTokenData(contracts.GOVI, protocol)
                         return web3Api.getStakedAmountAndPoolShareGOVI(contracts[rel.stakingRewards], account, token.decimals)
                     }
@@ -29,7 +31,7 @@ const stakingApi = {
             const data = await getDataByTokenName();
             const USDCData = await getTokenData(contracts["USDC"]);
             
-            const getAmount = async () => tokenName === "govi" ? data.stakedTokenAmount : await fromLPTokens(contracts[rel.platform], toBN(data.stakedTokenAmount), token);
+            const getAmount = async () => isTokenGOVI ? data.stakedTokenAmount : await fromLPTokens(contracts[rel.platform], toBN(data.stakedTokenAmount), token);
             const stakedAmountUSD = await convert(await getAmount(), tokenData, USDCData);
 
             return {
@@ -98,6 +100,7 @@ const stakingApi = {
         }
     },
     getStakedAmountAndPoolShareGOVI: async (staking, account, tokenDecimals, decimalsCountDisplay=8, percentageDecimals=4) => {
+        console.log(staking);
         const stakedTokenAmount = account ? await staking.methods.stakes(account).call() : 0;
         const poolSize = await staking.methods.totalStaked().call();
         const mySharePercentage = stakedTokenAmount?.toString() === "0" ? toBN("0") : toBN(stakedTokenAmount).mul(toBN("1", tokenDecimals)).div(toBN(poolSize)).mul(toBN("100"));
@@ -310,12 +313,13 @@ const stakingApi = {
         return isStaked ? [aprToAPY(dailyApr, 365, 365 * 365)] : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
         
     },
-    getClaimableRewards: async (contracts, asset, account) => {
+    getClaimableRewards: async (contracts, asset, account, selectedNetwork) => {
         const {protocol, key: tokenName, rewardsTokens, fixedDecimals, rel} = asset
-        if(protocol === "platform") {
+        if(protocol === stakingProtocols.platform) {
             const getClaimableRewardsByTokenName = async () => {
                 switch (tokenName) {
-                  case 'govi':
+                  case stakingConfig.tokens[selectedNetwork]["platform"]['govi-v1']?.key:
+                  case stakingConfig.tokens[selectedNetwork]["platform"]['govi-v2']?.key:
                     return await rewardsTokens.map(async t => await contracts[rel.stakingRewards].methods.profitOf(account, contracts[t]._address).call());
                   default: 
                     return [await contracts[rel.stakingRewards].methods.earned(account).call()];

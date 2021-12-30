@@ -10,6 +10,8 @@ const initialState = {
     networkStatus: 'disconnected',
     migrationModalIsOpen: false,
     migrationModalInitiallized: false,
+    goviMigrationModalIsOpen: false,
+    goviMigrationModalInitiallized: false,
     indexInfo: {
         cvi: null,
         ethvi: null,
@@ -62,6 +64,13 @@ export const appReducer = (state = initialState, action) => {
                 ...state,
                 migrationModalIsOpen: action.migrationModalIsOpen,
                 migrationModalInitiallized: state.migrationModalInitiallized || action.migrationModalInitiallized 
+            };
+        }
+        case actionTypes.SET_GOVI_MIGRATION_MODAL_IS_OPEN: {
+            return {
+                ...state,
+                goviMigrationModalIsOpen: action.goviMigrationModalIsOpen,
+                goviMigrationModalInitiallized: state.goviMigrationModalInitiallized || action.goviMigrationModalInitiallized 
             };
         }
         default:

@@ -13,11 +13,6 @@ export const stakingProtocols = {
   "platform": "platform"
 }
 
-export const tokensConfig = {
-  "usdc" : { key: "usdc", name: "USDC" },
-  "govi" : { key: "govi", name: "GOVI" }
-}
-
 const stakingConfig = {
   stakingConnectLabels: {
     [stakingViews.staked]: "staked assets"
@@ -104,8 +99,9 @@ const stakingConfig = {
             tokenDecimals: [18]
           }
         },
-        "govi": {
-          key: "govi",
+        "govi-v1": {
+          key: "govi-v1",
+          disable: true,
           label: "GOVI",
           address: "0xeeaa40b28a2d1b0b08f6f97bb1dd4b75316c6107",
           protocol: stakingProtocols.platform,
@@ -269,8 +265,9 @@ const stakingConfig = {
             tokenDecimals: [18]
           }
         },
-        "govi": {
-          key: "govi",
+        "govi-v1": {
+          key: "govi-v1",
+          disable: true,
           label: "GOVI",
           address: "0x43Df9c0a1156c96cEa98737b511ac89D0e2A1F46",
           protocol: stakingProtocols.platform,
@@ -282,6 +279,21 @@ const stakingConfig = {
             contractKey: "GOVI",
             stakingRewards: "Staking",
             tokenDecimals: [6, 6]
+          }
+        },
+        "govi-v2": {
+          key: "govi-v2",
+          label: "GOVI",
+          address: "0x43Df9c0a1156c96cEa98737b511ac89D0e2A1F46",
+          protocol: stakingProtocols.platform,
+          decimals: 18,
+          fixedDecimals: 8,
+          rewardsTokens: ["GOVI"],
+          type: "lp-v2",
+          rel: {
+            contractKey: "GOVI",
+            stakingRewards: "StakingV2",
+            tokenDecimals: [18]
           }
         }
       },
@@ -325,15 +337,15 @@ const stakingConfig = {
     },
     [chainNames.Arbitrum]: {
       [stakingProtocols.platform]: {
-        "govi": {
-          key: "govi",
+        "govi-v2": {
+          key: "govi-v2",
           label: "GOVI",
           address: "0x07e49d5de43dda6162fa28d24d5935c151875283",
           protocol: stakingProtocols.platform,
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
-          type: "lp-v1",
+          type: "lp-v2",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "StakingV2",
@@ -365,10 +377,11 @@ const stakingConfig = {
         "ethvol-usdc-lp": "ETHVOL-USDC LP",
         "cvol-usdc-lp": "CVOL-USDC LP",
         "rhegic2-eth-lp": "RHEGIC2-ETH LP",
-        "govi": "GOVI",
+        "govi-v1": "GOVI",
+        "govi-v2": "GOVI"
       },
-      "Claimable rewards": {
-        label: "Claimable rewards"
+      "Rewards": {
+        label: "Rewards"
       },
       action: ""
     },

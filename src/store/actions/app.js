@@ -43,3 +43,9 @@ export const setMigrationModalOpen = (migrationModalIsOpen, migrationModalInitia
   migrationModalIsOpen,
   migrationModalInitiallized
 });
+
+export const setGoviMigrationModalOpen = (goviMigrationModalIsOpen, goviMigrationModalInitiallized) => ({
+  type: actionTypes.SET_GOVI_MIGRATION_MODAL_IS_OPEN,
+  goviMigrationModalIsOpen,
+  goviMigrationModalInitiallized
+});

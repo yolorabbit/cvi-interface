@@ -381,6 +381,30 @@
                         border-right: 4.444vw solid #1a2243;      
                     }
                 }
+
+                &.highlight {
+                    &:hover {
+                        background-color: #182f5d;
+                        border-color: #182f5d;
+                    }
+                    background-color: #1d3a4d;
+                    border-left: 0.833vw solid #1d3a4d;
+                    border-right: 0.833vw solid #1d3a4d;
+                    @media (max-width: 1365px) {
+                        border-left: 1.172vw solid #1d3a4d;
+                        border-right: 1.172vw solid #1d3a4d;
+                    }
+            
+                    @media (max-width: 1024px) {
+                        border-left: 2.086vw solid #1d3a4d;
+                        border-right: 2.086vw solid #1d3a4d;       
+                    }
+                    
+                    @media (max-width: 767px) {
+                        border-left: 4.444vw solid #1d3a4d;
+                        border-right: 4.444vw solid #1d3a4d;      
+                    }
+                }
             }
         }
     }

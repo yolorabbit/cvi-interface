@@ -6,7 +6,7 @@ import { stakingViews } from 'config/stakingConfig';
 import { stakingViewContext } from 'components/Context';
 import React from 'react'
 import StakingAssets from './StakingAssets';
-import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
+import GoviMigrationModalToggle from 'components/Modals/GoviMigrationModal/GoviMigrationModalToggle';
 import useCviSdk from "components/Hooks/CviSdk";
 import './Staking.scss';
 
@@ -16,7 +16,7 @@ const Staking = () => {
     return (
         <Layout className="staking-component">
             <stakingViewContext.Provider value={{ w3 }}>
-                <MigrationModalToggle />
+                <GoviMigrationModalToggle />
                 <Column>
                     <Row>
                         <Container title="Your staked assets">

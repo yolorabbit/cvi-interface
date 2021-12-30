@@ -22,7 +22,7 @@ const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => 
             token={token} 
             protocol={protocol}
             data={data}
-        /> : <tr>
+        /> : <tr className={`${token === 'govi-v2'? 'highlight': ''}`}>
             <RowData 
                 isHeader={isHeader} 
                 token={token} 
@@ -102,9 +102,9 @@ const RowData = ({isHeader, token, protocol, data}) => {
                     bottomText={`${stakedData.tvl.stakedAmountLP} ${header.TVL[token]}`} 
                 /> } 
             />
-    
+
             <RowItem 
-                header={header["Claimable rewards"].label} 
+                header={header["Rewards"].label} 
                 content={<StakingClaim protocol={protocol} tokenName={token} claim={data.claim} /> } 
             />
 

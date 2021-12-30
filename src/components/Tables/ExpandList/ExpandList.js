@@ -3,6 +3,7 @@ import Expand from 'components/Expand';
 import Paginator from 'components/Paginator';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
+import { stakingViews } from 'config/stakingConfig';
 import './ExpandList.scss';
 import { useDataController } from '../DataController/DataController';
 
@@ -26,7 +27,8 @@ const ExpandList = () => {
                         <Expand 
                             key={`${rowData.token}${index}${currentPage}`} 
                             header={<ActiveRow rowData={rowData} activeTab={activeTab} isHeader />} 
-                            expandedView={<ActiveRow rowData={rowData} activeTab={activeTab} />} 
+                            expandedView={<ActiveRow rowData={rowData} activeTab={activeTab} />}
+                            classNames={rowData.key === 'govi-v2' && activeTab === stakingViews.staked? 'highlight' : ''} 
                         />
                     ])
                 }
