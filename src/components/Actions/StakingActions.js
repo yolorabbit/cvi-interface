@@ -87,7 +87,7 @@ const StakingActions = () => {
                     await _contract.methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
                     break;
                 case "unstake":
-                    const action = token.key === 'govi' ? "unstake" : "withdraw";
+                    const action = token.key.includes('govi') ? "unstake" : "withdraw";
                     await _contract.methods[action](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
                     break;    
                 default:
