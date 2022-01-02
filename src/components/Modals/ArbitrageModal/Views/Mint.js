@@ -31,8 +31,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
     try {
       setIsProcessing(true);
       const mintAction = collateralMint ? "fulfillCollateralizedMint" : "fulfillMint";
-      const mintResponse = await w3?.tokens[activeToken.rel.volTokenKey][mintAction](originalRequest.requestId, {account});
-      console.log(mintResponse);
+      await w3?.tokens[activeToken.rel.volTokenKey][mintAction](originalRequest, {account});
       dispatch(addAlert({
         id: 'mint',
         eventName: "Mint - success",
@@ -51,7 +50,7 @@ const Mint = ({ closeBtn, requestData }) => { // @TODO: refactor mint & burn int
       closeBtn();
       setIsProcessing(false);
     }
-  }, [account, activeToken.rel.volTokenKey, closeBtn, collateralMint, dispatch, originalRequest.requestId, w3]);
+  }, [account, activeToken.rel.volTokenKey, closeBtn, collateralMint, dispatch, originalRequest, w3?.tokens]);
 
   useEffect(()=>{
     if(!originalRequest) return;

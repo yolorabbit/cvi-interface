@@ -25,7 +25,7 @@ const Burn = ({ closeBtn, requestData }) => {
   const onClick = useCallback(async() => {
     try {
       setIsProcessing(true);
-      await w3?.tokens[activeToken.rel.volTokenKey].fulfillBurn(originalRequest.requestId, {account});
+      await w3?.tokens[activeToken.rel.volTokenKey].fulfillBurn(originalRequest, {account});
       dispatch(addAlert({
         id: 'burn',
         eventName: "Burn - success",
@@ -44,7 +44,7 @@ const Burn = ({ closeBtn, requestData }) => {
       closeBtn();
       setIsProcessing(false);
     }
-  }, [account, activeToken.rel.volTokenKey, closeBtn, dispatch, originalRequest.requestId, w3]);
+  }, [account, activeToken.rel.volTokenKey, closeBtn, dispatch, originalRequest, w3?.tokens]);
 
   useEffect(()=>{
     if(!originalRequest || !account) return;

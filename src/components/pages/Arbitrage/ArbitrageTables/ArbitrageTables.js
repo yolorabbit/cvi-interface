@@ -64,7 +64,7 @@ const DefaultTable = ({activeTab}) => {
         const data = w3 && unfulfilledRequests ? unfulfilledRequests.map(({
             event, id, requestId, requestType, submitFeesAmount, targetTimestamp, timestamp, tokenAmount,
         }) => {
-            const lastBlockTime = w3.block.cachedBlock.timestamp;
+            const lastBlockTime = w3.block.latestBlock.timestamp;
             const fromToken = arbitrageConfig.requestType[requestType] === activeTabs.burn ? activeToken : activeToken.pairToken; 
             const fromTokenName = fromToken.name.toUpperCase();
             const MAX_UPFRONT_FEE = toBN("500");

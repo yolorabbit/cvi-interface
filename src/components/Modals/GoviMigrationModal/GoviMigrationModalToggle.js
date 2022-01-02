@@ -15,9 +15,7 @@ const GoviMigrationModalToggle = () => {
     const { goviMigrationModalIsOpen, goviMigrationModalInitiallized } = useSelector(({app}) => app);
     const [isStakedGovi, setIsStakedGovi] = useState();
   
-    const w3 = useCviSdk({
-        staking: ["Staking"]
-    });
+    const w3 = useCviSdk();
 
     const isGoviStaker = useCallback(async () => {
         try {

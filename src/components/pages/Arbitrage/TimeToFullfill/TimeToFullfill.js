@@ -28,7 +28,7 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
       const timeDelayFee = await w3?.tokens[activeToken.rel.contractKey].calculateTimeDelayFee(totalTime);
       setDelayFee(prev => ({
         ...prev,
-        fee: timeDelayFee,
+        fee: timeDelayFee.feeNumber,
       }));
     } catch (error) {
       console.log(error);

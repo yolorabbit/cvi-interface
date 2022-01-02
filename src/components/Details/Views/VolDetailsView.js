@@ -28,7 +28,7 @@ const VolDetailsView = ({amount, delayFee}) => {
             setMaxSubmitFees(toDisplayAmount(maxFees, fromToken.decimals));
             const _delayFee = await w3.tokens[fromToken.rel.volTokenKey].calculateTimeDelayFee(delayFee.delayTime);
             const estimateSubmitFee = tokenAmount.mul(toBN(toBN(_delayFee * 100).add(MIN_REQUEST_FEE))).div(toBN(MAX_PERCENTAGE));
-            const estimateTokens = w3.tokens[fromToken.rel.volTokenKey][estimatedTokenFunctions[activeView]](tokenAmount.sub(estimateSubmitFee));
+            const estimateTokens = await w3.tokens[fromToken.rel.volTokenKey][estimatedTokenFunctions[activeView]](tokenAmount.sub(estimateSubmitFee));
             setEstimatedTokens(estimateTokens);
         } catch (error) {
             console.log(error);

@@ -16,6 +16,7 @@ import config from 'config/config';
 import ActiveSection from './ActiveSection';
 import MainSection from 'components/MainSection';
 import './Platform.scss';
+import MigrationModalToggle from '../../Modals/MigrationModal/MigrationModalToggle';
 
 
 const Platform = () => {
@@ -29,6 +30,7 @@ const Platform = () => {
             <div className="platform-component">
                 <SubNavbar tabs={Object.keys(platformConfig.tabs['sub-navbar'])} activeView={activeView} setActiveView={setActiveView} />
                 <GoviMigrationModalToggle />
+                <MigrationModalToggle />
                 <appViewContext.Provider value={{activeView}}>
                     <Layout>
                         <Row className="statistics-row-component">

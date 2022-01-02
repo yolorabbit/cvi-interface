@@ -12,7 +12,9 @@ const FulfillmentInTimer = ({ fulfillmentIn, setActionType }) => {
         if(-twelveHours >= _lockedTime) {
             setActionType(arbitrageConfig.actionsConfig.liquidate.key);
         }
-    }, [_lockedTime, setActionType])
+    }, [_lockedTime, setActionType]);
+
+   
 
     return useMemo(() => {
         return <CountdownComponent 

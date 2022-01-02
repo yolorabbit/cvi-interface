@@ -9,14 +9,16 @@ import StakingAssets from './StakingAssets';
 import GoviMigrationModalToggle from 'components/Modals/GoviMigrationModal/GoviMigrationModalToggle';
 import useCviSdk from "components/Hooks/CviSdk";
 import './Staking.scss';
+import MigrationModalToggle from 'components/Modals/MigrationModal/MigrationModalToggle';
 
 const Staking = () => {
-    const w3Filter = { staking: ["StakingV2"] };
-    const w3 = useCviSdk(w3Filter);
+    const w3 = useCviSdk();
+
     return (
         <Layout className="staking-component">
             <stakingViewContext.Provider value={{ w3 }}>
                 <GoviMigrationModalToggle />
+                <MigrationModalToggle />
                 <Column>
                     <Row>
                         <Container title="Your staked assets">

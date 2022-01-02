@@ -27,8 +27,8 @@ const SubmitMint = () => {
         setProcessing(true);
 
         try {
-            const totalRequestsAmount = w3?.tokens[activeToken.rel.volTokenKey].totalRequestsAmount;
-            const availableToOpen = w3?.tokens[activeToken.rel.volTokenKey].maxSubmitMintAmount();
+            const totalRequestsAmount = await w3?.tokens[activeToken.rel.volTokenKey].getTotalRequestsAmount();
+            const availableToOpen = await w3?.tokens[activeToken.rel.volTokenKey].maxSubmitMintAmount();
             const maxAvailableToOpen = availableToOpen < 0 ? totalRequestsAmount : totalRequestsAmount.add(availableToOpen);
             const availableBalanceWithTokenAmount = totalRequestsAmount.add(tokenAmount);
 
