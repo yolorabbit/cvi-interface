@@ -198,10 +198,21 @@ const Buy = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [approvalValidation, buy, dispatch, openFeeWithSlippageIsValid, getMaxAvailableToOpen, isActiveInDOM, setAmount, token, updateAvailableBalance])
 
+    const updateFeesCallback = useCallback(() => {
+            getPurchaseFees();
+        },[getPurchaseFees],
+    )
+
     return useMemo(() => {
         return  (
             <> 
-                {modalIsOpen && <ErrorModal error={errorMessage} setModalIsOpen={toggleModal} isWarning={errorMessage === feesHighWarningMessage}/> }
+                {modalIsOpen && <ErrorModal
+                    error={errorMessage}
+                    setModalIsOpen={toggleModal}
+                    isWarning={errorMessage === feesHighWarningMessage}
+                    updateFeesCallback={updateFeesCallback}
+                />}
+                
                 <div className="buy-component">
                     <Button 
                         className="button" 
@@ -214,7 +225,7 @@ const Buy = () => {
                 </div>
             </>
         )
-    }, [amount, collateralRatioData, disabled, errorMessage, isProcessing, modalIsOpen, onClick, purchaseFee, type])
+    }, [amount, updateFeesCallback, collateralRatioData, disabled, errorMessage, isProcessing, modalIsOpen, onClick, purchaseFee, type])
 }
 
 export default Buy;
