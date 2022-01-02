@@ -33,7 +33,8 @@ const config = {
       label: "Platform",
       path: '/platform',
       hide: ['/'],
-      restricted: true // block access by country
+      restricted: true, // block access by country
+      soonByNetwork: [chainNames.Arbitrum]
     },
     staking: {
       label: "Staking",
@@ -45,7 +46,8 @@ const config = {
       label: "Volatility Tokens",
       path: '/volatility_tokens',
       hide: ['/'],
-      restricted: true // block access by country
+      restricted: true, // block access by country
+      soonByNetwork: [chainNames.Arbitrum]
     },
     analytics: {
       label: "Analytics",

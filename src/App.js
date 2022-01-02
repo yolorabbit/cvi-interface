@@ -20,6 +20,7 @@ import RestrictedModal from 'components/Modals/RestrictedModal';
 import MaintenanceModal from 'components/Modals/MaintenanceModal';
 import Layout from 'components/Layout/Layout';
 import './App.scss';
+import { getAppMainRouteConfig } from 'utils';
 
 const Platform = lazy(() => import('./components/pages/Platform'));
 const Staking = lazy(() => import('./components/pages/Staking'));
@@ -56,7 +57,7 @@ const App = () => {
         <NotificationList />
         <Web3ReactManager key={selectedNetwork}>
           <ContractsContext>
-            <Routes />
+            <Routes selectedNetwork={selectedNetwork} />
           </ContractsContext>
         </Web3ReactManager>
       </div>
@@ -68,9 +69,19 @@ const App = () => {
 export default App;
 
 
-const Routes = () => {
+const Routes = ({selectedNetwork}) => {
   useSubscribe();
   return useMemo(() => {
+    const routesList = [
+      [config.routes.arbitrage, Arbitrage], 
+      [config.routes.staking, Staking],
+      [config.routes['help-center'], HelpCenter],
+      [config.routes.platform, Platform],
+      [config.routes.home, Home]
+    ];
+
+    const appMainRouteConfig = getAppMainRouteConfig(selectedNetwork);
+
     return <> 
       <Router>
         <Navbar />
@@ -78,11 +89,13 @@ const Routes = () => {
         <MaintenanceModal />
         <Suspense fallback={<Layout className="app-loading"></Layout>}>
           <Switch>
-            <Route path={config.routes.arbitrage.path} component={Arbitrage} />
-            <Route path={config.routes.staking.path} component={Staking} />
-            <Route path={config.routes['help-center'].path} component={HelpCenter} />
-            <Route path={config.routes.platform.path} component={Platform} />
-            <Route path={config.routes.home.path} component={Home} />
+            {routesList.map(route => {
+              const [{path, soonByNetwork}, Component] = route;
+              if(soonByNetwork?.includes(selectedNetwork)) return <Redirect from={path} to={appMainRouteConfig.path} />;
+              return <Route key={path} path={path} component={Component} />
+            }).filter(route => route)}
+
+            
             <Redirect to="/" />
           </Switch>
         </Suspense>
@@ -90,5 +103,5 @@ const Routes = () => {
         <Footer />
       </Router>
      </>
-  }, [])
+  }, [selectedNetwork])
 }

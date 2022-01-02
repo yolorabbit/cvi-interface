@@ -8,6 +8,8 @@ import SelectNetwork from "components/SelectNetwork";
 import ConnectWallet from "components/ConnectWallet";
 import "./Navbar.scss";
 import { track } from "shared/analytics";
+import { useSelector } from "react-redux";
+import { getAppMainRouteConfig } from "utils";
 
 const Navbar = () => {
   const isActiveInDOM = useInDOM();
@@ -87,20 +89,23 @@ const Navbar = () => {
 };
 
 export const EnterApp = ({ setIsOpen }) => {
-  return useMemo(
-    () => (
-      <div className="navbar-component__container--connect">
-        <Link
-          to={config.routes.platform.path}
-          className="navbar-component__container--connect-enter-app"
-          onClick={() => setIsOpen && setIsOpen(false)}
-        >
-          <div>ENTER PLATFORM</div>
-        </Link>
-      </div>
-    ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+  const { selectedNetwork } = useSelector(({app}) => app);
+  
+  return useMemo(() => {
+      const appMainRouteConfig = getAppMainRouteConfig(selectedNetwork);
+      return (
+        <div className="navbar-component__container--connect">
+          <Link
+            to={appMainRouteConfig.path}
+            className="navbar-component__container--connect-enter-app"
+            onClick={() => setIsOpen && setIsOpen(false)}
+          >
+            <div>ENTER PLATFORM</div>
+          </Link>
+        </div>
+      );
+    },
+    [selectedNetwork, setIsOpen]
   );
 };
 
@@ -129,7 +134,7 @@ const Links = ({ links, activePath, activeFrom, setIsOpen }) => {
       return path;
     };
 
-    return links.map(({ label, path, external, prevLink }) => (
+    return links.map(({ label, path, external, prevLink, soonByNetwork }) => (
       <NavLink
         key={path}
         label={label}
@@ -138,6 +143,7 @@ const Links = ({ links, activePath, activeFrom, setIsOpen }) => {
         external={external}
         activePath={activePath}
         setIsOpen={setIsOpen}
+        soonByNetwork={soonByNetwork}
       />
     ));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -198,7 +204,10 @@ const NavLink = ({
   activePath,
   prevPath,
   setIsOpen,
+  soonByNetwork
 }) => {
+  const { selectedNetwork } = useSelector(({app}) => app);
+
   return useMemo(() => {
     const onClickLink = (path) => {
       window.scrollTo(0, 0);
@@ -206,46 +215,59 @@ const NavLink = ({
       if (setIsOpen) setIsOpen(false);
     };
 
+    const renderView = () => {
+      if(external) return <ExternalLink 
+        path={path}
+        label={label}
+        onClickLink={onClickLink}
+      /> 
+
+      const isComingSoon = soonByNetwork?.includes(selectedNetwork);
+
+      if(isComingSoon) return <SoonLink label={label} />
+
+      return <Link
+        className={typeof path === "string" ? path === activePath ? "active" : "" : path.includes(activePath) ? "active" : ""}
+        to={{
+          pathname: !path.toString().includes("help") ? path : activePath === "/" || activePath === "/help" ? "/help" : "/platform/help",
+          state: { from: prevPath },
+        }}
+        onClick={() => onClickLink(path)}
+        disabled
+      >
+        {label}
+      </Link>
+    }
+
     return (
       <div key={path} className="navbar-component__list-item">
-        {external ? (
-          <a
-            href={path}
-            onClick={() => onClickLink(path)}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            {label}
-          </a>
-        ) : (
-          <Link
-            className={
-              typeof path === "string"
-                ? path === activePath
-                  ? "active"
-                  : ""
-                : path.includes(activePath)
-                ? "active"
-                : ""
-            }
-            to={{
-              pathname: !path.toString().includes("help")
-                ? path
-                : activePath === "/" || activePath === "/help"
-                ? "/help"
-                : "/platform/help",
-              state: { from: prevPath },
-            }}
-            onClick={() => onClickLink(path)}
-          >
-            {label}
-          </Link>
-        )}
+        {renderView()}
       </div>
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [path, external, label, activePath, prevPath]);
+  }, [path, setIsOpen, external, label, soonByNetwork, selectedNetwork, activePath, prevPath]);
 };
+
+const ExternalLink = ({path, onClickLink, label}) => {
+  return useMemo(() => {
+    return  <a
+      href={path}
+      onClick={() => onClickLink(path)}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      {label}
+    </a>
+  }, [label, onClickLink, path])
+}
+
+const SoonLink = ({label}) => {
+  return useMemo(() => {
+    return <Link className="coming-soon-link-component" to="#">
+      {label}
+      <span>Coming soon</span>
+    </Link>
+  }, [label]);
+}
 
 const NavbarConnectMemoized = () => {
   return useMemo(
@@ -261,17 +283,20 @@ const NavbarConnectMemoized = () => {
 };
 
 export const Logo = ({ showEnterApp }) => {
+  const { selectedNetwork } = useSelector(({app}) => app);
   return useMemo(() => {
     const onClickLogo = () => {
       window.scrollTo(0, 0);
       track("CVI Logo");
     };
 
+    const appMainRouteConfig = getAppMainRouteConfig(selectedNetwork);
+
     return (
       <Link
         className="logo-component"
         to={
-          showEnterApp ? config.routes.home.path : config.routes.platform.path
+          showEnterApp ? config.routes.home.path : appMainRouteConfig.path
         }
         onClick={onClickLogo}
       >
@@ -279,7 +304,7 @@ export const Logo = ({ showEnterApp }) => {
         <div>Crypto Volatility Index</div>
       </Link>
     );
-  }, [showEnterApp]);
+  }, [selectedNetwork, showEnterApp]);
 };
 
 export default Navbar;

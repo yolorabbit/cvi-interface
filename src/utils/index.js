@@ -174,3 +174,9 @@ export const activeVolsSet = (selectedNetwork, path = "/platform") => {
 
     return activeVolsObject;
 }
+
+export const getAppMainRouteConfig = (chainName) => {
+    return Object.values(config.routes)
+            .filter(route => route.restricted)
+            .find(route => !route?.soonByNetwork?.includes(chainName));
+}
