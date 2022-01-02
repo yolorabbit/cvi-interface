@@ -7,16 +7,17 @@ import { customFixed } from 'utils';
 const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
   const [costumTolerance, setCostumTolerance] = useState("");
   const [inputSlippageFocus, setInputSlippageFocus] = useState(false);
-  
+
   const slippageButtons = useMemo(() => ({
     buttons: ["0.5", "1", "2"],
   }), []);
 
+  const isFixedTolerance = slippageButtons.buttons.includes(slippageTolerance);
+
   const slippageBtnHandler = useCallback((val) => {
     if (slippageTolerance !== val) {
       setSlippageTolerance(val);
-    } else {
-      setCostumTolerance("")
+      setCostumTolerance("");
     }
   }, [setSlippageTolerance, slippageTolerance]);
 
@@ -27,9 +28,10 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
       if (valNoLetters >= 0 && valNoLetters < 100) {
         let costumTolerance = valNoLetters
         setCostumTolerance(customFixed(costumTolerance, 2));
-        slippageBtnHandler(customFixed(costumTolerance, 2));
+        setSlippageTolerance(customFixed(costumTolerance, 2));
       }
   }
+
 
   return (
     <div className="slippage-component">
@@ -52,32 +54,28 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
               <button
                 key={`${valnum}-${slippageValue}`}
                 type="button"
-                className={`slippage-button${!costumTolerance && slippageValue === slippageTolerance ? " selected" : ""}`}
+                className={`slippage-button${!costumTolerance && !inputSlippageFocus && slippageValue === slippageTolerance ? " selected" : ""}`}
                 onClick={() => slippageBtnHandler(slippageValue)}>
                 <span>{slippageValue}%</span>
               </button>
             );
           })}
 
-        <div className={`input-container${(costumTolerance || inputSlippageFocus) ? " selected" : ""}`}>
+        <div className={`input-container${((slippageTolerance && !isFixedTolerance) || costumTolerance || inputSlippageFocus) ? " selected" : ""}`}>
           <input type="text"
             placeholder="Custom"
             name="slippage-input"
             autoComplete="off"
             className="slippage-input"
-            value={costumTolerance}
+            value={slippageTolerance && isFixedTolerance ? costumTolerance : slippageTolerance}
             onChange={customSlippageInput}
             onFocus={() => setInputSlippageFocus(true)}
             onBlur={() => setInputSlippageFocus(false)}
-            onClick={() => {
-              setSlippageTolerance("");
-              setCostumTolerance("");
-            }}
           />
           <span className="slippage-sign">%</span>
         </div>
       </div>
-      {slippageTolerance && ((Number(slippageTolerance) < 0.5) || (Number(slippageTolerance) > 100)) &&
+      {slippageTolerance && ((Number(slippageTolerance) < 0.5)) &&
         <span className="slippage-error">
           <b>Pay Attention:</b> Your transaction may fail
         </span>
