@@ -17,10 +17,10 @@ const useCviSdk = () => {
         let w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork, {
           provider, 
           env: process.env.REACT_APP_ENVIRONMENT === "mainnet" ? "live" : process.env.REACT_APP_ENVIRONMENT
-        });
+        }).init();
         
         if(!config.isMainnet || process.env.REACT_APP_DAYS_TO_COUNT_FROM) { // run staging env from block number timestamp sub days in env
-          const blockTimestamp = await w3Inst.block.getBlock().timestamp;
+          const blockTimestamp = await (await w3Inst.block.getBlock()).timestamp;
           w3Inst.forkTimestamp = blockTimestamp - (DAY * process.env.REACT_APP_DAYS_TO_COUNT_FROM);
         }
   
