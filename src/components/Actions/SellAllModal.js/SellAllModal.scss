@@ -11,7 +11,11 @@
         & .sell-all-modal--actions {
             display: flex;
             justify-content: space-around;
-            
+
+            button {
+                text-transform: uppercase;
+            }
+
             @media (max-width: 1024px) {
                 flex-wrap: wrap;
             }
