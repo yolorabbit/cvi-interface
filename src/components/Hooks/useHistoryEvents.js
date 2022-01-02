@@ -186,7 +186,6 @@ const useHistoryEvents = () => {
 
     useEffect(() => {
         if(!selectedNetwork || !contracts || !account || typeof getEventsFast !== 'function') return;
-        console.log(wallet);
         fetchPastEventsDebounce(wallet);
         return () => {
             fetchPastEventsDebounce.cancel();
