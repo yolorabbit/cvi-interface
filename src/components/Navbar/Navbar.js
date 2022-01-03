@@ -55,7 +55,7 @@ const Navbar = () => {
     if(!selectedNetwork || !filteredLink || notificationData === false) return;
     
     const { notification: notificationConfig } = filteredLink?.find((linkData) => {
-      if(!linkData.notification?.activeBy) return false;
+      if(!linkData.notification?.activeBy || !config.routes[activePath?.replace('/', '')]?.notification ) return false;
       const { restricted, networks = [] } = linkData.notification.activeBy;
       return restricted === linkData.restricted && networks.includes(selectedNetwork);
     }) || [];
@@ -66,7 +66,7 @@ const Navbar = () => {
       setNotificationData(notificationConfig);
     }
     
-  }, [filteredLink, notificationData, selectedNetwork]);
+  }, [activePath, filteredLink, notificationData, selectedNetwork]);
 
   const RenderView = useMemo(() => {
     if(!activePath) return null;
