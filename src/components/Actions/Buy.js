@@ -136,6 +136,7 @@ const Buy = () => {
         if(!openFeeIsValid) {
             setModalIsOpen(true);
             setErrorMessage(feesHighWarningMessage);
+            setAmount("");
             return;
         }
 
@@ -198,11 +199,6 @@ const Buy = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [approvalValidation, buy, dispatch, openFeeWithSlippageIsValid, getMaxAvailableToOpen, isActiveInDOM, setAmount, token, updateAvailableBalance])
 
-    const updateFeesCallback = useCallback(() => {
-            getPurchaseFees();
-        },[getPurchaseFees],
-    )
-
     return useMemo(() => {
         return  (
             <> 
@@ -210,7 +206,6 @@ const Buy = () => {
                     error={errorMessage}
                     setModalIsOpen={toggleModal}
                     isWarning={errorMessage === feesHighWarningMessage}
-                    updateFeesCallback={updateFeesCallback}
                 />}
                 
                 <div className="buy-component">
@@ -225,7 +220,7 @@ const Buy = () => {
                 </div>
             </>
         )
-    }, [amount, updateFeesCallback, collateralRatioData, disabled, errorMessage, isProcessing, modalIsOpen, onClick, purchaseFee, type])
+    }, [amount, collateralRatioData, disabled, errorMessage, isProcessing, modalIsOpen, onClick, purchaseFee, type])
 }
 
 export default Buy;

@@ -106,7 +106,10 @@ const Sell = () => {
         
         try {
             const sellFeeIsValid = await sellFeeWithSlippageIsValid();
-            if(!sellFeeIsValid) return setModalIsOpen(true);
+            if(!sellFeeIsValid) {
+                setAmount("");
+                return setModalIsOpen(true);
+            }
 
             dispatch(addAlert({
                 id: 'notice',

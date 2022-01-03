@@ -3,11 +3,10 @@ import Modal from 'components/Modal/Modal';
 import React from 'react';
 import './ErrorModal.scss';
 
-const ErrorModal = ({setModalIsOpen, error = "An error has occured", isWarning, updateFeesCallback}) => {
+const ErrorModal = ({ setModalIsOpen, error = "An error has occured", isWarning }) => {
 
     const closeHandler = () => {
-        setModalIsOpen(false)
-        updateFeesCallback()
+        setModalIsOpen(false);
     }
 
     return (

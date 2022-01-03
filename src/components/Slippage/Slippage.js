@@ -8,7 +8,7 @@ const Slippage = ({slippageTolerance, setSlippageTolerance}) => {
   const [costumTolerance, setCostumTolerance] = useState("");
   const [inputSlippageFocus, setInputSlippageFocus] = useState(false);
 
-  const slippageButtons = useMemo(() => ({
+  const slippageButtons = useMemo(() => ({ // @TODO: move it to config.js
     buttons: ["0.5", "1", "2"],
   }), []);
 
