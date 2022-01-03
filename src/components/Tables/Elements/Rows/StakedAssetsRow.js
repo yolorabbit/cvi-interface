@@ -41,9 +41,8 @@ const RowData = ({isHeader, token, protocol, data}) => {
     const isMobile = useIsMobile();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
-    const tokenNameFormatted = (token === 'govi-v1' || token === 'govi-v2')? leftToken : (leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token);
-    const isStaked = true;
-    const [stakedData] = useStakedData(chainName, protocol, token, isStaked);
+    const tokenNameFormatted = token?.includes('govi') ? leftToken : (leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token);
+    const [stakedData] = useStakedData(chainName, protocol, token);
     const [amount, setAmount] = useState("");
 
     return useMemo(() => {

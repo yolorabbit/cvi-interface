@@ -268,7 +268,7 @@ const stakingConfig = {
         },
         "govi-v1": {
           key: "govi-v1",
-          disable: true,
+          disable: config.isMainnet,
           overrideApy: 0,
           label: "GOVI",
           address: "0x43Df9c0a1156c96cEa98737b511ac89D0e2A1F46",

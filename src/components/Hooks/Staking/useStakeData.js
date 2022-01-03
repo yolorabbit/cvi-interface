@@ -2,15 +2,13 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { contractsContext } from "contracts/ContractContext";
 import { stakingViewContext } from "components/Context";
 import stakingConfig, { stakingProtocols } from 'config/stakingConfig';
-import { chainNames } from "connectors";
 import { commaFormatted, customFixed, toBN, toDisplayAmount, toFixed } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
-import { convert, fromLPTokens, getPrice } from "contracts/utils";
+import { aprToAPY, convert, fromLPTokens, getPrice } from "contracts/utils";
 import { DAY, useEvents } from "../useEvents";
 import { useActiveWeb3React } from "../wallet";
 import { useSelector } from "react-redux";
 import { useWeb3React } from "@web3-react/core";
-import { aprToAPY } from "@coti-io/cvi-sdk/dist/src/util"
 import config from "config/config";
 
 const initialState = {
@@ -104,14 +102,15 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     if (token.overrideApy !== undefined) {
       cb(() => setStakedData((prev)=> ({
         ...prev,
-        apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => value ? `${customFixed(value, 2)}%` : "N/A")
+        apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => value >= 0 ? `${customFixed(value, 2)}%` : "N/A")
       })));
       return;
     }
+
+    const stakingInstance = w3.stakings[tokenRel.stakingRewards];
+    const dailyApr = await stakingInstance.getAPR(DAY);
+    const apy = [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
     
-    const goviStaking = w3.stakings[tokenRel.stakingRewards];
-    const apy = [aprToAPY(goviStaking.apr), aprToAPY(goviStaking.aprWeekly), aprToAPY(goviStaking.aprDaily)];
-  
     cb(() => setStakedData((prev)=> ({
       ...prev,
       apy: apy.map((value) => value ? `${customFixed(value, 2)}%` : "N/A")
@@ -167,8 +166,8 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const getStakedTVLSDK = async (cb) => {
     try {
       const goviStaking = w3.stakings[tokenRel.stakingRewards];
-      const stakedAmount = goviStaking.totalSupply;
-      const stakedAmountUSD = goviStaking.getTVL();
+      const stakedAmount = goviStaking.totalStaked;
+      const stakedAmountUSD = goviStaking.tvl;
       const tvl = {
         stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
         stakedAmountUSD: toBN(stakedAmount).isZero() ? "0" : `$${commaFormatted(customFixed(stakedAmountUSD, 2))}`
@@ -193,15 +192,13 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const uniswapLPToken = await getTokenData(platformLPToken, protocol);
       const poolSize = await stakingRewards.methods.totalSupply().call();
 
-      // console.log("poolSize: ", poolSize);
       const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, USDCData, uniswapLPToken, uniswapToken, longTokenData)
-      // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
+
       const tvl = {
         stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, token.decimals)), decimalsCountDisplay)),
         stakedAmountUSD: toBN(poolSize).isZero() ? "0" : `$${commaFormatted(customFixed(tvlUSD, 2))}`
       }
-      // console.log(tokenName+" data: ", data);
-      // console.log(tokenName+" tvl: ", tvl);
+  
       cb(() => setStakedData((prev)=> ({
         ...prev,
         tvl
@@ -318,17 +315,17 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   }
 
   const fetchData = async (cb) => {
-    if (selectedNetwork === chainNames.Arbitrum) {
+    if (stakingProtocols.platform === protocol && tokenName?.includes('govi')) {
       getTokenBalanceSDK(cb)
       getAPYSDK(cb);
       getStakedTVLSDK(cb);
+      return;
     }
-    else {
-      getTokenBalance(cb)
-      if(protocol !== stakingProtocols.platform) return fetchLiquidityMiningData(cb);
-      getAPY(cb);
-      getStakedTVL(cb);
-    }
+
+    getTokenBalance(cb)
+    if(protocol !== stakingProtocols.platform) return fetchLiquidityMiningData(cb);
+    getAPY(cb);
+    getStakedTVL(cb);
   }
 
   useEffect(()=>{
