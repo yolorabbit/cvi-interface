@@ -6,17 +6,20 @@ import Button from "../Elements/Button";
 import TotalValueLocked from "components/TotalValueLocked";
 import SelectNetwork from "components/SelectNetwork";
 import ConnectWallet from "components/ConnectWallet";
-import "./Navbar.scss";
 import { track } from "shared/analytics";
 import { useSelector } from "react-redux";
 import { getAppMainRouteConfig } from "utils";
+import "./Navbar.scss";
+import NewNotificationMessage from "components/Navbar/NewNotificationMessage";
 
 const Navbar = () => {
   const isActiveInDOM = useInDOM();
+  const { selectedNetwork } = useSelector(({app}) => app);
   const [pageYOffset, setPageYOffset] = useState(0);
   const location = useLocation();
   const isTablet = useIsTablet();
   const [activePath, setActivePath] = useState();
+  const [notificationData, setNotificationData] = useState(null);
   const links = Object.values(config.routes);
   const from = location?.state?.from;
   const showEnterApp =
@@ -48,6 +51,23 @@ const Navbar = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if(!selectedNetwork || !filteredLink || notificationData === false) return;
+    
+    const { notification: notificationConfig } = filteredLink?.find((linkData) => {
+      if(!linkData.notification?.activeBy) return false;
+      const { restricted, networks = [] } = linkData.notification.activeBy;
+      return restricted === linkData.restricted && networks.includes(selectedNetwork);
+    }) || [];
+
+    
+    if(notificationConfig) {
+      if(localStorage.getItem(notificationConfig.type) === 'close') return setNotificationData('close');
+      setNotificationData(notificationConfig);
+    }
+    
+  }, [filteredLink, notificationData, selectedNetwork]);
+
   const RenderView = useMemo(() => {
     if(!activePath) return null;
     return (
@@ -73,19 +93,20 @@ const Navbar = () => {
     );
     //eslint-disable-next-line
   }, [showEnterApp, activePath, isTablet]);
-       
 
   return useMemo(() => {
+    const hasNotification = notificationData && notificationData !== 'close';
     return (
       <div
-        className={`navbar-component ${showEnterApp ? "is-home" : ""} ${
+        className={`navbar-component ${showEnterApp ? "is-home" : ""} ${hasNotification ? 'navbar-component-is-notification' : ''} ${
           pageYOffset > 25 ? "is-scroll" : ""
         }`}
       >
+        {hasNotification && <NewNotificationMessage type={notificationData.type} setNotificationData={setNotificationData} />}
         <div className="navbar-component__container">{RenderView}</div>
       </div>
     );
-  }, [showEnterApp, pageYOffset, RenderView]);
+  }, [showEnterApp, notificationData, pageYOffset, RenderView]);
 };
 
 export const EnterApp = ({ setIsOpen }) => {

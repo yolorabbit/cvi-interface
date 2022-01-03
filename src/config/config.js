@@ -1,5 +1,13 @@
 import { chainNames } from "connectors";
 
+const newStakingProgramNotification = {
+  type: "new-staking-program-notification-2022",
+  activeBy: {
+    restricted: true,
+    networks: [chainNames.Ethereum, chainNames.Matic]
+  }
+}
+
 const config = {
   oraclesData: {
     "cvi": {
@@ -34,20 +42,23 @@ const config = {
       path: '/platform',
       hide: ['/'],
       restricted: true, // block access by country
-      soonByNetwork: [chainNames.Arbitrum]
+      soonByNetwork: [chainNames.Arbitrum],
+      notification: newStakingProgramNotification
     },
     staking: {
       label: "Staking",
       path: '/staking',
       hide: ['/'],
-      restricted: true // block access by country
+      restricted: true, // block access by country
+      notification: newStakingProgramNotification
     },
     arbitrage: {
       label: "Volatility Tokens",
       path: '/volatility_tokens',
       hide: ['/'],
       restricted: true, // block access by country
-      soonByNetwork: [chainNames.Arbitrum]
+      soonByNetwork: [chainNames.Arbitrum],
+      notification: newStakingProgramNotification
     },
     analytics: {
       label: "Analytics",
