@@ -109,7 +109,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["USDT", "WETH", "USDC"],
-          type: "cvi-sdk",
+          type: "lp-v2",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "Staking",
@@ -276,7 +276,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["USDT", "USDC"],
-          type: "cvi-sdk",
+          type: "lp-v2",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "Staking",

@@ -38,7 +38,7 @@ const RowData = ({isHeader, rowData: asset}) => {
     const isMobile = useIsMobile();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
-    const tokenNameFormatted = token?.includes('govi') ? leftToken : (leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token);
+    const tokenNameFormatted = token?.match(/^govi-v/) ? leftToken : (leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token);
     const [stakedData] = useStakedData(chainName, protocol, token);
     const [amount, setAmount] = useState("");
 
