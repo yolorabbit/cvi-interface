@@ -290,9 +290,9 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     })))
 
     try {
-      const goviToken = w3.tokens['GOVI'];
-      const tokenBalance = await goviToken.balanceOf(account);
-      const tokenBalanceUSD = await goviToken.getUSD(tokenBalance);
+      const token = w3.tokens[tokenRel.contractKey];
+      const tokenBalance = await token.balanceOf(account);
+      const tokenBalanceUSD = await token.getUSD(tokenBalance);
       const usdBalance = isNaN(tokenBalance)? 'N/A' : `$${commaFormatted(customFixed(tokenBalanceUSD, 2))}`;
       cb(()=> setStakedData((prev)=>({
         ...prev,
@@ -314,7 +314,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   }
 
   const fetchData = async (cb) => {
-    if (stakingProtocols.platform === protocol && tokenName?.includes('govi')) {
+    if (stakingProtocols.platform === protocol && isGoviToken(tokenName)) {
       getTokenBalanceSDK(cb)
       getAPYSDK(cb);
       getStakedTVLSDK(cb);

@@ -64,7 +64,7 @@ const useAssets = (type, w3) => {
 
                             const {profit} = await stakingInstance.profits({account, historyId: "EventHistory"}); // @TODO: remove EventHistory
                             const claim = [{
-                                amount: commaFormatted(customFixedTokenValue(profit, asset.fixedDecimals, asset.decimals)),
+                                amount: profit < 0 ? "0" : commaFormatted(customFixedTokenValue(profit, asset.fixedDecimals, asset.decimals)),
                                 symbol: asset.label
                             }];
 
