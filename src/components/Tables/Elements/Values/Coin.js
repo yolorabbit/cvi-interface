@@ -1,10 +1,11 @@
 import AddMetamaskAsset from 'components/AddMetamaskAsset/AddMetamaskAsset';
 import { stakingProtocols } from 'config/stakingConfig';
 import React from 'react'
+import { isGoviToken } from 'utils';
 
 const Coin = ({token, showName, protocol}) => {
   if(!token) return null;
-  const tokenKey = (token === 'govi-v1' || token === 'govi-v2') ? 'govi' : token;
+  const tokenKey =  isGoviToken(token) ? 'govi' : token;
   const tokenName = tokenKey.split('-').length > 1 ? tokenKey.replace(/-([^-]*)$/, ' $1') : tokenKey;
 
 return <> 

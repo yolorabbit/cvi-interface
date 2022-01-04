@@ -4,7 +4,7 @@ import config from 'config/config';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
-import { actionConfirmEvent, gas } from 'utils';
+import { actionConfirmEvent, gas, isGoviToken } from 'utils';
 import Contract from 'web3-eth-contract';
 import Rewards from './../Tables/Elements/Values/Rewards';
 
@@ -31,9 +31,9 @@ const StakingClaim = ({asset, claim }) => {
                 alertType: config.alerts.types.NOTICE,
                 message: "Please confirm the transaction in your wallet"
             }));
-            
-            await _contract.methods["getReward"]().send({from: account, ...gas});
 
+            await _contract.methods[isGoviToken(asset.key) ? "claimAllProfits" : "getReward"]().send({from: account, ...gas});
+                         
             dispatch(addAlert({
                 id: 'claim',
                 eventName: `Claim ${asset.label ?? asset.rewardsTokens[0]} reward- success`,

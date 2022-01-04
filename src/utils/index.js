@@ -8,6 +8,8 @@ import { getChainName } from "contracts/utils";
 import moment from "moment";
 import { actionConfirm } from "store/actions/events";
 
+export const isGoviToken = (str) => /^govi-v\d$/.test(str);
+
 export const gas = config.isMainnet ? { } : { };
 
 export const getTimeDurationFormatted = (lockedTime, showSeconds) => {

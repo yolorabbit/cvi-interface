@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import { commaFormatted, customFixed, customFixedTokenValue, toBN, toBNAmount } from 'utils';
+import { commaFormatted, customFixed, customFixedTokenValue, isGoviToken, toBN, toBNAmount } from 'utils';
 import Button from 'components/Elements/Button';
 import Input from 'components/Elements/Input';
 import config from 'config/config';
@@ -26,7 +26,7 @@ const InputAmount = ({
     const tokenAmount = useMemo(() => toBN(toBNAmount(amount, activeToken.decimals)), [amount, activeToken.decimals]);
     const availableBalanceAmount = useMemo(() => customFixedTokenValue(availableBalance, activeToken.decimals, activeToken.decimals), [activeToken, availableBalance]);
     const insufficientBalance = useMemo(() => tokenAmount.gt(toBN(availableBalance)), [tokenAmount, availableBalance]);
-    const symbolName = useMemo(() => symbol === 'govi-v1' || symbol === 'govi-v2'? 'govi' : symbol, [symbol]);
+    const symbolName = useMemo(() => isGoviToken(symbol) ? 'govi' : symbol, [symbol]);
 
     useEffect(() => {
         setInsufficientBalance(insufficientBalance);

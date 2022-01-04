@@ -9,7 +9,7 @@ import StakingClaim from "components/Actions/StakingClaim";
 import { Pairs } from "../Values";
 import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
-import { toBN } from "utils";
+import { isGoviToken, toBN } from "utils";
 import StakedAmount from "../Values/StakedAmount";
 import MigrateAction from "components/Actions/MigrateAction";
 
@@ -38,7 +38,7 @@ const RowData = ({isHeader, rowData: asset}) => {
     const isMobile = useIsMobile();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
     const [leftToken, rightToken] = token?.split('-');
-    const tokenNameFormatted = token?.match(/^govi-v/) ? leftToken : (leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token);
+    const tokenNameFormatted = isGoviToken(token) ? leftToken : (leftToken && rightToken ? token.replace(/-([^-]*)$/, ' $1') : token);
     const [stakedData] = useStakedData(chainName, protocol, token);
     const [amount, setAmount] = useState("");
 

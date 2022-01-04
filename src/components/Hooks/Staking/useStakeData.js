@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { contractsContext } from "contracts/ContractContext";
 import { stakingViewContext } from "components/Context";
 import stakingConfig, { stakingProtocols } from 'config/stakingConfig';
-import { commaFormatted, customFixed, toBN, toDisplayAmount, toFixed } from "utils";
+import { commaFormatted, customFixed, isGoviToken, toBN, toDisplayAmount, toFixed } from "utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
 import { aprToAPY, convert, fromLPTokens, getPrice } from "contracts/utils";
 import { DAY, useEvents } from "../useEvents";
@@ -51,9 +51,6 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const [stakedData, setStakedData] = useState(initialState);
   const eventsUtils = useEvents();
   const token = stakingConfig.tokens[chainName]?.[protocol]?.[tokenName];
-  const isTokenGOVI = useMemo(() => (
-    tokenName === stakingConfig.tokens[selectedNetwork]["platform"]["govi-v1"]?.key || tokenName === stakingConfig.tokens[selectedNetwork]["platform"]["govi-v2"]?.key
-  ), [selectedNetwork, tokenName]);
   const tokenRel = token?.rel;
   const decimalsCountDisplay = 8;
   const events = useSelector(({events})=> events);
@@ -140,7 +137,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
 
   const getStakedTVL = async (cb) => {
     try {
-      if(isTokenGOVI) return getGoviValueStaked(cb);
+      if(isGoviToken(tokenName)) return getGoviValueStaked(cb);
       const [platform, stakingRewards] = [contracts[tokenRel.platform], contracts[tokenRel.stakingRewards]];
       const stakedAmount = await stakingRewards.methods.totalSupply().call();
       const stakedAmountToken = await fromLPTokens(platform, toBN(stakedAmount), token);
@@ -247,10 +244,10 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
         const USDCData = await getTokenData(contracts['USDC']);
         switch (protocol) {
           case stakingProtocols.platform: {
-            tokenData = await getTokenData(contracts[isTokenGOVI ? 'GOVI' : tokenRel.platform], protocol);
-            const tokenData2 = await getTokenData(contracts[isTokenGOVI ? 'GOVI' : tokenRel.token], protocol);
+            tokenData = await getTokenData(contracts[isGoviToken(tokenName) ? tokenRel.contractKey : tokenRel.platform], protocol);
+            const tokenData2 = await getTokenData(contracts[isGoviToken(tokenName) ? tokenRel.contractKey : tokenRel.token], protocol);
             balance = await tokenData.contract.methods.balanceOf(account).call();
-            const amountToConvert = async () => isTokenGOVI ? toBN(balance) : await fromLPTokens(tokenData.contract, toBN(balance), token);
+            const amountToConvert = async () => isGoviToken(tokenName) ? toBN(balance) : await fromLPTokens(tokenData.contract, toBN(balance), token);
             const usdBalance = await convert(await amountToConvert(), tokenData2, USDCData);
             return `$${commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance, USDCData.decimals)), 2))}`
           }
