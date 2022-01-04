@@ -13,30 +13,27 @@ import { toBN } from "utils";
 import StakedAmount from "../Values/StakedAmount";
 import MigrateAction from "components/Actions/MigrateAction";
 
-const StakedAssetsRow = ({rowData: { key: token, protocol, data}, isHeader}) => {
+const StakedAssetsRow = ({rowData, isHeader}) => {
     const isTablet = useIsTablet();
 
     return useMemo(() => {
         return isTablet ? <RowData 
             isHeader={isHeader} 
-            token={token} 
-            protocol={protocol}
-            data={data}
-        /> : <tr className={`${token === 'govi-v2'? 'highlight': ''}`}>
+            rowData={rowData}
+        /> : <tr className={`${rowData.key === 'govi-v2'? 'highlight': ''}`}>
             <RowData 
                 isHeader={isHeader} 
-                token={token} 
-                protocol={protocol}
-                data={data}
+                rowData={rowData}
             />
         </tr>
-    }, [token, protocol, data, isHeader, isTablet])
+    }, [isTablet, isHeader, rowData])
 }
 
 export default StakedAssetsRow;
 
-const RowData = ({isHeader, token, protocol, data}) => {
-    const chainName = useSelector(({app})=>app.selectedNetwork);
+const RowData = ({isHeader, rowData: asset}) => {
+    const { key: token, protocol, data } = asset;
+    const chainName = useSelector(({app}) => app.selectedNetwork);
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const header = useMemo(() => stakingConfig.headers[stakingViews.staked], []);
@@ -104,7 +101,7 @@ const RowData = ({isHeader, token, protocol, data}) => {
 
             <RowItem 
                 header={header["Rewards"].label} 
-                content={<StakingClaim protocol={protocol} tokenName={token} claim={data.claim} /> } 
+                content={<StakingClaim asset={asset} claim={data.claim} /> } 
             />
 
             {(!isTablet || isMobile) &&
@@ -116,6 +113,5 @@ const RowData = ({isHeader, token, protocol, data}) => {
                 } />
             }
         </>
-        //eslint-disable-next-line
-    )}, [stakedData, isTablet, isMobile, amount, data]);
+    )}, [data.staked.stakedTokenAmount, data.staked.stakedAmount, data.staked.lastStakedAmount.value, data.staked.stakedAmountUSD, data.claim, token, amount, protocol, tokenNameFormatted, isHeader, isTablet, header, stakedData.apy, stakedData.tvl.stakedAmountUSD, stakedData.tvl.stakedAmountLP, asset, isMobile, leftToken, rightToken]);
 }

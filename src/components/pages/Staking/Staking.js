@@ -22,7 +22,7 @@ const Staking = () => {
                 <Column>
                     <Row>
                         <Container title="Your staked assets">
-                            <StakingAssets type={stakingViews.staked} />
+                            {w3 && <StakingAssets type={stakingViews.staked} />}
                         </Container>
                     </Row>
 

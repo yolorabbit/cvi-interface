@@ -1,7 +1,7 @@
 import { contractsContext } from "contracts/ContractContext";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useActiveWeb3React } from "./wallet";
-import { toBN, toBNAmount } from 'utils';
+import { commaFormatted, customFixed, customFixedTokenValue, toBN, toBNAmount } from 'utils';
 import stakingConfig from "config/stakingConfig";
 import { useSelector } from "react-redux";
 import platformConfig from "config/platformConfig";
@@ -11,7 +11,7 @@ import { useWeb3React } from '@web3-react/core';
 import config from "config/config";
 import stakingApi from 'contracts/apis/staking';
 
-const useAssets = (type) => {
+const useAssets = (type, w3) => {
     const { library } = useWeb3React(config.web3ProviderId);
     const { account } = useActiveWeb3React();
     const contracts = useContext(contractsContext);
@@ -54,14 +54,43 @@ const useAssets = (type) => {
         let filteredAssets = getAssets();
         switch (type) {
             case "staked": {
-                filteredAssets = filteredAssets.map(async asset => {
-                    let staked = await stakingApi.getStakedAmountAndPoolShareByToken(contracts, asset, account, selectedNetwork);
-                    const claim = await stakingApi.getClaimableRewards(contracts, asset, account, selectedNetwork);
-                    return {...asset, data: {staked, claim} };
-                })
-                filteredAssets = await Promise.all(filteredAssets);
+                const filterAsset = async (asset) => {
+                    try {
+                        if(asset.key.includes('govi')) { // use the sdk only for govi assets
+                            const stakingInstance = w3.stakings[asset.rel.stakingRewards];
+                            const token = w3.tokens[asset.rel.contractKey];
+                            const {stakedAmount, sharePercent: poolSize} = await stakingInstance.staked(account);
+                            const stakedAmountUSD = await token.getUSD(stakedAmount);
+
+                            const {profit} = await stakingInstance.profits({account, historyId: "EventHistory"}); // @TODO: remove EventHistory
+           
+                            const claim = [{
+                                amount: commaFormatted(customFixedTokenValue(profit, asset.fixedDecimals, asset.decimals)),
+                                symbol: asset.label
+                            }];
+
+                            return {...asset, data: {staked: {
+                                lastStakedAmount: {class: '', value: `(${customFixed(poolSize, 2)}%)`},
+                                poolSize: poolSize,
+                                stakedAmount: commaFormatted(customFixedTokenValue(stakedAmount, asset.fixedDecimals, asset.decimals)),
+                                stakedAmountUSD: commaFormatted(stakedAmountUSD),
+                                stakedTokenAmount: stakedAmount
+                            }, claim}}
+                        }
+                        let staked = await stakingApi.getStakedAmountAndPoolShareByToken(contracts, asset, account, selectedNetwork);
+                        const claim = await stakingApi.getClaimableRewards(contracts, asset, account, selectedNetwork);
+
+                        return {...asset, data: {staked, claim}}
+                    } catch(error) {
+                        return {...asset, data: {staked: "N/A", claim: []}}
+                    }
+                }   
+
+                filteredAssets = filteredAssets.map(async asset => await filterAsset(asset))
+                filteredAssets = await Promise.allSettled(filteredAssets);
+
                 if(!isActiveInDom()) return;
-                return filteredAssets.filter(({decimals, data: {staked, claim}}) => {
+                return filteredAssets.map(({value}) => value).filter(({decimals, data: {staked, claim}}) => {
                     const stakedTokenAmount = staked?.stakedTokenAmount ?? 0
                     const hasStaked = toBN(stakedTokenAmount).gt(toBN(0));
                     const canClaim = claim?.some(({amount}) => amount && toBN(toBNAmount(amount, decimals)).gt(toBN(0)));

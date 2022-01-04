@@ -109,7 +109,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["USDT", "WETH", "USDC"],
-          type: "lp-v1",
+          type: "cvi-sdk",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "Staking",
@@ -276,7 +276,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["USDT", "USDC"],
-          type: "lp-v1",
+          type: "cvi-sdk",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "Staking",
@@ -291,7 +291,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
-          type: "lp-v2",
+          type: "cvi-sdk",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "StakingV2",
@@ -347,7 +347,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"],
-          type: "lp-v2",
+          type: "cvi-sdk",
           rel: {
             contractKey: "GOVI",
             stakingRewards: "StakingV2",

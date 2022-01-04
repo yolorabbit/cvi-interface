@@ -30,7 +30,6 @@ const GoviMigrationModalToggle = () => {
 
     useEffect(() => {
         if(!w3 || !account) return;
-        console.log(w3);
         isGoviStaker();
     }, [w3, account, isGoviStaker]);
 
