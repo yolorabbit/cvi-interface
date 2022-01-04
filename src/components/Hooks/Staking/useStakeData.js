@@ -109,7 +109,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
 
     const stakingInstance = w3.stakings[tokenRel.stakingRewards];
     const dailyApr = await stakingInstance.getAPR(DAY);
-    const apy = [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
+    const apy = [commaFormatted(aprToAPY(dailyApr, 365, 365 * 365)), commaFormatted(aprToAPY(dailyApr, 365, 365 * 7)), commaFormatted(aprToAPY(dailyApr, 365, 365))];
     
     cb(() => setStakedData((prev)=> ({
       ...prev,

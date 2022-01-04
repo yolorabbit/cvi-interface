@@ -56,14 +56,13 @@ const useAssets = (type, w3) => {
             case "staked": {
                 const filterAsset = async (asset) => {
                     try {
-                        if(asset.key.includes('govi')) { // use the sdk only for govi assets
+                        if(asset.key === 'govi-v2') { // use the sdk only for govi assets
                             const stakingInstance = w3.stakings[asset.rel.stakingRewards];
                             const token = w3.tokens[asset.rel.contractKey];
                             const {stakedAmount, sharePercent: poolSize} = await stakingInstance.staked(account);
                             const stakedAmountUSD = await token.getUSD(stakedAmount);
 
                             const {profit} = await stakingInstance.profits({account, historyId: "EventHistory"}); // @TODO: remove EventHistory
-           
                             const claim = [{
                                 amount: commaFormatted(customFixedTokenValue(profit, asset.fixedDecimals, asset.decimals)),
                                 symbol: asset.label
@@ -82,6 +81,7 @@ const useAssets = (type, w3) => {
 
                         return {...asset, data: {staked, claim}}
                     } catch(error) {
+                        console.log(error)
                         return {...asset, data: {staked: "N/A", claim: []}}
                     }
                 }   
@@ -89,7 +89,7 @@ const useAssets = (type, w3) => {
                 filteredAssets = filteredAssets.map(async asset => await filterAsset(asset))
                 filteredAssets = await Promise.allSettled(filteredAssets);
 
-                if(!isActiveInDom()) return;
+                if(!isActiveInDom()) return;    
                 return filteredAssets.map(({value}) => value).filter(({decimals, data: {staked, claim}}) => {
                     const stakedTokenAmount = staked?.stakedTokenAmount ?? 0
                     const hasStaked = toBN(stakedTokenAmount).gt(toBN(0));
