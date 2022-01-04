@@ -1,3 +1,4 @@
+import { stakingViewContext } from "components/Context";
 import CountdownComponent, { useIsLockedTime } from "components/Countdown/Countdown";
 import Button from "components/Elements/Button";
 import { useInDOM } from "components/Hooks";
@@ -16,6 +17,7 @@ import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
     const isActiveInDom = useInDOM();
+    const { w3 } = useContext(stakingViewContext);
     const {disabled, type, token: tokenName, isModal, isOpen, setIsOpen, amount, setAmount, protocol, balances: { tokenAmount } = {} } = useActionController();
     const dispatch = useDispatch();
     const contracts = useContext(contractsContext);
@@ -87,8 +89,11 @@ const StakingActions = () => {
                     await _contract.methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
                     break;
                 case "unstake":
-                    const action = token.key.includes('govi') ? "unstake" : "withdraw";
-                    await _contract.methods[action](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
+                    if(isGoviToken(token.key)) {
+                        await w3.stakings[token.rel.stakingRewards].unstake(toBN(toBNAmount(amount, token.decimals)), account);
+                    } else {
+                        await _contract.methods["withdraw"](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
+                    }
                     break;    
                 default:
                     break;
