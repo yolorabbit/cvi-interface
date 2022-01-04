@@ -292,7 +292,8 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     try {
       const goviToken = w3.tokens['GOVI'];
       const tokenBalance = await goviToken.balanceOf(account);
-      const usdBalance = isNaN(tokenBalance)? 'N/A' : `$${commaFormatted(customFixed(toFixed(toDisplayAmount(goviToken.toUSD(tokenBalance))), 2))}`;
+      const tokenBalanceUSD = await goviToken.getUSD(tokenBalance);
+      const usdBalance = isNaN(tokenBalance)? 'N/A' : `$${commaFormatted(customFixed(tokenBalanceUSD, 2))}`;
       cb(()=> setStakedData((prev)=>({
         ...prev,
         balance: {
