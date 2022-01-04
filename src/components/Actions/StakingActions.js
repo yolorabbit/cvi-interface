@@ -10,7 +10,7 @@ import { upperFirst } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAlert } from "store/actions";
-import { actionConfirmEvent, gas, toBN, toBNAmount } from "utils";
+import { actionConfirmEvent, gas, isGoviToken, toBN, toBNAmount } from "utils";
 import Contract from "web3-eth-contract";
 import { useActionController } from "./ActionController";
 
@@ -23,11 +23,11 @@ const StakingActions = () => {
     const approvalValidation = useApproveToken();
     const [processing, setProcessing] = useState(false);
     const [lockup, setLockup] = useState(24);
-    const lockedTime = useIsLockedTime(type === stakingConfig.actionsConfig.unstake.key && tokenName === "govi");
+    const lockedTime = useIsLockedTime(type === stakingConfig.actionsConfig.unstake.key && isGoviToken(tokenName));
     const { selectedNetwork } = useSelector(({app})=>app);
     const token = stakingConfig.tokens[selectedNetwork]?.[protocol]?.[tokenName];
     const unstakeModalButtonDisabled = ((isOpen && !isModal && (disabled || !(Number(amount ?? "0") > 0))));
-    const unstakeTableButtonDisabled = (!isOpen && (Number(tokenAmount ?? 0) <= 0)) || (token?.key === 'govi' && (lockedTime > 0 || lockedTime === null));
+    const unstakeTableButtonDisabled = (!isOpen && (Number(tokenAmount ?? 0) <= 0)) || (isGoviToken(tokenName) && (lockedTime > 0 || lockedTime === null));
     const stakeModalDisabled = (isOpen && !isModal) && !(Number(amount ?? "0") > 0);
     const platfromName = stakingConfig.tokens[selectedNetwork].platform[tokenName]?.rel?.contractKey;
     

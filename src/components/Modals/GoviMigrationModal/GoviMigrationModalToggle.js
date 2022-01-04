@@ -19,6 +19,7 @@ const GoviMigrationModalToggle = () => {
 
     const isGoviStaker = useCallback(async () => {
         try {
+            if(!w3?.stakings?.["Staking"]) return;
             const stakedBalance = await w3.stakings["Staking"].staked(account);
             if(!isActiveInDOM()) return; 
             const hasStakeAmount = stakedBalance?.stakedAmount?.gt(toBN("0"));
