@@ -165,9 +165,10 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
 
   const getStakedTVLSDK = async (cb) => {
     try {
-      const goviStaking = w3.stakings[tokenRel.stakingRewards];
-      const stakedAmount = goviStaking.totalStaked;
-      const stakedAmountUSD = goviStaking.tvl;
+      const stakingInstance = w3.stakings[tokenRel.stakingRewards];
+      const stakedAmountUSD = await stakingInstance.getTVL();
+      const stakedAmount = stakingInstance.totalStaked;
+
       const tvl = {
         stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmount, token.decimals)), decimalsCountDisplay)),
         stakedAmountUSD: toBN(stakedAmount).isZero() ? "0" : `$${commaFormatted(customFixed(stakedAmountUSD, 2))}`
