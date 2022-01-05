@@ -56,7 +56,7 @@ const useAssets = (type, w3) => {
             case "staked": {
                 const filterAsset = async (asset) => {
                     try {
-                        if(asset.key === 'govi-v2') { // use the sdk only for govi assets
+                        if(asset.key === 'govi-v2') { // use the sdk only for govi v2 asset
                             const stakingInstance = w3.stakings[asset.rel.stakingRewards];
                             const token = w3.tokens[asset.rel.contractKey];
                             const {stakedAmount, sharePercent: poolSize} = await stakingInstance.staked(account);
