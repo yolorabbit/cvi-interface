@@ -226,8 +226,8 @@ const config = {
     'approved': 'approved', 
     'migrate': 'migrate', 
   },
-  goviV2StakingText: ["The new GOVI staking program is now live on Arbitrum and Polygon!",
-                     "For more information on the new GOVI staking program and how to bridge your tokens to Arbitrum click here."],
+  goviV2StakingText: ["The new GOVI staking V2 program is now live on Arbitrum and Polygon!",
+                     "For more information on the new GOVI staking V2 program and how to bridge your tokens to Arbitrum click here."],
   migrationSteps: [
     {
       stepKey: 'start',
