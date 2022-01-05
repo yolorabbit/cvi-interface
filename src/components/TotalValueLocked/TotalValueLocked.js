@@ -31,7 +31,7 @@ const TotalValueLocked = ({ placement }) => {
     value: tvlValue ? tvlValue : null,
     tooltip: {
       content:
-        "Total value locked is the total value of the open positions, liquidity, staked GOVI and LP tokens on both Ethereum and Polygon networks in USD",
+        "Total value locked is the total value of the open positions, liquidity, staked GOVI and LP tokens on Ethereum, Polygon and Arbitrum networks",
       mobileLeft: 0,
       left: 0,
     },
