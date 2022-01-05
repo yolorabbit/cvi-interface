@@ -12,7 +12,11 @@
     }
 
     @media (max-width: 1024px){ 
-        top: 0;
+        top: 1.067vw;
+    }
+
+    @media (max-width: 767px) {
+        top: 2vw;
     }
 
     &.external-link {

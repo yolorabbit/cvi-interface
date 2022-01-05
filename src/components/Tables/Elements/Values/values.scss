@@ -116,6 +116,7 @@
 .staked-amount-component {
     white-space: nowrap;
     display: flex;
+    align-items: center;
 
     & .pairs-component {
         .pairs-component__group {
@@ -230,7 +231,9 @@
         font-size: 1.026vw;
     }
 
-    @media (max-width: 1024px){ 
+    @media (max-width: 1024px){
+        display: flex;
+        align-items: center;
         font-size: 1.826vw;
     }
 
