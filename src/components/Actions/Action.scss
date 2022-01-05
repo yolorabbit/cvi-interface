@@ -53,6 +53,19 @@ button {
         &--action {
             display: inline;
         }
+
+        &.cvi-sdk {
+            & span {
+                max-width: 9.635vw;
+                @media (max-width: 1365px) {
+                    max-width: 13.553vw;
+                }
+        
+                @media (max-width: 1024px) {
+                    max-width: 100%;
+                }
+            }
+        }
     }
 
     &.is-not-available {

@@ -55,11 +55,13 @@ const StakingClaim = ({asset, claim }) => {
     
     return (
         <div className="claim-component">
-            <div className="claim-component__container">
-                <Rewards rewards={claim} />
-                {asset.type !== "cvi-sdk" && <div className="claim-component__container--action">
-                    <Button disabled={!isValid} className="claim-button" buttonText="Claim" onClick={onClick} /> 
-                </div>}
+            <div className={`claim-component__container ${asset.type ?? ''}`}>
+                {asset.type === "cvi-sdk" ? <span>The rewards are autocompounded into your staked GOVI tokens</span> : <> 
+                    <Rewards rewards={claim} />
+                    <div className="claim-component__container--action">
+                        <Button disabled={!isValid} className="claim-button" buttonText="Claim" onClick={onClick} /> 
+                    </div>
+                </>}
             </div>
         </div>
     )
