@@ -72,7 +72,7 @@ const useAssets = (type, w3) => {
                                 lastStakedAmount: {class: '', value: `(${customFixed(poolSize, 2)}%)`},
                                 poolSize: poolSize,
                                 stakedAmount: commaFormatted(customFixedTokenValue(stakedAmount, asset.fixedDecimals, asset.decimals)),
-                                stakedAmountUSD: commaFormatted(stakedAmountUSD),
+                                stakedAmountUSD: commaFormatted(customFixed(stakedAmountUSD, 2)),
                                 stakedTokenAmount: stakedAmount
                             }, claim}}
                         }
