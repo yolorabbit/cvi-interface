@@ -8,7 +8,9 @@ const Expand = ({header, expandedView, classNames}) => {
     return (
         <div className={`expand-component ${isExpanded ? 'expanded' : ''} ${classNames ? classNames : ''}`}>
             <div className="expand-component__header" onClick={() => setIsExpanded(!isExpanded)}>
-                {header}
+                <div className="expand-component__header--info">
+                    {header}
+                </div>
                 <Button className="expand-component__header--button" >
                     <img src={require('../../images/icons/dropdown-chevron-orange.svg').default} alt="chevron" />
                 </Button>
