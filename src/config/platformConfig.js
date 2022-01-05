@@ -167,7 +167,6 @@ const platformConfig = {
     },
     [chainNames.Arbitrum]: {
       "usdc-cvol": {
-        soon: true,
         key: "usdc-cvol",
         name: "usdc",
         decimals: 6,
