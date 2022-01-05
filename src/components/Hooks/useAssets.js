@@ -62,19 +62,13 @@ const useAssets = (type, w3) => {
                             const {stakedAmount, sharePercent: poolSize} = await stakingInstance.staked(account);
                             const stakedAmountUSD = await token.getUSD(stakedAmount);
 
-                            const {profit} = await stakingInstance.profits({account, historyId: "EventHistory"}); // @TODO: remove EventHistory
-                            const claim = [{
-                                amount: profit < 0 ? "0" : commaFormatted(customFixedTokenValue(profit, asset.fixedDecimals, asset.decimals)),
-                                symbol: asset.label
-                            }];
-
                             return {...asset, data: {staked: {
                                 lastStakedAmount: {class: '', value: `(${customFixed(poolSize, 2)}%)`},
                                 poolSize: poolSize,
                                 stakedAmount: commaFormatted(customFixedTokenValue(stakedAmount, asset.fixedDecimals, asset.decimals)),
                                 stakedAmountUSD: commaFormatted(customFixed(stakedAmountUSD, 2)),
                                 stakedTokenAmount: stakedAmount
-                            }, claim}}
+                            }, claim: []}}
                         }
                         let staked = await stakingApi.getStakedAmountAndPoolShareByToken(contracts, asset, account, selectedNetwork);
                         const claim = await stakingApi.getClaimableRewards(contracts, asset, account, selectedNetwork);
