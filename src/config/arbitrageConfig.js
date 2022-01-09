@@ -235,13 +235,13 @@ const arbitrageConfig = {
     [chainNames.Matic]: {
       fulfill: {
         desktop: 'fulfillment-polygon.svg',
-        tablet: 'fulfillment-polygon.svg', //@TODO: add mobile and tablet
-        mobile: 'fulfillment-polygon.svg',
+        tablet: 'fulfillment-polygon-tablet.svg', 
+        mobile: 'fulfillment-polygon-mobile.svg',
       },
       penalty: {
         desktop: 'penalty-polygon.svg',
-        tablet: 'penalty-polygon.svg', //@TODO: add mobile and tablet
-        mobile: 'penalty-polygon.svg',
+        tablet: 'penalty-polygon-tablet.svg', 
+        mobile: 'penalty-polygon-mobile.svg',
       }
     },
     [chainNames.Arbitrum]: {
