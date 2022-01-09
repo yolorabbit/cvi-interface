@@ -218,6 +218,44 @@ const arbitrageConfig = {
     Mint:activeTabs.mint,
     Burn:activeTabs.burn,
     CollateralizedMint:activeTabs.mint,
+  },
+  graphsThumbnails: {
+    [chainNames.Ethereum]: {
+      fulfill: {
+        desktop: 'fulfillment.svg',
+        tablet: 'fulfillment-tablet.svg',
+        mobile: 'fulfillment-mobile.svg',
+      },
+      penalty: {
+        desktop: 'penalty.svg',
+        tablet: 'penalty-mobile.svg',
+        mobile: 'penalty-tablet.svg',
+      }
+    },
+    [chainNames.Matic]: {
+      fulfill: {
+        desktop: 'fulfillment-polygon.svg',
+        tablet: 'fulfillment-polygon.svg', //@TODO: add mobile and tablet
+        mobile: 'fulfillment-polygon.svg',
+      },
+      penalty: {
+        desktop: 'penalty-polygon.svg',
+        tablet: 'penalty-polygon.svg', //@TODO: add mobile and tablet
+        mobile: 'penalty-polygon.svg',
+      }
+    },
+    [chainNames.Arbitrum]: {
+      fulfill: {
+        desktop: 'fulfillment.svg',
+        tablet: 'fulfillment-tablet.svg',
+        mobile: 'fulfillment-mobile.svg',
+      },
+      penalty: {
+        desktop: 'penalty.svg',
+        tablet: 'penalty-mobile.svg',
+        mobile: 'penalty-tablet.svg',
+      }
+    },
   }
 }
 

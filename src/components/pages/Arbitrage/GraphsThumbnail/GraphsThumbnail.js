@@ -3,12 +3,7 @@ import arbitrageConfig from 'config/arbitrageConfig';
 import React, { useMemo, useRef, useState } from 'react';
 import Container from 'components/Layout/Container';
 import TabsForm from 'components/TabsForm';
-import fulillmentGraph from 'images/graphs/fulfillment.svg';
-import fulillmentGraphMobile from 'images/graphs/fulfillment-mobile.svg';
-import fulillmentGraphTablet from 'images/graphs/fulfillment-tablet.svg';
-import penaltyGraph from 'images/graphs/penalty.svg';
-import penaltyGraphMobile from 'images/graphs/penalty-mobile.svg';
-import penaltyGraphTablet from 'images/graphs/penalty-tablet.svg';
+import { useSelector } from "react-redux";
 import './GraphsThumbnail.scss';
 
 const GraphsThumbnail = () => {
@@ -43,24 +38,35 @@ const GraphsThumbnail = () => {
 
 const ActiveGraph = ({activeTab = ""}) => {
     const { width } = useViewport();
+    const { selectedNetwork } = useSelector(({app}) => app);
 
     return useMemo(() => {
-        return (
+      const fulfillGraphSrc = arbitrageConfig.graphsThumbnails[selectedNetwork].fulfill
+      const penaltyGraphSrc = arbitrageConfig.graphsThumbnails[selectedNetwork].penalty
+      return (
             <div className="graph-wrapper">
               {activeTab.toLowerCase() === 'fulfillment' ? 
                 <>
-                  <img className="graph-image" src={width <= 767 ? fulillmentGraphMobile : width <= 1365 ? fulillmentGraphTablet : fulillmentGraph} alt="Time to fullfillment fee" />
+                  <img 
+                    className="graph-image" 
+                    src={require(`images/graphs/${width <= 767 ? fulfillGraphSrc.mobile : width <= 1365 ? fulfillGraphSrc.tablet : fulfillGraphSrc.desktop}`).default} 
+                    alt="Time to fullfillment fee" 
+                  />
                   <p className="graph-note">The fee decreases the more the user's time to fulfillment target gets closer to the 3 hours bound.</p>
                 </>
                 :
                 <>
-                  <img className="graph-image" src={width <= 767 ? penaltyGraphMobile : width <= 1365 ? penaltyGraphTablet : penaltyGraph} alt="Time penalty fee" />
+                  <img 
+                    className="graph-image" 
+                    src={require(`images/graphs/${width <= 767 ? penaltyGraphSrc.mobile : width <= 1365 ? penaltyGraphSrc.tablet : penaltyGraphSrc.desktop}`).default} 
+                    alt="Time penalty fee" 
+                  />
                   <p className="graph-note">A time penalty fee is introduced if the user fulfills his request prior/after his specified target time.</p>
                 </>
               }
             </div> 
         )
-    }, [activeTab, width]);
+    }, [activeTab, selectedNetwork, width]);
 }
 
 export default GraphsThumbnail;
