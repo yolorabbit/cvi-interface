@@ -6,19 +6,30 @@ import Dropdown from "components/Dropdown/Dropdown";
 import "./TimeToFullfill.scss";
 import Spinner from "components/Spinner/Spinner";
 import { customFixed } from "utils";
+import { useSelector } from "react-redux";
+import arbitrageConfig from "config/arbitrageConfig";
 
 const TimeToFullfill = ({ delayFee, setDelayFee }) => {
+  const { selectedNetwork } = useSelector(({app}) => app);
+  const optionsType = arbitrageConfig.timeToFulfillment[selectedNetwork].type;
   const { w3, activeToken } = useContext(appViewContext);
   const [hoursDropdownValue, setHoursDropdownValue] = useState("");
   const [minutesDropdownValue, setMinutesDropdownValue] = useState("");
   const [maxHours, setMaxHours] = useState();
   const [maxMinutes, setMaxMinutes] = useState();
 
+
   const getOptions = useCallback((minRange, maxRange) => {
-    if(maxMinutes === 0 && maxHours === 0) return [];
-    if((!minRange && minRange !== 0) || !maxRange) return [];
-    return [...new Array(maxRange)].map((option, index) => index+minRange);
-  }, [maxHours, maxMinutes]);
+    try {
+      if(maxMinutes === 0 && maxHours === 0) return [];
+      if((!minRange && minRange !== 0) || !maxRange) return [];
+      const _maxRange = optionsType === 'minutes' ? maxRange * 60 : maxRange; 
+      return [...new Array(_maxRange)].map((option, index) => index+minRange)
+    } catch(error) {
+      console.log(error);
+      return []
+    }
+  }, [maxHours, maxMinutes, optionsType]);
 
   const calculateTimeDelayFee = useCallback(async (totalTime) => {
     let isValid = true;
@@ -50,6 +61,10 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
           const {maxTimeWindow, minTimeWindow} = await w3?.tokens[activeToken.rel.contractKey].getTimeDelayWindow();
           setMaxHours(maxTimeWindow ? (maxTimeWindow/60/60) : 0);
           setMaxMinutes(minTimeWindow < 3600 ? (minTimeWindow/60) : minTimeWindow/60);
+
+          if(optionsType === 'minutes') {
+            setMinutesDropdownValue(minTimeWindow/60)
+          }
       } catch (error) {
         console.log(error);
         setMaxHours("0");
@@ -63,48 +78,70 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
     return () => {
       fetchDataDebounce.cancel();
     }
-  }, [activeToken.rel.contractKey, w3]);
+  }, [activeToken.rel.contractKey, optionsType, w3]);
 
   useEffect(() => {
-    if(!isNumber(hoursDropdownValue) && !isNumber(!minutesDropdownValue)) {
-      setHoursDropdownValue(maxHours || "0");
-      return setMinutesDropdownValue("0");
+    const calculateDropdown = () => {
+      if(optionsType === 'minutes') {
+        const totalTime = Number(minutesDropdownValue * 60);
+        setDelayFee({fee: null, delayTime: totalTime});
+        calculateTimeDelayFeeDebounce(totalTime);
+        return;
+      }
+
+      if(!isNumber(hoursDropdownValue) && !isNumber(!minutesDropdownValue)) {
+        setHoursDropdownValue(maxHours || "0");
+        return setMinutesDropdownValue("0");
+      }
+      
+      const totalTime = Number(hoursDropdownValue * 60 * 60) + Number(minutesDropdownValue * 60);
+      setDelayFee({fee: null, delayTime: totalTime});
+      calculateTimeDelayFeeDebounce(totalTime);
+  
+      if(Number(hoursDropdownValue) >= maxHours) return setMinutesDropdownValue("0");
+      if(Number(hoursDropdownValue) === 0 && Number(minutesDropdownValue) < maxMinutes) return setMinutesDropdownValue(maxMinutes);
     }
     
-    const totalTime = Number(hoursDropdownValue * 60 * 60) + Number(minutesDropdownValue * 60);
-    setDelayFee({fee: null, delayTime: totalTime});
-    calculateTimeDelayFeeDebounce(totalTime);
-
-    if(Number(hoursDropdownValue) >= maxHours) return setMinutesDropdownValue("0");
-    if(Number(hoursDropdownValue) === 0 && Number(minutesDropdownValue) < maxMinutes) return setMinutesDropdownValue(maxMinutes);
-
+    calculateDropdown();
+    
     return () => {
       calculateTimeDelayFeeDebounce.cancel();
     }
-  }, [hoursDropdownValue, minutesDropdownValue, maxHours, maxMinutes, calculateTimeDelayFee, calculateTimeDelayFeeDebounce, setDelayFee]);
+  }, [hoursDropdownValue, minutesDropdownValue, maxHours, maxMinutes, calculateTimeDelayFee, calculateTimeDelayFeeDebounce, setDelayFee, optionsType]);
 
   return useMemo(() => {
-    
+    const hoursOptions = getOptions(maxHours > 1 ? 1 : 0 , maxHours > 1 ? maxHours : maxHours+1);
+    const minutesOptions = () => {
+      if(optionsType === 'minutes') return getOptions(maxMinutes, maxHours - ((maxMinutes - 1) / 60));
+      return getOptions(hoursDropdownValue === 0 ? maxMinutes < 60 ? maxMinutes : (maxMinutes/60) : 0, hoursDropdownValue === maxHours ? 0 : Math.floor((61-(maxMinutes/60))));
+    }
+
     return (
       <div className="fullfill-wrapper">
         <h2>Time to fulfillment</h2>
         <BetweenText 
+          optionsType={optionsType}
           maxMinutes={maxMinutes} 
           maxHours={maxHours} 
         />
-        <div className="time-wrapper">
-          <Dropdown
-            type="number"
-            label="hours"
-            dropdownOptions={getOptions(maxHours > 1 ? 1 : 0 , maxHours > 1 ? maxHours : maxHours+1)}
-            dropdownValue={hoursDropdownValue}
-            setDropdownValue={setHoursDropdownValue}
-          />
-          <span>:</span>
+        
+        <div className={`time-wrapper ${optionsType}`}>
+          {
+            optionsType === 'hours' && <> 
+               <Dropdown
+                type="number"
+                label="hours"
+                dropdownOptions={hoursOptions}
+                dropdownValue={hoursDropdownValue}
+                setDropdownValue={setHoursDropdownValue}
+              />
+              <span>:</span>
+            </>
+          }
           <Dropdown
             type="number"
             label="minutes"
-            dropdownOptions={getOptions(hoursDropdownValue === 0 ? maxMinutes < 60 ? maxMinutes : (maxMinutes/60) : 0, hoursDropdownValue === maxHours ? 0 : Math.floor((61-(maxMinutes/60))))}
+            dropdownOptions={minutesOptions()}
             dropdownValue={minutesDropdownValue}
             setDropdownValue={setMinutesDropdownValue}
           />
@@ -118,13 +155,17 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
         </div>
       </div>
     );
-  }, [delayFee, getOptions, hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue])
+  }, [delayFee, getOptions, hoursDropdownValue, maxHours, maxMinutes, minutesDropdownValue, optionsType])
 };
 
-const BetweenText = ({maxMinutes, maxHours}) => {
+const BetweenText = ({optionsType, maxMinutes, maxHours}) => {
   return useMemo(() => {
     if(!maxMinutes && !maxHours) return <span className="between-text">Between <Spinner className="statistics-spinner" /> hours to <Spinner className="statistics-spinner" /> hours.</span>
-    return <span>(Between {maxHours <= 1 ? `${maxMinutes} minutes` : `${maxMinutes/60} hour`} to {maxHours} hours)</span>
-  }, [maxHours, maxMinutes]);
+    return <span>
+      (Between 
+      {(optionsType === 'minutes' || maxHours <= 1) ? ` ${maxMinutes} minutes` : `${maxMinutes/60} hour`} 
+      &nbsp;to {optionsType === 'minutes' ? `${maxHours * 60} minutes` : `${maxHours} hours`} )
+    </span>
+  }, [maxHours, maxMinutes, optionsType]);
 }
 export default TimeToFullfill;

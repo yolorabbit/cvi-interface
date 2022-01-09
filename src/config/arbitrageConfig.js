@@ -256,6 +256,17 @@ const arbitrageConfig = {
         mobile: 'penalty-tablet.svg',
       }
     },
+  },
+  timeToFulfillment: {
+    [chainNames.Ethereum]: { 
+      type: 'hours'
+    },
+    [chainNames.Matic]: { 
+      type: 'minutes'
+    },
+    [chainNames.Arbitrum]: { 
+      type: 'hours'
+    }
   }
 }
 
