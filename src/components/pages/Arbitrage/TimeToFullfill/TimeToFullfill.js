@@ -124,7 +124,7 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
           maxMinutes={maxMinutes} 
           maxHours={maxHours} 
         />
-        
+
         <div className={`time-wrapper ${optionsType}`}>
           {
             optionsType === 'hours' && <> 
@@ -160,11 +160,11 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
 
 const BetweenText = ({optionsType, maxMinutes, maxHours}) => {
   return useMemo(() => {
-    if(!maxMinutes && !maxHours) return <span className="between-text">Between <Spinner className="statistics-spinner" /> hours to <Spinner className="statistics-spinner" /> hours.</span>
+    if(!maxMinutes && !maxHours) return <span className="between-text">Between <Spinner className="statistics-spinner" /> {optionsType} to <Spinner className="statistics-spinner" /> {optionsType}.</span>
     return <span>
       (Between 
-      {(optionsType === 'minutes' || maxHours <= 1) ? ` ${maxMinutes} minutes` : `${maxMinutes/60} hour`} 
-      &nbsp;to {optionsType === 'minutes' ? `${maxHours * 60} minutes` : `${maxHours} hours`} )
+      {(optionsType === 'minutes' || maxHours <= 1) ? ` ${maxMinutes} ${optionsType}` : ` ${maxMinutes/60} hour`} 
+      &nbsp;to {optionsType === 'minutes' ? `${maxHours * 60} ${optionsType}` : ` ${maxHours} ${optionsType}`})
     </span>
   }, [maxHours, maxMinutes, optionsType]);
 }
