@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@coti-io/cvi-sdk": "^0.2.12",
+    "@coti-io/cvi-sdk": "^0.2.13",
     "@ethersproject/contracts": "^5.4.0",
     "@ethersproject/providers": "^5.4.1",
     "@ethersproject/solidity": "^5.4.0",
