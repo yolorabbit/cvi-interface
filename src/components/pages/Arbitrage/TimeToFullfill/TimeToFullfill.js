@@ -63,7 +63,7 @@ const TimeToFullfill = ({ delayFee, setDelayFee }) => {
           setMaxMinutes(minTimeWindow < 3600 ? (minTimeWindow/60) : minTimeWindow/60);
 
           if(optionsType === 'minutes') {
-            setMinutesDropdownValue(minTimeWindow/60)
+            setMinutesDropdownValue(maxTimeWindow/60)
           }
       } catch (error) {
         console.log(error);
