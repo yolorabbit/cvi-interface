@@ -12,16 +12,12 @@ import useStakedData from "components/Hooks/Staking";
 import { useSelector } from "react-redux";
 import { toBN } from "utils";
 
-const StakeAssetsRow = ({rowData: { key: token, label, protocol, poolLink}, isHeader}) => {
+const StakeAssetsRow = ({rowData, isHeader}) => {
     const isTablet = useIsTablet();
-
-    const RowDataComponent = () => 
-    <RowData 
+    
+    const RowDataComponent = () => <RowData 
         isHeader={isHeader} 
-        label={label} 
-        token={token} 
-        protocol={protocol} 
-        poolLink={poolLink}
+        rowData={rowData}
     />
 
     return useMemo(()=> {
@@ -33,7 +29,9 @@ const StakeAssetsRow = ({rowData: { key: token, label, protocol, poolLink}, isHe
 export default StakeAssetsRow;
 
 
-const RowData = ({isHeader, label, token, protocol, poolLink}) => {
+const RowData = ({isHeader, rowData}) => {
+    const { label, key: token, protocol, poolLink, type } = rowData;
+
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const chainName = useSelector(({app}) => app.selectedNetwork);
@@ -43,7 +41,7 @@ const RowData = ({isHeader, label, token, protocol, poolLink}) => {
     const [stakedData] = useStakedData(chainName, protocol, token);
     const { account } = useActiveWeb3React();
     const [amount, setAmount] = useState("");
-    
+
     return useMemo(() => {
         const tokenBalance = stakedData.balance.tokenBalance ?? 0
         const StakeController = 
@@ -67,7 +65,7 @@ const RowData = ({isHeader, label, token, protocol, poolLink}) => {
             return <>
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
-                    <Coin token={token} showName protocol={protocol} /> : 
+                    <Coin token={token} showName protocol={protocol} version={type === 'cvi-sdk' ? 'v2' : ''} /> : 
                     <Pairs leftToken={leftToken} rightToken={rightToken} token={token} protocol={protocol} poolLink={poolLink} />} 
                 />
                 {!isMobile && <RowItem type="action" content={StakeController} /> }
@@ -76,10 +74,11 @@ const RowData = ({isHeader, label, token, protocol, poolLink}) => {
 
         return (
         <> 
+        
             {!isTablet && <> 
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
-                    <Coin token={token} showName protocol={protocol} /> : 
+                    <Coin token={token} showName protocol={protocol} version={type === 'cvi-sdk' ? 'v2' : ''} /> : 
                     <Pairs leftToken={leftToken} rightToken={rightToken} label={label} token={token} protocol={protocol} poolLink={poolLink} />} 
                 />
             </>}

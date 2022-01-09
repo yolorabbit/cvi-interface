@@ -267,6 +267,29 @@
   }
 }
 
+.coin-component--version-img {
+    vertical-align: middle;
+    position: relative;
+    margin: 0 0 0 0.313vw;
+    left: 0.104vw;
+
+    @media (max-width: 1365px) {
+        margin-left: 0.44vw;
+        left: 0.147vw;
+        margin: 0 0 0 0.44vw;
+    }
+
+    @media (max-width: 1024px) {
+        left: 0.261vw;
+        margin: 0 0 0 0.782vw;
+    }
+
+    @media (max-width: 767px) {
+        left: 0.556vw;
+        margin: 0 0 0 1.667vw;
+    }
+}
+
 .apy-component {
     display: flex;
     flex-direction: row-reverse;
