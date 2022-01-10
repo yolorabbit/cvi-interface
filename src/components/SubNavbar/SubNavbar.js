@@ -14,7 +14,7 @@ const SubNavbar = ({tabs, setActiveView, activeView}) => {
             <a 
                 href="https://wallet.matic.network/bridge" 
                 target="_blank" 
-                rel="noopener noreferrer">
+                rel="nofollow noopener noreferrer">
                     Polygon PoS bridge
             </a>
         </div>

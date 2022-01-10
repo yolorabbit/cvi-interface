@@ -22,7 +22,7 @@ export const GoviMigrationModal = () => {
                 {config.goviV2StakingText.map((desc, tn) => (<> 
                     <p key={tn}>
                         {desc}&nbsp;
-                        {tn === (config.goviV2StakingText?.length -1) && <a href={newStakingProgramNotification.link} target="_blank" rel="noopener noreferrer">
+                        {tn === (config.goviV2StakingText?.length -1) && <a href={newStakingProgramNotification.link} target="_blank" rel="nofollow noopener noreferrer">
                             click here
                         </a>}
                     </p>

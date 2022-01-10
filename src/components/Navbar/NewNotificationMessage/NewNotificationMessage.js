@@ -14,7 +14,7 @@ const NewNotificationMessage = ({type, setNotificationData}) => {
             <div className='new-notification-message-component'>
                 <p>
                     The new GOVI staking V2 program is now live on Arbitrum and Polygon!
-                    For more information on the new GOVI staking V2 program and how to bridge your tokens to Arbitrum <a href={newStakingProgramNotification.link} target="_blank" rel="noopener noreferrer">
+                    For more information on the new GOVI staking V2 program and how to bridge your tokens to Arbitrum <a href={newStakingProgramNotification.link} target="_blank" rel="nofollow noopener noreferrer">
                         click here
                     </a>
                 </p>

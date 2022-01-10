@@ -273,7 +273,7 @@ const ExternalLink = ({path, onClickLink, label}) => {
     return  <a
       href={path}
       onClick={() => onClickLink(path)}
-      rel="noopener noreferrer"
+      rel="nofollow noopener noreferrer"
       target="_blank"
     >
       {label}

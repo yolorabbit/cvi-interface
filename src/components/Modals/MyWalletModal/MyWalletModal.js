@@ -22,7 +22,7 @@ export const MyWalletModal = ({address, setModalIsOpen}) => {
                 <div className="account-info__actions">
                     <Copy title="Copy address" text={address} />
 
-                    <Link to={{pathname: `${chainsData[selectedNetwork].explorerUrl}/${address}`}} target="_blank" rel="noopener noreferrer">
+                    <Link to={{pathname: `${chainsData[selectedNetwork].explorerUrl}/${address}`}} target="_blank" rel="nofollow noopener noreferrer">
                         <img src={require('../../../images/icons/open-browser.svg').default} alt="EtherScan" />
                         <span>View on {chainsData[selectedNetwork].explorerName}</span>
                     </Link>

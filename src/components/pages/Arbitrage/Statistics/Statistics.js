@@ -75,7 +75,7 @@ const Statistics = () => {
                 />
 
                 <a href={arbitrageConfig.exchanges[selectedNetwork].mainExchange.path}
-                    rel="noopener noreferrer"
+                    rel="nofollow noopener noreferrer"
                     className="statistics-trade-button"
                     target="_blank"
                 >

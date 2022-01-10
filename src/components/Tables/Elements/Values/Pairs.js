@@ -14,7 +14,7 @@ const Pairs = ({leftToken, rightToken, token, label, protocol, showImage, hideNa
             <span>{label ?? `${leftToken?.toUpperCase()}-${rightToken?.toUpperCase()} LP`}</span>
             <span>{protocol}</span>
           </div>}
-          {poolLink && <a className="external-link" title={`View on ${protocol}`} href={poolLink} target="_blank" rel="noopener noreferrer">
+          {poolLink && <a className="external-link" title={`View on ${protocol}`} href={poolLink} target="_blank" rel="nofollow noopener noreferrer">
             <img src={require('images/icons/pop.svg').default} alt="link"/>
           </a> }
       </div> }
