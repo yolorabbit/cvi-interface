@@ -5,7 +5,6 @@ const allPlatformEventsQuery = gql`
   {
     openPositions(orderBy: timestamp, orderDirection: desc) {
       id
-      platform
       timestamp
       account
       tokenAmount
@@ -14,7 +13,6 @@ const allPlatformEventsQuery = gql`
     }
     closePositions(orderBy: timestamp, orderDirection: desc) {
       id
-      platform
       timestamp
       account
       tokenAmount
@@ -24,7 +22,6 @@ const allPlatformEventsQuery = gql`
   }
   {
     deposits(orderBy: timestamp, orderDirection: desc) {
-      platform
       timestamp
       account
       tokenAmount
@@ -32,7 +29,6 @@ const allPlatformEventsQuery = gql`
       lpTokensAmount
     }
     withdraws(orderBy: timestamp, orderDirection: desc) {
-      platform
       timestamp
       account
       tokenAmount
@@ -51,7 +47,6 @@ const accountPositionsQuery = gql`
     ) {
       id
       leverage
-      platform
       cviValue
       blockNumber
       timestamp
@@ -67,7 +62,6 @@ const accountPositionsQuery = gql`
     ) {
       id
       leverage
-      platform
       cviValue
       blockNumber
       timestamp
@@ -87,7 +81,6 @@ const accountLiquidityQuery = gql`
       orderDirection: desc
     ) {
       id
-      platform
       timestamp
       account
       blockNumber
@@ -101,7 +94,6 @@ const accountLiquidityQuery = gql`
       orderDirection: desc
     ) {
       id
-      platform
       timestamp
       account
       blockNumber
@@ -134,7 +126,6 @@ const lastOpenQuery = gql`
   query getPositions($account: String!, $platformAddress: String!) {
     openPositions(where: { account: $account, platformAddress: $platformAddress }, first: 1, orderBy: timestamp, orderDirection: desc) {
       id
-      platform
       blockNumber
       cviValue
       timestamp
