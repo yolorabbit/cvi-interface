@@ -259,13 +259,16 @@ const arbitrageConfig = {
   },
   timeToFulfillment: {
     [chainNames.Ethereum]: { 
-      type: 'hours'
+      type: 'hours',
+      maxTime: '3 hours'
     },
     [chainNames.Matic]: { 
-      type: 'minutes'
+      type: 'minutes',
+      maxTime: '90 minutes'
     },
     [chainNames.Arbitrum]: { 
-      type: 'hours'
+      type: 'hours',
+      maxTime: '3 hours'
     }
   }
 }

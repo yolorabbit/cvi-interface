@@ -59,7 +59,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     if (token.overrideApy !== undefined) {
       cb(() => setStakedData((prev)=> ({
         ...prev,
-        apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => value ? `${customFixed(value, 2)}%` : "N/A")
+        apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => <>{value}%&nbsp;</>)
       })));
       return;
     }
@@ -99,7 +99,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
     if (token.overrideApy !== undefined) {
       cb(() => setStakedData((prev)=> ({
         ...prev,
-        apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => value >= 0 ? `${customFixed(value, 2)}%` : "N/A")
+        apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => <>{value}%&nbsp;</>)
       })));
       return;
     }
@@ -209,6 +209,14 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
 
   const getAPYLM = async (cb) => {
     try{
+      if (token.overrideApy !== undefined) {
+        cb(() => setStakedData((prev)=> ({
+          ...prev,
+          apy: [token.overrideApy, token.overrideApy, token.overrideApy].map((value) => <>{value}%&nbsp;</>)
+        })));
+        return;
+      }
+
       const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
       const USDCData = await getTokenData(contracts['USDC']);
       const GOVIData = await getTokenData(contracts['GOVI'], stakingProtocols.platform);

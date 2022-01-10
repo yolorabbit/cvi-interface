@@ -52,7 +52,7 @@ const ActiveGraph = ({activeTab = ""}) => {
                     src={require(`images/graphs/${width <= 767 ? fulfillGraphSrc.mobile : width <= 1365 ? fulfillGraphSrc.tablet : fulfillGraphSrc.desktop}`).default} 
                     alt="Time to fullfillment fee" 
                   />
-                  <p className="graph-note">The fee decreases the more the user's time to fulfillment target gets closer to the 3 hours bound.</p>
+                  <p className="graph-note">The fee decreases the more the user's time to fulfillment target gets closer to the {arbitrageConfig.timeToFulfillment[selectedNetwork].maxTime} bound.</p>
                 </>
                 :
                 <>

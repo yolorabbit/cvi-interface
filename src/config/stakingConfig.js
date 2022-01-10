@@ -120,6 +120,8 @@ const stakingConfig = {
       [stakingProtocols.uniswap]: {
         "coti-eth-lp": {
           key: "coti-eth-lp",
+          disable: config.isMainnet,
+          overrideApy: 0,
           label: "COTI-ETH LP",
           address: "0xa2b04f8133fc25887a436812eae384e32a8a84f2",
           protocol: stakingProtocols.uniswap,
@@ -192,6 +194,8 @@ const stakingConfig = {
       [stakingProtocols.sushiswap]: {
         "coti-eth-lp": {
           key: "coti-eth-lp",
+          disable: config.isMainnet,
+          overrideApy: 0,
           label: "COTI-ETH SLP",
           address: "0x717385e1a702f90b6eb8cd23150702ca7217b626",
           protocol: stakingProtocols.sushiswap,
