@@ -2,7 +2,7 @@ import { chainNames } from "connectors";
 
 export const newStakingProgramNotification = {
   type: "new-staking-program-notification-2022",
-  link: "#",
+  link: "https://cviofficial.medium.com/govi-staking-v2-is-now-live-3b7211d0069",
   activeBy: {
     restricted: true,
     networks: [chainNames.Ethereum, chainNames.Matic]
