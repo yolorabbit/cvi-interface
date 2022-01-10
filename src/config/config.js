@@ -1,7 +1,8 @@
 import { chainNames } from "connectors";
 
-const newStakingProgramNotification = {
+export const newStakingProgramNotification = {
   type: "new-staking-program-notification-2022",
+  link: "#",
   activeBy: {
     restricted: true,
     networks: [chainNames.Ethereum, chainNames.Matic]
@@ -227,7 +228,7 @@ const config = {
     'migrate': 'migrate', 
   },
   goviV2StakingText: ["The new GOVI staking V2 program is now live on Arbitrum and Polygon!",
-                     "For more information on the new GOVI staking V2 program and how to bridge your tokens to Arbitrum click here."],
+                     "For more information on the new GOVI staking V2 program and how to bridge your tokens to Arbitrum"],
   migrationSteps: [
     {
       stepKey: 'start',

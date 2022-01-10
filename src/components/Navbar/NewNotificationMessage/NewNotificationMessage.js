@@ -1,5 +1,5 @@
+import { newStakingProgramNotification } from 'config/config';
 import React, { useMemo } from 'react'
-import { Link } from 'react-router-dom';
 import './NewNotificationMessage.scss';
 
 const NewNotificationMessage = ({type, setNotificationData}) => {
@@ -14,9 +14,9 @@ const NewNotificationMessage = ({type, setNotificationData}) => {
             <div className='new-notification-message-component'>
                 <p>
                     The new GOVI staking V2 program is now live on Arbitrum and Polygon!
-                    For more information on the new GOVI staking V2 program and how to bridge your tokens to Arbitrum <Link to="#">
+                    For more information on the new GOVI staking V2 program and how to bridge your tokens to Arbitrum <a href={newStakingProgramNotification.link} target="_blank" rel="noopener noreferrer">
                         click here
-                    </Link>
+                    </a>
                 </p>
 
                 <button className="new-notification-message-component__close-button" onClick={closeNotification}>

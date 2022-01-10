@@ -52,11 +52,12 @@
             @media (max-width: 767px) {
               padding: 6.667vw 0;
             }
-            p {
+            p, a{
               margin: 0.586vw 0;
               white-space: pre-wrap;
               line-height: 1.25vw;
               font-size: 0.729vw;
+              color: white;
               
               @media (max-width: 1365px) {
                 line-height: 1.758vw;

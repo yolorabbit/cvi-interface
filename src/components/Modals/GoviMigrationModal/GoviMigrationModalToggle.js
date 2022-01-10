@@ -39,11 +39,9 @@ const GoviMigrationModalToggle = () => {
         dispatch(setGoviMigrationModalOpen(true, true));
     }, [account, goviMigrationModalInitiallized, isStakedGovi, dispatch]);
 
-    return useMemo(() => {
-        return goviMigrationModalIsOpen && (
-            <GoviMigrationModal w3={w3} />
-        )
-    }, [goviMigrationModalIsOpen, w3]);
+    return useMemo(() => goviMigrationModalIsOpen && (
+        <GoviMigrationModal />
+    ), [goviMigrationModalIsOpen]);
 }
 
 export default GoviMigrationModalToggle;

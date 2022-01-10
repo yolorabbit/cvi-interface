@@ -3,7 +3,7 @@ import Button from "components/Elements/Button";
 import Modal from 'components/Modal/Modal';
 import { useDispatch } from 'react-redux';
 import { setGoviMigrationModalOpen } from 'store/actions';
-import config from "config/config";
+import config, { newStakingProgramNotification } from "config/config";
 import './GoviMigrationModal.scss';
 
 export const GoviMigrationModal = () => {
@@ -19,9 +19,16 @@ export const GoviMigrationModal = () => {
                 <img className="v2-circle-icon" src={require('../../../images/coins/v2-circle.svg').default} alt="v2-circle" />
             </div>
             <div className="details">
-                {config.goviV2StakingText.map((desc, tn) => (
-                    <p key={tn}>{desc}</p>
+                {config.goviV2StakingText.map((desc, tn) => (<> 
+                    <p key={tn}>
+                        {desc}&nbsp;
+                        {tn === (config.goviV2StakingText?.length -1) && <a href={newStakingProgramNotification.link} target="_blank" rel="noopener noreferrer">
+                            click here
+                        </a>}
+                    </p>
+                </>
                 ))}
+               
             </div>
             <div className="actions">
                 <Button
