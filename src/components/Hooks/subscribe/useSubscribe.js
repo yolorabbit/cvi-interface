@@ -1,9 +1,9 @@
+import { useWeb3React } from "@web3-react/core";
 import config from "config/config";
 import { contractsContext } from "contracts/ContractContext";
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { addEvent } from "store/actions/events";
-import { useActiveWeb3React } from "../wallet";
 
 const eventsToListen = [
     "Transfer",
@@ -22,7 +22,7 @@ const eventsToListen = [
 ];
 
 const useSubscribe = () => {
-    const { account, library: web3 } = useActiveWeb3React();
+    const { account, library: web3 } = useWeb3React(config.web3ProviderId);
     const [subscribedEvents,  setSubscribedEvents] = useState({});
     const [called,  setCalled] = useState(null);
     const contracts = useContext(contractsContext);
