@@ -181,7 +181,7 @@ const RPC_URLS_NETWORK = {
     "mainnet": {
         1: "https://eth-mainnet.alchemyapi.io/v2/KhQWOrbOeWZoTIkwRt4a4aXPPxx5wj5J",
         137: "https://polygon-mainnet.infura.io/v3/febfb2edfb47420784373875242fd24d",
-        42161: "https://arb1.arbitrum.io/rpc",
+        42161: "https://arb-mainnet.g.alchemy.com/v2/wm1M6JZoetutYwR_gICXbLkdi5CIvTXA",
     },
     "staging": {
         31337: "https://staging-ethereum.cvi.finance",

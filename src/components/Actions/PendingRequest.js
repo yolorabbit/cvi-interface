@@ -49,7 +49,7 @@ const PendingRequest = () => {
     const onLiquidate = useCallback(async() => {
         try {
           setIsProcessing(true);
-          await w3?.tokens[activeToken.rel.volTokenKey][requestActionByType[action]](originalRequest.requestId, { account });
+          await w3?.tokens[activeToken.rel.volTokenKey][requestActionByType[action]](originalRequest, { account });
           dispatch(addAlert({
             id: action,
             eventName: `${upperFirst(action)} - success`,
@@ -67,7 +67,7 @@ const PendingRequest = () => {
         } finally {
           setIsProcessing(false);
         }
-      }, [account, action, activeToken.rel.volTokenKey, dispatch, originalRequest.requestId, w3]);
+      }, [account, action, activeToken.rel.volTokenKey, dispatch, originalRequest, w3]);
 
     const onClick = async () => {
         if(type === arbitrageConfig.actionsConfig.fulfill.key) {
