@@ -3675,7 +3675,7 @@
         }
     },
     "CVOL-FeedOracle": {
-        "address": "0x3b49ad7aDf9E348852C529F621aEcD7ABD99907e",
+        "address": "0xB527769842f997d56dD1Ff73C34192141b69077e",
         "abi": [
             {
                 "inputs": [
@@ -3839,9 +3839,9 @@
             }
         ],
         "creation": {
-            "block": 15129722,
-            "timestamp": 1622406099,
-            "transactionHash": "0x3d2fff78a8f09342efc9644d027d868fd5e9d0902ece211827210af6492a0373"
+            "block": 16032918,
+            "timestamp": 1624400938,
+            "transactionHash": "0xc160c062755765c1845e202f653d6cfe78e1501c139874495a7df85f9d031cf4"
         }
     },
     "CVOL-Oracle": {
@@ -3888,6 +3888,27 @@
             },
             {
                 "inputs": [],
+                "name": "getCVILatestRoundData",
+                "outputs": [
+                    { "internalType": "uint16", "name": "cviValue", "type": "uint16" },
+                    { "internalType": "uint80", "name": "cviRoundId", "type": "uint80" },
+                    { "internalType": "uint256", "name": "cviTimestamp", "type": "uint256" }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint80", "name": "_roundId", "type": "uint80" }],
+                "name": "getCVIRoundData",
+                "outputs": [
+                    { "internalType": "uint16", "name": "cviValue", "type": "uint16" },
+                    { "internalType": "uint256", "name": "cviTimestamp", "type": "uint256" }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
                 "name": "maxCVIValue",
                 "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
                 "stateMutability": "view",
@@ -3909,34 +3930,6 @@
             },
             { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
             {
-                "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
-                "name": "transferOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [{ "internalType": "uint80", "name": "_roundId", "type": "uint80" }],
-                "name": "getCVIRoundData",
-                "outputs": [
-                    { "internalType": "uint16", "name": "cviValue", "type": "uint16" },
-                    { "internalType": "uint256", "name": "cviTimestamp", "type": "uint256" }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
-                "inputs": [],
-                "name": "getCVILatestRoundData",
-                "outputs": [
-                    { "internalType": "uint16", "name": "cviValue", "type": "uint16" },
-                    { "internalType": "uint80", "name": "cviRoundId", "type": "uint80" },
-                    { "internalType": "uint256", "name": "cviTimestamp", "type": "uint256" }
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            {
                 "inputs": [{ "internalType": "bool", "name": "_newDeviationCheck", "type": "bool" }],
                 "name": "setDeviationCheck",
                 "outputs": [],
@@ -3949,12 +3942,19 @@
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+                "name": "transferOwnership",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
             }
         ],
         "creation": {
-            "block": 17138587,
-            "timestamp": 1626942726,
-            "transactionHash": "0x571ebed0054d596ebe6021c0ed155ca78c4d212a47d650b59f2d37d7ce60b00e"
+            "block": 23376247,
+            "timestamp": 1641399310,
+            "transactionHash": "0x4a2609d92745774ccb4580b2368898d617bce99b8fbd217a0ffbd81527ade430"
         }
     },
     "GOVIETH-StakingRewards": {
@@ -5585,14 +5585,8 @@
         }
     },
     "CVOL-USDC-PositionRewards": {
-        "address": "0xf293873CA668Ef7F1412C46c2C2c682Fd3441c02",
+        "address": "0xE7E97cb4F82b2e4be4c24Fb5aF0769a9C65BaB5B",
         "abi": [
-            {
-                "inputs": [{ "internalType": "contract IERC20", "name": "_cviToken", "type": "address" }],
-                "stateMutability": "nonpayable",
-                "type": "constructor",
-                "signature": "constructor"
-            },
             {
                 "anonymous": false,
                 "inputs": [
@@ -5600,8 +5594,7 @@
                     { "indexed": false, "internalType": "uint256", "name": "rewardAmount", "type": "uint256" }
                 ],
                 "name": "Claimed",
-                "type": "event",
-                "signature": "0xd8138f8a3f377c5259ca548e70e4c2de94f129f5a11036a15b69513cba2b426a"
+                "type": "event"
             },
             {
                 "anonymous": false,
@@ -5610,188 +5603,14 @@
                     { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
                 ],
                 "name": "OwnershipTransferred",
-                "type": "event",
-                "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+                "type": "event"
             },
             {
                 "inputs": [],
                 "name": "PRECISION_DECIMALS",
                 "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
                 "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x60ebfee6"
-            },
-            {
-                "inputs": [],
-                "name": "lastClaimedDay",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0xae7715b1"
-            },
-            {
-                "inputs": [],
-                "name": "lastMaxSingleReward",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0xe3aa8b48"
-            },
-            {
-                "inputs": [],
-                "name": "lastRewardMaxLinearGOVI",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0xafb03518"
-            },
-            {
-                "inputs": [],
-                "name": "lastRewardMaxLinearPositionUnits",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x179fd845"
-            },
-            {
-                "inputs": [],
-                "name": "maxClaimPeriod",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x6ae3484e"
-            },
-            {
-                "inputs": [],
-                "name": "maxDailyReward",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x5fb87206"
-            },
-            {
-                "inputs": [],
-                "name": "maxRewardTime",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x551996f8"
-            },
-            {
-                "inputs": [],
-                "name": "maxRewardTimePercentageGain",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0xb3b6965a"
-            },
-            {
-                "inputs": [],
-                "name": "maxSingleReward",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x9e5f4e9d"
-            },
-            {
-                "inputs": [],
-                "name": "owner",
-                "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x8da5cb5b"
-            },
-            {
-                "inputs": [],
-                "name": "platform",
-                "outputs": [{ "internalType": "contract IPlatform", "name": "", "type": "address" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x4bde38c8"
-            },
-            { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function", "signature": "0x715018a6" },
-            {
-                "inputs": [],
-                "name": "rewardCalculationValidTimestamp",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x66487d78"
-            },
-            {
-                "inputs": [],
-                "name": "rewardFactor",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x1c41ef97"
-            },
-            {
-                "inputs": [],
-                "name": "rewardMaxLinearGOVI",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0xca4250a9"
-            },
-            {
-                "inputs": [],
-                "name": "rewardMaxLinearPositionUnits",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x1057729e"
-            },
-            {
-                "inputs": [],
-                "name": "rewarder",
-                "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0xdcc3e06e"
-            },
-            {
-                "inputs": [],
-                "name": "todayClaimedRewards",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0xc4aca6f7"
-            },
-            {
-                "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
-                "name": "transferOwnership",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0xf2fde38b"
-            },
-            {
-                "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
-                "name": "unclaimedPositionUnits",
-                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-                "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0xb6929eb4"
+                "type": "function"
             },
             {
                 "inputs": [
@@ -5801,38 +5620,174 @@
                 "name": "calculatePositionReward",
                 "outputs": [{ "internalType": "uint256", "name": "rewardAmount", "type": "uint256" }],
                 "stateMutability": "view",
-                "type": "function",
-                "constant": true,
-                "signature": "0x5ffc5424"
+                "type": "function"
             },
+            { "inputs": [], "name": "claimReward", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
             {
                 "inputs": [
-                    { "internalType": "address", "name": "_account", "type": "address" },
-                    { "internalType": "uint256", "name": "_positionUnits", "type": "uint256" },
-                    { "internalType": "uint8", "name": "_leverage", "type": "uint8" }
+                    { "internalType": "address", "name": "", "type": "address" },
+                    { "internalType": "uint32", "name": "", "type": "uint32" }
                 ],
-                "name": "reward",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0x2fc6511c"
+                "name": "claimedPositionUnits",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
             },
-            { "inputs": [], "name": "claimReward", "outputs": [], "stateMutability": "nonpayable", "type": "function", "signature": "0xb88a802f" },
             {
-                "inputs": [{ "internalType": "address", "name": "_newRewarder", "type": "address" }],
-                "name": "setRewarder",
+                "inputs": [],
+                "name": "cviToken",
+                "outputs": [{ "internalType": "contract IERC20Upgradeable", "name": "", "type": "address" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            { "inputs": [], "name": "extractRewards", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            {
+                "inputs": [{ "internalType": "contract IERC20Upgradeable", "name": "_cviToken", "type": "address" }],
+                "name": "initialize",
                 "outputs": [],
                 "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0x3a6462e4"
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "lastClaimedDay",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "lastMaxSingleReward",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "lastRewardMaxLinearGOVI",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "lastRewardMaxLinearPositionUnits",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "maxClaimPeriod",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "maxDailyReward",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "maxRewardTime",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "maxRewardTimePercentageGain",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "maxSingleReward",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "owner",
+                "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "platform",
+                "outputs": [{ "internalType": "contract IPlatform", "name": "", "type": "address" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            { "inputs": [], "name": "renounceOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+            {
+                "inputs": [],
+                "name": "rewardCalculationValidTimestamp",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "rewardFactor",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "rewardMaxLinearGOVI",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "rewardMaxLinearPositionUnits",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint256", "name": "_newMaxClaimPeriod", "type": "uint256" }],
+                "name": "setMaxClaimPeriod",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
             },
             {
                 "inputs": [{ "internalType": "uint256", "name": "_newMaxDailyReward", "type": "uint256" }],
                 "name": "setMaxDailyReward",
                 "outputs": [],
                 "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0x6ee30fd9"
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint256", "name": "_newMaxRewardTime", "type": "uint256" }],
+                "name": "setMaxRewardTime",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "uint256", "name": "_newMaxRewardTimePercentageGain", "type": "uint256" }],
+                "name": "setMaxRewardTimePercentageGain",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{ "internalType": "contract IPlatform", "name": "_newPlatform", "type": "address" }],
+                "name": "setPlatform",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
             },
             {
                 "inputs": [
@@ -5843,54 +5798,34 @@
                 "name": "setRewardCalculationParameters",
                 "outputs": [],
                 "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0xf37bfe2d"
+                "type": "function"
             },
             {
                 "inputs": [{ "internalType": "uint256", "name": "_newRewardFactor", "type": "uint256" }],
                 "name": "setRewardFactor",
                 "outputs": [],
                 "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0x2157c0e7"
+                "type": "function"
             },
             {
-                "inputs": [{ "internalType": "uint256", "name": "_newMaxClaimPeriod", "type": "uint256" }],
-                "name": "setMaxClaimPeriod",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0x0598e0bf"
+                "inputs": [],
+                "name": "todayClaimedRewards",
+                "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+                "stateMutability": "view",
+                "type": "function"
             },
             {
-                "inputs": [{ "internalType": "uint256", "name": "_newMaxRewardTime", "type": "uint256" }],
-                "name": "setMaxRewardTime",
+                "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
+                "name": "transferOwnership",
                 "outputs": [],
                 "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0x6a538591"
-            },
-            {
-                "inputs": [{ "internalType": "uint256", "name": "_newMaxRewardTimePercentageGain", "type": "uint256" }],
-                "name": "setMaxRewardTimePercentageGain",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0xe126dad3"
-            },
-            {
-                "inputs": [{ "internalType": "contract IPlatform", "name": "_newPlatform", "type": "address" }],
-                "name": "setPlatform",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function",
-                "signature": "0x6945c5ea"
+                "type": "function"
             }
         ],
         "creation": {
-            "block": 17288125,
-            "timestamp": 1627299722,
-            "transactionHash": "0x043d7371b0baef34747fb08caca6c6ac976d0d36299d4f742c83a0ccebe441a5"
+            "block": 23831078,
+            "timestamp": 1642433446,
+            "transactionHash": "0xcd446020ff720ad659aef2e8821d6e699eb9de91ac28cd8f2e361a12e3c4a765"
         }
     },
     "CVOL-USDCLP-StakingRewards": { "address": "0xd53f9D95a87896E3543251aCb3fb13D3d4D7D09e", "abiRef": "StakingRewards" },
