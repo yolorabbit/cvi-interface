@@ -29,6 +29,7 @@ const StakingActions = () => {
     const { selectedNetwork } = useSelector(({app})=>app);
     const token = stakingConfig.tokens[selectedNetwork]?.[protocol]?.[tokenName];
     const unstakeModalButtonDisabled = ((isOpen && !isModal && (disabled || !(Number(amount ?? "0") > 0))));
+    const isMaximumAmount = toBN(toBNAmount(amount, token.decimals)).eq(toBN(tokenAmount));
     const unstakeTableButtonDisabled = (!isOpen && (Number(tokenAmount ?? 0) <= 0)) || (isGoviToken(tokenName) && (lockedTime > 0 || lockedTime === null));
     const stakeModalDisabled = (isOpen && !isModal) && !(Number(amount ?? "0") > 0);
     const platfromName = stakingConfig.tokens[selectedNetwork].platform[tokenName]?.rel?.contractKey;
@@ -90,13 +91,17 @@ const StakingActions = () => {
                     break;
                 case "unstake":
                     if(isGoviToken(token.key)) {
-                        if(toBN(toBNAmount(amount, token.decimals)).eq(toBN(tokenAmount))) { // check for max 
-                            await w3.stakings[token.rel.stakingRewards].unstakeAll(account);
+                        if(isMaximumAmount) { // check for max 
+                            await w3.stakings[token.rel.stakingRewards].exit(account);
                         } else {
                             await w3.stakings[token.rel.stakingRewards].unstake(toBN(toBNAmount(amount, token.decimals)), account);
                         }
                     } else {
-                        await _contract.methods["withdraw"](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
+                        if (isMaximumAmount) {
+                            await _contract.methods["exit"]().send({from: account, ...gas});
+                        } else {
+                            await _contract.methods["withdraw"](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});  
+                        }
                     }
                     break;    
                 default:
@@ -136,7 +141,7 @@ const StakingActions = () => {
                     {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
                     <Button 
                         className="unstake-component__container--button" 
-                        buttonText="Unstake" 
+                        buttonText={isOpen && !isModal && isMaximumAmount? "Claim & Unstake" : "Unstake"} 
                         onClick={onClick}
                         disabled={unstakeModalButtonDisabled || unstakeTableButtonDisabled}
                         processing={processing}
