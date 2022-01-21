@@ -11,7 +11,7 @@ import { upperFirst } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAlert } from "store/actions";
-import { actionConfirmEvent, gas, isGoviToken, toBN, toBNAmount } from "utils";
+import { actionConfirmEvent, gas, isGoviToken, isGoviV1Token, toBN, toBNAmount } from "utils";
 import Contract from "web3-eth-contract";
 import { useActionController } from "./ActionController";
 
@@ -91,8 +91,8 @@ const StakingActions = () => {
                     break;
                 case "unstake":
                     if(isGoviToken(token.key)) {
-                        if(isMaximumAmount) { // check for max 
-                            await w3.stakings[token.rel.stakingRewards].exit(account);
+                        if(isMaximumAmount) { // check for max and govi-v1
+                            isGoviV1Token(token.key)? await w3.stakings[token.rel.stakingRewards].exit(account) : await w3.stakings[token.rel.stakingRewards].unstakeAll(account);
                         } else {
                             await w3.stakings[token.rel.stakingRewards].unstake(toBN(toBNAmount(amount, token.decimals)), account);
                         }
@@ -141,7 +141,7 @@ const StakingActions = () => {
                     {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
                     <Button 
                         className="unstake-component__container--button" 
-                        buttonText={isOpen && !isModal && isMaximumAmount? "Claim & Unstake" : "Unstake"} 
+                        buttonText={isOpen && !isModal && isMaximumAmount && isGoviV1Token(token.key)? "Claim & Unstake" : "Unstake"} 
                         onClick={onClick}
                         disabled={unstakeModalButtonDisabled || unstakeTableButtonDisabled}
                         processing={processing}
