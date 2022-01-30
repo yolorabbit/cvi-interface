@@ -1,9 +1,7 @@
 # Scfipts
 *.sh
 
-# lock files
-*.lock
-*-lock.json
+*.env
 
 # Logs
 logs
@@ -75,10 +73,6 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env*
-.env.test
-
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
@@ -113,8 +107,6 @@ dist
 
 # dependencies
 /node_modules
-/.pnp
-.pnp.js
 
 # testing
 /coverage
@@ -124,14 +116,7 @@ dist
 
 # misc
 .DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-#VSCode
-.vscode
