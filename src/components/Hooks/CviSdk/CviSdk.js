@@ -1,4 +1,4 @@
-import { getW3 } from "@coti-io/cvi-sdk";
+import { getW3 } from "@coti-cvi/cvi-sdk";
 import { useWeb3React } from "@web3-react/core";
 import config from "config/config";
 import { chainNames } from "connectors";

@@ -6,7 +6,7 @@ import Checkbox from "components/Checkbox";
 import Tooltip from "components/Tooltip";
 import { appViewContext } from 'components/Context';
 import { useActiveToken } from 'components/Hooks';
-import { toDisplayAmount } from '@coti-io/cvi-sdk';
+import { toDisplayAmount } from '@coti-cvi/cvi-sdk';
 import { commaFormatted, customFixed } from 'utils';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useDispatch, useSelector } from 'react-redux';
