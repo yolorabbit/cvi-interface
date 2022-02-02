@@ -1,8 +1,6 @@
 # Scfipts
 *.sh
 
-*.env
-
 # Logs
 logs
 *.log
