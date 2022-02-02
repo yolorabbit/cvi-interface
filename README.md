@@ -66,3 +66,14 @@ and run `yarn start:production`
 ### Deploy to staging:
 
 push your commits to `origin/staging` branch and Jenkins will automatically invoke to build your code and deploy it to staging.
+
+
+### Connect to Staging ETH And Polygon Networks With Metamask:
+
+#### Staging Ethereum:
+* RPC URL https://staging-ethereum.cvi.finance
+* Chain ID 31337
+
+#### Staging Polygon:
+* RPC URL http://54.92.189.167:9547
+* Chain ID 31338
