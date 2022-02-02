@@ -24,7 +24,7 @@ auth: <check your email for verification code>
 
 ### To start the web on staging env:
 
-Create `.env.staging` file:
+Create `.env` file:
 
 ```
 REACT_APP_HOST=https://api-dev.cvx.finance
