@@ -15,10 +15,8 @@ const SelectNetwork = ({view}) => {
     const dispatch = useDispatch();
     const { selectedNetwork } = useSelector(({app}) => app);
     const networkContext = useWeb3React(config.web3ProviderId);
-    // const {chainId, library} = useWeb3React();
     const {library} = useWeb3React();
     const [isOpen, setIsOpen] = useState();
-    // const [warningModalIsOpen, setWarningModalIsOpen] = useState();
 
     const networksList = useMemo(() => Object.values(supportedNetworksConfigByEnv).map(({chainId}) => ({
         chainId: parseHex(chainId),
@@ -35,17 +33,7 @@ const SelectNetwork = ({view}) => {
             const _selectedNetwork = supportedNetworksConfigByEnv[parseHex(hexChainId)];
             dispatch(setNetworkStatus(config.networkStatuses.pending));
             if(_selectedNetwork && window.ethereum?.request && window.ethereum.selectedAddress) {
-                // if(_selectedNetwork.chainName !== chainNames.Ethereum) {
                 await window.ethereum.request({method: 'wallet_switchEthereumChain', params: [{chainId: _selectedNetwork.chainId}]});
-                // } else {
-                //    if(chainId === chainNameToChainId(_selectedNetwork.chainName)) {
-                //        await networkContext.connector.changeChainId(parseHex(_selectedNetwork.chainId));
-                //    } else {
-                //        await window.ethereum.request({method: 'wallet_switchEthereumChain', params: [{chainId: _selectedNetwork.chainId}]});
-                //        // setIsOpen(false);
-                //        // return setWarningModalIsOpen(true);
-                //    };
-                // }
             }
             
             await networkContext.connector.changeChainId(parseHex(_selectedNetwork.chainId));
@@ -69,18 +57,6 @@ const SelectNetwork = ({view}) => {
 
     return (
         <div className={`select-network-component ${view ?? ''}`}>
-            {/*{warningModalIsOpen && <Modal className="error-modal sell-all-modal" closeIcon handleCloseModal={() => setWarningModalIsOpen(false)}> */}
-            {/*    <div>*/}
-            {/*        <img src={require('images/icons/notifications/notice.svg').default} alt="notice red icon" width="80" height="80" />*/}
-
-            {/*        <h2><br/>*/}
-            {/*            Please switch to Ethereum {config.isMainnet ? 'Mainnet' : 'Testnet'} in your wallet*/}
-            {/*        </h2>*/}
-
-            {/*        <Button className="error-modal__close button navbar-button" buttonText="CLOSE" onClick={() => setWarningModalIsOpen(false)} />*/}
-            {/*    </div>   */}
-            {/*</Modal>}*/}
-
             {isOpen && <Modal className="select-network-component__modal" closeIcon handleCloseModal={() => setIsOpen(false)}>
                 <Title className="select-network-title xs-center" color="white" text="Select a network" borderColor="#f8ba15"/>
                 <p>You are currently browsing cvi.finance on the {activeNetwork.name} network.</p>
