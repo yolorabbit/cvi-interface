@@ -98,7 +98,7 @@ export const supportedNetworksConfig = {
                 symbol: 'ETH',
                 decimals: 18
             },
-            rpcUrls: ['https://staging-ethereum.cvi.finance'],
+            rpcUrls: ['https://staging-ethereum-2.cvi.finance'],
             blockExplorerUrls: null
         },
         31338: {
@@ -184,7 +184,7 @@ const RPC_URLS_NETWORK = {
         42161: "https://arb-mainnet.g.alchemy.com/v2/wm1M6JZoetutYwR_gICXbLkdi5CIvTXA",
     },
     "staging": {
-        31337: "https://staging-ethereum.cvi.finance",
+        31337: "https://staging-ethereum-2.cvi.finance",
         31338: "https://staging-polygon.cvi.finance",
         31339: "https://staging-arbitrum.cvi.finance"
     },
