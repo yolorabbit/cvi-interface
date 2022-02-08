@@ -175,12 +175,16 @@ const web3Api = {
     },
     getGoviPrice: async ({GOVI, USDC, WETH}) => {
         try {
-            const GOVIData = await getTokenData(GOVI, stakingProtocols.platform);
-            const USDCData = await getTokenData(USDC);
-            const WETHData = await getTokenData(WETH);
-
-            const wethPrice = await getPrice(WETHData, USDCData);
-            const goviPrice = await getPrice(GOVIData, WETHData);
+            const [GOVIData, USDCData, WETHData] = [
+                await getTokenData(GOVI, stakingProtocols.platform),
+                await getTokenData(USDC),
+                await getTokenData(WETH)
+            ];
+            
+            const [wethPrice, goviPrice] = [
+                await getPrice(WETHData, USDCData), 
+                await getPrice(GOVIData, WETHData)
+            ];
 
             return goviPrice * wethPrice;
         } catch(error) {
