@@ -65,8 +65,13 @@ and run `yarn start:production`
 
 ### Deploy to staging:
 
-push your commits to `origin/staging` branch and Jenkins will automatically invoke to build your code and deploy it to staging.
-
+1. push your commits to `origin/staging` branch and Jenkins will automatically invoke to build your code and deploy it to staging.
+2. connect to coti-staging server.
+3. run:
+```
+cd services
+sh upgrade.sh cvi-staging
+```
 
 ### Connect to Staging ETH And Polygon Networks With Metamask:
 
