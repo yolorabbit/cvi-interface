@@ -90,19 +90,13 @@ const StakingActions = () => {
                     await _contract.methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
                     break;
                 case "unstake":
-                    if(isGoviToken(token.key)) {
-                        if(isMaximumAmount) { // check for max and govi-v1
-                            isGoviV1Token(token.key)? await w3.stakings[token.rel.stakingRewards].exit(account) : await w3.stakings[token.rel.stakingRewards].unstakeAll(account);
-                        } else {
-                            await w3.stakings[token.rel.stakingRewards].unstake(toBN(toBNAmount(amount, token.decimals)), account);
-                        }
+                    const type = isGoviToken(token.key) ? "stakings" : "stakingRewards";
+                    if(isMaximumAmount) {
+                        await w3[type][token.rel.stakingRewards]["unstakeAll"](account);
                     } else {
-                        if (isMaximumAmount) {
-                            await _contract.methods["exit"]().send({from: account, ...gas});
-                        } else {
-                            await _contract.methods["withdraw"](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});  
-                        }
+                        await w3[type][token.rel.stakingRewards]["unstake"](toBN(toBNAmount(amount, token.decimals)), account);
                     }
+
                     break;    
                 default:
                     break;
