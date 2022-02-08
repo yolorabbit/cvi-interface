@@ -2,7 +2,6 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 import Modal from 'components/Modal';
 import InputAmount from 'components/InputAmount';
 import Slippage from 'components/Slippage';
-import Expand from 'components/Expand';
 import { appViewContext } from 'components/Context';
 import Action from './Action';
 import platformConfig from 'config/platformConfig';
@@ -12,6 +11,7 @@ import TimeToFullfill from 'components/pages/Arbitrage/TimeToFullfill';
 import { activeTabs as arbitrageActiveTabs } from 'config/arbitrageConfig';
 import Mint from 'components/Modals/ArbitrageModal/Views/Mint';
 import Burn from 'components/Modals/ArbitrageModal/Views/Burn';
+import Expand from 'components/Expand';
 
 const actionControllerContext = createContext({});
 export const ActionControllerContext = (props = {}) => {
