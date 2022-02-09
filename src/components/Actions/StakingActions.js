@@ -11,7 +11,7 @@ import { upperFirst } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAlert } from "store/actions";
-import { actionConfirmEvent, gas, isGoviToken, toBN, toBNAmount } from "utils";
+import { actionConfirmEvent, gas, isGoviToken, isGoviV1Token, toBN, toBNAmount } from "utils";
 import Contract from "web3-eth-contract";
 import { useActionController } from "./ActionController";
 
@@ -29,6 +29,7 @@ const StakingActions = () => {
     const { selectedNetwork } = useSelector(({app})=>app);
     const token = stakingConfig.tokens[selectedNetwork]?.[protocol]?.[tokenName];
     const unstakeModalButtonDisabled = ((isOpen && !isModal && (disabled || !(Number(amount ?? "0") > 0))));
+    const isMaximumAmount = toBN(toBNAmount(amount, token.decimals)).eq(toBN(tokenAmount));
     const unstakeTableButtonDisabled = (!isOpen && (Number(tokenAmount ?? 0) <= 0)) || (isGoviToken(tokenName) && (lockedTime > 0 || lockedTime === null));
     const stakeModalDisabled = (isOpen && !isModal) && !(Number(amount ?? "0") > 0);
     const platfromName = stakingConfig.tokens[selectedNetwork].platform[tokenName]?.rel?.contractKey;
@@ -89,15 +90,13 @@ const StakingActions = () => {
                     await _contract.methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
                     break;
                 case "unstake":
-                    if(isGoviToken(token.key)) {
-                        if(toBN(toBNAmount(amount, token.decimals)).eq(toBN(tokenAmount))) { // check for max 
-                            await w3.stakings[token.rel.stakingRewards].unstakeAll(account);
-                        } else {
-                            await w3.stakings[token.rel.stakingRewards].unstake(toBN(toBNAmount(amount, token.decimals)), account);
-                        }
+                    const type = isGoviToken(token.key) ? "stakings" : "stakingRewards";
+                    if(isMaximumAmount) {
+                        await w3[type][token.rel.stakingRewards]["unstakeAll"](account);
                     } else {
-                        await _contract.methods["withdraw"](toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});        
+                        await w3[type][token.rel.stakingRewards]["unstake"](toBN(toBNAmount(amount, token.decimals)), account);
                     }
+
                     break;    
                 default:
                     break;
@@ -136,7 +135,7 @@ const StakingActions = () => {
                     {(!isOpen && isModal) && <CountdownComponent lockedTime={lockedTime} /> }
                     <Button 
                         className="unstake-component__container--button" 
-                        buttonText="Unstake" 
+                        buttonText={isOpen && !isModal && isMaximumAmount && isGoviV1Token(token.key)? "Claim & Unstake" : "Unstake"} 
                         onClick={onClick}
                         disabled={unstakeModalButtonDisabled || unstakeTableButtonDisabled}
                         processing={processing}

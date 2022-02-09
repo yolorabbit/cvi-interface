@@ -9,6 +9,7 @@ import moment from "moment";
 import { actionConfirm } from "store/actions/events";
 
 export const isGoviToken = (str) => /^govi-v\d$/.test(str);
+export const isGoviV1Token = (str) => str === 'govi-v1';
 
 export const gas = config.isMainnet ? { } : { };
 
