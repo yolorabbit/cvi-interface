@@ -35,7 +35,7 @@ const RestrictedModal = () => {
     }
 
     useEffect(() => {
-        if(!location?.pathname || process.env.NODE_ENV === 'development' || window?.location?.host?.includes("localhost:3000")) return;
+        if(!location?.pathname || process.env.NODE_ENV === 'development' || window?.location?.host?.includes("localhost:3000") || window?.location?.host?.includes("surge.sh")) return;
         checkRestrictedCountry();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location?.pathname]);

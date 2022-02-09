@@ -24,3 +24,6 @@ jobs:
 
       - name: React Build
         run: yarn build
+
+      - name: Deploy PR Version To Surge
+        run: yarn deploy-pr-version-to-surge
