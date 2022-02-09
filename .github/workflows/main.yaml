@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   build:
+    name: Github Actions Build
     timeout-minutes: 10
     runs-on: macos-11
 
