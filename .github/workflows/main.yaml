@@ -31,7 +31,8 @@ jobs:
 
       - name: Deploy Production Version To AWS S3
         run: yarn deploy-production-to-aws-s3
-        shell: bash
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.STAV_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.STAV_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_DEFAULT_OUTPUT: json
