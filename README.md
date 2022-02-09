@@ -55,13 +55,11 @@ and run `yarn start:production`
 
 ### Deploy to mainnet silent (only viewed internally by the company):
 
-1. `yarn build`
-2. deploy to s3 bucket. TBD
+1. `yarn deploy:silent`
 
 ### Deploy to mainnet production (viewed by everyone):
 
-1. `yarn build`
-2. deploy to different s3 bucket. TBD
+1. `yarn deploy:production`
 
 ### Deploy to staging:
 

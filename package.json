@@ -37,6 +37,8 @@
     "web3-eth-contract": "^1.4.0"
   },
   "scripts": {
+    "deploy:silent":"yarn build && aws s3 sync build/ s3://cvi-silent-environment",
+    "deploy:production":"yarn build && aws s3 sync build/ s3://cvi-prod",
     "build-staging:production": "sh -ac '. .env.staging; react-scripts build'",
     "start:production": "sh -ac '. .env.production; react-scripts start'",
     "start": "react-scripts start",
