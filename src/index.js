@@ -19,7 +19,9 @@ import GitInfo from 'react-git-info/macro';
 const gitInfo = GitInfo();
 console.log("-----------------------------")
 console.log("Git Info:")
-console.log(`git-branch: ${gitInfo.branch}`);
+if(gitInfo.branch){
+  console.log(`git-branch: ${gitInfo.branch}`);
+}
 console.log(`date: ${new Date(gitInfo.commit.date).toISOString()}`);
 console.log(`shortHash: ${gitInfo.commit.shortHash}`);
 console.log("-----------------------------")
