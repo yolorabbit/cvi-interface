@@ -5,8 +5,8 @@ on: [push]
 jobs:
   build:
     name: Github Actions Build
-    timeout-minutes: 10
-    runs-on: macos-11
+    timeout-minutes: 20
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
