@@ -1,0 +1,26 @@
+name: Main
+
+on: [push]
+
+jobs:
+  build:
+    timeout-minutes: 10
+    runs-on: macos-11
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js v16.13.2
+        uses: actions/setup-node@v1
+        with:
+          node-version: v16.13.2
+
+      - name: Yarn Install
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_READ_TOKEN}" > ~/.npmrc
+          yarn install --frozen-lockfile
+        env:
+          NPM_READ_TOKEN: '${{ secrets.NPM_READ_TOKEN }}'
+
+      - name: React Build
+        run: yarn build

@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import Expand from 'components/Expand';
 import Paginator from 'components/Paginator';
 import ActiveRow from '../Elements/Rows/ActiveRow';
 import SubHeader from '../Elements/SubHeader';
 import { stakingViews } from 'config/stakingConfig';
 import './ExpandList.scss';
 import { useDataController } from '../DataController/DataController';
+import Expand from 'components/Expand';
 
 const ExpandList = () => {
     const { 
