@@ -5,7 +5,7 @@ import path from 'path'
 const _axios = axios.create({
   baseURL: "https://hooks.slack.com",
   headers: {
-    "Content-Type": "application/json"
+    "Content-type": "application/json"
   }
 });
 
@@ -67,16 +67,6 @@ async function main() {
   console.log(`staging: https://staging-cvi-branch-${formattedGitBranchName}.surge.sh`)
   console.log(`silent: https://silent-cvi-branch-${formattedGitBranchName}.surge.sh`)
   
-  const response = await _axios.post("/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
-    text: `
-      Deploying cvi-interface version of this branch to surge:\r\n\r\n
-      staging: https://staging-cvi-branch-${formattedGitBranchName}.surge.sh\r\n
-      silent: https://silent-cvi-branch-${formattedGitBranchName}.surge.sh
-    `
-  });
-
-  console.log(response.data);
-
   // deploy staging version:
   await deploy({
     buildCommand:`yarn build:staging`,
@@ -92,6 +82,19 @@ async function main() {
     repoPath,
     buildDirPath
   })
+
+  const response = await _axios.post("/services/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
+    text: `
+      \r\n\r\n
+      =================== ${formattedGitBranchName} ===================
+      CVI-interface version of this branch has been deployed to surge:\r\n
+      *deploy time:* ${new Date().toLocaleString()}\r\n
+      *staging:* <https://staging-cvi-branch-${formattedGitBranchName}.surge.sh>\r\n
+      *silent:* <https://silent-cvi-branch-${formattedGitBranchName}.surge.sh>
+      \r\n\r\n
+    `
+  });
+  console.log(response.data);
 }
 
 if (require.main === module) {
