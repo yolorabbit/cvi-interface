@@ -26,8 +26,8 @@ jobs:
       - name: React Build
         run: yarn build
 
-      - name: Deploy PR Version To Surge
-        run: yarn deploy-pr-version-to-surge
+      - name: Deploy To Surge
+        run: yarn deploy-to-surge
 
       - name: Deploy Production Version To AWS S3
         run: yarn deploy-production-to-aws-s3
