@@ -1,5 +1,13 @@
+import axios from 'axios'
 import execa from 'execa'
-import path from 'node:path'
+import path from 'path'
+
+const _axios = axios.create({
+  baseURL: "https://hooks.slack.com",
+  headers: {
+    "Content-type": "application/json"
+  }
+});
 
 async function deploy({url,buildCommand,repoPath,buildDirPath}:{
   url:string,
@@ -59,7 +67,6 @@ async function main() {
   console.log(`staging: https://staging-cvi-branch-${formattedGitBranchName}.surge.sh`)
   console.log(`silent: https://silent-cvi-branch-${formattedGitBranchName}.surge.sh`)
   
-
   // deploy staging version:
   await deploy({
     buildCommand:`yarn build:staging`,
@@ -75,6 +82,19 @@ async function main() {
     repoPath,
     buildDirPath
   })
+
+  const response = await _axios.post("/services/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
+    text: `
+      \r\n\r\n
+      =================== ${formattedGitBranchName} ===================
+      CVI-interface version of this branch has been deployed to surge:\r\n
+      *deploy time:* ${new Date().toLocaleString()}\r\n
+      *staging:* <https://staging-cvi-branch-${formattedGitBranchName}.surge.sh>\r\n
+      *silent:* <https://silent-cvi-branch-${formattedGitBranchName}.surge.sh>
+      \r\n\r\n
+    `
+  });
+  console.log(response.data);
 }
 
 if (require.main === module) {
