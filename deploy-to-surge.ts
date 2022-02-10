@@ -21,7 +21,6 @@ async function deploy({url,buildCommand,repoPath,buildDirPath}:{
 
 async function main() {
   const repoPath = __dirname
-  const packageToDeploy = 'cvi-interface'
   const buildDirPath = path.join(repoPath, 'build')
 
   const gitBranchName = await execa.command('git symbolic-ref --short HEAD',{
@@ -31,11 +30,18 @@ async function main() {
   
   if (process.env.GITHUB_REF_NAME === 'main') {
     console.log('Deploying cvi-interface version of origin/main to surge:')
-    console.log(`staging: https://${packageToDeploy}-staging.surge.sh`)
+    console.log(`staging: https://staging.cvi.surge.sh`)
+    console.log(`silent: https://silent.cvi.surge.sh`)
   
     await deploy({
       buildCommand:`yarn build:staging`,
-      url:`${packageToDeploy}-staging.surge.sh`,
+      url:`staging.cvi.surge.sh`,
+      repoPath,
+      buildDirPath
+    })
+    await deploy({
+      buildCommand:`yarn build`,
+      url:`silent.cvi.surge.sh`,
       repoPath,
       buildDirPath
     })
@@ -50,14 +56,14 @@ async function main() {
   const formattedGitBranchName = gitBranchName.replace('/','_')
 
   console.log('Deploying cvi-interface version of this branch to surge:')
-  console.log(`staging: https://${packageToDeploy}-staging--branch-${formattedGitBranchName}.surge.sh`)
-  console.log(`production: https://${packageToDeploy}-production--branch-${formattedGitBranchName}.surge.sh`)
+  console.log(`staging: https://staging.cvi.branch.${formattedGitBranchName}.surge.sh`)
+  console.log(`silent: https://silent.cvi.branch.${formattedGitBranchName}.surge.sh`)
   
 
   // deploy staging version:
   await deploy({
     buildCommand:`yarn build:staging`,
-    url:`${packageToDeploy}-staging--branch-${formattedGitBranchName}.surge.sh`,
+    url:`staging.cvi.branch.${formattedGitBranchName}.surge.sh`,
     repoPath,
     buildDirPath
   })
@@ -65,7 +71,7 @@ async function main() {
   // deploy production version:
   await deploy({
     buildCommand:`yarn build`,
-    url:`${packageToDeploy}-production--branch-${formattedGitBranchName}.surge.sh`,
+    url:`silent.cvi.branch.${formattedGitBranchName}.surge.sh`,
     repoPath,
     buildDirPath
   })
