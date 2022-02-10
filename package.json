@@ -44,7 +44,7 @@
     "typescript": "^4.5.5"
   },
   "scripts": {
-    "deploy-pr-version-to-surge":"ts-node deploy-pr-version-to-surge.ts",
+    "deploy-to-surge":"ts-node deploy-to-surge.ts",
     "deploy-production-to-aws-s3":"ts-node deploy-production-to-aws-s3.ts",
     "deploy:silent": "yarn build && aws s3 sync build/ s3://cvi-silent-environment",
     "deploy:production": "yarn build && aws s3 sync build/ s3://cvi-prod",
