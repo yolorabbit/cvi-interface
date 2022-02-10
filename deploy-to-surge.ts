@@ -1,5 +1,13 @@
+import axios from 'axios'
 import execa from 'execa'
 import path from 'node:path'
+
+const _axios = axios.create({
+  baseURL: "https://hooks.slack.com",
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
 
 async function deploy({url,buildCommand,repoPath,buildDirPath}:{
   url:string,
@@ -75,6 +83,11 @@ async function main() {
     repoPath,
     buildDirPath
   })
+
+  _axios.post("/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
+    text: "Test deploy"
+  });
+
 }
 
 if (require.main === module) {
