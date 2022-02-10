@@ -30,18 +30,18 @@ async function main() {
   
   if (process.env.GITHUB_REF_NAME === 'main') {
     console.log('Deploying cvi-interface version of origin/main to surge:')
-    console.log(`staging: https://staging.cvi.surge.sh`)
-    console.log(`silent: https://silent.cvi.surge.sh`)
+    console.log(`staging: https://staging-cvi.surge.sh`)
+    console.log(`silent: https://silent-cvi.surge.sh`)
   
     await deploy({
       buildCommand:`yarn build:staging`,
-      url:`staging.cvi.surge.sh`,
+      url:`staging-cvi.surge.sh`,
       repoPath,
       buildDirPath
     })
     await deploy({
       buildCommand:`yarn build`,
-      url:`silent.cvi.surge.sh`,
+      url:`silent-cvi.surge.sh`,
       repoPath,
       buildDirPath
     })
@@ -56,14 +56,14 @@ async function main() {
   const formattedGitBranchName = gitBranchName.replace('/','_')
 
   console.log('Deploying cvi-interface version of this branch to surge:')
-  console.log(`staging: https://staging.cvi.branch.${formattedGitBranchName}.surge.sh`)
-  console.log(`silent: https://silent.cvi.branch.${formattedGitBranchName}.surge.sh`)
+  console.log(`staging: https://staging-cvi-branch-${formattedGitBranchName}.surge.sh`)
+  console.log(`silent: https://silent-cvi-branch-${formattedGitBranchName}.surge.sh`)
   
 
   // deploy staging version:
   await deploy({
     buildCommand:`yarn build:staging`,
-    url:`staging.cvi.branch.${formattedGitBranchName}.surge.sh`,
+    url:`staging-cvi-branch-${formattedGitBranchName}.surge.sh`,
     repoPath,
     buildDirPath
   })
@@ -71,7 +71,7 @@ async function main() {
   // deploy production version:
   await deploy({
     buildCommand:`yarn build`,
-    url:`silent.cvi.branch.${formattedGitBranchName}.surge.sh`,
+    url:`silent-cvi-branch-${formattedGitBranchName}.surge.sh`,
     repoPath,
     buildDirPath
   })
