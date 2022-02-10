@@ -1,6 +1,6 @@
 import axios from 'axios'
 import execa from 'execa'
-import path from 'node:path'
+import path from 'path'
 
 const _axios = axios.create({
   baseURL: "https://hooks.slack.com",
@@ -67,6 +67,15 @@ async function main() {
   console.log(`staging: https://staging-cvi-branch-${formattedGitBranchName}.surge.sh`)
   console.log(`silent: https://silent-cvi-branch-${formattedGitBranchName}.surge.sh`)
   
+  const response = await _axios.post("/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
+    text: `
+      Deploying cvi-interface version of this branch to surge:\r\n\r\n
+      staging: https://staging-cvi-branch-${formattedGitBranchName}.surge.sh\r\n
+      silent: https://silent-cvi-branch-${formattedGitBranchName}.surge.sh
+    `
+  });
+
+  console.log(response.data);
 
   // deploy staging version:
   await deploy({
@@ -83,11 +92,6 @@ async function main() {
     repoPath,
     buildDirPath
   })
-
-  _axios.post("/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
-    text: "Test deploy"
-  });
-
 }
 
 if (require.main === module) {
