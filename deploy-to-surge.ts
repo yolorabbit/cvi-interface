@@ -1,8 +1,9 @@
 import axios from 'axios'
 import execa from 'execa'
+import { Octokit } from 'octokit';
 import path from 'path'
 
-const _axios = axios.create({
+const slackAxios = axios.create({
   baseURL: "https://hooks.slack.com",
   headers: {
     "Content-type": "application/json"
@@ -29,13 +30,13 @@ async function deploy({url,buildCommand,repoPath,buildDirPath}:{
 
 async function main() {
   const repoPath = __dirname
-  const buildDirPath = path.join(repoPath, 'build')
+  const buildDirPath = path.join(repoPath, 'build');
 
   const gitBranchName = await execa.command('git symbolic-ref --short HEAD',{
     stdio: 'pipe',
     cwd: repoPath,
-  }).then(r=>r.stdout)
-  
+  }).then(r=>r.stdout);
+
   if (process.env.GITHUB_REF_NAME === 'main') {
     console.log('Deploying cvi-interface version of origin/main to surge:')
     console.log(`staging: https://staging-cvi.surge.sh`)
@@ -81,16 +82,44 @@ async function main() {
     url:`silent-cvi-branch-${formattedGitBranchName}.surge.sh`,
     repoPath,
     buildDirPath
-  })
+  });
 
-  const response = await _axios.post("/services/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
+  
+  let pullRequestUrl;
+  const github_access_token = process.env.BOT_GITHUB_ACCESS_TOKEN; // Add your access token
+ 
+  if(github_access_token) {
+    try {
+      const octokit = new Octokit({
+        auth: github_access_token 
+      });
+      const { data } = await octokit.request("GET /repos/cotitech-io/cvi-interface/pulls?state=open&sort=updated&per_page=100");
+      const { html_url, number} = data?.find((pullRequest: any) => pullRequest?.head?.ref?.includes(gitBranchName.toLowerCase())) || {};
+      if(!html_url) throw new Error("Failed to find pull request");
+
+      pullRequestUrl = html_url;
+
+      await octokit.request(`POST /repos/cotitech-io/cvi-interface/issues/${number}/comments`, { // add a comment to pull request
+        body: `\
+[staging-${formattedGitBranchName}](https://staging-cvi-branch-${formattedGitBranchName}.surge.sh)\r\n
+[silent-${formattedGitBranchName}](https://silent-cvi-branch-${formattedGitBranchName}.surge.sh)\r\n\
+`
+      });
+
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+  const response = await slackAxios.post("/services/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
     text: `
       \r\n\r\n
       =================== ${formattedGitBranchName} ===================
       CVI-interface version of this branch has been deployed to surge:\r\n
       *deploy time:* ${new Date().toLocaleString()}\r\n
       *staging:* <https://staging-cvi-branch-${formattedGitBranchName}.surge.sh>\r\n
-      *silent:* <https://silent-cvi-branch-${formattedGitBranchName}.surge.sh>
+      *silent:* <https://silent-cvi-branch-${formattedGitBranchName}.surge.sh>\r\n
+      *Pull request url:* ${pullRequestUrl ? `<${pullRequestUrl}>` : 'None'}
       \r\n\r\n
     `
   });
