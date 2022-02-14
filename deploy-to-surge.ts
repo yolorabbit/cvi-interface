@@ -101,8 +101,9 @@ async function main() {
 
       await octokit.request(`POST /repos/cotitech-io/cvi-interface/issues/${number}/comments`, { // add a comment to pull request
         body: `\
-[staging-${formattedGitBranchName}](https://staging-cvi-branch-${formattedGitBranchName}.surge.sh)\r\n
-[silent-${formattedGitBranchName}](https://silent-cvi-branch-${formattedGitBranchName}.surge.sh)\r\n\
+PR Urls:
+1. [staging-${formattedGitBranchName}](https://staging-cvi-branch-${formattedGitBranchName}.surge.sh)
+2. [silent-${formattedGitBranchName}](https://silent-cvi-branch-${formattedGitBranchName}.surge.sh)\
 `
       });
 
