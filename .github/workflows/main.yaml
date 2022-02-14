@@ -31,10 +31,13 @@ jobs:
         env:
           BOT_GITHUB_ACCESS_TOKEN: '${{ secrets.BOT_GITHUB_ACCESS_TOKEN }}'
 
-      - name: Deploy Production Version To AWS S3
-        run: yarn deploy-production-to-aws-s3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.STAV_AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.STAV_AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
-          AWS_DEFAULT_OUTPUT: json
+      ###############
+      # temporarly, deployment to production will be manual.
+      ###############
+      # - name: Deploy Production Version To AWS S3
+      #   run: yarn deploy-production-to-aws-s3
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.STAV_AWS_ACCESS_KEY }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.STAV_AWS_SECRET_ACCESS_KEY }}
+      #     AWS_DEFAULT_REGION: us-east-1
+      #     AWS_DEFAULT_OUTPUT: json
