@@ -85,31 +85,32 @@ async function main() {
   });
 
   
-  let pullRequestUrl;
+  let pullRequestUrl:string|undefined;
   const github_access_token = process.env.BOT_GITHUB_ACCESS_TOKEN; // Add your access token
  
   if(github_access_token) {
-    try {
-      const octokit = new Octokit({
-        auth: github_access_token 
-      });
-      const { data } = await octokit.request("GET /repos/cotitech-io/cvi-interface/pulls?state=open&sort=updated&per_page=100");
-      const { html_url, number} = data?.find((pullRequest: any) => pullRequest?.head?.ref?.includes(gitBranchName.toLowerCase())) || {};
-      if(!html_url) throw new Error("Failed to find pull request");
+    console.log(`Adding Github comment with surge links...`)
 
-      pullRequestUrl = html_url;
+    const octokit = new Octokit({
+      auth: github_access_token 
+    });
+    const { data } = await octokit.request("GET /repos/cotitech-io/cvi-interface/pulls?state=open&sort=updated&per_page=100");
+    const { html_url, number} = data?.find((pullRequest: any) => pullRequest?.head?.ref?.toLowerCase().includes(gitBranchName.toLowerCase())) || {};
+    if(!html_url) throw new Error(`Failed to find pull request for branch ${gitBranchName}`);
 
-      await octokit.request(`POST /repos/cotitech-io/cvi-interface/issues/${number}/comments`, { // add a comment to pull request
-        body: `\
+    pullRequestUrl = html_url;
+
+    await octokit.request(`POST /repos/cotitech-io/cvi-interface/issues/${number}/comments`, { // add a comment to pull request
+      body: `\
 PR Urls:
 1. [staging-${formattedGitBranchName}](https://staging-cvi-branch-${formattedGitBranchName}.surge.sh)
 2. [silent-${formattedGitBranchName}](https://silent-cvi-branch-${formattedGitBranchName}.surge.sh)\
 `
-      });
-
-    } catch(error) {
-      console.log(error);
-    }
+    });
+  }
+  else{
+    console.log(`Skipping adding Github comment with surge links because no access token is set.`)
+    console.log(`To set it: BOT_GITHUB_ACCESS_TOKEN=<token>`)
   }
 
   const response = await slackAxios.post("/services/T017MPE6VM5/B032GT2LMRR/C9Zf1gzUrCdEpRwl4opN3m6R", {
