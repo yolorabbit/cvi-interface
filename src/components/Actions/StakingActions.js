@@ -11,8 +11,7 @@ import { upperFirst } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addAlert } from "store/actions";
-import { actionConfirmEvent, gas, isGoviToken, isGoviV1Token, toBN, toBNAmount } from "utils";
-import Contract from "web3-eth-contract";
+import { actionConfirmEvent, isGoviToken, isGoviV1Token, toBN, toBNAmount } from "utils";
 import { useActionController } from "./ActionController";
 
 const StakingActions = () => {
@@ -21,7 +20,7 @@ const StakingActions = () => {
     const {disabled, type, token: tokenName, isModal, isOpen, setIsOpen, amount, setAmount, protocol, balances: { tokenAmount } = {} } = useActionController();
     const dispatch = useDispatch();
     const contracts = useContext(contractsContext);
-    const { account, library } = useActiveWeb3React();
+    const { account } = useActiveWeb3React();
     const approvalValidation = useApproveToken();
     const [processing, setProcessing] = useState(false);
     const [lockup, setLockup] = useState(24);
@@ -62,14 +61,6 @@ const StakingActions = () => {
     //eslint-disable-next-line
     },[tokenName, selectedNetwork, contracts]);
 
-    const getContract = (contractKey) => {
-        const contractsJSON = require(`../../contracts/files/${process.env.REACT_APP_ENVIRONMENT}/Contracts_${selectedNetwork}.json`);
-        const { abi, abiRef, address } = contractsJSON[contractKey];
-        const _contract = new Contract(abi || contractsJSON[abiRef].abi, address);
-        _contract.setProvider(library?.currentProvider);
-        return _contract
-    }
-    
     const onClick = async () => {
         if(isModal && !isOpen) return setIsOpen(true);
         setProcessing(true);
@@ -77,8 +68,8 @@ const StakingActions = () => {
         if(!isApproved) return;
         
         try {
-            const _contract = getContract(token.rel.stakingRewards);
-            
+            const stakings = {...w3.stakings, ...w3.stakingRewards}
+
             dispatch(addAlert({
                 id: 'notice',
                 alertType: config.alerts.types.NOTICE,
@@ -87,14 +78,13 @@ const StakingActions = () => {
 
             switch (type) {
                 case "stake":
-                    await _contract.methods.stake(toBN(toBNAmount(amount, token.decimals))).send({from: account, ...gas});
+                    await stakings[token.rel.stakingRewards]["stake"](toBN(toBNAmount(amount, token.decimals)), account);
                     break;
                 case "unstake":
-                    const type = isGoviToken(token.key) ? "stakings" : "stakingRewards";
                     if(isMaximumAmount) {
-                        await w3[type][token.rel.stakingRewards]["unstakeAll"](account);
+                        await stakings[token.rel.stakingRewards]["unstakeAll"](account);
                     } else {
-                        await w3[type][token.rel.stakingRewards]["unstake"](toBN(toBNAmount(amount, token.decimals)), account);
+                        await stakings[token.rel.stakingRewards]["unstake"](toBN(toBNAmount(amount, token.decimals)), account);
                     }
 
                     break;    
