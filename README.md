@@ -1,12 +1,23 @@
 # Links
 
-1. Staging - https://staging.cvi.finance/
-2. Silent - https://silent.cvi.finance/
-3. Production - https://cvi.finance/
+1. Production - https://cvi.finance/
+2. Silent - https://silent-cvi.surge.sh
+3. Staging - https://staging-cvi.surge.sh
+
 
 # Jira 
 
 https://creditcoin.atlassian.net/jira/software/c/projects/CVIX/boards/56
+
+# How To Develop
+
+1. Create a new branch on top of origin/main
+2. Develop
+3. Create a PR in Github
+4. Your PR version will be deployed to surge.sh. Links will be added as a comment in your PR automatically.
+5. Test it and let @Costa test it.
+6. Merge your PR by rebasing.
+7. Ask for deployment to production (AWS S3).
 
 # Run Project Locally
 
@@ -55,21 +66,21 @@ and run `yarn start:production`
 
 ### Deploy to mainnet silent (only viewed internally by the company):
 
-1. `yarn deploy:silent`
+https://silent-cvi.surge.sh
+
+1. Happends automatically when merging a PR in github.
+2. To manually deploy, run: `GITHUB_REF_NAME=main yarn deploy-to-surge`.
+* It will also deploy to staging (https://staging-cvi.surge.sh)
 
 ### Deploy to mainnet production (viewed by everyone):
 
-1. `yarn deploy:production`
+1. `AWS_ACCESS_KEY_ID=<id> AWS_SECRET_ACCESS_KEY=<key> yarn deploy-production-to-aws-s3`
 
 ### Deploy to staging:
 
-1. push your commits to `origin/staging` branch and Jenkins will automatically invoke to build your code and deploy it to staging.
-2. connect to coti-staging server.
-3. run:
-```
-cd services
-sh upgrade.sh cvi-staging
-```
+1. Happends automatically when merging a PR in github.
+2. To manually deploy, run: `GITHUB_REF_NAME=main yarn deploy-to-surge`.
+* It will also deploy to silent (https://silent-cvi.surge.sh)
 
 ### Connect to Staging ETH And Polygon Networks With Metamask:
 
@@ -78,5 +89,5 @@ sh upgrade.sh cvi-staging
 * Chain ID 31337
 
 #### Staging Polygon:
-* RPC URL http://54.92.189.167:9547
+* RPC URL https://staging-polygon.cvi.finance
 * Chain ID 31338

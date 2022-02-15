@@ -7,8 +7,9 @@ async function main() {
     console.log('Deploying cvi-interface version of origin/main to AWS S3:')
     console.log(`production: https://cvi.finance`)
 
-    await execa.command(`yarn deploy:production`, {
+    await execa.command(`yarn build && aws s3 sync build/ s3://cvi-prod`, {
       cwd: repoPath,
+      shell: true, 
       env: {
         AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
         AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY
