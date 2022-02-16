@@ -24,10 +24,14 @@ export const getTokenData = async (contract, protocol) => {
 
     const tokensJsonConfig = {...stakingConfig.tokens[network][protocol], ...platformConfig.tokens[network]}
     let tokenData = findTokenByAddress(tokensJsonConfig, address); 
-
+    const getSymbol = (key, name) => {
+        const symbol = name === "eth" ? "WETH" : name?.toUpperCase() || key?.toUpperCase();
+        return symbol.replace(/-[Vv]\d$/, '');
+    }
     if(tokenData) {
         const { decimals, key, name, address} = tokenData;
-        return { address, symbol: name === "eth" ? "WETH" : name?.toUpperCase() || key?.toUpperCase(), decimals, contract };
+        
+        return { address, symbol: getSymbol(key, name), decimals, contract };
     }
     
     const symbol = await contract.methods.symbol().call();
@@ -186,6 +190,8 @@ const web3Api = {
                 await getPrice(GOVIData, WETHData)
             ];
 
+            console.log(wethPrice)
+            console.log(goviPrice)
             return goviPrice * wethPrice;
         } catch(error) {
             console.log(error);
