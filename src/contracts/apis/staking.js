@@ -6,6 +6,7 @@ import { DAY } from "components/Hooks/useEvents";
 import { chainNames } from "connectors";
 import stakingConfig, { stakingProtocols } from "config/stakingConfig";
 import Api from "Api";
+import { pairsData } from "components/Hooks/Staking/useStakeData";
 
 const stakingApi = {
     getStakedAmountAndPoolShareByToken: async (contracts, asset, account, selectedNetwork) => {
@@ -260,7 +261,7 @@ const stakingApi = {
         if(!uniswapLPToken.contract) return 0;
         const totalSupply = toBN(await uniswapLPToken.contract.methods.totalSupply().call());
         const token0 = await uniswapLPToken.contract.methods.token0().call();
-        const uniswapToken = await getTokenData(contracts[tokenConfig.pair.pairToken]);
+        const uniswapToken = pairsData[tokenConfig.pair.pairToken] || await getTokenData(contracts[tokenConfig.pair.pairToken], stakingProtocols.platform)
         const swapped = token0.toLowerCase() !== uniswapToken.address.toLowerCase();
 
         const getReservesData = async () => {

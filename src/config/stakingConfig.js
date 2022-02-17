@@ -1,5 +1,5 @@
+import config from "config/config";
 import { chainNames } from "connectors";
-import config from "./config";
 
 export const stakingViews = {
   "staked": "staked",
@@ -136,7 +136,18 @@ const stakingConfig = {
             token: "UNIV2COTIETH",
           },
           pair: {
+            decimals: [18, 18],
             pairToken: "COTI",
+            priceTokens: {
+              WETH: {
+                key: "WETH",
+                decimals: 18
+              },
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              }
+            },
           }
         },
         "govi-eth-lp": {
@@ -156,7 +167,6 @@ const stakingConfig = {
           },
           pair: {
             decimals: [18, 18],
-            reverse: true,
             pairToken: "GOVI",
             priceTokens: {
               WETH: {
@@ -187,7 +197,6 @@ const stakingConfig = {
           },
           pair: {
             decimals: [18, 6],
-            reverse: true,
             pairToken: "USDC",
             priceTokens: {
               USDC: {
@@ -218,14 +227,25 @@ const stakingConfig = {
             token: "UNIV2RHEGIC2ETH",
           },
           pair: {
+            decimals: [18, 18],
             pairToken: "RHEGIC2",
+            priceTokens: {
+              WETH: {
+                key: "WETH",
+                decimals: 18
+              },
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              }
+            },
           }
         },
       },
       [stakingProtocols.sushiswap]: {
         "coti-eth-lp": {
           key: "coti-eth-lp",
-          disable: config.isMainnet,
+          disable: false,
           overrideApy: 0,
           label: "COTI-ETH SLP",
           address: "0x717385e1a702f90b6eb8cd23150702ca7217b626",
@@ -239,8 +259,21 @@ const stakingConfig = {
             tokenDecimals: [18],
             contractKey: "SLPCOTIETH",
             token: "SLPCOTIETH",
-            pairToken: "COTI",
           },
+          pair: {
+            decimals: [18, 18],
+            pairToken: "COTI",
+            priceTokens: {
+              WETH: {
+                key: "WETH",
+                decimals: 18
+              },
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              }
+            },
+          }
         },
         "govi-eth-lp": {
           key: "govi-eth-lp",
@@ -259,7 +292,6 @@ const stakingConfig = {
           },
           pair: {
             decimals: [18, 18],
-            reverse: true,
             pairToken: "GOVI",
             priceTokens: {
               WETH: {

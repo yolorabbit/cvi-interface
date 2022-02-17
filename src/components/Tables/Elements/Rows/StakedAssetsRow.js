@@ -61,7 +61,7 @@ const RowData = ({isHeader, rowData: asset}) => {
             }}
         />
 
-        const StakedValue = <Value text={data.staked.stakedAmount} subText={`${tokenNameFormatted?.toUpperCase()} ${data.staked.lastStakedAmount.value}`} bottomText={`$${data.staked.stakedAmountUSD}`} protocol={protocol} />
+        const StakedValue = <Value text={data?.staked?.stakedAmount} subText={`${tokenNameFormatted?.toUpperCase()} ${data?.staked?.lastStakedAmount.value}`} bottomText={`$${data?.staked?.stakedAmountUSD}`} protocol={protocol} />
         
         if(isHeader) {
             return <>
@@ -114,5 +114,5 @@ const RowData = ({isHeader, rowData: asset}) => {
                 } />
             }
         </>
-    )}, [data?.staked?.stakedTokenAmount, data.staked.stakedAmount, data.staked.lastStakedAmount.value, data.staked.stakedAmountUSD, data.claim, token, amount, protocol, tokenNameFormatted, isHeader, isTablet, header, stakedData.apy, stakedData.tvl.stakedAmountUSD, stakedData.tvl.stakedAmountLP, asset, isMobile, leftToken, rightToken]);
+    )}, [data?.staked?.stakedTokenAmount, data?.staked?.stakedAmount, data?.staked?.lastStakedAmount?.value, data?.staked?.stakedAmountUSD, data?.claim, token, amount, protocol, tokenNameFormatted, isHeader, isTablet, header, stakedData.apy, stakedData.tvl.stakedAmountUSD, stakedData.tvl.stakedAmountLP, asset, isMobile, leftToken, rightToken]);
 }
