@@ -1,6 +1,6 @@
 import { aprToAPY, convert, fromLPTokens, getChainName, getPrice, platformCreationTimestamp } from "contracts/utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
-import { commaFormatted, customFixed, fromBN, isGoviToken, toBN, toDisplayAmount, toFixed } from "utils";
+import { commaFormatted, customFixed, isGoviToken, toBN, toDisplayAmount, toFixed } from "utils";
 import moment from "moment";
 import { DAY } from "components/Hooks/useEvents";
 import { chainNames } from "connectors";
@@ -37,9 +37,9 @@ const stakingApi = {
                 stakedAmountUSD: commaFormatted(customFixed(toFixed(toDisplayAmount(stakedAmountUSD.toString(), USDCData.decimals)), fixedDecimals))
             }
         } 
-        return web3Api.getPoolSizeLiquidityMining(contracts, asset, account, selectedNetwork)
+        return web3Api.getPoolSizeLiquidityMining(contracts, asset, account)
     },
-    getPoolSizeLiquidityMining: async (contracts, asset, account, selectedNetwork, percentageDecimals=4) => {
+    getPoolSizeLiquidityMining: async (contracts, asset, account, percentageDecimals=4) => {
         try {
 
             const {protocol, key: tokenName, fixedDecimals, rel, ...token} = asset;
@@ -49,14 +49,13 @@ const stakingApi = {
             const uniswapLPToken = await getTokenData(platformLPToken, protocol);
             const poolSize = await stakingRewards.methods.totalSupply().call();
             // console.log("poolSize: ", poolSize);
-            const longTokenData = rel.longToken ? await getTokenData(contracts[rel.longToken], protocol) : undefined; 
-            const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, contracts, uniswapLPToken, longTokenData);
+            const tvlUSD = await web3Api.uniswapLPTokenToUSD(contracts, uniswapLPToken, asset);
             // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
             
             const totalStaked = !!account ? await stakingRewards.methods.balanceOf(account).call() : 0;
             // console.log("totalStaked: ", customFixed(toFixed(toDisplayAmount(totalStaked, token.decimals))));
             
-            const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, contracts, uniswapLPToken, longTokenData)
+            const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(contracts, uniswapLPToken, asset)
             // console.log(tokenName, protocol+" accountStakedUSD: ", accountStakedUSD);
             const mySharePercentage = totalStaked?.toString() === "0" ? toBN("0") : toBN(totalStaked).mul(toBN("1", token.decimals)).div(toBN(poolSize)).mul(toBN("100"));
             
@@ -252,152 +251,50 @@ const stakingApi = {
             }
         }
     },
-    uniswapLPTokenToUSD: async (amount, contracts, uniswapLPToken, longTokenData) => {
-        const tokenAmount = toBN(amount);
-        console.log(amount)
-        console.log(contracts)
-        console.log(uniswapLPToken);
-        console.log(longTokenData);
-        console.log("finish");
+    uniswapLPTokenToUSD: async (contracts, uniswapLPToken, tokenConfig) => {
         if(!uniswapLPToken.contract) return 0;
 
-        const getPairData = async () => {
-            const [tokenName, pairTokenName] = uniswapLPToken.symbol.split('-').map(symbol => symbol.replace(/ETH/, 'WETH'));
-            const tokensData = [
-                await getTokenData(contracts[tokenName]),
-                await getTokenData(contracts[pairTokenName]),
-            ];
-            const {reserve0, reserve1} = await uniswapLPToken.contract.methods?.getReserves()?.call() || {};
-            const [reserveToken, reservePairToken] = [
-                toDisplayAmount(reserve0, tokensData[0].decimals),
-                toDisplayAmount(reserve1, tokensData[1].decimals)
-            ];
-
-            return {
-                tokensData,
-                pairs: [
-                    await uniswapLPToken.contract.methods.token0().call(),
-                    await uniswapLPToken.contract.methods.token1().call()
-                ],
-                reserves: {reserveToken, reservePairToken}
+        const getReservesData = async () => {
+            try {
+                const [priceTokenDecimals, pricePairTokenDecimals] = tokenConfig.pair.decimals;
+                const {reserve0, reserve1} = await uniswapLPToken.contract.methods?.getReserves()?.call() || {};
+                const [reserveToken, reservePairToken] = [
+                    toDisplayAmount(reserve0, priceTokenDecimals),
+                    toDisplayAmount(reserve1, pricePairTokenDecimals)
+                ];
+                return tokenConfig.pair.reverse ? {reservePairToken: reserveToken, reserveToken: reservePairToken} : {reserveToken, reservePairToken}
+            } catch(error) {
+                console.log(error);
             }
         }
 
-        const {
-            tokensData,
-            pairs,
-            reserves: { reserveToken, reservePairToken }
-        } = await getPairData();
+        const [priceToken, pricePairToken] = Object.values(tokenConfig?.pair?.priceTokens);
+        const { reserveToken, reservePairToken } = await getReservesData();
 
-        // const USDCData = await getTokenData(contracts["USDC"]);
-        // const WETHData = await getTokenData(contracts["WETH"]);
+        const pairTokenPrice = await getPrice(await getTokenData(contracts[priceToken.key]), await getTokenData(contracts[pricePairToken.key]));
+        // const usdcPrice = (await getPrice(await getTokenData(contracts["USDC"]), await getTokenData(contracts["WETH"])));
 
-        const wethPriceUSD = await getPrice(await getTokenData(contracts["WETH"]), await getTokenData(contracts["USDC"]));
-        const usdcPrice = await getPrice(await getTokenData(contracts["USDC"]), await getTokenData(contracts["WETH"]));
-        const derivedPrice = await getPrice(tokensData[0], tokensData[1]);
-         
-        const tokenPrice = derivedPrice * wethPriceUSD;
-
-        return reserveToken * tokenPrice
-        // const {
-        //     tokenData,
-        //     pairTokenData
-        // } = 
-        // const [token, pairToken]  = [
-        //     await uniswapLPToken.contract.methods.token0().call(),
-        //     await uniswapLPToken.contract.methods.token1().call()
-        // ];
-
-   
-
-        // const {reserve0: reserveToken, reserve1: reservePairToken} = await uniswapLPToken.contract.methods.getReserves().call();
-
-        // const [tokenData, pairTokenData] = [
-        //     await getTokenData(USDC),
-        //     await getTokenData(USDC),
-        // ]
-        console.log(uniswapLPToken);
-
-        // let swapped = token1.toLowerCase() !== uniswapToken.address;
-        // let swapped = token1.toLowerCase() !== uniswapToken.address.toLowerCase();
-    
-        // // console.log("reserves: " + JSON.stringify(reserves));
-        // let reserve0 = reserves[swapped ? "1" :"0"];
-        // // console.log("reserve0: " + reserve0);
-        // let reserve1 = reserves[swapped ? "0" :"1"];
-
-        if (tokenAmount.isZero()) return 0;
-
-        return "100";
-        // const [token1Symbol, token2Symbol] = uniswapLPToken.split('-').map(symbol => symbol.replace(/ETH/, 'WETH'));
+        const pairLpAmount = reserveToken / reservePairToken;
+        const lpAmount = reservePairToken / reserveToken;
         
-        // const [
-        //     token1Data,
-        //     token2Data
-        // ] = [
-        //     await getTokenData(),
-        //     await getTokenData(),
-        // ];
-        
-        // const [token1Price, token2Price] = [
-        //     await getPrice(WETHData, USDCData), 
-        //     await getPrice(GOVIData, WETHData)
-        // ];
-
-        // uniswapLpToken = GOVI-ETH
-        // reserve0 = 88200
-        // reserve1 = 47
-
-        // let totalSupply = toBN(await uniswapLPToken.contract.methods.totalSupply().call());
-        // // console.log("totalSupply: " + totalSupply);
-        // if (totalSupply.isZero()) return 0;
-        // let token1 = await uniswapLPToken.contract.methods.token1().call();
-        // // let swapped = token1.toLowerCase() !== uniswapToken.address;
-        // let swapped = token1.toLowerCase() !== uniswapToken.address.toLowerCase();
-    
-        // let reserves = await uniswapLPToken.contract.methods.getReserves().call();
-        // // console.log("reserves: " + JSON.stringify(reserves));
-        // let reserve0 = reserves[swapped ? "1" :"0"];
-        // // console.log("reserve0: " + reserve0);
-        // let reserve1 = reserves[swapped ? "0" :"1"];
-        // // console.log("reserve1: " + reserve1);
-      
-        // let ETHValueInUSDFull = await convert(reserve0, longTokenData, USDCData);
-        // // console.log("ETHValueInUSDFull: " + ETHValueInUSDFull);
-        // let ETHValueInUSD = toDisplayAmount(ETHValueInUSDFull, USDCData.decimals);
-        // // console.log("ETHValueInUSD: " + ETHValueInUSD);
-      
-        // let tokenValueInUSDFull = await convert(reserve1, uniswapToken, USDCData);
-        // // console.log("tokenValueInUSDFull: " + tokenValueInUSDFull);
-        // let tokenValueInUSD = toDisplayAmount(tokenValueInUSDFull, USDCData.decimals);
-        // // console.log("tokenValueInUSD: " + tokenValueInUSD);
-      
-        // let totalSupplyTokens = toDisplayAmount(totalSupply, uniswapLPToken.decimals);
-        // // console.log("totalSupplyTokens: " + totalSupplyTokens);
-      
-        // let totalValue = parseFloat(tokenValueInUSD) + parseFloat(ETHValueInUSD);
-        // // console.log("totalValue: " + totalValue);
-      
-        // let lpTokenValue = totalValue / parseFloat(totalSupplyTokens);
-        // // console.log("lpTokenValue: " + lpTokenValue);
-        // let amountTokens = fromBN(amount, uniswapLPToken.decimals);
-        // // console.log("amountTokens: " + amountTokens);
-        // return amountTokens * lpTokenValue;
+        const tokenPrice = (pairTokenPrice / pairLpAmount);
+        if(uniswapLPToken.symbol.includes("USDC")) {
+            return (reserveToken * ((tokenConfig.pair.reverse ? pairLpAmount : reserveToken ) * lpAmount) + (reservePairToken * pairLpAmount));
+        };
+        return (reserveToken * tokenPrice + (reservePairToken * pairTokenPrice));
     },
-    getUniswapAPY: async function(contracts, stakingRewards, USDTToken, GOVIData, uniswapLPToken, uniswapToken, longTokenData, isStaked) {
+    getUniswapAPY: async function(contracts, stakingRewards, USDCData, GOVIData, uniswapLPToken, tokenConfig, isStaked) {
         // console.log("ETHToken: ", ETHToken);
         let rate = await stakingRewards.methods.rewardRate().call();
         // console.log(`reward rate ${rate}`);
-        let total = await stakingRewards.methods.totalSupply().call();
-        // console.log(`total ${total}`);
         
         let periodRewards = toBN(DAY).mul(toBN(rate));
         // console.log(`GOVI periodRewards ${periodRewards}`);
-        let USDPeriodRewards = toDisplayAmount(await convert(periodRewards, GOVIData, USDTToken), USDTToken.decimals);
+        let USDPeriodRewards = toDisplayAmount(await convert(periodRewards, GOVIData, USDCData), USDCData.decimals);
         // console.log(`USDPeriodRewards ${USDPeriodRewards}`);
         
         // convert from coti/eth or govi/eth to USDT using uniswapLPTokenToUSD (cant use uniswap for this)
-        let USDStakedTokens = await this.uniswapLPTokenToUSD(toBN(total), contracts, uniswapLPToken, longTokenData);
+        let USDStakedTokens = await this.uniswapLPTokenToUSD(contracts, uniswapLPToken, tokenConfig);
         // console.log(`USDStakedTokens ${USDStakedTokens}`);
 
         const dailyApr = USDStakedTokens.toString() === "0" ? 0 : (USDPeriodRewards / USDStakedTokens) * 100;

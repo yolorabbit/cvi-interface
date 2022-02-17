@@ -152,6 +152,20 @@ const stakingConfig = {
             contractKey: "UNIV2GOVIETH",
             token: "UNIV2GOVIETH",
             pairToken: "GOVI",
+          },
+          pair: {
+            decimals: [18, 18],
+            reverse: true,
+            priceTokens: {
+              WETH: {
+                key: "WETH",
+                decimals: 18
+              },
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              }
+            },
           }
         },
         "ethvol-usdc-lp": {
@@ -168,8 +182,20 @@ const stakingConfig = {
             tokenDecimals: [18],
             contractKey: "UNIV2USDCETHVOL-USDC-LONG",
             token: "UNIV2USDCETHVOL-USDC-LONG",
-            longToken: "ETHVOL-USDC-LONG",
-            pairToken: "USDC",
+          },
+          pair: {
+            decimals: [18, 6],
+            reverse: true,
+            priceTokens: {
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              },
+              "ETHVOL-USDC-LONG": {
+                key: "ETHVOL-USDC-LONG",
+                decimals: 18
+              }
+            },
           }
         },
         "rhegic2-eth-lp": {
@@ -226,6 +252,20 @@ const stakingConfig = {
             contractKey: "SLPGOVIETH",
             token: "SLPGOVIETH",
             pairToken: "GOVI",
+          },
+          pair: {
+            decimals: [18, 18],
+            reverse: true,
+            priceTokens: {
+              WETH: {
+                key: "WETH",
+                decimals: 18
+              },
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              },
+            },
           }
         },
       },
@@ -319,6 +359,19 @@ const stakingConfig = {
             contractKey: "UNIV2GOVIETH",
             pairToken: "GOVI",
             tokenDecimals: [18]
+          },
+          pair: {
+            decimals: [18, 18],
+            priceTokens: {
+              WETH: {
+                key: "WETH",
+                decimals: 18
+              },
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              }
+            },
           }
         },
         "cvol-usdc-lp": {
@@ -334,9 +387,20 @@ const stakingConfig = {
             stakingRewards: "CVOL-USDC-StakingRewards", // @TODO: update it with the real contract
             token: "UNIV2USDCCVOL-USDC-LONG",
             contractKey: "UNIV2USDCCVOL-USDC-LONG",
-            longToken: "CVOL-USDC-LONG",
-            pairToken: "USDC",
             tokenDecimals: [18],
+          },
+          pair: {
+            decimals: [6, 18],
+            priceTokens: {
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              },
+              "CVOL-USDC-LONG": {
+                key: "CVOL-USDC-LONG",
+                decimals: 18
+              }
+            },
           }
         },
       }

@@ -184,11 +184,10 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
   const getTVLLM = async (cb) => {
     try{
       const [stakingRewards, platformLPToken] = [contracts[tokenRel.stakingRewards], contracts[tokenRel.token]]
-      const longTokenData = tokenRel.longToken ? await getTokenData(contracts[tokenRel.longToken], protocol) : undefined; 
       const uniswapLPToken = await getTokenData(platformLPToken, protocol);
       const poolSize = await stakingRewards.methods.totalSupply().call();
 
-      const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, contracts, uniswapLPToken, longTokenData)
+      const tvlUSD = await web3Api.uniswapLPTokenToUSD(contracts, uniswapLPToken, token)
 
       const tvl = {
         stakedAmountLP: commaFormatted(customFixed(toFixed(toDisplayAmount(poolSize, token.decimals)), decimalsCountDisplay)),
@@ -220,9 +219,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
       const USDCData = await getTokenData(contracts['USDC']);
       const GOVIData = await getTokenData(contracts['GOVI'], stakingProtocols.platform);
       const uniswapLPToken = await getTokenData(platformLPToken, protocol);
-      const uniswapToken = pairsData[tokenRel.pairToken] || await getTokenData(contracts[tokenRel.pairToken], stakingProtocols.platform);
-      const longTokenData = tokenRel.longToken ? await getTokenData(contracts[tokenRel.longToken], protocol) : undefined; 
-      const apy = await web3Api.getUniswapAPY(contracts, stakingRewards, USDCData, GOVIData, uniswapLPToken, uniswapToken, longTokenData);
+      const apy = await web3Api.getUniswapAPY(contracts, stakingRewards, USDCData, GOVIData, uniswapLPToken, token);
       // console.log(tokenName, protocol+" apy: ", apy);
       cb(() => setStakedData((prev)=> ({
         ...prev,
@@ -260,10 +257,8 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
           }
           default: {
             tokenData = await getTokenData(contracts[tokenRel.token], protocol);
-            balance = await tokenData.contract.methods.balanceOf(account).call();
             const uniswapToken = pairsData[tokenRel.pairToken] || await getTokenData(contracts[tokenRel.pairToken], stakingProtocols.platform);
-            const longTokenData = tokenRel.longToken ? await getTokenData(contracts[tokenRel.longToken], protocol) : undefined; 
-            const usdBalance = await web3Api.uniswapLPTokenToUSD(balance, contracts, uniswapToken, longTokenData);
+            const usdBalance = await web3Api.uniswapLPTokenToUSD(contracts, uniswapToken, token);
             return `$${commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance)), 2))}`
           }
         }
