@@ -258,8 +258,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
           default: {
             tokenData = await getTokenData(contracts[tokenRel.token], protocol);
             balance = await tokenData.contract.methods.balanceOf(account).call();
-            const uniswapToken = pairsData[tokenRel.pairToken] || await getTokenData(contracts[tokenRel.pairToken], stakingProtocols.platform);
-            const usdBalance = await web3Api.uniswapLPTokenToUSD(balance, contracts, uniswapToken, token);
+            const usdBalance = await web3Api.uniswapLPTokenToUSD(balance, contracts, tokenData, token);
             return `$${commaFormatted(customFixed(toFixed(toDisplayAmount(usdBalance)), 2))}`
           }
         }
