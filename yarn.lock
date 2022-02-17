@@ -1095,10 +1095,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@coti-cvi/cvi-sdk@^0.2.21-fix2":
-  version "0.2.21-fix2"
-  resolved "https://registry.yarnpkg.com/@coti-cvi/cvi-sdk/-/cvi-sdk-0.2.21-fix2.tgz#cac897f9f94a972086f307ab2bd7b59162d4ff0d"
-  integrity sha512-1/zXWBfw9UKvtPkTMEXWpQNYAlJsRTHBdW0Fi7Z4PWiEAUrnsNrWlKh5OWNvBG0MNs/ZjwJINFXlxvP8JENLcQ==
+"@coti-cvi/cvi-sdk@^0.2.26":
+  version "0.2.26"
+  resolved "https://registry.yarnpkg.com/@coti-cvi/cvi-sdk/-/cvi-sdk-0.2.26.tgz#d3b42560889c01df5c80f6dff36940b9a75c80a6"
+  integrity sha512-N1S25Cpu3Nkwtmv+S64UlqbWGW+PBvrDZAJt7J1pMTPyoqOOAxKi5LaC8M03Nqennl7HFsiFYzKeNY4XymDVow==
   dependencies:
     "@ethersproject/contracts" "^5.4.1"
     "@ethersproject/providers" "^5.4.3"
@@ -1107,6 +1107,7 @@
     abi-decoder "^2.4.0"
     axios "^0.21.1"
     dotenv "^10.0.0"
+    find-git-root "^1.0.4"
     graphql "^15.5.1"
     graphql-request "^3.5.0"
     web3 "^1.5.3"
@@ -6613,6 +6614,11 @@ find-cache-dir@^3.3.1:
     commondir "^1.0.1"
     make-dir "^3.0.2"
     pkg-dir "^4.1.0"
+
+find-git-root@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/find-git-root/-/find-git-root-1.0.4.tgz#8bc1e0897db783e06762bf050b0943288e5399fd"
+  integrity sha512-468fmirKKgcrqfZfPn0xIpwZUUsZQcYXfx0RC2/jX39GPz83TwutQNZZhDrI6HqjO8cRejxQVaUY8GQdXopFfA==
 
 find-up@4.1.0, find-up@^4.0.0, find-up@^4.1.0:
   version "4.1.0"
