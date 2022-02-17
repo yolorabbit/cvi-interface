@@ -276,7 +276,6 @@ const stakingApi = {
         const { reserveToken, reservePairToken } = await getReservesData();
 
         const pairTokenPrice = await getPrice(await getTokenData(contracts[priceToken.key]), await getTokenData(contracts[pricePairToken.key]));
-        // const usdcPrice = (await getPrice(await getTokenData(contracts["USDC"]), await getTokenData(contracts["WETH"])));
 
         const pairLpAmount = reserveToken / reservePairToken;
         const lpAmount = reservePairToken / reserveToken;
@@ -302,9 +301,12 @@ const stakingApi = {
         let total = await stakingRewards.methods.totalSupply().call();
         // console.log(`total ${total}`);
         
-        let periodRewards = toBN(DAY).mul(toBN(rate));
+        let periodRewards = toDisplayAmount(toBN(DAY).mul(toBN(rate)), GOVIData.decimals);
+
+        const goviPrice = await web3Api.getGoviPrice(contracts);
+
         // console.log(`GOVI periodRewards ${periodRewards}`);
-        let USDPeriodRewards = toDisplayAmount(await convert(periodRewards, GOVIData, USDCData), USDCData.decimals);
+        let USDPeriodRewards = periodRewards * goviPrice;
         // console.log(`USDPeriodRewards ${USDPeriodRewards}`);
         
         // convert from coti/eth or govi/eth to USDT using uniswapLPTokenToUSD (cant use uniswap for this)
