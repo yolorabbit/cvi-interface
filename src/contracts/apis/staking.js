@@ -29,7 +29,7 @@ const stakingApi = {
             const data = await getDataByTokenName();
             const USDCData = await getTokenData(contracts["USDC"]);
             
-            const getAmount = async () => isGoviToken(tokenName) ? data.stakedTokenAmount : await fromLPTokens(contracts[rel.platform], toBN(data.stakedTokenAmount), token);
+            const getAmount = async () => isGoviToken(tokenName) ? data?.stakedTokenAmount : await fromLPTokens(contracts[rel.platform], toBN(data?.stakedTokenAmount || "0"), token);
             const stakedAmountUSD = await convert(await getAmount(), tokenData, USDCData);
 
             return {

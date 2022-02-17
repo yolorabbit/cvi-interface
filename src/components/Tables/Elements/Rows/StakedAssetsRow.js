@@ -43,7 +43,7 @@ const RowData = ({isHeader, rowData: asset}) => {
     const [amount, setAmount] = useState("");
 
     return useMemo(() => {
-        const stakedTokenAmount = data.staked.stakedTokenAmount ?? 0
+        const stakedTokenAmount = data?.staked?.stakedTokenAmount ?? 0
         const UnstakeController =
         <ActionController 
             amountLabel="Enter amount to unstake*"
@@ -56,8 +56,8 @@ const RowData = ({isHeader, rowData: asset}) => {
             protocol={protocol}
             disabled={!toBN(stakedTokenAmount).gt(toBN(0))}
             balances={{
-                tokenAmount: data.staked.stakedTokenAmount,
-                available: data.staked.stakedAmount
+                tokenAmount: data?.staked?.stakedTokenAmount,
+                available: data?.staked?.stakedAmount
             }}
         />
 
@@ -114,5 +114,5 @@ const RowData = ({isHeader, rowData: asset}) => {
                 } />
             }
         </>
-    )}, [data.staked.stakedTokenAmount, data.staked.stakedAmount, data.staked.lastStakedAmount.value, data.staked.stakedAmountUSD, data.claim, token, amount, protocol, tokenNameFormatted, isHeader, isTablet, header, stakedData.apy, stakedData.tvl.stakedAmountUSD, stakedData.tvl.stakedAmountLP, asset, isMobile, leftToken, rightToken]);
+    )}, [data?.staked?.stakedTokenAmount, data.staked.stakedAmount, data.staked.lastStakedAmount.value, data.staked.stakedAmountUSD, data.claim, token, amount, protocol, tokenNameFormatted, isHeader, isTablet, header, stakedData.apy, stakedData.tvl.stakedAmountUSD, stakedData.tvl.stakedAmountLP, asset, isMobile, leftToken, rightToken]);
 }
