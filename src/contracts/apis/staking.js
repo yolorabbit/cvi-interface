@@ -253,7 +253,7 @@ const stakingApi = {
     },
     uniswapLPTokenToUSD: async (stakedAmount, contracts, uniswapLPToken, tokenConfig) => {
         if(!uniswapLPToken.contract) return 0;
-        
+        const totalSupply = toBN(await uniswapLPToken.contract.methods.totalSupply().call());
         const token0 = await uniswapLPToken.contract.methods.token0().call();
         const uniswapToken = await getTokenData(contracts[tokenConfig.pair.pairToken]);
         const swapped = token0.toLowerCase() !== uniswapToken.address.toLowerCase();
@@ -283,8 +283,6 @@ const stakingApi = {
         
         const tokenPrice = (pairTokenPrice / pairLpAmount);
 
-        let amountTokens = toDisplayAmount(stakedAmount, uniswapLPToken.decimals);
-
         const getLiquidityPool = () => {
             if(uniswapLPToken.symbol.includes("USDC")) {
                 if(uniswapToken.symbol === "USDC") return parseFloat(reserveToken) + (reservePairToken * pairLpAmount);
@@ -295,7 +293,7 @@ const stakingApi = {
 
         const liquidity = getLiquidityPool();
 
-        return liquidity;
+        return (liquidity / totalSupply) * stakedAmount;
     },
     getUniswapAPY: async function(contracts, stakingRewards, USDCData, GOVIData, uniswapLPToken, tokenConfig, isStaked) {
         // console.log("ETHToken: ", ETHToken);
