@@ -82,7 +82,7 @@ const useStakedData = (chainName, protocol, tokenName, isStaked) => {
         }
         default: {
           const tokenData = await getTokenData(contracts[tokenRel.token], protocol === stakingProtocols.platform ? '' : protocol);
-          return await web3Api.getAPYPerToken(platform, stakingRewards, USDCData, GOVIData, tokenData, token);
+          return await web3Api.getAPYPerToken(contracts, platform, stakingRewards, USDCData, GOVIData, tokenData, token);
         }
       }
     }

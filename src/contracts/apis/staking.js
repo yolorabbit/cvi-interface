@@ -113,14 +113,19 @@ const stakingApi = {
             lastStakedAmount: {...lastStakedAmount}
         }
     },
-    getAPYPerToken: async (platform, stakingRewards, USDCData, GOVIData, tokenData, token) => {
+    getAPYPerToken: async (contracts, platform, stakingRewards, USDCData, GOVIData, tokenData, token) => {
         try {
-          if(token.migrated) return ["0", "0", "0"]; // 
+          if(token.migrated) return ["0", "0", "0"];
           let rate = await stakingRewards.methods.rewardRate().call();
           let total = await stakingRewards.methods.totalSupply().call();
-          let dailyReward = toBN(DAY).mul(toBN(rate));
-          let USDDailyReward = toDisplayAmount(await convert(dailyReward, GOVIData, USDCData), USDCData.decimals);
+          let dailyReward = toDisplayAmount(toBN(DAY).mul(toBN(rate)), GOVIData.decimals);
+
+          const goviPrice = await web3Api.getGoviPrice(contracts);
+
+          let USDDailyReward = dailyReward * goviPrice;
+
           let stakedTokens = await fromLPTokens(platform, toBN(total), token);
+
           let USDStakedTokens = toDisplayAmount(await convert(stakedTokens, tokenData, USDCData), USDCData.decimals);
 
           const dailyApr = (USDDailyReward / USDStakedTokens) * 100;
@@ -316,7 +321,6 @@ const stakingApi = {
         const dailyApr = USDStakedTokens.toString() === "0" ? 0 : (USDPeriodRewards / USDStakedTokens) * 100;
         // console.log(apysPeriods);
         return isStaked ? [aprToAPY(dailyApr, 365, 365 * 365)] : [aprToAPY(dailyApr, 365, 365 * 365), aprToAPY(dailyApr, 365, 365 * 7), aprToAPY(dailyApr, 365, 365)];
-        
     },
     getClaimableRewards: async (contracts, asset, account, selectedNetwork) => {
         const {protocol, key: tokenName, rewardsTokens, fixedDecimals, rel} = asset
