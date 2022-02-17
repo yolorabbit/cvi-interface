@@ -134,6 +134,8 @@ const stakingConfig = {
             tokenDecimals: [18],
             contractKey: "UNIV2COTIETH",
             token: "UNIV2COTIETH",
+          },
+          pair: {
             pairToken: "COTI",
           }
         },
@@ -151,11 +153,11 @@ const stakingConfig = {
             tokenDecimals: [18],
             contractKey: "UNIV2GOVIETH",
             token: "UNIV2GOVIETH",
-            pairToken: "GOVI",
           },
           pair: {
             decimals: [18, 18],
             reverse: true,
+            pairToken: "GOVI",
             priceTokens: {
               WETH: {
                 key: "WETH",
@@ -186,6 +188,7 @@ const stakingConfig = {
           pair: {
             decimals: [18, 6],
             reverse: true,
+            pairToken: "USDC",
             priceTokens: {
               USDC: {
                 key: "USDC",
@@ -213,6 +216,8 @@ const stakingConfig = {
             tokenDecimals: [18],
             contractKey: "UNIV2RHEGIC2ETH",
             token: "UNIV2RHEGIC2ETH",
+          },
+          pair: {
             pairToken: "RHEGIC2",
           }
         },
@@ -235,7 +240,7 @@ const stakingConfig = {
             contractKey: "SLPCOTIETH",
             token: "SLPCOTIETH",
             pairToken: "COTI",
-          }
+          },
         },
         "govi-eth-lp": {
           key: "govi-eth-lp",
@@ -251,11 +256,11 @@ const stakingConfig = {
             tokenDecimals: [18],
             contractKey: "SLPGOVIETH",
             token: "SLPGOVIETH",
-            pairToken: "GOVI",
           },
           pair: {
             decimals: [18, 18],
             reverse: true,
+            pairToken: "GOVI",
             priceTokens: {
               WETH: {
                 key: "WETH",
@@ -357,11 +362,11 @@ const stakingConfig = {
             stakingRewards: "GOVIETH-StakingRewards",
             token: "UNIV2GOVIETH",
             contractKey: "UNIV2GOVIETH",
-            pairToken: "GOVI",
             tokenDecimals: [18]
           },
           pair: {
             decimals: [18, 18],
+            pairToken: "GOVI",
             priceTokens: {
               WETH: {
                 key: "WETH",
@@ -391,6 +396,7 @@ const stakingConfig = {
           },
           pair: {
             decimals: [6, 18],
+            pairToken: "USDC",
             priceTokens: {
               USDC: {
                 key: "USDC",

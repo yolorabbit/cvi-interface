@@ -49,13 +49,13 @@ const stakingApi = {
             const uniswapLPToken = await getTokenData(platformLPToken, protocol);
             const poolSize = await stakingRewards.methods.totalSupply().call();
             // console.log("poolSize: ", poolSize);
-            const tvlUSD = await web3Api.uniswapLPTokenToUSD(contracts, uniswapLPToken, asset);
+            const tvlUSD = await web3Api.uniswapLPTokenToUSD(poolSize, contracts, uniswapLPToken, asset);
             // console.log(tokenName, protocol+" tvlUSD: ", tvlUSD);
             
             const totalStaked = !!account ? await stakingRewards.methods.balanceOf(account).call() : 0;
             // console.log("totalStaked: ", customFixed(toFixed(toDisplayAmount(totalStaked, token.decimals))));
             
-            const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(contracts, uniswapLPToken, asset)
+            const accountStakedUSD = await web3Api.uniswapLPTokenToUSD(totalStaked, contracts, uniswapLPToken, asset)
             // console.log(tokenName, protocol+" accountStakedUSD: ", accountStakedUSD);
             const mySharePercentage = totalStaked?.toString() === "0" ? toBN("0") : toBN(totalStaked).mul(toBN("1", token.decimals)).div(toBN(poolSize)).mul(toBN("100"));
             
@@ -251,8 +251,12 @@ const stakingApi = {
             }
         }
     },
-    uniswapLPTokenToUSD: async (contracts, uniswapLPToken, tokenConfig) => {
+    uniswapLPTokenToUSD: async (stakedAmount, contracts, uniswapLPToken, tokenConfig) => {
         if(!uniswapLPToken.contract) return 0;
+        
+        const token0 = await uniswapLPToken.contract.methods.token0().call();
+        const uniswapToken = await getTokenData(contracts[tokenConfig.pair.pairToken]);
+        const swapped = token0.toLowerCase() !== uniswapToken.address.toLowerCase();
 
         const getReservesData = async () => {
             try {
@@ -262,7 +266,7 @@ const stakingApi = {
                     toDisplayAmount(reserve0, priceTokenDecimals),
                     toDisplayAmount(reserve1, pricePairTokenDecimals)
                 ];
-                return tokenConfig.pair.reverse ? {reservePairToken: reserveToken, reserveToken: reservePairToken} : {reserveToken, reservePairToken}
+                return swapped ? {reservePairToken: reserveToken, reserveToken: reservePairToken} : {reserveToken, reservePairToken}
             } catch(error) {
                 console.log(error);
             }
@@ -278,15 +282,27 @@ const stakingApi = {
         const lpAmount = reservePairToken / reserveToken;
         
         const tokenPrice = (pairTokenPrice / pairLpAmount);
-        if(uniswapLPToken.symbol.includes("USDC")) {
-            return (reserveToken * ((tokenConfig.pair.reverse ? pairLpAmount : reserveToken ) * lpAmount) + (reservePairToken * pairLpAmount));
-        };
-        return (reserveToken * tokenPrice + (reservePairToken * pairTokenPrice));
+
+        let amountTokens = toDisplayAmount(stakedAmount, uniswapLPToken.decimals);
+
+        const getLiquidityPool = () => {
+            if(uniswapLPToken.symbol.includes("USDC")) {
+                if(uniswapToken.symbol === "USDC") return parseFloat(reserveToken) + (reservePairToken * pairLpAmount);
+                return (reserveToken * ((swapped ? pairLpAmount : parseFloat(reserveToken) ) * lpAmount) + (reservePairToken * pairLpAmount));
+            };
+            return (reserveToken * tokenPrice + (reservePairToken * pairTokenPrice));
+        }
+
+        const liquidity = getLiquidityPool();
+
+        return liquidity;
     },
     getUniswapAPY: async function(contracts, stakingRewards, USDCData, GOVIData, uniswapLPToken, tokenConfig, isStaked) {
         // console.log("ETHToken: ", ETHToken);
         let rate = await stakingRewards.methods.rewardRate().call();
         // console.log(`reward rate ${rate}`);
+        let total = await stakingRewards.methods.totalSupply().call();
+        // console.log(`total ${total}`);
         
         let periodRewards = toBN(DAY).mul(toBN(rate));
         // console.log(`GOVI periodRewards ${periodRewards}`);
@@ -294,7 +310,7 @@ const stakingApi = {
         // console.log(`USDPeriodRewards ${USDPeriodRewards}`);
         
         // convert from coti/eth or govi/eth to USDT using uniswapLPTokenToUSD (cant use uniswap for this)
-        let USDStakedTokens = await this.uniswapLPTokenToUSD(contracts, uniswapLPToken, tokenConfig);
+        let USDStakedTokens = await this.uniswapLPTokenToUSD(toBN(total), contracts, uniswapLPToken, tokenConfig);
         // console.log(`USDStakedTokens ${USDStakedTokens}`);
 
         const dailyApr = USDStakedTokens.toString() === "0" ? 0 : (USDPeriodRewards / USDStakedTokens) * 100;
