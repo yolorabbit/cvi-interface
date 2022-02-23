@@ -31,6 +31,37 @@
         }
     }
 
+    & .new-link-component {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & span {
+            padding-top: 2px;
+            display: flex;
+            align-items: center;
+            color: #2bbede;
+            font-weight: 600;
+            font-size: 0.521vw;
+            padding-left: 0.156vw;
+
+            @media (max-width: 1365px) {
+                font-size: 0.733vw;
+                padding-left: 0.220vw;
+            }
+
+            @media (max-width: 1024px) {
+                font-size: 1.304vw;
+                padding-left: 0.293vw;
+            }
+
+            @media (max-width: 767px) {
+                font-size: 2.778vw;
+                padding-left: 0.391vw;
+            }
+        }
+    }
+
     & .coming-soon-link-component {
         color: rgba(white, 0.5);
         display: flex;
@@ -453,6 +484,18 @@
 
             &.active {
                 color: #fea716;
+            }
+        }
+
+        & .new-link-component {
+            flex-direction: row;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            & span {
+                position: static;
+                padding-top: 0;
             }
         }
 
