@@ -155,9 +155,7 @@ const Links = ({ links, activePath, activeFrom, setIsOpen }) => {
       return path;
     };
 
-    console.log("links", links);
-
-    return links.map(({ label, path, external, prevLink, soonByNetwork, newLink }) => (
+    return links.map(({ label, path, external, prevLink, soonByNetwork }) => (
       <NavLink
         key={path}
         label={label}
@@ -167,7 +165,6 @@ const Links = ({ links, activePath, activeFrom, setIsOpen }) => {
         activePath={activePath}
         setIsOpen={setIsOpen}
         soonByNetwork={soonByNetwork}
-        newLink={newLink}
       />
     ));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,8 +225,7 @@ const NavLink = ({
   activePath,
   prevPath,
   setIsOpen,
-  soonByNetwork,
-  newLink
+  soonByNetwork
 }) => {
   const { selectedNetwork } = useSelector(({app}) => app);
 
@@ -241,13 +237,11 @@ const NavLink = ({
     };
 
     const renderView = () => {
-      if (newLink) return <NewLink label={label} path={path} onClickLink={onClickLink} />
-
-      if(external) return <ExternalLink
+      if(external) return <ExternalLink 
         path={path}
         label={label}
         onClickLink={onClickLink}
-      />
+      /> 
 
       const isComingSoon = soonByNetwork?.includes(selectedNetwork);
 
@@ -294,21 +288,6 @@ const SoonLink = ({label}) => {
       <span>Coming soon</span>
     </Link>
   }, [label]);
-}
-
-const NewLink = ({path, onClickLink, label}) => {
-  return useMemo(() => {
-    return  <a
-        className="new-link-component"
-        href={path}
-        onClick={() => onClickLink(path)}
-        rel="nofollow noopener noreferrer"
-        target="_blank"
-    >
-      {label}
-      <span>NEW!</span>
-    </a>
-  }, [label, onClickLink, path]);
 }
 
 const NavbarConnectMemoized = () => {

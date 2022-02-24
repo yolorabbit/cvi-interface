@@ -61,13 +61,6 @@ const config = {
       soonByNetwork: [chainNames.Arbitrum],
       notification: newStakingProgramNotification
     },
-    governance: {
-      label: "Governance",
-      path: 'https://vote.cvi.finance',
-      hide: ['/'],
-      newLink: true,
-      external: true
-    },
     analytics: {
       label: "Analytics",
       path: 'https://dune.xyz/govidev/CVI',
