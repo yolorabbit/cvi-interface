@@ -271,7 +271,7 @@ const NavLink = ({
         {renderView()}
       </div>
     );
-  }, [path, setIsOpen, external, label, soonByNetwork, selectedNetwork, activePath, prevPath, newLink]);
+  }, [path, setIsOpen, external, label, soonByNetwork, selectedNetwork, activePath, prevPath]);
 };
 
 const ExternalLink = ({path, onClickLink, label}) => {
