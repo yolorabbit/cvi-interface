@@ -1095,10 +1095,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@coti-cvi/cvi-sdk@^0.2.26":
-  version "0.2.26"
-  resolved "https://registry.yarnpkg.com/@coti-cvi/cvi-sdk/-/cvi-sdk-0.2.26.tgz#d3b42560889c01df5c80f6dff36940b9a75c80a6"
-  integrity sha512-N1S25Cpu3Nkwtmv+S64UlqbWGW+PBvrDZAJt7J1pMTPyoqOOAxKi5LaC8M03Nqennl7HFsiFYzKeNY4XymDVow==
+"@coti-cvi/cvi-sdk@^0.2.29":
+  version "0.2.29"
+  resolved "https://registry.yarnpkg.com/@coti-cvi/cvi-sdk/-/cvi-sdk-0.2.29.tgz#dcbbb4151323330a96459a596784aa9813b474c9"
+  integrity sha512-cpicYVOiJS2b7pJdVudT1oYf2jdLcj2CN5ODTOIpilug/SJvI4ah5WV98nF2XWJOsL9kH90UC32jwVt5JzxlUQ==
   dependencies:
     "@ethersproject/contracts" "^5.4.1"
     "@ethersproject/providers" "^5.4.3"
