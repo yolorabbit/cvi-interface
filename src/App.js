@@ -94,8 +94,6 @@ const Routes = ({selectedNetwork}) => {
               if(soonByNetwork?.includes(selectedNetwork)) return <Redirect from={path} to={appMainRouteConfig.path} />;
               return <Route key={path} path={path} component={Component} />
             }).filter(route => route)}
-
-            
             <Redirect to="/" />
           </Switch>
         </Suspense>

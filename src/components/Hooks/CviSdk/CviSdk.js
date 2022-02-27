@@ -1,4 +1,4 @@
-import { getW3 } from "@coti-cvi/cvi-sdk";
+import { cloneW3 } from "@coti-cvi/cvi-sdk";
 import { useWeb3React } from "@web3-react/core";
 import config from "config/config";
 import { chainNames } from "connectors";
@@ -13,7 +13,7 @@ const useCviSdk = () => {
     const { library: networkPorvider } = useWeb3React(config.web3ProviderId);
     const { library: sendProvider } = useActiveWeb3React();
     const { selectedNetwork } = useSelector(({app}) => app);
-  
+
     const getW3Instance = useCallback(async (provider, sendProvider) => {
       try {
         let options = {
@@ -25,7 +25,7 @@ const useCviSdk = () => {
           options.sendProvider = sendProvider;
         }
 
-        let w3Inst = await getW3(selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork, options).init();
+        let w3Inst = await cloneW3(selectedNetwork === chainNames.Matic ? 'Polygon' : selectedNetwork, options).init();
         
         if(!config.isMainnet || process.env.REACT_APP_DAYS_TO_COUNT_FROM) { // run staging env from block number timestamp sub days in env
           const blockTimestamp = await (await w3Inst.block.getBlock()).timestamp;
@@ -42,8 +42,7 @@ const useCviSdk = () => {
   
     useEffect(() => {
       if(!selectedNetwork || !networkPorvider?.currentProvider) return;
-      getW3InstanceDebounce(networkPorvider?.currentProvider, sendProvider?.currentProvider);
-  
+      getW3InstanceDebounce(networkPorvider?.currentProvider,  sendProvider?.currentProvider);
       return () => {
         getW3InstanceDebounce.cancel();
       }
