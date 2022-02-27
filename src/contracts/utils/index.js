@@ -285,3 +285,8 @@ export function fromTokenAmountToUnits(tokenAmount, index, maxIndex) {
   if(!maxIndex) console.warn("Warning: maxIndex is not provided as a param.");
   return toBN(tokenAmount).mul(toBN(maxIndex)).div(toBN(index));
 }
+
+export const getTransactionType = (network) => {
+  if(network === chainNames.Matic) return {type: 0};
+  return {};
+}

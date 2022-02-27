@@ -5,7 +5,7 @@ import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { actionConfirmEvent, gas, toBN, toBNAmount } from '../../utils/index';
+import { actionConfirmEvent, toBN, toBNAmount } from '../../utils/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
@@ -17,6 +17,7 @@ import SellAllModal from './SellAllModal.js';
 import { useWeb3Api } from 'contracts/useWeb3Api';
 import ErrorModal from 'components/Modals/ErrorModal';
 import Contract from 'web3-eth-contract';
+import { getTransactionType } from 'contracts/utils';
 
 const feesChangedWarning = "This transaction will not succeed due to the change in the sell fee premium. Try increasing your slippage tolerance.";
 
@@ -63,9 +64,9 @@ const Sell = () => {
                 const tokenData = await getTokenData(contracts[activeToken.rel.contractKey]);
                 const closingPremiumFee = await getClosingPremiumFee(contracts, activeToken, { tokenAmount, cviValue, leverage, tokenData, library});
                 const _feesWithSlippage =  String(Number(closingPremiumFee || 0) + Number((slippageTolerance * 100) || 0));
-                await _contract.methods.closePosition(positionUnitsToClose, toBN('1'), toBN(_feesWithSlippage)).send({from: account, ...gas});
+                await _contract.methods.closePosition(positionUnitsToClose, toBN('1'), toBN(_feesWithSlippage)).send({from: account, ...getTransactionType(selectedNetwork)});
             } else {
-                await _contract.methods.closePosition(positionUnitsToClose, toBN('1')).send({from: account, ...gas});
+                await _contract.methods.closePosition(positionUnitsToClose, toBN('1')).send({from: account, ...getTransactionType(selectedNetwork)});
             }
  
             dispatch(addAlert({

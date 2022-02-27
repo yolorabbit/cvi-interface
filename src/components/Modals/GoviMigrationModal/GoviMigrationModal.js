@@ -19,14 +19,15 @@ export const GoviMigrationModal = () => {
                 <img className="v2-circle-icon" src={require('../../../images/coins/v2-circle.svg').default} alt="v2-circle" />
             </div>
             <div className="details">
-                {config.goviV2StakingText.map((desc, tn) => (<> 
-                    <p key={tn}>
-                        {desc}&nbsp;
-                        {tn === (config.goviV2StakingText?.length -1) && <a href={newStakingProgramNotification.link} target="_blank" rel="nofollow noopener noreferrer">
-                            click here
-                        </a>}
-                    </p>
-                </>
+                {config.goviV2StakingText.map((desc, tn) => (
+                    <React.Fragment key={tn}> 
+                        <p key={tn}>
+                            {desc}&nbsp;
+                            {tn === (config.goviV2StakingText?.length -1) && <a href={newStakingProgramNotification.link} target="_blank" rel="nofollow noopener noreferrer">
+                                click here
+                            </a>}
+                        </p>
+                    </React.Fragment>
                 ))}
                
             </div>

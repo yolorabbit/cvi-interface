@@ -1,10 +1,11 @@
 import Button from 'components/Elements/Button';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import config from 'config/config';
+import { getTransactionType } from 'contracts/utils';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
-import { actionConfirmEvent, gas, isGoviToken } from 'utils';
+import { actionConfirmEvent, isGoviToken } from 'utils';
 import Contract from 'web3-eth-contract';
 import Rewards from './../Tables/Elements/Values/Rewards';
 
@@ -32,7 +33,7 @@ const StakingClaim = ({asset, claim }) => {
                 message: "Please confirm the transaction in your wallet"
             }));
 
-            await _contract.methods[isGoviToken(asset.key) ? "claimAllProfits" : "getReward"]().send({from: account, ...gas});
+            await _contract.methods[isGoviToken(asset.key) ? "claimAllProfits" : "getReward"]().send({from: account, ...getTransactionType(selectedNetwork)});
                          
             dispatch(addAlert({
                 id: 'claim',

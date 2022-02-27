@@ -6,7 +6,7 @@ import { useContext } from 'react';
 import { contractsContext } from './../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
 import { useWeb3Api } from './../../contracts/useWeb3Api';
-import { actionConfirmEvent, commaFormatted, gas, maxUint256, toBN, toBNAmount, toDisplayAmount } from './../../utils/index';
+import { actionConfirmEvent, commaFormatted, maxUint256, toBN, toBNAmount, toDisplayAmount } from './../../utils/index';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
@@ -15,7 +15,7 @@ import platformConfig from 'config/platformConfig';
 import ErrorModal from 'components/Modals/ErrorModal';
 import Contract from 'web3-eth-contract';
 import { useWeb3React } from '@web3-react/core';
-import { fromUnitsToTokenAmount } from 'contracts/utils';
+import { fromUnitsToTokenAmount, getTransactionType } from 'contracts/utils';
 
 const feesHighWarningMessage = "This transaction will not succeed due to the change in the purchase fee premium. Try increasing your slippage tolerance.";
 
@@ -53,7 +53,7 @@ const Buy = () => {
 
     const approve = useCallback(async (_address) => {
         const _contract = getContract(activeToken.rel.contractKey);
-        return await _contract.methods.approve(_address, maxUint256).send({from: account});
+        return await _contract.methods.approve(_address, maxUint256).send({from: account, ...getTransactionType(selectedNetwork)});
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [account, activeToken.rel.contractKey]);
     
@@ -112,11 +112,11 @@ const Buy = () => {
 
         const maxIndexValue = config.oraclesData[activeToken.oracleId].maxIndex;
         if (activeToken.type === "eth") {
-            return await _contract.methods.openPositionETH(maxIndexValue, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount, ...gas });
+            return await _contract.methods.openPositionETH(maxIndexValue, _feesWithSlippage, _leverage).send({ from: account, value: tokenAmount.toString(), ...getTransactionType(selectedNetwork) });
         } else if (activeToken.type === "v2" || activeToken.type === "usdc" || activeToken.type === "v3") {
-            return await _contract.methods.openPosition(tokenAmount, maxIndexValue, _feesWithSlippage, _leverage).send({ from: account, ...gas });
+            return await _contract.methods.openPosition(tokenAmount, maxIndexValue, _feesWithSlippage, _leverage).send({ from: account, ...getTransactionType(selectedNetwork) });
         } else {
-            return await _contract.methods.openPosition(tokenAmount, maxIndexValue).send({ from: account, ...gas });
+            return await _contract.methods.openPosition(tokenAmount, maxIndexValue).send({ from: account, ...getTransactionType(selectedNetwork) });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeToken, leverage, purchaseFee, account, tokenAmount])

@@ -5,7 +5,7 @@ import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { actionConfirmEvent, commaFormatted, gas, maxUint256, toBN, toBNAmount, toDisplayAmount } from '../../utils/index';
+import { actionConfirmEvent, commaFormatted, maxUint256, toBN, toBNAmount, toDisplayAmount } from '../../utils/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
@@ -14,7 +14,7 @@ import ErrorModal from 'components/Modals/ErrorModal';
 import WithdrawInfo from 'components/pages/Platform/Info/WithdrawInfo';
 import Contract from 'web3-eth-contract';
 import { useWeb3React } from '@web3-react/core';
-import { fromUnitsToTokenAmount } from 'contracts/utils';
+import { fromUnitsToTokenAmount, getTransactionType } from 'contracts/utils';
 
 const Withdraw = () => {
     const dispatch = useDispatch(); 
@@ -64,10 +64,10 @@ const Withdraw = () => {
    
         if(tokenAmount.eq(toBN(balances.tokenAmount))) { 
             const lpBalance = toBN(await contracts[activeToken.rel.platform].methods.balanceOf(account).call());
-            return await _contract.methods.withdrawLPTokens(lpBalance).send({from: account, ...gas}); // withdraw all - only use for better accurate calculation.
+            return await _contract.methods.withdrawLPTokens(lpBalance).send({from: account, ...getTransactionType(selectedNetwork)}); // withdraw all - only use for better accurate calculation.
         }
 
-        await _contract.methods.withdraw(tokenAmount, maxUint256).send({from: account, ...gas}); // withdraw part of the position
+        await _contract.methods.withdraw(tokenAmount, maxUint256).send({from: account, ...getTransactionType(selectedNetwork)}); // withdraw part of the position
     }
 
     const onClick = async () => {

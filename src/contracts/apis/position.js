@@ -1,6 +1,6 @@
-import { fromTokenAmountToUnits, getBalance, getChainName, getCviValue } from "contracts/utils";
+import { fromTokenAmountToUnits, getBalance, getChainName, getCviValue, getTransactionType } from "contracts/utils";
 import web3Api, { getTokenData } from "contracts/web3Api";
-import { gas, maxUint256, toBN, toDisplayAmount } from "utils";
+import { maxUint256, toBN, toDisplayAmount } from "utils";
 import * as TheGraph from 'graph/queries';
 import { contractState } from "components/Hooks/useHistoryEvents";
 import config from "config/config";
@@ -19,9 +19,10 @@ export const getPositionValue = async (platform, account) => {
 
 export async function approve(contract, from, to, amount = maxUint256) {
   if (!contract) return;
+  const chainName = await getChainName();
   let allowance = await contract.methods.allowance(from, to).call();
-  if (allowance.toString() !== "0") await contract.methods.approve(to, 0).send({ from, ...gas });
-  const res = await contract.methods.approve(to, amount).send({ from, ...gas });
+  if (allowance.toString() !== "0") await contract.methods.approve(to, 0).send({ from, ...getTransactionType(chainName) });
+  const res = await contract.methods.approve(to, amount).send({ from, ...getTransactionType(chainName) });
   allowance = await contract.methods.allowance(from, to).call();
   console.log(`approve ${res.status ? "success" : "failed"}: allowance ${allowance}`);
 }

@@ -5,12 +5,13 @@ import { useActionController } from './ActionController';
 import { useContext } from 'react';
 import { contractsContext } from '../../contracts/ContractContext';
 import { useActiveWeb3React } from 'components/Hooks/wallet';
-import { actionConfirmEvent, gas, maxUint256, toBN, toBNAmount } from '../../utils/index';
+import { actionConfirmEvent, maxUint256, toBN, toBNAmount } from '../../utils/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
 import config from '../../config/config';
 import platformConfig from 'config/platformConfig';
 import Contract from 'web3-eth-contract';
+import { getTransactionType } from 'contracts/utils';
 
 const Deposit = () => {
     const dispatch = useDispatch(); 
@@ -38,7 +39,7 @@ const Deposit = () => {
 
     const approve = async (_address) => {
         const _contract = getContract(activeToken.rel.contractKey);
-        return await _contract.methods.approve(_address, maxUint256).send({from: account});
+        return await _contract.methods.approve(_address, maxUint256).send({from: account, ...getTransactionType(selectedNetwork)});
     }
 
     const approvalValidation = async () => {
@@ -61,8 +62,8 @@ const Deposit = () => {
 
     const deposit = async () => {
         const _contract = getContract(activeToken.rel.platform);
-        if(activeToken.type === "eth") return await _contract.methods.depositETH(toBN('0')).send({ from: account, value: tokenAmount, ...gas });
-        return await _contract.methods.deposit(tokenAmount, toBN('0')).send({from: account, ...gas});
+        if(activeToken.type === "eth") return await _contract.methods.depositETH(toBN('0')).send({ from: account, value: tokenAmount, ...getTransactionType(selectedNetwork) });
+        return await _contract.methods.deposit(tokenAmount, toBN('0')).send({from: account, ...getTransactionType(selectedNetwork)});
     }
 
     const onClick = async () => {

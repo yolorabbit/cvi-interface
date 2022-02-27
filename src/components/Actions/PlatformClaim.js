@@ -6,11 +6,12 @@ import Spinner from 'components/Spinner/Spinner';
 import Rewards from 'components/Tables/Elements/Values/Rewards';
 import config from 'config/config';
 import { useWeb3Api } from 'contracts/useWeb3Api';
+import { getTransactionType } from 'contracts/utils';
 import moment from 'moment';
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addAlert } from 'store/actions';
-import { actionConfirmEvent, gas } from 'utils';
+import { actionConfirmEvent } from 'utils';
 import Contract from 'web3-eth-contract';
 
 const PlatformClaim = ({token}) => {
@@ -65,7 +66,7 @@ const PlatformClaim = ({token}) => {
         try {
             if(!claimData?.length > 0) return;
             const _contract = getContract(token.rel.positionRewards);
-            await _contract.methods.claimReward().send({ from: account, ...gas })
+            await _contract.methods.claimReward().send({ from: account, ...getTransactionType(selectedNetwork) })
 
             dispatch(addAlert({
                 id: 'claim',

@@ -7,6 +7,7 @@ import { maxUint256, toBN, toBNAmount } from "utils";
 import Contract from "web3-eth-contract";
 import { useActiveWeb3React } from "./wallet";
 import { isGoviToken } from '../../utils';
+import { getTransactionType } from "contracts/utils";
 
 const useApproveToken = () => {
     const { account, library } = useActiveWeb3React();
@@ -29,7 +30,7 @@ const useApproveToken = () => {
     
     const approve = async (token, address) => {
         const _contract = getContract(isGoviToken(token.key) ? token.rel.contractKey : token.rel.platform ?? token.rel.token)
-        return await _contract.methods.approve(address, maxUint256).send({from: account});
+        return await _contract.methods.approve(address, maxUint256).send({from: account, ...getTransactionType(selectedNetwork)});
     }
 
     const approvalValidation = async (token, amount) => {

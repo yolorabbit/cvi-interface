@@ -11,8 +11,6 @@ import { actionConfirm } from "store/actions/events";
 export const isGoviToken = (str) => /^govi-v\d$/.test(str);
 export const isGoviV1Token = (str) => str === 'govi-v1';
 
-export const gas = config.isMainnet ? { } : { };
-
 export const getTimeDurationFormatted = (lockedTime, showSeconds) => {
     const isNegativeTime = lockedTime < 0;
     const secondsDuration = moment.duration(lockedTime).asSeconds();
