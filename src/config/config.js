@@ -35,7 +35,7 @@ const config = {
     home: {
       label: "Home",
       path: "/",
-      hide: ['/', '/platform', '/staking', '/index'],
+      hide: ['/', '/platform', '/staking', '/volatility_tokens', '/index'],
       enterApp: true
     },
     platform: {
@@ -69,6 +69,12 @@ const config = {
     "help-center": {
       label: "Docs",
       path: 'https://docs.cvi.finance',
+      external: true
+    },
+    governance: {
+      label: "Governance",
+      path: 'https://vote.cvi.finance',
+      newLink: true,
       external: true
     },
   },
