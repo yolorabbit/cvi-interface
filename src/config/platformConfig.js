@@ -90,6 +90,29 @@ const platformConfig = {
           liquidation: "ETHVOL-USDC-Liquidation"
         }
       },
+      usdt: {
+        migrated: config.isMainnet,
+        hideFrom: ['stats'], // hide this token from being show in the statistics
+        key: "usdt",
+        name: "usdt",
+        decimals: 6,
+        fixedDecimals: 6,
+        lpTokensDecimals: 18,
+        type: "v1",
+        address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        oracleId: config.oraclesData.cvi.oracleId,
+        rel: {
+          contractKey: "USDT",
+          platform: "CVOL-USDT-Platform",
+          feesCalc: "CVOL-USDT-FeesCalculator",
+          feesModel: "CVOL-USDT-FeesModel",
+          oracle: "CVOL-Oracle-ETH", // same oracle for eth and usdt
+          positionRewards: "CVOL-USDT-PositionRewards",
+          stakingRewards: "CVOL-USDTLP-StakingRewards",
+          liquidation: "CVOL-USDT-Liquidation",
+          rewards: "Rewards",
+        },
+      },
       coti: {
         key: "coti",
         name: "coti",
@@ -120,6 +143,28 @@ const platformConfig = {
           stakingRewards: "CVOL-USDCLP-StakingRewards",
           liquidation: "CVOL-USDC-Liquidation"
         }
+      },
+      usdt: {
+        migrated: config.isMainnet,
+        hideFrom: ['stats'], // hide this token from being show in the statistics
+        key: "usdt",
+        name: "usdt",
+        decimals: 6,
+        fixedDecimals: 6,
+        lpTokensDecimals: 18,
+        type: "v2",
+        address: "0xc2132D05D31c914a87C6611C10748AEb04B58e8F",
+        oracleId: config.oraclesData.cvi.oracleId,
+        rel: {
+          contractKey: "USDT",
+          platform: "CVOL-USDT-Platform",
+          feesCalc: "CVOL-USDT-FeesCalculator",
+          feesModel: "CVOL-USDT-Platform",
+          positionRewards: "CVOL-USDT-PositionRewards",
+          oracle: "CVOL-Oracle",
+          stakingRewards: "CVOL-USDTLP-StakingRewards",
+          liquidation: "CVOL-USDT-Liquidation"
+        },
       },
     },
     [chainNames.Arbitrum]: {

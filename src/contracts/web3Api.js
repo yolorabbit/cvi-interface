@@ -154,7 +154,7 @@ const web3Api = {
         try {
             const USDCData = await getTokenData(contracts["USDC"]);
             
-            const promiseList = tokens.map(async ({rel: { platform, contractKey}, name, type, oracleId}) => {
+            const promiseList = tokens.filter(({hideFrom}) => !hideFrom?.includes("stats")).map(async ({rel: { platform, contractKey}, name, type, oracleId}) => {
                 const tokenData = await getTokenData(contracts[contractKey]);
                 let value;
                 if(type === "v3" || type === "usdc") {
