@@ -38,7 +38,7 @@ auth: <check your email for verification code>
 Create `.env` file:
 
 ```
-REACT_APP_HOST_V2=https://staging-api-v2.cvi.finance
+REACT_APP_HOST_V2=https://api.dev-cvi-finance-route53.com
 GENERATE_SOURCEMAP=true
 REACT_APP_ENVIRONMENT=staging
 ```
@@ -50,7 +50,7 @@ and run `yarn start`
 Create `.env.production` file:
 
 ```
-REACT_APP_HOST_V2=https://api-v2.cvi.finance
+REACT_APP_HOST_V2=https://api.dev-cvi-finance-route53.com
 GENERATE_SOURCEMAP=false
 REACT_APP_ENVIRONMENT=mainnet
 ```
