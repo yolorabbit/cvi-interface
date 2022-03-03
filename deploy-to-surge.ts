@@ -32,6 +32,7 @@ async function main() {
   const repoPath = __dirname
   const buildDirPath = path.join(repoPath, 'build');
 
+  const {stdout: gitHeadSha} = await execa.command(`git rev-parse HEAD`)
   const gitBranchName = await execa.command('git symbolic-ref --short HEAD',{
     stdio: 'pipe',
     cwd: repoPath,
@@ -102,7 +103,7 @@ async function main() {
 
     await octokit.request(`POST /repos/cotitech-io/cvi-interface/issues/${number}/comments`, { // add a comment to pull request
       body: `\
-PR Urls:
+Commit: "${gitHeadSha}" deployed to surge:
 1. [staging-${formattedGitBranchName}](https://staging-cvi-branch-${formattedGitBranchName}.surge.sh)
 2. [silent-${formattedGitBranchName}](https://silent-cvi-branch-${formattedGitBranchName}.surge.sh)\
 `
@@ -118,6 +119,7 @@ PR Urls:
       \r\n\r\n
       =================== ${formattedGitBranchName} ===================
       CVI-interface version of this branch has been deployed to surge:\r\n
+      *Commit:* ${gitHeadSha}\r\n
       *deploy time:* ${new Date().toLocaleString()}\r\n
       *staging:* <https://staging-cvi-branch-${formattedGitBranchName}.surge.sh>\r\n
       *silent:* <https://silent-cvi-branch-${formattedGitBranchName}.surge.sh>\r\n
