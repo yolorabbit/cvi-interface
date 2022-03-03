@@ -38,9 +38,7 @@ auth: <check your email for verification code>
 Create `.env` file:
 
 ```
-REACT_APP_HOST=https://api-dev.cvx.finance
 REACT_APP_HOST_V2=https://staging-api-v2.cvi.finance
-REACT_APP_COTI_URL=https://dev.coti.io
 GENERATE_SOURCEMAP=true
 REACT_APP_ENVIRONMENT=staging
 ```
@@ -52,10 +50,7 @@ and run `yarn start`
 Create `.env.production` file:
 
 ```
-REACT_APP_HOST=https://api.cvi.finance
 REACT_APP_HOST_V2=https://api-v2.cvi.finance
-REACT_APP_COTI_URL=https://coti.io
-REACT_APP_CHAIN_ID=1
 GENERATE_SOURCEMAP=false
 REACT_APP_ENVIRONMENT=mainnet
 ```
