@@ -27,4 +27,3 @@ jobs:
           GITHUB_TOKEN: '${{ secrets.AUTO_MERGE_TOKEN }}'
           MERGE_METHOD: 'rebase'
           MERGE_DELETE_BRANCH: 'true'
-          MERGE_RETRIES: '0'
