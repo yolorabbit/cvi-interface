@@ -98,7 +98,7 @@ export const supportedNetworksConfig = {
                 symbol: 'ETH',
                 decimals: 18
             },
-            rpcUrls: ['https://staging-ethereum.cvi.finance'],
+            rpcUrls: ['https://hardhat-ethereum.dev-cvi-finance-route53.com'],
             blockExplorerUrls: null
         },
         31338: {
@@ -109,7 +109,7 @@ export const supportedNetworksConfig = {
                 symbol: 'MATIC',
                 decimals: 18
             },
-            rpcUrls: ['https://staging-polygon.cvi.finance'], // https://matic-testnet-archive-rpc.bwarelabs.com
+            rpcUrls: ['https://hardhat-polygon.dev-cvi-finance-route53.com'], // https://matic-testnet-archive-rpc.bwarelabs.com
             blockExplorerUrls: ['https://matic.network']
         },
         31339: {
@@ -120,7 +120,7 @@ export const supportedNetworksConfig = {
                 symbol: 'ETH',
                 decimals: 18
             },
-            rpcUrls: ['https://staging-arbitrum.cvi.finance'],
+            rpcUrls: ['https://hardhat-arbitrum.dev-cvi-finance-route53.com'],
             blockExplorerUrls: ['https://arbiscan.io']
         },
     }
@@ -184,9 +184,9 @@ const RPC_URLS_NETWORK = {
         42161: "https://arb-mainnet.g.alchemy.com/v2/wm1M6JZoetutYwR_gICXbLkdi5CIvTXA",
     },
     "staging": {
-        31337: "https://staging-ethereum.cvi.finance",
-        31338: "https://staging-polygon.cvi.finance",
-        31339: "https://staging-arbitrum.cvi.finance"
+        31337: "https://hardhat-ethereum.dev-cvi-finance-route53.com",
+        31338: "https://hardhat-polygon.dev-cvi-finance-route53.com",
+        31339: "https://hardhat-arbitrum.dev-cvi-finance-route53.com"
     },
 }
 export const RPC_URLS_NETWORK_BY_ENV = RPC_URLS_NETWORK[process.env.REACT_APP_ENVIRONMENT]
