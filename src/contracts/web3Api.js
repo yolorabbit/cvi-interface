@@ -190,8 +190,6 @@ const web3Api = {
                 await getPrice(GOVIData, WETHData)
             ];
 
-            console.log(wethPrice)
-            console.log(goviPrice)
             return goviPrice * wethPrice;
         } catch(error) {
             console.log(error);

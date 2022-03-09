@@ -1100,10 +1100,10 @@
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
 
-"@coti-cvi/cvi-sdk@^0.2.29":
-  version "0.2.29"
-  resolved "https://registry.yarnpkg.com/@coti-cvi/cvi-sdk/-/cvi-sdk-0.2.29.tgz#dcbbb4151323330a96459a596784aa9813b474c9"
-  integrity sha512-cpicYVOiJS2b7pJdVudT1oYf2jdLcj2CN5ODTOIpilug/SJvI4ah5WV98nF2XWJOsL9kH90UC32jwVt5JzxlUQ==
+"@coti-cvi/cvi-sdk@^0.2.29-dev":
+  version "0.2.29-dev"
+  resolved "https://registry.yarnpkg.com/@coti-cvi/cvi-sdk/-/cvi-sdk-0.2.29-dev.tgz#52938a87f76cb1148c4d67199d25a33b5a44c03c"
+  integrity sha512-/Jzg6ifKLkDbJ8qzCBpbPv4Jqlmgqun/CwfSQh/qr24mQrLm4XgMMANiJH2d4VUG7mf7Eo+5mh23EYOp3mKTfg==
   dependencies:
     "@ethersproject/contracts" "^5.4.1"
     "@ethersproject/providers" "^5.4.3"

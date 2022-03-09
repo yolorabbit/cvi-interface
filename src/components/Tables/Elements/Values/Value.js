@@ -3,7 +3,7 @@ import { DataState } from './DataState';
 import { commaFormatted } from 'utils';
 import Coin from './Coin';
 
-const Value = ({className, text, header, subText, prefix, bottomText, protocol, format, progressBarPercents, coin, showData = true}) => {
+const Value = ({className, text, header, subText, disableSpace, prefix, bottomText, protocol, format, progressBarPercents, coin, showData = true}) => {
     return useMemo(() => {
         return (
             <div className={`value-component ${className ?? ''} ${text ? '' : ' no-value'}`}>
@@ -17,14 +17,14 @@ const Value = ({className, text, header, subText, prefix, bottomText, protocol, 
                                 <span style={{width: `${progressBarPercents}%`}}>{commaFormatted(format) ?? text}</span> : 
                                 commaFormatted(format) ?? text}
                             </b>}
-                            {subText && <span>{(text && subText) ? <>&nbsp;{subText}</> : subText}</span>}
+                            {subText && <span>{(text && subText) ? <>{!disableSpace && <>&nbsp;</>}{subText}</> : subText}</span>}
                             {bottomText && <div>{bottomText} {protocol && protocol !== "platform" && <span className="value-component__protocol">{`(${protocol})`}</span>}</div>}
                         </DataState>
                     </>
                 }
             </div>
         )
-    }, [className, showData, header, text, subText, coin, prefix, progressBarPercents, format, bottomText, protocol]);
+    }, [className, text, showData, header, subText, coin, prefix, progressBarPercents, format, disableSpace, bottomText, protocol]);
 }
 
 export default Value;

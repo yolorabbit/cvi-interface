@@ -462,7 +462,37 @@ const stakingConfig = {
         }
       },
       [stakingProtocols.sushiswap]: {
-        
+        "govi-eth-lp": {
+          key: "govi-eth-lp",
+          label: "GOVI-ETH SLP",
+          address: "0xC73d2191A1dD0a99B377272899A5569eD83f8cd8",
+          limitedTimeApy: "https://cviofficial.medium.com/limited-time-high-apy-on-staking-govi-eth-slp-on-arbitrum-528c46de2b19",
+          protocol: stakingProtocols.sushiswap,
+          decimals: 18,
+          fixedDecimals: 8,
+          rewardsTokens: ["GOVI"], 
+          poolLink: "https://app.sushi.com/add/ETH/0xeEAA40B28A2d1b0B08f6f97bB1DD4B75316c6107",
+          rel: {
+            stakingRewards: "GOVIETH-StakingRewards",
+            tokenDecimals: [18],
+            contractKey: "UNIV2GOVIETH",
+            token: "UNIV2GOVIETH",
+          },
+          pair: {
+            decimals: [18, 18],
+            pairToken: "GOVI",
+            priceTokens: {
+              WETH: {
+                key: "WETH",
+                decimals: 18
+              },
+              USDC: {
+                key: "USDC",
+                decimals: 6
+              }
+            },
+          }
+        },         
       }
     }
   },

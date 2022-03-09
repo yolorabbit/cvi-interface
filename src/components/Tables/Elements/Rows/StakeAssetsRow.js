@@ -30,8 +30,7 @@ export default StakeAssetsRow;
 
 
 const RowData = ({isHeader, rowData}) => {
-    const { label, key: token, protocol, poolLink, type } = rowData;
-
+    const { label, key: token, protocol, poolLink, type, limitedTimeApy} = rowData;
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const chainName = useSelector(({app}) => app.selectedNetwork);
@@ -74,7 +73,6 @@ const RowData = ({isHeader, rowData}) => {
 
         return (
         <> 
-        
             {!isTablet && <> 
                 <RowItem content={
                     stakingProtocols[protocol] === stakingProtocols.platform ? 
@@ -104,7 +102,7 @@ const RowData = ({isHeader, rowData}) => {
 
             <RowItem 
                 header={header.APY.label} 
-                content={<Apy apyList={stakedData.apy} />} 
+                content={<Apy apyList={stakedData.apy} limitedTimeApy={limitedTimeApy} />} 
             />
 
             {(!isTablet || isMobile) && <RowItem content={StakeController} />}

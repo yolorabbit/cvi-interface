@@ -2610,5 +2610,15 @@
             { "stateMutability": "payable", "type": "receive" }
         ],
         "creation": { "block": 4335473, "timestamp": 1641307042, "transactionHash": "0x2631dba60c64152135c9df13fc464eca5874f4e285ce646161d700b32e43a7de" }
+    },
+    "UNIV2GOVIETH": {
+        "address": "0xC73d2191A1dD0a99B377272899A5569eD83f8cd8",
+        "abiRef": "UNIV2",
+        "creation": { "block": 7469628, "timestamp": 1646582557, "transactionHash": "0x16c8b102d0ec674bf2584ad3148b049ef5c6ebcf6d9e6236cd1b14baf31ce574" }
+    },
+    "GOVIETH-StakingRewards": {
+        "address": "0x88D01eF3a4D586D5e4ce30357ec57B073D45ff9d",
+        "abiRef": "StakingRewards",
+        "creation": { "block": 7471531, "timestamp": 1646587099, "transactionHash": "0x7ebf62fd77b98fc72795150279c1f398ca0d73f7dd1130e48c90b8ebc66b5b82" }
     }
 }
