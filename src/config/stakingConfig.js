@@ -471,7 +471,7 @@ const stakingConfig = {
           decimals: 18,
           fixedDecimals: 8,
           rewardsTokens: ["GOVI"], 
-          poolLink: "https://app.sushi.com/add/ETH/0xeEAA40B28A2d1b0B08f6f97bB1DD4B75316c6107",
+          poolLink: "https://app.sushi.com/add/ETH/0x07E49d5dE43DDA6162Fa28D24d5935C151875283",
           rel: {
             stakingRewards: "GOVIETH-StakingRewards",
             tokenDecimals: [18],
