@@ -275,6 +275,31 @@
                 font-weight: bold;
                 border-color: #fea716;
             }
+
+            & img {
+                width: 1.042vw;
+                height: 1.042vw;
+                object-fit: contain;
+                margin-left: 0.104vw;
+
+                @media (max-width: 1365px){
+                    width: 1.465vw;
+                    height: 1.465vw;
+                    margin-left: 0.147vw;
+                }
+        
+                @media (max-width: 1024px){
+                    width: 2.608vw;
+                    height: 2.608vw;
+                    margin-left: 0.261vw;
+                }
+        
+                @media (max-width: 767px){
+                    width: 5.556vw;
+                    height: 5.556vw;
+                    margin-left: 0.556vw;
+                }
+            }
         }
     }
 

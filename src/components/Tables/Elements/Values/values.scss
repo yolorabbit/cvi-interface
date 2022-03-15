@@ -394,6 +394,7 @@
         & img {
             width: 0.833vw;
             height: 0.833vw;
+            object-fit: contain;
             margin-left: 0.104vw;
             @media (max-width: 1365px){
                 width: 1.172vw;

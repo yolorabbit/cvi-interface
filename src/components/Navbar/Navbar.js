@@ -28,13 +28,15 @@ const Navbar = () => {
       ({ enterApp, path }) => enterApp && activePath && activePath === path
     ); // show "enter app button" if config match enterApp flag.
 
-  const filteredLink = links.filter(
+  const filteredLinkForHide = links.filter(
     ({ hide, path }) =>
       !hide?.some((hidePath) => {
         const isHidePath = !(hidePath && hidePath !== activePath); // hide current link by hiding list in routes (config.js)
         return (isHidePath && showEnterApp) || path === "/"; // always hide home page link
       })
   ); // don't show links who hided in config by active path and "show enter app" state
+
+  const filteredLink = filteredLinkForHide.filter(({ supportedByNetwork }) => !supportedByNetwork || (supportedByNetwork.includes(selectedNetwork)));
 
   useEffect(() => {
     if (isActiveInDOM()) setActivePath(location?.pathname);
@@ -155,7 +157,7 @@ const Links = ({ links, activePath, activeFrom, setIsOpen }) => {
       return path;
     };
 
-    return links.map(({ label, path, external, prevLink, soonByNetwork, newLink }) => (
+    return links.map(({ label, path, external, prevLink, soonByNetwork, fire, newLink }) => (
       <NavLink
         key={path}
         label={label}
@@ -165,6 +167,7 @@ const Links = ({ links, activePath, activeFrom, setIsOpen }) => {
         activePath={activePath}
         setIsOpen={setIsOpen}
         soonByNetwork={soonByNetwork}
+        fire = {fire}
         newLink={newLink}
       />
     ));
@@ -227,6 +230,7 @@ const NavLink = ({
   prevPath,
   setIsOpen,
   soonByNetwork,
+  fire,
   newLink
 }) => {
   const { selectedNetwork } = useSelector(({app}) => app);
@@ -244,6 +248,7 @@ const NavLink = ({
       if(external) return <ExternalLink
         path={path}
         label={label}
+        fire={fire}
         onClickLink={onClickLink}
       />
 
@@ -269,10 +274,10 @@ const NavLink = ({
         {renderView()}
       </div>
     );
-  }, [path, setIsOpen, external, label, soonByNetwork, selectedNetwork, activePath, prevPath, newLink]);
+  }, [path, setIsOpen, external, label, soonByNetwork, selectedNetwork, activePath, prevPath, newLink, fire]);
 };
 
-const ExternalLink = ({path, onClickLink, label}) => {
+const ExternalLink = ({path, onClickLink, label, fire}) => {
   return useMemo(() => {
     return  <a
       href={path}
@@ -280,9 +285,9 @@ const ExternalLink = ({path, onClickLink, label}) => {
       rel="nofollow noopener noreferrer"
       target="_blank"
     >
-      {label}
+      {label}{fire && <img src={require('../../images/icons/fire.svg').default} alt="fire" />}
     </a>
-  }, [label, onClickLink, path])
+  }, [label, onClickLink, fire, path])
 }
 
 const SoonLink = ({label}) => {
