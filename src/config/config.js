@@ -61,6 +61,13 @@ const config = {
       soonByNetwork: [chainNames.Arbitrum],
       notification: newStakingProgramNotification
     },
+    bond: {
+      label: "Bond",
+      path: "https://pro.olympusdao.finance/#/bond",
+      supportedByNetwork: [chainNames.Arbitrum],
+      fire: true,
+      external: true
+    },
     analytics: {
       label: "Analytics",
       path: 'https://dune.xyz/govidev/CVI',

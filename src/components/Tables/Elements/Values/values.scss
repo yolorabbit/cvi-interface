@@ -349,7 +349,7 @@
         }
     }
 
-    & .limited-time-apy {
+    & .buy-bond {
         line-height: 1;
         white-space: nowrap;
         background-color: #fea71612;
@@ -360,6 +360,9 @@
         margin-left: 0.417vw;
         text-decoration: none;
         border: 0.052vw solid #fea71614;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
         max-width: fit-content;
 
         @media (max-width: 1365px) {
@@ -386,6 +389,29 @@
             padding: 1.667vw 2.222vw;
             border-radius: 2.778vw;
             border: 0.278vw solid #fea71614;
+        }
+
+        & img {
+            width: 0.833vw;
+            height: 0.833vw;
+            margin-left: 0.104vw;
+            @media (max-width: 1365px){
+                width: 1.172vw;
+                height: 1.172vw;
+                margin-left: 0.147vw;
+            }
+    
+            @media (max-width: 1024px){
+                width: 2.086vw;
+                height: 2.086vw;
+                margin-left: 0.261vw;
+            }
+    
+            @media (max-width: 767px){
+                width: 4.444vw;
+                height: 4.444vw;
+                margin-left: 0.556vw;
+            }
         }
     }
 }

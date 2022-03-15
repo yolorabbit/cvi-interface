@@ -30,7 +30,7 @@ export default StakeAssetsRow;
 
 
 const RowData = ({isHeader, rowData}) => {
-    const { label, key: token, protocol, poolLink, type, limitedTimeApy} = rowData;
+    const { label, key: token, protocol, poolLink, type, buyBond} = rowData;
     const isTablet = useIsTablet();
     const isMobile = useIsMobile();
     const chainName = useSelector(({app}) => app.selectedNetwork);
@@ -102,7 +102,7 @@ const RowData = ({isHeader, rowData}) => {
 
             <RowItem 
                 header={header.APY.label} 
-                content={<Apy apyList={stakedData.apy} limitedTimeApy={limitedTimeApy} />} 
+                content={<Apy apyList={stakedData.apy} buyBond={buyBond} />} 
             />
 
             {(!isTablet || isMobile) && <RowItem content={StakeController} />}

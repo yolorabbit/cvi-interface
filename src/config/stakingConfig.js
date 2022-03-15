@@ -466,7 +466,7 @@ const stakingConfig = {
           key: "govi-eth-lp",
           label: "GOVI-ETH SLP",
           address: "0xC73d2191A1dD0a99B377272899A5569eD83f8cd8",
-          limitedTimeApy: "https://cviofficial.medium.com/limited-time-high-apy-on-staking-govi-eth-slp-on-arbitrum-528c46de2b19",
+          buyBond: "https://pro.olympusdao.finance/#/bond",
           protocol: stakingProtocols.sushiswap,
           decimals: 18,
           fixedDecimals: 8,
