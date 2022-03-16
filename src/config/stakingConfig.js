@@ -466,7 +466,7 @@ const stakingConfig = {
           key: "govi-eth-lp",
           label: "GOVI-ETH SLP",
           address: "0xC73d2191A1dD0a99B377272899A5569eD83f8cd8",
-          buyBond: "https://pro.olympusdao.finance/#/bond",
+          buyBond: "https://pro.olympusdao.finance/#/partners/Crypto%20Volatility%20Index",
           protocol: stakingProtocols.sushiswap,
           decimals: 18,
           fixedDecimals: 8,

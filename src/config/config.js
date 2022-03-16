@@ -63,7 +63,7 @@ const config = {
     },
     bond: {
       label: "Bond",
-      path: "https://pro.olympusdao.finance/#/bond",
+      path: "https://pro.olympusdao.finance/#/partners/Crypto%20Volatility%20Index",
       supportedByNetwork: [chainNames.Arbitrum],
       fire: true,
       external: true
